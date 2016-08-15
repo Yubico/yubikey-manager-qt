@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>YubiKey.qml</file>
+        <file>yubikey.py</file>
+        <file>DeviceInfo.qml</file>
+        <file>ConnectionsDialog.qml</file>
+        <file>Dialog.qml</file>
+    </qresource>
+</RCC>
