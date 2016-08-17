@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import io.thp.pyotherside 1.5
 
+// @disable-check M300
 Python {
     id: py
 
