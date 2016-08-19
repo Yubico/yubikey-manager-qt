@@ -6,5 +6,6 @@
         <file>DeviceInfo.qml</file>
         <file>ConnectionsDialog.qml</file>
         <file>Dialog.qml</file>
+        <file>ConfigureOTPDialog.qml</file>
     </qresource>
 </RCC>

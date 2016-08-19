@@ -49,6 +49,12 @@ ColumnLayout {
                 Label {
                     text: device.enabled.indexOf(modelData) >= 0 ? "Enabled" : "Disabled"
                 }
+
+            }
+
+            Button {
+                text: qsTr("Configure")
+                onClicked: configureOTPDialog.show()
             }
         }
     }
@@ -81,6 +87,11 @@ ColumnLayout {
                 onClicked: connectionsDialog.show()
             }
         }
+    }
+
+    ConfigureOTPDialog {
+        id: configureOTPDialog
+        device: yk
     }
 
     ConnectionsDialog {
