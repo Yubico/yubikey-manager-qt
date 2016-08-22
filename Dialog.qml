@@ -57,7 +57,7 @@ Window {
             w = Math.max(w, contentItem.visibleChildren[i].implicitWidth)
             h = Math.max(h, contentItem.visibleChildren[i].implicitHeight)
         }
-        minimumWidth = w + 2*outer_content.anchors.margins
-        minimumHeight = h + 2*outer_content.anchors.margins
+        width = w + 2*outer_content.anchors.margins
+        height = h + 2*outer_content.anchors.margins
     }
 }

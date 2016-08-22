@@ -54,7 +54,7 @@ ColumnLayout {
 
             Button {
                 text: qsTr("Configure")
-                onClicked: configureOTPDialog.show()
+                onClicked: configureOTPDialog.init()
             }
         }
     }

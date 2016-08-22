@@ -44,3 +44,7 @@ def set_mode(connections):
     except Exception as e:
         return str(e)
     return None
+
+def slots_status():
+    dev = open_device(TRANSPORT.OTP)
+    return dev.driver.slot_status

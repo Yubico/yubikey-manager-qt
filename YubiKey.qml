@@ -49,4 +49,10 @@ Python {
     function set_mode(connections, cb) {
         call('yubikey.set_mode', [connections], cb)
     }
+
+    function slots_status(cb) {
+        call('yubikey.slots_status', [], function(res) {
+            cb(res)
+        })
+    }
 }

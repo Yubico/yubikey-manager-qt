@@ -4,21 +4,26 @@ import QtQuick.Layouts 1.3
 
 Dialog {
     property var device
+    property bool hasDevice: device ? device.hasDevice : false
+
+    onHasDeviceChanged: close()
 
     title: qsTr("Configure YubiKey slots")
 
     GridLayout{
         columns: 4
+
         Text {
             text: qsTr("Slot 1 (short press):")
         }
 
         Text {
-            // Status
+            id: slot1Txt
         }
 
         Button {
             text: qsTr("Configure")
+            onClicked: resize()
         }
 
         Button {
@@ -30,7 +35,7 @@ Dialog {
         }
 
         Text {
-            // Status
+            id: slot2Txt
         }
 
         Button {
@@ -41,4 +46,18 @@ Dialog {
             text: qsTr("Erase")
         }
     }
+
+    function init() {
+        device.slots_status(function(res) {
+            slot1Txt.text = statusText(res[0])
+            slot2Txt.text = statusText(res[1])
+            show()
+        })
+    }
+
+    function statusText(programmed) {
+        return programmed ? qsTr("Programmed") : qsTr("Empty")
+    }
 }
+
+
