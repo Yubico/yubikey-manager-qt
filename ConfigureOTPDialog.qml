@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Dialogs 1.1
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 
@@ -10,7 +11,7 @@ Dialog {
 
     title: qsTr("Configure YubiKey slots")
 
-    GridLayout{
+    GridLayout {
         columns: 4
 
         Text {
@@ -26,7 +27,9 @@ Dialog {
         }
 
         Button {
+            id: slot1EraseBtn
             text: qsTr("Erase")
+            onClicked: eraseSlot(1)
         }
 
         Text {
@@ -42,14 +45,20 @@ Dialog {
         }
 
         Button {
+            id: slot2EraseBtn
             text: qsTr("Erase")
+            onClicked: eraseSlot(2)
         }
     }
 
     function init() {
-        device.slots_status(function(res) {
+        device.slots_status(function (res) {
             slot1Txt.text = statusText(res[0])
+            slot1EraseBtn.enabled = res[0]
+
             slot2Txt.text = statusText(res[1])
+            slot2EraseBtn.enabled = res[1]
+
             show()
         })
     }
@@ -57,6 +66,25 @@ Dialog {
     function statusText(programmed) {
         return programmed ? qsTr("Programmed") : qsTr("Empty")
     }
+
+    function eraseSlot(slot) {
+        confirmErase.slot = slot
+        confirmErase.open()
+    }
+
+    MessageDialog {
+
+        property int slot
+
+        id: confirmErase
+        icon: StandardIcon.Warning
+        title: "Erase YubiKey slot" + slot
+        text: "Do you want to erase the content of slot " + slot + "? This permanently deletes the contents of this slot."
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: {
+            device.erase_slot(slot)
+            close()
+        }
+        onNo: close()
+    }
 }
-
-

@@ -99,6 +99,7 @@ ColumnLayout {
         device: yk
     }
 
+
     function readable_list(args) {
         if(args.length === 0) {
             return ''

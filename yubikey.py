@@ -48,3 +48,7 @@ def set_mode(connections):
 def slots_status():
     dev = open_device(TRANSPORT.OTP)
     return dev.driver.slot_status
+
+def erase_slot(slot):
+    dev = open_device(TRANSPORT.OTP)
+    dev.driver.zap_slot(slot)
