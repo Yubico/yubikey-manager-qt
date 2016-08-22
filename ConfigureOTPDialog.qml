@@ -23,7 +23,6 @@ Dialog {
 
         Button {
             text: qsTr("Configure")
-            onClicked: resize()
         }
 
         Button {
