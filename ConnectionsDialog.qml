@@ -3,7 +3,7 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.1
 
-Dialog {
+DefaultDialog {
     property var device
 
     title: qsTr("Configure connections")

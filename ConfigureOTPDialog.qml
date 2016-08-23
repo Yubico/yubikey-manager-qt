@@ -1,15 +1,29 @@
 import QtQuick 2.0
-import QtQuick.Dialogs 1.1
+import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 
 Dialog {
+
+    title: qsTr("Configure YubiKey slots")
+
+    modality: Qt.ApplicationModal
+    standardButtons: StandardButton.Close
+
     property var device
     property bool hasDevice: device ? device.hasDevice : false
+    property bool slot1enabled
+    property bool slot2enabled
 
     onHasDeviceChanged: close()
 
-    title: qsTr("Configure YubiKey slots")
+    onSlot1enabledChanged: {
+        updateSlotElements()
+    }
+
+    onSlot2enabledChanged: {
+        updateSlotElements()
+    }
 
     GridLayout {
         columns: 4
@@ -51,16 +65,11 @@ Dialog {
         }
     }
 
-    function init() {
-        device.slots_status(function (res) {
-            slot1Txt.text = statusText(res[0])
-            slot1EraseBtn.enabled = res[0]
-
-            slot2Txt.text = statusText(res[1])
-            slot2EraseBtn.enabled = res[1]
-
-            show()
-        })
+    function updateSlotElements(){
+        slot1Txt.text = statusText(slot1enabled)
+        slot1EraseBtn.enabled = slot1enabled
+        slot2Txt.text = statusText(slot2enabled)
+        slot2EraseBtn.enabled = slot2enabled
     }
 
     function statusText(programmed) {

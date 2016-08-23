@@ -55,7 +55,7 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignRight
                 text: qsTr("Configure")
                 enabled: device.enabled.indexOf('OTP') >= 0
-                onClicked: configureOTPDialog.init()
+                onClicked: openSlotDialog()
             }
         }
     }
@@ -96,13 +96,23 @@ ColumnLayout {
     }
 
     ConfigureOTPDialog {
-        id: configureOTPDialog
+        id: slotDialog
         device: yk
+
     }
 
     ConnectionsDialog {
         id: connectionsDialog
         device: yk
+    }
+
+    function openSlotDialog() {
+        device.slots_status(function (res) {
+            slotDialog.slot1enabled = res[0]
+            slotDialog.slot2enabled = res[1]
+            slotDialog.updateSlotElements()
+            slotDialog.open()
+        })
     }
 
     function readable_list(args) {

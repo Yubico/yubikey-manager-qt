@@ -5,7 +5,7 @@
         <file>yubikey.py</file>
         <file>DeviceInfo.qml</file>
         <file>ConnectionsDialog.qml</file>
-        <file>Dialog.qml</file>
+        <file>DefaultDialog.qml</file>
         <file>ConfigureOTPDialog.qml</file>
     </qresource>
 </RCC>
