@@ -95,10 +95,9 @@ ColumnLayout {
         }
     }
 
-    ConfigureOTPDialog {
+    SlotDialog {
         id: slotDialog
         device: yk
-
     }
 
     ConnectionsDialog {
