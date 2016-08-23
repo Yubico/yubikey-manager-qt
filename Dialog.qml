@@ -9,7 +9,7 @@ Window {
     default property alias content: inner_content.data
 
     flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
-    modality: Qt.WindowModal
+    modality: Qt.ApplicationModal
     color: palette.window
     signal accepted
     signal rejected
