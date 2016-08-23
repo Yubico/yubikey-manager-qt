@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 ApplicationWindow {
     visible: true
-    title: qsTr("YubiKey Manager QML version")
+    title: qsTr("YubiKey Manager")
 
     // @disable-check M301
     YubiKey {

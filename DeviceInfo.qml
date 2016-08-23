@@ -30,8 +30,7 @@ ColumnLayout {
         Layout.fillWidth: true
 
         GridLayout {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.fill: parent
             flow: GridLayout.TopToBottom
             rows: device.features.length
 
@@ -45,14 +44,15 @@ ColumnLayout {
 
             Repeater {
                 model: device.features
-
                 Label {
-                    text: device.enabled.indexOf(modelData) >= 0 ? "Enabled" : "Disabled"
+                    text: device.enabled.indexOf(
+                              modelData) >= 0 ? qsTr("Enabled") : qsTr(
+                                                    "Disabled")
                 }
-
             }
 
             Button {
+                Layout.alignment: Qt.AlignRight
                 text: qsTr("Configure")
                 onClicked: configureOTPDialog.init()
             }
@@ -69,8 +69,8 @@ ColumnLayout {
 
             Label {
                 text: qsTr("Supported:")
-
             }
+
             Label {
                 text: readable_list(device.connections)
                 Layout.columnSpan: 2
@@ -79,11 +79,15 @@ ColumnLayout {
             Label {
                 text: qsTr("Enabled:")
             }
-            Label {
-                text: readable_list(device.enabled.filter(function(e) { return device.connections.indexOf(e) >= 0}))
 
+            Label {
+                text: readable_list(device.enabled.filter(function (e) {
+                    return device.connections.indexOf(e) >= 0
+                }))
             }
+
             Button {
+                Layout.alignment: Qt.AlignRight
                 text: qsTr("Configure")
                 onClicked: connectionsDialog.show()
             }
@@ -100,14 +104,13 @@ ColumnLayout {
         device: yk
     }
 
-
     function readable_list(args) {
-        if(args.length === 0) {
+        if (args.length === 0) {
             return ''
-        } else if(args.length === 1) {
+        } else if (args.length === 1) {
             return args[0]
         } else {
-            args = args.slice()  //Don't modify the original array.
+            args = args.slice() //Don't modify the original array.
             var last = args.pop()
             return args.join(', ') + qsTr(' and ') + last
         }

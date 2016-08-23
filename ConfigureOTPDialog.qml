@@ -33,7 +33,7 @@ Dialog {
         }
 
         Text {
-            text: qsTr("Slot 2 (short press):")
+            text: qsTr("Slot 2 (long press):")
         }
 
         Text {
@@ -73,9 +73,7 @@ Dialog {
     }
 
     MessageDialog {
-
         property int slot
-
         id: confirmErase
         icon: StandardIcon.Warning
         title: "Erase YubiKey slot" + slot
