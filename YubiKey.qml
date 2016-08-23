@@ -22,6 +22,7 @@ Python {
                 features = res
             })
         })
+
     }
 
     onError: {
@@ -45,6 +46,7 @@ Python {
                 hasDevice = false
             }
         })
+
     }
 
     function set_mode(connections, cb) {

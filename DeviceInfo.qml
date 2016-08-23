@@ -54,6 +54,7 @@ ColumnLayout {
             Button {
                 Layout.alignment: Qt.AlignRight
                 text: qsTr("Configure")
+                enabled: device.enabled.indexOf('OTP') >= 0
                 onClicked: configureOTPDialog.init()
             }
         }

@@ -31,7 +31,7 @@ def refresh():
         return {
             'name': dev.device_name,
             'version': '.'.join(str(x) for x in dev.version),
-            'serial': dev.serial,
+            'serial': dev.serial or '',
             'enabled': [c.name for c in CAPABILITY if c & dev.enabled],
             'connections': [t.name for t in TRANSPORT if t & dev.capabilities]
         }
