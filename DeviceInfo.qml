@@ -81,6 +81,7 @@ ColumnLayout {
             }
             Label {
                 text: readable_list(device.enabled.filter(function(e) { return device.connections.indexOf(e) >= 0}))
+
             }
             Button {
                 text: qsTr("Configure")
