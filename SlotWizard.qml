@@ -11,13 +11,14 @@ DefaultDialog {
     property var device
     property bool configured
 
-    title: qsTr("Configure YubiKey slot" + slot)
+    title: qsTr("Configure YubiKey slots")
 
     ColumnLayout {
 
         Text {
             textFormat: Text.StyledText
-            text: qsTr("<h2>Configure YubiKey slots</h2>")
+            text: "<h2>" + getHeading(slot) + "</h2>
+<p>The slot is configured.</p>"
         }
 
         GridLayout {
@@ -34,13 +35,14 @@ DefaultDialog {
         }
     }
 
-    function update() {
-        eraseButton.enabled = configured
-    }
-
     function eraseSlot() {
         confirmErase.slot = slot
         confirmErase.open()
+    }
+
+    function getHeading(slot) {
+        if (slot === 1) return "Short press"
+        if (slot === 2) return "Long press"
     }
 
     MessageDialog {

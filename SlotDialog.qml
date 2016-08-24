@@ -83,14 +83,15 @@ Dialog {
 
         device.slots_status(function (res) {
             slotWizard.slot = slot
-            slotWizard.configured = res[slot - 1]
-            slotWizard.device = device
-            slotWizard.update()
-            slotWizard.show()
+            var configured = res[slot - 1]
+            if (configured) {
+                slotWizard.device = device
+                slotWizard.show()
+            } else {
+                console.log("Not configured, open configuration wizard.")
+            }
         })
-
     }
-
 
     SlotWizard {
         id: slotWizard
