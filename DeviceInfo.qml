@@ -110,7 +110,7 @@ ColumnLayout {
             slotDialog.slot1enabled = res[0]
             slotDialog.slot2enabled = res[1]
             slotDialog.updateSlotElements()
-            slotDialog.open()
+            slotDialog.show()
         })
     }
 

@@ -29,8 +29,18 @@ DefaultDialog {
 
             Button {
                 id: eraseButton
+                Layout.fillWidth: true
                 text: "Erase"
                 onClicked: eraseSlot()
+            }
+        }
+
+        RowLayout {
+            Layout.alignment: Qt.AlignRight
+            Button {
+                id: btn_cancel
+                text: qsTr("Close")
+                onClicked: close()
             }
         }
     }

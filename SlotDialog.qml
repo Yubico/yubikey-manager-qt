@@ -4,12 +4,9 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.0
 
-Dialog {
+DefaultDialog {
 
     title: qsTr("Configure YubiKey slots")
-
-    modality: Qt.ApplicationModal
-    standardButtons: StandardButton.Close
 
     property var device
     property bool hasDevice: device ? device.hasDevice : false
@@ -66,6 +63,22 @@ Dialog {
                 onClicked: {
                     openSlotWizard(2)
                 }
+            }
+
+            Button {
+                text: qsTr("Swap credentials between slots")
+                Layout.columnSpan : 2
+                onClicked: {
+                    console.log("Swapping...")
+                }
+            }
+        }
+        RowLayout {
+            Layout.alignment: Qt.AlignRight
+            Button {
+                id: btn_cancel
+                text: qsTr("Close")
+                onClicked: close()
             }
         }
     }
