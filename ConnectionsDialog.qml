@@ -8,6 +8,9 @@ DefaultDialog {
 
     title: qsTr("Configure connections")
 
+    readonly property var button_ok: btn_ok
+    readonly property var button_cancel: btn_cancel
+
     onAccepted: function () {
         var enabled = get_enabled()
         device.set_mode(enabled, function (e) {
@@ -42,6 +45,26 @@ DefaultDialog {
                     checked: device.enabled.indexOf(modelData) >= 0
                     enabled: modelData !== 'NFC'
                     onCheckedChanged: button_ok.enabled = check_acceptable()
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.alignment: Qt.AlignRight
+            Button {
+                id: btn_ok
+                text: qsTr("OK")
+                onClicked: function() {
+                    close()
+                    accepted()
+                }
+            }
+            Button {
+                id: btn_cancel
+                text: qsTr("Cancel")
+                onClicked: function() {
+                    close()
+                    rejected()
                 }
             }
         }

@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
+import QtQuick.Window 2.0
 
 Dialog {
 
@@ -25,73 +26,64 @@ Dialog {
         updateSlotElements()
     }
 
-    GridLayout {
-        columns: 4
+    ColumnLayout {
+        id: container
 
         Text {
-            text: qsTr("Slot 1 (short press):")
+            textFormat: Text.StyledText
+            text: qsTr("<h2>Configure YubiKey slots</h2>")
         }
 
-        Text {
-            id: slot1Txt
-        }
+        GridLayout {
+            id: slotGrid
+            columns: 3
 
-        Button {
-            text: qsTr("Configure")
-        }
+            Text {
+                text: qsTr("Short press:")
+            }
 
-        Button {
-            id: slot1EraseBtn
-            text: qsTr("Erase")
-            onClicked: eraseSlot(1)
-        }
+            Text {
+                id: slot1Txt
+            }
 
-        Text {
-            text: qsTr("Slot 2 (long press):")
-        }
+            Button {
+                text: qsTr("Configure")
+                onClicked: {
+                    slotWizard.slot = 1
+                    slotWizard.device = device
+                    slotWizard.show()
+                }
+            }
 
-        Text {
-            id: slot2Txt
-        }
+            Text {
+                text: qsTr("Long press:")
+            }
 
-        Button {
-            text: qsTr("Configure")
-        }
+            Text {
+                id: slot2Txt
+            }
 
-        Button {
-            id: slot2EraseBtn
-            text: qsTr("Erase")
-            onClicked: eraseSlot(2)
+            Button {
+                text: qsTr("Configure")
+                onClicked: {
+                    slotWizard.slot = 2
+                    slotWizard.device = device
+                    slotWizard.show()
+                }
+            }
         }
     }
 
-    function updateSlotElements(){
+    function updateSlotElements() {
         slot1Txt.text = statusText(slot1enabled)
-        slot1EraseBtn.enabled = slot1enabled
         slot2Txt.text = statusText(slot2enabled)
-        slot2EraseBtn.enabled = slot2enabled
     }
 
-    function statusText(programmed) {
-        return programmed ? qsTr("Programmed") : qsTr("Empty")
+    function statusText(configured) {
+        return configured ? qsTr("Configured") : qsTr("Empty")
     }
 
-    function eraseSlot(slot) {
-        confirmErase.slot = slot
-        confirmErase.open()
-    }
-
-    MessageDialog {
-        property int slot
-        id: confirmErase
-        icon: StandardIcon.Warning
-        title: "Erase YubiKey slot" + slot
-        text: "Do you want to erase the content of slot " + slot + "? This permanently deletes the contents of this slot."
-        standardButtons: StandardButton.Yes | StandardButton.No
-        onYes: {
-            device.erase_slot(slot)
-            close()
-        }
-        onNo: close()
+    SlotWizard {
+        id: slotWizard
     }
 }

@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.0
+import QtQuick.Dialogs 1.2
 
 Window {
     SystemPalette { id: palette }
@@ -14,8 +15,6 @@ Window {
     signal accepted
     signal rejected
 
-    readonly property var button_ok: btn_ok
-    readonly property var button_cancel: btn_cancel
 
     ColumnLayout {
         id: outer_content
@@ -25,25 +24,6 @@ Window {
 
         ColumnLayout {
             id: inner_content
-        }
-        RowLayout {
-            Layout.alignment: Qt.AlignRight
-            Button {
-                id: btn_ok
-                text: qsTr("OK")
-                onClicked: function() {
-                    close()
-                    accepted()
-                }
-            }
-            Button {
-                id: btn_cancel
-                text: qsTr("Cancel")
-                onClicked: function() {
-                    close()
-                    rejected()
-                }
-            }
         }
     }
 
