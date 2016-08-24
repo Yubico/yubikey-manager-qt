@@ -9,6 +9,7 @@ DefaultDialog {
 
     property int slot
     property var device
+    property bool configured
 
     title: qsTr("Configure YubiKey slot" + slot)
 
@@ -26,10 +27,15 @@ DefaultDialog {
             }
 
             Button {
+                id: eraseButton
                 text: "Erase"
                 onClicked: eraseSlot()
             }
         }
+    }
+
+    function update() {
+        eraseButton.enabled = configured
     }
 
     function eraseSlot() {

@@ -49,9 +49,7 @@ Dialog {
             Button {
                 text: qsTr("Configure")
                 onClicked: {
-                    slotWizard.slot = 1
-                    slotWizard.device = device
-                    slotWizard.show()
+                    openSlotWizard(1)
                 }
             }
 
@@ -66,9 +64,7 @@ Dialog {
             Button {
                 text: qsTr("Configure")
                 onClicked: {
-                    slotWizard.slot = 2
-                    slotWizard.device = device
-                    slotWizard.show()
+                    openSlotWizard(2)
                 }
             }
         }
@@ -82,6 +78,19 @@ Dialog {
     function statusText(configured) {
         return configured ? qsTr("Configured") : qsTr("Empty")
     }
+
+    function openSlotWizard(slot) {
+
+        device.slots_status(function (res) {
+            slotWizard.slot = slot
+            slotWizard.configured = res[slot - 1]
+            slotWizard.device = device
+            slotWizard.update()
+            slotWizard.show()
+        })
+
+    }
+
 
     SlotWizard {
         id: slotWizard
