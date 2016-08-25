@@ -10,20 +10,24 @@ DefaultDialog {
     property int slot
     property var device
     property bool configured
+    signal resetLoader
 
-    signal resetIndex
-    onResetIndex: stack.currentIndex = 0
+    onResetLoader: loader.sourceComponent = slotStatus
 
     title: qsTr("Configure YubiKey slots")
 
-    StackLayout {
-        id: stack
+    Loader {
+        id: loader
+    }
 
+    Component {
+        id: slotStatus
         ColumnLayout {
             Text {
+                id: heading
                 textFormat: Text.StyledText
-                text: "<h2>" + getHeading(slot) + "</h2>
-<p>The slot is configured.</p>"
+                text: "<h2>" + getHeading(
+                          slot) + "</h2> <p>The slot is configured.</p>"
             }
 
             GridLayout {
@@ -35,7 +39,6 @@ DefaultDialog {
 
                 Button {
                     id: eraseButton
-                    Layout.fillWidth: true
                     text: "Erase"
                     onClicked: eraseSlot()
                 }
@@ -49,12 +52,14 @@ DefaultDialog {
                 }
             }
         }
-
+    }
+    Component {
+        id: type
         ColumnLayout {
             Text {
                 textFormat: Text.StyledText
-                text: "<h2>" + qsTr("Configure ") + getHeading(slot) + "</h2>
-<p>Select the type of functionality to configure:</p>"
+                text: "<h2>" + qsTr("Configure ") + getHeading(
+                          slot) + "</h2> <p>Select the type of functionality to configure:</p>"
             }
 
             RowLayout {
@@ -63,34 +68,29 @@ DefaultDialog {
                         id: slotType
                     }
                     RadioButton {
-
                         text: qsTr("YubiKey OTP")
                         exclusiveGroup: slotType
                         checked: true
-                        onClicked: desc.text = qsTr("Programs a onte-time-password credential using the YubiKey OTP protocol.")
+                        property string desc: qsTr("Programs a onte-time-passwordcredential using the YubiKey OTP protocol.")
                     }
                     RadioButton {
                         text: qsTr("Challenge-response")
                         exclusiveGroup: slotType
-                        onClicked: desc.text = qsTr("Programs a HMAC-SHA1 credential, which can be used for local authentication or encryption.")
-
+                        property string desc: qsTr("Programs a HMAC-SHA1 credential,which can be used for local authentication or encryption.")
                     }
                     RadioButton {
                         text: qsTr("Static password")
                         exclusiveGroup: slotType
-                        onClicked: desc.text = qsTr("Stores a fixed password, which will be output each time you touch the button.")
-
+                        property string desc: qsTr("Stores a fixed password,which will be output each time you touch the button.")
                     }
                     RadioButton {
                         text: qsTr("OATH-HOTP")
                         exclusiveGroup: slotType
-                        onClicked: desc.text = qsTr("Stores a numeric one-time-password using the OATH-HOTP standard.")
+                        property string desc: qsTr("Stores a numeric one-time-password using the OATH-HOTP standard.")
                     }
                 }
                 Text {
-                    id: desc
-                    wrapMode: Text.WordWrap
-                    text: ""
+                    text: slotType.current.desc
                     verticalAlignment: Text.AlignVCenter
                 }
             }
@@ -109,7 +109,7 @@ DefaultDialog {
     }
 
     function chooseType() {
-        stack.currentIndex = 1
+        loader.sourceComponent = type
     }
 
     function eraseSlot() {

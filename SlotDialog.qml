@@ -32,7 +32,6 @@ DefaultDialog {
         }
 
         GridLayout {
-            id: slotGrid
             columns: 3
 
             Text {
@@ -45,9 +44,7 @@ DefaultDialog {
 
             Button {
                 text: qsTr("Configure")
-                onClicked: {
-                    openSlotWizard(1)
-                }
+                onClicked: openSlotWizard(1)
             }
 
             Text {
@@ -60,9 +57,7 @@ DefaultDialog {
 
             Button {
                 text: qsTr("Configure")
-                onClicked: {
-                    openSlotWizard(2)
-                }
+                onClicked: openSlotWizard(2)
             }
 
             Button {
@@ -76,7 +71,6 @@ DefaultDialog {
         RowLayout {
             Layout.alignment: Qt.AlignRight
             Button {
-                id: btn_cancel
                 text: qsTr("Close")
                 onClicked: close()
             }
@@ -93,13 +87,12 @@ DefaultDialog {
     }
 
     function openSlotWizard(slot) {
-
         device.slots_status(function (res) {
             slotWizard.slot = slot
             var configured = res[slot - 1]
             if (configured) {
                 slotWizard.device = device
-                slotWizard.resetIndex()
+                slotWizard.resetLoader()
                 slotWizard.show()
             } else {
                 console.log("Not configured, open configuration wizard.")

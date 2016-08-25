@@ -8,9 +8,6 @@ DefaultDialog {
 
     title: qsTr("Configure connections")
 
-    readonly property var button_ok: btn_ok
-    readonly property var button_cancel: btn_cancel
-
     onAccepted: function () {
         var enabled = get_enabled()
         device.set_mode(enabled, function (e) {
@@ -52,7 +49,7 @@ DefaultDialog {
         RowLayout {
             Layout.alignment: Qt.AlignRight
             Button {
-                id: btn_ok
+                id: button_ok
                 text: qsTr("OK")
                 onClicked: function() {
                     close()
@@ -60,7 +57,6 @@ DefaultDialog {
                 }
             }
             Button {
-                id: btn_cancel
                 text: qsTr("Cancel")
                 onClicked: function() {
                     close()

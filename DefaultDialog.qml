@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 
-Window {
+ApplicationWindow {
     SystemPalette { id: palette }
 
     default property alias content: inner_content.data
@@ -25,19 +25,5 @@ Window {
         ColumnLayout {
             id: inner_content
         }
-    }
-
-    onVisibleChanged: resize()
-    onContentChanged: resize()
-
-    function resize() {
-        var w = 0
-        var h = 0
-        for(var i=0; i<contentItem.visibleChildren.length; i++) {
-            w = Math.max(w, contentItem.visibleChildren[i].implicitWidth)
-            h = Math.max(h, contentItem.visibleChildren[i].implicitHeight)
-        }
-        width = w + 2*outer_content.anchors.margins
-        height = h + 2*outer_content.anchors.margins
     }
 }
