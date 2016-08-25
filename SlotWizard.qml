@@ -20,7 +20,6 @@ DefaultDialog {
         id: stack
 
         ColumnLayout {
-
             Text {
                 textFormat: Text.StyledText
                 text: "<h2>" + getHeading(slot) + "</h2>
@@ -54,14 +53,56 @@ DefaultDialog {
         ColumnLayout {
             Text {
                 textFormat: Text.StyledText
-                text: "Choose type of slot"
+                text: "<h2>" + qsTr("Configure ") + getHeading(slot) + "</h2>
+<p>Select the type of functionality to configure:</p>"
             }
+
+            RowLayout {
+                ColumnLayout {
+                    ExclusiveGroup {
+                        id: slotType
+                    }
+                    RadioButton {
+
+                        text: qsTr("YubiKey OTP")
+                        exclusiveGroup: slotType
+                        checked: true
+                        onClicked: desc.text = qsTr("Programs a onte-time-password credential using the YubiKey OTP protocol.")
+                    }
+                    RadioButton {
+                        text: qsTr("Challenge-response")
+                        exclusiveGroup: slotType
+                        onClicked: desc.text = qsTr("Programs a HMAC-SHA1 credential, which can be used for local authentication or encryption.")
+
+                    }
+                    RadioButton {
+                        text: qsTr("Static password")
+                        exclusiveGroup: slotType
+                        onClicked: desc.text = qsTr("Stores a fixed password, which will be output each time you touch the button.")
+
+                    }
+                    RadioButton {
+                        text: qsTr("OATH-HOTP")
+                        exclusiveGroup: slotType
+                        onClicked: desc.text = qsTr("Stores a numeric one-time-password using the OATH-HOTP standard.")
+                    }
+                }
+                Text {
+                    id: desc
+                    wrapMode: Text.WordWrap
+                    text: ""
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+
             RowLayout {
                 Layout.alignment: Qt.AlignRight
                 Button {
-                    id: btn_cancel
-                    text: qsTr("Close")
+                    text: qsTr("Back")
                     onClicked: close()
+                }
+                Button {
+                    text: qsTr("Next")
                 }
             }
         }
