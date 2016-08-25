@@ -99,6 +99,7 @@ DefaultDialog {
             var configured = res[slot - 1]
             if (configured) {
                 slotWizard.device = device
+                slotWizard.resetIndex()
                 slotWizard.show()
             } else {
                 console.log("Not configured, open configuration wizard.")
