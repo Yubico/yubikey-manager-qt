@@ -95,11 +95,6 @@ ColumnLayout {
         }
     }
 
-    SlotDialog {
-        id: slotDialog
-        device: yk
-    }
-
     ConnectionsDialog {
         id: connectionsDialog
         device: yk
@@ -107,12 +102,15 @@ ColumnLayout {
 
     function openSlotDialog() {
         device.slots_status(function (res) {
-            slotDialog.slot1enabled = res[0]
-            slotDialog.slot2enabled = res[1]
-            slotDialog.init()
-            slotDialog.show()
+            var component = Qt.createComponent("SlotDialog.qml")
+            component.createObject(this, {
+                                       device: device,
+                                       slot1Enabled: res[0],
+                                       slot2Enabled: res[1]
+                                   }).show()
         })
     }
+
 
     function readable_list(args) {
         if (args.length === 0) {

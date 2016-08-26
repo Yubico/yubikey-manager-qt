@@ -15,21 +15,16 @@ DefaultDialog {
     property int selectedSlot
 
     onHasDeviceChanged: close()
-    onClosing: loader.sourceComponent = overview
-
-    function init() {
-        loader.sourceComponent = overview
-    }
 
     Loader {
         id: loader
+        sourceComponent: overview
     }
 
     Component {
         id: overview
         ColumnLayout {
             id: container
-        //    Layout.fillHeight: true
 
             Text {
                 textFormat: Text.StyledText
