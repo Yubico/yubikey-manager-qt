@@ -7,6 +7,5 @@
         <file>ConnectionsDialog.qml</file>
         <file>DefaultDialog.qml</file>
         <file>SlotDialog.qml</file>
-        <file>SlotWizard.qml</file>
     </qresource>
 </RCC>

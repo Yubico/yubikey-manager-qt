@@ -109,7 +109,7 @@ ColumnLayout {
         device.slots_status(function (res) {
             slotDialog.slot1enabled = res[0]
             slotDialog.slot2enabled = res[1]
-            slotDialog.updateSlotElements()
+            slotDialog.init()
             slotDialog.show()
         })
     }
