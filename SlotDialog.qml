@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
 DefaultDialog {
@@ -9,9 +9,8 @@ DefaultDialog {
     title: qsTr("Configure YubiKey slots")
 
     property var device
+    property var slotsEnabled
     property bool hasDevice: device ? device.hasDevice : false
-    property bool slot1enabled
-    property bool slot2enabled
     property int selectedSlot
 
     onHasDeviceChanged: close()
@@ -38,7 +37,7 @@ DefaultDialog {
                 }
 
                 Text {
-                    text: statusText(slot1enabled)
+                    text: statusText(slotsEnabled[0])
                 }
 
                 Button {
@@ -51,7 +50,7 @@ DefaultDialog {
                 }
 
                 Text {
-                    text: statusText(slot2enabled)
+                    text: statusText(slotsEnabled[1])
                 }
 
                 Button {
@@ -179,14 +178,11 @@ DefaultDialog {
 
     function configureSlot(slot) {
         selectedSlot = slot
-        device.slots_status(function (res) {
-            var configured = res[slot - 1]
-            if (configured) {
-                loader.sourceComponent = slotStatus
-            } else {
-                console.log("Not configured, open configuration wizard.")
-            }
-        })
+        if(slotsEnabled[slot - 1]) {
+            loader.sourceComponent = slotStatus
+        } else {
+            console.log("Not configured, TODO: open wizard")
+        }
     }
 
     function eraseSlot() {

@@ -1,5 +1,5 @@
 import QtQuick 2.5
-import io.thp.pyotherside 1.5
+import io.thp.pyotherside 1.4
 
 
 // @disable-check M300
@@ -18,7 +18,7 @@ Python {
     Component.onCompleted: {
         addImportPath(Qt.resolvedUrl('.'))
         importModule('yubikey', function () {
-            call('yubikey.get_features', [], function (res) {
+            do_call('yubikey.get_features', [], function (res) {
                 features = res
             })
         })
@@ -29,12 +29,18 @@ Python {
         console.log('Python error: ' + traceback)
     }
 
+    function do_call(func, args, cb) {
+        call(func, args, function(json) {
+            cb(json ? JSON.parse(json) : undefined)
+        })
+    }
+
 
     function refresh() {
-        call('yubikey.count_devices', [], function (n) {
+        do_call('yubikey.count_devices', [], function (n) {
             nDevices = n
             if (nDevices == 1) {
-                call('yubikey.refresh', [], function (dev) {
+                do_call('yubikey.refresh', [], function (dev) {
                     hasDevice = dev !== undefined
                     name = dev ? dev.name : ''
                     version = dev ? dev.version : ''
@@ -50,16 +56,14 @@ Python {
     }
 
     function set_mode(connections, cb) {
-        call('yubikey.set_mode', [connections], cb)
+        do_call('yubikey.set_mode', [connections], cb)
     }
 
     function slots_status(cb) {
-        call('yubikey.slots_status', [], function (res) {
-            cb(res)
-        })
+        do_call('yubikey.slots_status', [], cb)
     }
 
     function erase_slot(slot) {
-        call('yubikey.erase_slot', [slot])
+        do_call('yubikey.erase_slot', [slot])
     }
 }

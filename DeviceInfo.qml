@@ -1,6 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.1
 
 ColumnLayout {
     property var device
@@ -101,13 +101,15 @@ ColumnLayout {
     }
 
     function openSlotDialog() {
-        device.slots_status(function (res) {
             var component = Qt.createComponent("SlotDialog.qml")
-            component.createObject(this, {
-                                       device: device,
-                                       slot1Enabled: res[0],
-                                       slot2Enabled: res[1]
-                                   }).show()
+            var dialog = component.createObject(this, {
+                                       device: device
+
+                                   })
+        dialog.show()
+        device.slots_status(function (res) {
+            dialog.slotsEnabled = res
+
         })
     }
 

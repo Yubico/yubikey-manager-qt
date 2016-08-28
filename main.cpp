@@ -3,7 +3,9 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    //TODO: Run this on Qt versions which support it...
+    //QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
