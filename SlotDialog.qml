@@ -74,14 +74,45 @@ DefaultDialog {
         }
     }
 
+    function statusText(configured) {
+        return configured ? qsTr("Configured") : qsTr("Empty")
+    }
+
+    function configureSlot(slot) {
+        selectedSlot = slot
+        if (slotsEnabled[slot - 1]) {
+            loader.sourceComponent = slotStatus
+        } else {
+            loader.sourceComponent = selectTypeDialog
+        }
+    }
+
+    function update() {
+        device.slots_status(function (res) {
+            slotsEnabled = res
+        })
+    }
+
+    MessageDialog {
+        id: confirmSwap
+        icon: StandardIcon.Warning
+        title: "Swap credentials between slots"
+        text: "Do you want to swap the credentials between short press and long press?"
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: {
+            device.swap_slots()
+            update()
+            close()
+        }
+        onNo: close()
+    }
+
     Component {
         id: slotStatus
         ColumnLayout {
             Text {
-                id: heading
                 textFormat: Text.StyledText
-                text: "<h2>" + getHeading(
-                          ) + "</h2> <p>The slot is configured.</p>"
+                text: "<h2>" + getHeading() + "</h2> <p>The slot is configured.</p>"
             }
 
             GridLayout {
@@ -92,7 +123,6 @@ DefaultDialog {
                 }
 
                 Button {
-                    id: eraseButton
                     text: "Erase"
                     onClicked: eraseSlot()
                 }
@@ -108,17 +138,34 @@ DefaultDialog {
         }
     }
 
+    function eraseSlot() {
+        confirmErase.slot = selectedSlot
+        confirmErase.open()
+    }
+
+    MessageDialog {
+        property int slot
+        id: confirmErase
+        icon: StandardIcon.Warning
+        title: "Erase YubiKey slot" + slot
+        text: "Do you want to erase the content of slot " + slot
+              + "? This permanently deletes the contents of this slot."
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: {
+            device.erase_slot(slot)
+            update()
+            close()
+        }
+        onNo: close()
+    }
+
     Component {
-
         id: selectTypeDialog
-
         ColumnLayout {
             Text {
                 textFormat: Text.StyledText
-                text: "<h2>" + qsTr("Configure ") + getHeading(
-                          ) + "</h2> <p>Select the type of functionality to configure:</p>"
+                text: "<h2>" + qsTr("Configure ") + getHeading() + "</h2> <p>Select the type of functionality to configure:</p>"
             }
-
             RowLayout {
                 ColumnLayout {
                     ExclusiveGroup {
@@ -172,6 +219,13 @@ DefaultDialog {
         }
     }
 
+    function getHeading() {
+        if (selectedSlot === 1)
+            return "Short press"
+        if (selectedSlot === 2)
+            return "Long press"
+    }
+
     function openProgramCredDialog(typeName) {
         switch (typeName) {
         case "otp":
@@ -189,64 +243,4 @@ DefaultDialog {
         }
     }
 
-    function update() {
-        device.slots_status(function (res) {
-            slotsEnabled = res
-        })
-    }
-
-    function statusText(configured) {
-        return configured ? qsTr("Configured") : qsTr("Empty")
-    }
-
-    function getHeading() {
-        if (selectedSlot === 1)
-            return "Short press"
-        if (selectedSlot === 2)
-            return "Long press"
-    }
-
-    function configureSlot(slot) {
-        selectedSlot = slot
-        if (slotsEnabled[slot - 1]) {
-            loader.sourceComponent = slotStatus
-        } else {
-            console.log("Not configured, TODO: open wizard")
-        }
-    }
-
-    function eraseSlot() {
-        confirmErase.slot = selectedSlot
-        confirmErase.open()
-    }
-
-    MessageDialog {
-        property int slot
-        id: confirmErase
-        icon: StandardIcon.Warning
-        title: "Erase YubiKey slot" + slot
-        text: "Do you want to erase the content of slot " + slot
-              + "? This permanently deletes the contents of this slot."
-        standardButtons: StandardButton.Yes | StandardButton.No
-        onYes: {
-            device.erase_slot(slot)
-            updateSlotStatus()
-            close()
-        }
-        onNo: close()
-    }
-
-    MessageDialog {
-        id: confirmSwap
-        icon: StandardIcon.Warning
-        title: "Swap credentials between slots"
-        text: "Do you want to swap the credentials between short press and long press?"
-        standardButtons: StandardButton.Yes | StandardButton.No
-        onYes: {
-            device.swap_slots()
-            update()
-            close()
-        }
-        onNo: close()
-    }
 }
