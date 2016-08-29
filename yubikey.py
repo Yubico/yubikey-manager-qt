@@ -82,5 +82,8 @@ class Controller(object):
         dev = self._descriptor.open_device(TRANSPORT.OTP)
         dev.driver.zap_slot(slot)
 
+    def swap_slots(self):
+        dev = self._descriptor.open_device(TRANSPORT.OTP)
+        dev.driver.swap_slots()
 
 controller = Controller()

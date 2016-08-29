@@ -9,7 +9,7 @@ DefaultDialog {
     title: qsTr("Configure YubiKey slots")
 
     property var device
-    property var slotsEnabled
+    property var slotsEnabled: [false, false]
     property bool hasDevice: device ? device.hasDevice : false
     property int selectedSlot
 
@@ -61,9 +61,7 @@ DefaultDialog {
                 Button {
                     text: qsTr("Swap credentials between slots")
                     Layout.columnSpan : 2
-                    onClicked: {
-                        console.log("Swapping...")
-                    }
+                    onClicked: confirmSwap.open()
                 }
             }
             RowLayout {
@@ -165,6 +163,12 @@ DefaultDialog {
         }
     }
 
+    function update() {
+        device.slots_status(function (res) {
+            slotsEnabled = res
+        })
+    }
+
     function statusText(configured) {
         return configured ? qsTr("Configured") : qsTr("Empty")
     }
@@ -200,6 +204,21 @@ DefaultDialog {
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
             device.erase_slot(slot)
+            updateSlotStatus()
+            close()
+        }
+        onNo: close()
+    }
+
+    MessageDialog {
+        id: confirmSwap
+        icon: StandardIcon.Warning
+        title: "Swap credentials between slots"
+        text: "Do you want to swap the credentials between short press and long press?"
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: {
+            device.swap_slots()
+            update()
             close()
         }
         onNo: close()

@@ -106,10 +106,12 @@ Item {
         var dialog = component.createObject(this, {
                                                 device: device
                                             })
-        dialog.show()
         device.slots_status(function (res) {
             dialog.slotsEnabled = res
+            dialog.show()
         })
+
+
     }
 
     function readable_list(args) {

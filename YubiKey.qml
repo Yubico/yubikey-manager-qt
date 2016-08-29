@@ -1,4 +1,4 @@
-import QtQuick 2.5
+import QtQuick 2.0
 import io.thp.pyotherside 1.4
 
 
@@ -65,5 +65,9 @@ Python {
 
     function erase_slot(slot) {
         do_call('yubikey.controller.erase_slot', [slot])
+    }
+
+    function swap_slots() {
+        do_call('yubikey.controller.swap_slots', [])
     }
 }
