@@ -4,10 +4,11 @@
 
 import os
 import json
+import types
 #os.environ['PYUSB_DEBUG'] = 'debug'
 
-from ykman.device import open_device
-from ykman.util import CAPABILITY, TRANSPORT, list_yubikeys, Mode
+from ykman.descriptor import get_descriptors
+from ykman.util import CAPABILITY, TRANSPORT, Mode
 
 NON_FEATURE_CAPABILITIES = [CAPABILITY.CCID, CAPABILITY.NFC]
 
@@ -25,42 +26,61 @@ def as_json(f):
         return json.dumps(f(*args, **kwargs))
     return wrapped
 
-@as_json
-def get_features():
-    return [c.name for c in CAPABILITY if c not in NON_FEATURE_CAPABILITIES]
 
-@as_json
-def count_devices():
-    return len(list_yubikeys())
+class Controller(object):
+    _descriptor = None
+    _dev_info = None
 
-@as_json
-def refresh():
-    dev = open_device()
-    if dev:
-        return {
-            'name': dev.device_name,
-            'version': '.'.join(str(x) for x in dev.version),
-            'serial': dev.serial or '',
-            'enabled': [c.name for c in CAPABILITY if c & dev.enabled],
-            'connections': [t.name for t in TRANSPORT if t & dev.capabilities]
-        }
+    def __init__(self):
+        # Wrap all return values as JSON.
+        for f in dir(self):
+            if not f.startswith('_'):
+                func = getattr(self, f)
+                if isinstance(func, types.MethodType):
+                    setattr(self, f, as_json(func))
 
-@as_json
-def set_mode(connections):
-    dev = open_device()
-    try:
-        transports = sum([TRANSPORT[c] for c in connections])
-        dev.mode = Mode(transports & TRANSPORT.usb_transports())
-    except Exception as e:
-        return str(e)
-    return None
+    def get_features(self):
+        return [c.name for c in CAPABILITY if c not in NON_FEATURE_CAPABILITIES]
 
-@as_json
-def slots_status():
-    dev = open_device(TRANSPORT.OTP)
-    return dev.driver.slot_status
+    def count_devices(self):
+        return len(list(get_descriptors()))
 
-@as_json
-def erase_slot(slot):
-    dev = open_device(TRANSPORT.OTP)
-    dev.driver.zap_slot(slot)
+    def refresh(self):
+        descriptors = list(get_descriptors())
+        if len(descriptors) != 1:
+            self._descriptor = None
+            return
+
+        desc = descriptors[0]
+        if desc.fingerprint != (self._descriptor.fingerprint if self._descriptor else None):
+            dev = desc.open_device()
+            self._dev_info = {
+                'name': dev.device_name,
+                'version': '.'.join(str(x) for x in dev.version),
+                'serial': dev.serial or '',
+                'enabled': [c.name for c in CAPABILITY if c & dev.enabled],
+                'connections': [t.name for t in TRANSPORT if t & dev.capabilities]
+            }
+            self._descriptor = desc
+
+        return self._dev_info
+
+    def set_mode(self, connections):
+        dev = self._descriptor.open_device()
+        try:
+            transports = sum([TRANSPORT[c] for c in connections])
+            dev.mode = Mode(transports & TRANSPORT.usb_transports())
+        except Exception as e:
+            return str(e)
+        return None
+
+    def slots_status(self):
+        dev = self._descriptor.open_device(TRANSPORT.OTP)
+        return dev.driver.slot_status
+
+    def erase_slot(self, slot):
+        dev = self._descriptor.open_device(TRANSPORT.OTP)
+        dev.driver.zap_slot(slot)
+
+
+controller = Controller()

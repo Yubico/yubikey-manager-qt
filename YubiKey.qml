@@ -18,7 +18,7 @@ Python {
     Component.onCompleted: {
         addImportPath(Qt.resolvedUrl('.'))
         importModule('yubikey', function () {
-            do_call('yubikey.get_features', [], function (res) {
+            do_call('yubikey.controller.get_features', [], function (res) {
                 features = res
             })
         })
@@ -37,10 +37,10 @@ Python {
 
 
     function refresh() {
-        do_call('yubikey.count_devices', [], function (n) {
+        do_call('yubikey.controller.count_devices', [], function (n) {
             nDevices = n
             if (nDevices == 1) {
-                do_call('yubikey.refresh', [], function (dev) {
+                do_call('yubikey.controller.refresh', [], function (dev) {
                     hasDevice = dev !== undefined
                     name = dev ? dev.name : ''
                     version = dev ? dev.version : ''
@@ -56,14 +56,14 @@ Python {
     }
 
     function set_mode(connections, cb) {
-        do_call('yubikey.set_mode', [connections], cb)
+        do_call('yubikey.controller.set_mode', [connections], cb)
     }
 
     function slots_status(cb) {
-        do_call('yubikey.slots_status', [], cb)
+        do_call('yubikey.controller.slots_status', [], cb)
     }
 
     function erase_slot(slot) {
-        do_call('yubikey.erase_slot', [slot])
+        do_call('yubikey.controller.erase_slot', [slot])
     }
 }

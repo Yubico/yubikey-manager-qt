@@ -15,9 +15,9 @@ ApplicationWindow {
     Timer {
         id: timer
         triggeredOnStart: true
-        interval: 1000
+        interval: 500
         repeat: true
-        running: active
+        running: true
         onTriggered: yk.refresh()
     }
 
