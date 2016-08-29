@@ -60,7 +60,7 @@ DefaultDialog {
 
                 Button {
                     text: qsTr("Swap credentials between slots")
-                    Layout.columnSpan : 2
+                    Layout.columnSpan: 2
                     onClicked: confirmSwap.open()
                 }
             }
@@ -72,7 +72,6 @@ DefaultDialog {
                 }
             }
         }
-
     }
 
     Component {
@@ -81,14 +80,15 @@ DefaultDialog {
             Text {
                 id: heading
                 textFormat: Text.StyledText
-                text: "<h2>" + getHeading() + "</h2> <p>The slot is configured.</p>"
+                text: "<h2>" + getHeading(
+                          ) + "</h2> <p>The slot is configured.</p>"
             }
 
             GridLayout {
                 columns: 2
                 Button {
                     text: "New configuration"
-                    onClicked: loader.sourceComponent = type
+                    onClicked: loader.sourceComponent = selectTypeDialog
                 }
 
                 Button {
@@ -102,50 +102,57 @@ DefaultDialog {
                 Layout.alignment: Qt.AlignRight
                 Button {
                     text: qsTr("Back")
-                    onClicked: loader.sourceComponent =  overview
+                    onClicked: loader.sourceComponent = overview
                 }
             }
         }
     }
 
     Component {
-        id: type
+
+        id: selectTypeDialog
+
         ColumnLayout {
             Text {
                 textFormat: Text.StyledText
-                text: "<h2>" + qsTr("Configure ") + getHeading() + "</h2> <p>Select the type of functionality to configure:</p>"
+                text: "<h2>" + qsTr("Configure ") + getHeading(
+                          ) + "</h2> <p>Select the type of functionality to configure:</p>"
             }
 
             RowLayout {
-                    ColumnLayout {
-                        ExclusiveGroup {
-                            id: slotType
-                        }
-                        RadioButton {
-                            text: qsTr("YubiKey OTP")
-                            exclusiveGroup: slotType
-                            checked: true
-                            property string desc: qsTr("Programs a onte-time-passwordcredential using the YubiKey OTP protocol.")
-                        }
-                        RadioButton {
-                            text: qsTr("Challenge-response")
-                            exclusiveGroup: slotType
-                            property string desc: qsTr("Programs a HMAC-SHA1 credential,which can be used for local authentication or encryption.")
-                        }
-                        RadioButton {
-                            text: qsTr("Static password")
-                            exclusiveGroup: slotType
-                            property string desc: qsTr("Stores a fixed password,which will be output each time you touch the button.")
-                        }
-                        RadioButton {
-                            text: qsTr("OATH-HOTP")
-                            exclusiveGroup: slotType
-                            property string desc: qsTr("Stores a numeric one-time-password using the OATH-HOTP standard.")
-                        }
+                ColumnLayout {
+                    ExclusiveGroup {
+                        id: typeAlternatives
                     }
+                    RadioButton {
+                        text: qsTr("YubiKey OTP")
+                        exclusiveGroup: typeAlternatives
+                        checked: true
+                        property string name: "otp"
+                        property string desc: qsTr("Programs a onte-time-passwordcredential using the YubiKey OTP protocol.")
+                    }
+                    RadioButton {
+                        text: qsTr("Challenge-response")
+                        exclusiveGroup: typeAlternatives
+                        property string name: "challengeResponse"
+                        property string desc: qsTr("Programs a HMAC-SHA1 credential,which can be used for local authentication or encryption.")
+                    }
+                    RadioButton {
+                        text: qsTr("Static password")
+                        exclusiveGroup: typeAlternatives
+                        property string name: "staticPassword"
+                        property string desc: qsTr("Stores a fixed password,which will be output each time you touch the button.")
+                    }
+                    RadioButton {
+                        text: qsTr("OATH-HOTP")
+                        exclusiveGroup: typeAlternatives
+                        property string name: "oathHotp"
+                        property string desc: qsTr("Stores a numeric one-time-password using the OATH-HOTP standard.")
+                    }
+                }
 
                 Text {
-                    text: slotType.current.desc
+                    text: typeAlternatives.current.desc
                     verticalAlignment: Text.AlignVCenter
                 }
             }
@@ -154,12 +161,31 @@ DefaultDialog {
                 Layout.alignment: Qt.AlignRight
                 Button {
                     text: qsTr("Back")
-                    onClicked: loader.sourceComponent =  overview
+                    onClicked: loader.sourceComponent = overview
                 }
                 Button {
                     text: qsTr("Next")
+                    onClicked: openProgramCredDialog(
+                                   typeAlternatives.current.name)
                 }
             }
+        }
+    }
+
+    function openProgramCredDialog(typeName) {
+        switch (typeName) {
+        case "otp":
+            console.log("otp")
+            break
+        case "challengeResponse":
+            console.log("challengeResponse")
+            break
+        case "staticPassword":
+            console.log("staticPassword")
+            break
+        case "oathHotp":
+            console.log("oathHotp")
+            break
         }
     }
 
@@ -182,7 +208,7 @@ DefaultDialog {
 
     function configureSlot(slot) {
         selectedSlot = slot
-        if(slotsEnabled[slot - 1]) {
+        if (slotsEnabled[slot - 1]) {
             loader.sourceComponent = slotStatus
         } else {
             console.log("Not configured, TODO: open wizard")
@@ -223,5 +249,4 @@ DefaultDialog {
         }
         onNo: close()
     }
-
 }
