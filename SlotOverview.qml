@@ -13,6 +13,7 @@ ColumnLayout {
     signal goToOverview
     signal goToSelectType
     signal goToSlotStatus
+    signal goToConfigureOTP
 
     onDeviceChanged: update()
 
