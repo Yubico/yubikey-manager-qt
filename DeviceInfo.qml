@@ -124,5 +124,7 @@ Item {
             var last = args.pop()
             return args.join(', ') + qsTr(' and ') + last
         }
+
+
     }
 }
