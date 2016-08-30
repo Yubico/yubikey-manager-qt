@@ -14,6 +14,7 @@ ColumnLayout {
     signal goToOverview
     signal goToSelectType
     signal goToSlotStatus
+    signal goToConfigureOTP
 
     Text {
         textFormat: Text.StyledText
@@ -26,40 +27,44 @@ ColumnLayout {
             text: qsTr("Public ID")
         }
         TextField {
-            id: publicIdLbl
+            id: publicIdInput
             implicitWidth: 110
             font.family: "Courier"
         }
         CheckBox {
+            id: useSerialCb
             anchors.margins: 5
-            anchors.left: publicIdLbl.right
+            anchors.left: publicIdInput.right
             text: qsTr("Use serial number")
+            onCheckedChanged: useSerial()
         }
         Text {
             text: qsTr("Private ID")
         }
         TextField {
-            id: privateIdLbl
+            id: privateIdInput
             implicitWidth: 110
             font.family: "Courier"
         }
         Button {
             anchors.margins: 5
             text: qsTr("Generate")
-            anchors.left: privateIdLbl.right
+            anchors.left: privateIdInput.right
+            onClicked: generateUid()
         }
         Text {
             text: qsTr("Secret key")
         }
         TextField {
-            id: secretKeyLbl
+            id: secretKeyInput
             implicitWidth: 260
             font.family: "Courier"
         }
         Button {
             anchors.margins: 5
-            anchors.left: secretKeyLbl.right
+            anchors.left: secretKeyInput.right
             text: qsTr("Generate")
+            onClicked: generateKey()
         }
     }
 
@@ -73,4 +78,26 @@ ColumnLayout {
             text: qsTr("Finish")
         }
     }
+
+    function useSerial() {
+        if (useSerialCb.checked) {
+            device.serial_modhex(function (res) {
+                publicIdInput.text = res
+            })
+        }
+    }
+
+    function generateUid() {
+        device.random_uid(function (res) {
+            privateIdInput.text = res
+        })
+    }
+
+    function generateKey() {
+        device.random_key(function (res) {
+            secretKeyInput.text = res
+        })
+    }
+
+
 }

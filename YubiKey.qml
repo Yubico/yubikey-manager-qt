@@ -70,4 +70,16 @@ Python {
     function swap_slots() {
         do_call('yubikey.controller.swap_slots', [])
     }
+
+    function serial_modhex(cb) {
+        do_call('yubikey.controller.serial_modhex', [], cb)
+    }
+
+    function random_uid(cb) {
+        do_call('yubikey.controller.random_uid', [], cb)
+    }
+
+    function random_key(cb) {
+        do_call('yubikey.controller.random_key', [], cb)
+    }
 }

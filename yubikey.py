@@ -5,10 +5,12 @@
 import os
 import json
 import types
+import struct
 #os.environ['PYUSB_DEBUG'] = 'debug'
 
 from ykman.descriptor import get_descriptors
-from ykman.util import CAPABILITY, TRANSPORT, Mode
+from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode
+from binascii import b2a_hex
 
 NON_FEATURE_CAPABILITIES = [CAPABILITY.CCID, CAPABILITY.NFC]
 
@@ -85,5 +87,15 @@ class Controller(object):
     def swap_slots(self):
         dev = self._descriptor.open_device(TRANSPORT.OTP)
         dev.driver.swap_slots()
+
+    def serial_modhex(self):
+        dev = self._descriptor.open_device(TRANSPORT.OTP)
+        return modhex_encode(b'\xff\x00' + struct.pack(b'>I', dev.serial))
+
+    def random_uid(self):
+        return b2a_hex(os.urandom(6)).decode('ascii')
+
+    def random_key(self):
+        return b2a_hex(os.urandom(16)).decode('ascii')
 
 controller = Controller()
