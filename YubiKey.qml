@@ -82,4 +82,8 @@ Python {
     function random_key(cb) {
         do_call('yubikey.controller.random_key', [], cb)
     }
+
+    function program_otp(slot, public_id, private_id, key) {
+        do_call('yubikey.controller.program_otp', [slot, public_id, private_id, key])
+    }
 }

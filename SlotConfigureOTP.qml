@@ -76,6 +76,7 @@ ColumnLayout {
         }
         Button {
             text: qsTr("Finish")
+            onClicked: programOTP()
         }
     }
 
@@ -98,6 +99,12 @@ ColumnLayout {
             secretKeyInput.text = res
         })
     }
+
+    function programOTP() {
+        device.program_otp(selectedSlot, publicIdInput.text, privateIdInput.text, secretKeyInput.text)
+        close()
+    }
+
 
 
 }

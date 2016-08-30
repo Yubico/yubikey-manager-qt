@@ -98,4 +98,8 @@ class Controller(object):
     def random_key(self):
         return b2a_hex(os.urandom(16)).decode('ascii')
 
+    def program_otp(self, slot, public_id, private_id, key):
+        dev = self._descriptor.open_device(TRANSPORT.OTP)
+        dev.driver.program_otp(slot, key, public_id, private_id)
+
 controller = Controller()
