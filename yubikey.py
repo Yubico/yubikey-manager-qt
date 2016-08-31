@@ -9,8 +9,8 @@ import struct
 #os.environ['PYUSB_DEBUG'] = 'debug'
 
 from ykman.descriptor import get_descriptors
-from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode
-from binascii import b2a_hex
+from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode
+from binascii import b2a_hex, a2b_hex
 
 NON_FEATURE_CAPABILITIES = [CAPABILITY.CCID, CAPABILITY.NFC]
 
@@ -99,6 +99,9 @@ class Controller(object):
         return b2a_hex(os.urandom(16)).decode('ascii')
 
     def program_otp(self, slot, public_id, private_id, key):
+        key = a2b_hex(key)
+        public_id = modhex_decode(public_id)
+        private_id = a2b_hex(private_id)
         dev = self._descriptor.open_device(TRANSPORT.OTP)
         dev.driver.program_otp(slot, key, public_id, private_id)
 
