@@ -30,6 +30,9 @@ ColumnLayout {
             id: publicIdInput
             implicitWidth: 110
             font.family: "Courier"
+            validator: RegExpValidator {
+                regExp: /[cbdefghijklnrtuv]{12}$/
+            }
         }
         CheckBox {
             id: useSerialCb
@@ -45,12 +48,15 @@ ColumnLayout {
             id: privateIdInput
             implicitWidth: 110
             font.family: "Courier"
+            validator: RegExpValidator {
+                regExp: /[0-9a-fA-F]{12}$/
+            }
         }
         Button {
             anchors.margins: 5
             text: qsTr("Generate")
             anchors.left: privateIdInput.right
-            onClicked: generateUid()
+            onClicked: generatePrivateId()
         }
         Text {
             text: qsTr("Secret key")
@@ -59,6 +65,9 @@ ColumnLayout {
             id: secretKeyInput
             implicitWidth: 260
             font.family: "Courier"
+            validator: RegExpValidator {
+                regExp: /[0-9a-fA-F]{32}$/
+            }
         }
         Button {
             anchors.margins: 5
@@ -76,6 +85,9 @@ ColumnLayout {
         }
         Button {
             text: qsTr("Finish")
+            enabled: publicIdInput.acceptableInput
+                     && privateIdInput.acceptableInput
+                     && secretKeyInput.acceptableInput
             onClicked: programOTP()
         }
     }
@@ -88,7 +100,7 @@ ColumnLayout {
         }
     }
 
-    function generateUid() {
+    function generatePrivateId() {
         device.random_uid(function (res) {
             privateIdInput.text = res
         })
@@ -107,8 +119,10 @@ ColumnLayout {
                                if (!error) {
                                    updateStatus()
                                    confirmConfigured.open()
+                               } else {
+                                   // TODO: Handle errors, access code case.
+                                   console.log(error)
                                }
-                               //TODO: Handle errors, access code case.
                            })
     }
 
