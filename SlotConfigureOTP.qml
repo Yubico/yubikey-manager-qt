@@ -101,10 +101,25 @@ ColumnLayout {
     }
 
     function programOTP() {
-        device.program_otp(selectedSlot, publicIdInput.text, privateIdInput.text, secretKeyInput.text)
-        close()
+        device.program_otp(selectedSlot, publicIdInput.text,
+                           privateIdInput.text, secretKeyInput.text,
+                           function (error) {
+                               if (!error) {
+                                   updateStatus()
+                                   confirmConfigured.open()
+                               }
+                               //TODO: Handle errors, access code case.
+                           })
     }
 
-
-
+    MessageDialog {
+        id: confirmConfigured
+        icon: StandardIcon.Information
+        title: "Slot configured"
+        text: "The slot is now configured."
+        standardButtons: StandardButton.Ok
+        onAccepted: {
+            goToOverview()
+        }
+    }
 }
