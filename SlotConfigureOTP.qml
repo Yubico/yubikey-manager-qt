@@ -15,6 +15,7 @@ ColumnLayout {
     signal goToSelectType
     signal goToSlotStatus
     signal goToConfigureOTP
+    signal goToChallengeResponse
 
     Text {
         textFormat: Text.StyledText
@@ -107,7 +108,7 @@ ColumnLayout {
     }
 
     function generateKey() {
-        device.random_key(function (res) {
+        device.random_key(16, function (res) {
             secretKeyInput.text = res
         })
     }

@@ -15,6 +15,7 @@ ColumnLayout {
     signal goToSelectType
     signal goToSlotStatus
     signal goToConfigureOTP
+    signal goToChallengeResponse
 
     Text {
         textFormat: Text.StyledText
@@ -36,13 +37,13 @@ ColumnLayout {
                 text: qsTr("Challenge-response")
                 exclusiveGroup: typeAlternatives
                 property string name: "challengeResponse"
-                property string desc: qsTr("Programs a HMAC-SHA1 credential,which can be used for local authentication or encryption.")
+                property string desc: qsTr("Programs a HMAC-SHA1 credential, which can be used for local authentication or encryption.")
             }
             RadioButton {
                 text: qsTr("Static password")
                 exclusiveGroup: typeAlternatives
                 property string name: "staticPassword"
-                property string desc: qsTr("Stores a fixed password,which will be output each time you touch the button.")
+                property string desc: qsTr("Stores a fixed password, which will be output each time you touch the button.")
             }
             RadioButton {
                 text: qsTr("OATH-HOTP")
@@ -76,7 +77,7 @@ ColumnLayout {
             goToConfigureOTP()
             break
         case "challengeResponse":
-            console.log("challengeResponse")
+            goToChallengeResponse()
             break
         case "staticPassword":
             console.log("staticPassword")

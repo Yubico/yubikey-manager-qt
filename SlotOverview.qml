@@ -14,6 +14,7 @@ ColumnLayout {
     signal goToSelectType
     signal goToSlotStatus
     signal goToConfigureOTP
+    signal goToChallengeResponse
 
     onDeviceChanged: update()
 

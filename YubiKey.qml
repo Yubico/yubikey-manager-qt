@@ -79,11 +79,16 @@ Python {
         do_call('yubikey.controller.random_uid', [], cb)
     }
 
-    function random_key(cb) {
-        do_call('yubikey.controller.random_key', [], cb)
+    function random_key(bytes, cb) {
+        do_call('yubikey.controller.random_key', [bytes], cb)
     }
 
     function program_otp(slot, public_id, private_id, key, cb) {
         do_call('yubikey.controller.program_otp', [slot, public_id, private_id, key], cb)
+    }
+
+
+    function program_challenge_response(slot, key, touch, cb) {
+        do_call('yubikey.controller.program_challenge_response', [slot, key, touch], cb)
     }
 }

@@ -12,5 +12,6 @@
         <file>SlotSelectType.qml</file>
         <file>slotutils.js</file>
         <file>SlotConfigureOTP.qml</file>
+        <file>SlotConfigureChallengeResponse.qml</file>
     </qresource>
 </RCC>

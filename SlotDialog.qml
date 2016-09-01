@@ -15,50 +15,53 @@ DefaultDialog {
 
     onHasDeviceChanged: close()
 
-    Loader {
-        id: loader
-        source: "SlotOverview.qml"
-        onLoaded: {
-            deviceBinder.target = loader.item
-            selectedSlotBinder.target = loader.item
-            slotStatusBinder.target = loader.item
+        Loader {
+            id: loader
+            source: "SlotOverview.qml"
+            onLoaded: {
+                deviceBinder.target = loader.item
+                selectedSlotBinder.target = loader.item
+                slotStatusBinder.target = loader.item
+            }
         }
-    }
 
-    Binding {
-        id: deviceBinder
-        property: "device"
-        value: device
-    }
+        Binding {
+            id: deviceBinder
+            property: "device"
+            value: device
+        }
 
-    Binding {
-        id: slotStatusBinder
-        property: "slotsEnabled"
-        value: slotsEnabled
-    }
+        Binding {
+            id: slotStatusBinder
+            property: "slotsEnabled"
+            value: slotsEnabled
+        }
 
-    Binding {
-        id: selectedSlotBinder
-        property: "selectedSlot"
-        value: selectedSlot
-    }
+        Binding {
+            id: selectedSlotBinder
+            property: "selectedSlot"
+            value: selectedSlot
+        }
 
-    Connections {
-        target: loader.item
-         onConfigureSlot: {
-             selectedSlot = slot
-             loader.source = "SlotStatus.qml"
+        Connections {
+            target: loader.item
+             onConfigureSlot: {
+                 selectedSlot = slot
+                 loader.source = "SlotStatus.qml"
+             }
+             onUpdateStatus: updateStatus()
+
+             onGoToOverview: loader.source = "SlotOverview.qml"
+             onGoToSlotStatus: loader.source = "SlotStatus.qml"
+             onGoToSelectType: loader.source = "SlotSelectType.qml"
+             onGoToConfigureOTP: loader.source = "SlotConfigureOTP.qml"
+             onGoToChallengeResponse: loader.source = "SlotConfigureChallengeResponse.qml"
          }
-         onUpdateStatus: updateStatus()
-         onGoToOverview: loader.source = "SlotOverview.qml"
-         onGoToSlotStatus: loader.source = "SlotStatus.qml"
-         onGoToSelectType: loader.source = "SlotSelectType.qml"
-         onGoToConfigureOTP: loader.source = "SlotConfigureOTP.qml"
-     }
 
-    function updateStatus() {
-        device.slots_status(function (res) {
-            slotsEnabled = res
-        })
-    }
+        function updateStatus() {
+            device.slots_status(function (res) {
+                slotsEnabled = res
+            })
+        }
+
 }
