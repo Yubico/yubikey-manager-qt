@@ -7,8 +7,6 @@ import json
 import types
 import struct
 
-raise ValueError(os.environ['DYLD_LIBRARY_PATH'])
-
 #os.environ['PYUSB_DEBUG'] = 'debug'
 
 from ykman.descriptor import get_descriptors
