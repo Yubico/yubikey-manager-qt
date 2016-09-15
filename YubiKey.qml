@@ -16,13 +16,16 @@ Python {
     property var enabled: []
 
     Component.onCompleted: {
-        addImportPath(Qt.resolvedUrl('.'))
-        importModule('yubikey', function () {
-            do_call('yubikey.controller.get_features', [], function (res) {
-                features = res
+        importModule('os', function() {
+            call('os.environ.__setitem__', ["DYLD_LIBRARY_PATH", appDir + "/lib"], function() {
+                addImportPath(Qt.resolvedUrl('.'))
+                importModule('yubikey', function () {
+                    do_call('yubikey.controller.get_features', [], function (res) {
+                        features = res
+                    })
+                })
             })
         })
-
     }
 
     onError: {

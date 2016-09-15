@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <stdlib.h>
 
 int main(int argc, char *argv[])
@@ -8,15 +9,8 @@ int main(int argc, char *argv[])
     //QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
-
-    //Set DYLD_LIBRARY_PATH to exe_dir/lib/
-    char* base_dir = app.applicationDirPath().toLatin1().data();
-    char dyld_path[sizeof(base_dir) + 4];
-    strcpy(dyld_path, base_dir);
-    strcat(dyld_path, "/lib");
-    setenv("DYLD_LIBRARY_PATH", dyld_path, 1);
-
     QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("appDir", app.applicationDirPath());
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
     return app.exec();

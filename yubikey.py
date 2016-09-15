@@ -8,7 +8,6 @@ import types
 import struct
 
 #os.environ['PYUSB_DEBUG'] = 'debug'
-raise ValueError(os.environ['DYLD_LIBRARY_PATH'])
 
 from ykman.descriptor import get_descriptors
 from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode
