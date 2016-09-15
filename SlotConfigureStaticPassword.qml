@@ -18,35 +18,30 @@ ColumnLayout {
     signal goToChallengeResponse
     signal goToStaticPassword
 
+
     Text {
         textFormat: Text.StyledText
-        text: "<h2>Configure challenge-response</h2><br/><p>When queried, the YubiKey will respond to a challenge.<p>"
+        text: "<h2>Configure static password</h2><br/><p>When triggered, the YubiKey will output a fixed password.</p><br/><p>To avoid problems with different keyboard layouts, the password should only contain modhex characters.<p>"
     }
 
     RowLayout {
         Text {
-            text: qsTr("Secret key")
+            text: qsTr("Password")
         }
         TextField {
-            id: secretKeyInput
-            implicitWidth: 310
+            id: passwordInput
+            implicitWidth: 280
             font.family: "Courier"
             validator: RegExpValidator {
-                regExp: /[0-9a-fA-F]{40}$/
+                regExp: /[cbdefghijklnrtuv]{1,32}$/
             }
         }
-
         Button {
             anchors.margins: 5
             text: qsTr("Generate")
-            anchors.left: secretKeyInput.right
-            onClicked: generateKey()
+            anchors.left: passwordInput.right
+            onClicked: generatePassword()
         }
-    }
-
-    CheckBox {
-        id: requireTouch
-        text: qsTr("Require touch")
     }
 
     RowLayout {
@@ -57,20 +52,19 @@ ColumnLayout {
         }
         Button {
             text: qsTr("Finish")
-            enabled: secretKeyInput.acceptableInput
-            onClicked: programChallengeResponse()
+            enabled: passwordInput.acceptableInput
+            onClicked: programStaticPassword()
         }
     }
 
-    function generateKey() {
-        device.random_key(20, function (res) {
-            secretKeyInput.text = res
+    function generatePassword() {
+        device.random_modhex(16, function (res) {
+            passwordInput.text = res
         })
     }
 
-    function programChallengeResponse() {
-        device.program_challenge_response(selectedSlot, secretKeyInput.text,
-                                          requireTouch.checked,
+    function programStaticPassword() {
+        device.program_static_password(selectedSlot, passwordInput.text,
                                           function (error) {
                                               if (!error) {
                                                   updateStatus()

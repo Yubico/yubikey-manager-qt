@@ -50,12 +50,13 @@ DefaultDialog {
                  loader.source = "SlotStatus.qml"
              }
              onUpdateStatus: updateStatus()
-
              onGoToOverview: loader.source = "SlotOverview.qml"
              onGoToSlotStatus: loader.source = "SlotStatus.qml"
              onGoToSelectType: loader.source = "SlotSelectType.qml"
              onGoToConfigureOTP: loader.source = "SlotConfigureOTP.qml"
              onGoToChallengeResponse: loader.source = "SlotConfigureChallengeResponse.qml"
+             onGoToStaticPassword: loader.source = "SlotConfigureStaticPassword.qml"
+             onGoToOathHotp: loader.source = "SlotConfigureOathHotp.qml"
          }
 
         function updateStatus() {

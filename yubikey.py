@@ -6,12 +6,15 @@ import os
 import json
 import types
 import struct
+
 #os.environ['PYUSB_DEBUG'] = 'debug'
 raise ValueError(os.environ['DYLD_LIBRARY_PATH'])
 
 from ykman.descriptor import get_descriptors
 from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode
 from binascii import b2a_hex, a2b_hex
+
+
 
 NON_FEATURE_CAPABILITIES = [CAPABILITY.CCID, CAPABILITY.NFC]
 
@@ -96,6 +99,9 @@ class Controller(object):
         dev = self._descriptor.open_device(TRANSPORT.OTP)
         return modhex_encode(b'\xff\x00' + struct.pack(b'>I', dev.serial))
 
+    def random_modhex(self, bytes):
+        return modhex_encode(os.urandom(int(bytes)))
+
     def random_uid(self):
         return b2a_hex(os.urandom(6)).decode('ascii')
 
@@ -119,5 +125,21 @@ class Controller(object):
             dev.driver.program_chalresp(slot, key, touch)
         except Exception as e:
             return str(e)
+
+    def program_static_password(self, slot, key):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.OTP)
+            dev.driver.program_static(slot, key)
+        except Exception as e:
+            return str(e)
+
+
+    def program_oath_hotp(self, slot, key, digits):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.OTP)
+            dev.driver.program_hotp(slot, key, digits == 8)
+        except Exception as e:
+            return str(e)
+
 
 controller = Controller()

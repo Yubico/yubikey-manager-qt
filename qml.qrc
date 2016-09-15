@@ -13,5 +13,7 @@
         <file>slotutils.js</file>
         <file>SlotConfigureOTP.qml</file>
         <file>SlotConfigureChallengeResponse.qml</file>
+        <file>SlotConfigureStaticPassword.qml</file>
+        <file>SlotConfigureOathHotp.qml</file>
     </qresource>
 </RCC>

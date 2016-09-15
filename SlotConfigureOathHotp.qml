@@ -20,7 +20,7 @@ ColumnLayout {
 
     Text {
         textFormat: Text.StyledText
-        text: "<h2>Configure challenge-response</h2><br/><p>When queried, the YubiKey will respond to a challenge.<p>"
+        text: "<h2>Configure HOTP credential</h2><br/><p>When triggered, the YubiKey will output a HOTP code.<p>"
     }
 
     RowLayout {
@@ -29,25 +29,23 @@ ColumnLayout {
         }
         TextField {
             id: secretKeyInput
-            implicitWidth: 310
+            implicitWidth: 240
             font.family: "Courier"
             validator: RegExpValidator {
-                regExp: /[0-9a-fA-F]{40}$/
+                regExp: /[2-7a-fA-F]+/
             }
         }
+    }
 
-        Button {
-            anchors.margins: 5
-            text: qsTr("Generate")
-            anchors.left: secretKeyInput.right
-            onClicked: generateKey()
+    RowLayout {
+        Text {
+            text: qsTr("Digits")
+        }
+        ComboBox {
+            model: [ 6, 8 ]
         }
     }
 
-    CheckBox {
-        id: requireTouch
-        text: qsTr("Require touch")
-    }
 
     RowLayout {
         Layout.alignment: Qt.AlignRight
@@ -58,19 +56,13 @@ ColumnLayout {
         Button {
             text: qsTr("Finish")
             enabled: secretKeyInput.acceptableInput
-            onClicked: programChallengeResponse()
+            onClicked: programOathHotp()
         }
     }
 
-    function generateKey() {
-        device.random_key(20, function (res) {
-            secretKeyInput.text = res
-        })
-    }
-
-    function programChallengeResponse() {
-        device.program_challenge_response(selectedSlot, secretKeyInput.text,
-                                          requireTouch.checked,
+    function programOathHotp() {
+        device.program_oath_hotp(selectedSlot, secretKeyInput.text,
+                                          8,
                                           function (error) {
                                               if (!error) {
                                                   updateStatus()

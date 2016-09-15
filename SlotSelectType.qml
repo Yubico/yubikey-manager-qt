@@ -16,6 +16,8 @@ ColumnLayout {
     signal goToSlotStatus
     signal goToConfigureOTP
     signal goToChallengeResponse
+    signal goToStaticPassword
+    signal goToOathHotp
 
     Text {
         textFormat: Text.StyledText
@@ -80,10 +82,10 @@ ColumnLayout {
             goToChallengeResponse()
             break
         case "staticPassword":
-            console.log("staticPassword")
+            goToStaticPassword()
             break
         case "oathHotp":
-            console.log("oathHotp")
+            goToOathHotp()
             break
         }
     }
