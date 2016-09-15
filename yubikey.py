@@ -20,8 +20,8 @@ def find_library(libname):
     if os.path.isfile(libname):
         return libname
     bundle_path = os.path.join(os.environ['DYLD_LIBRARY_PATH'], libname)
-        if os.path.isfile(bundle_path):
-            return bundle_path
+    if os.path.isfile(bundle_path):
+        return bundle_path
     return ctypes.util.find_library(libname)
 
 import usb.backend.libusb1
