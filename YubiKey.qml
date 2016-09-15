@@ -15,13 +15,21 @@ Python {
     property var connections: []
     property var enabled: []
 
+    property bool ready: false
+    property var queue: []
+
     Component.onCompleted: {
         importModule('os', function() {
             call('os.environ.__setitem__', ["DYLD_LIBRARY_PATH", appDir + "/lib"], function() {
                 addImportPath(Qt.resolvedUrl('.'))
                 importModule('yubikey', function () {
+                    ready = true
                     do_call('yubikey.controller.get_features', [], function (res) {
                         features = res
+                        for(var i in queue) {
+                            do_call(queue[i][0], queue[i][1], queue[i][2])
+                        }
+                        queue = []
                     })
                 })
             })
@@ -33,9 +41,13 @@ Python {
     }
 
     function do_call(func, args, cb) {
-        call(func, args, function(json) {
-            cb(json ? JSON.parse(json) : undefined)
-        })
+        if(!ready) {
+            queue.push([func, args, cb])
+        } else {
+            call(func, args, function(json) {
+                cb(json ? JSON.parse(json) : undefined)
+            })
+        }
     }
 
 
