@@ -6,6 +6,7 @@ import os
 import json
 import types
 #os.environ['PYUSB_DEBUG'] = 'debug'
+raise ValueError(os.environ['DYLD_LIBRARY_PATH'])
 
 from ykman.descriptor import get_descriptors
 from ykman.util import CAPABILITY, TRANSPORT, Mode
@@ -16,6 +17,9 @@ import ctypes.util
 def find_library(libname):
     if os.path.isfile(libname):
         return libname
+    bundle_path = os.path.join(os.environ['DYLD_LIBRARY_PATH'], libname)
+        if os.path.isfile(bundle_path):
+            return bundle_path
     return ctypes.util.find_library(libname)
 
 import usb.backend.libusb1
