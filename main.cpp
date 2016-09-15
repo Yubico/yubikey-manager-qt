@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
+    setenv("PYTHONDONTWRITEBYTECODE", "1", 1);
     engine.rootContext()->setContextProperty("appDir", app.applicationDirPath());
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
