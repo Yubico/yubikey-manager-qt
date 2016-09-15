@@ -83,12 +83,23 @@ Python {
         do_call('yubikey.controller.random_key', [bytes], cb)
     }
 
+    function random_modhex(bytes, cb) {
+        do_call('yubikey.controller.random_modhex', [bytes], cb)
+    }
+
     function program_otp(slot, public_id, private_id, key, cb) {
         do_call('yubikey.controller.program_otp', [slot, public_id, private_id, key], cb)
     }
 
-
     function program_challenge_response(slot, key, touch, cb) {
         do_call('yubikey.controller.program_challenge_response', [slot, key, touch], cb)
+    }
+
+    function program_static_password(slot, password, cb) {
+        do_call('yubikey.controller.program_static_password', [slot, password], cb)
+    }
+
+    function program_oath_hotp(slot, key, digits, cb) {
+        do_call('yubikey.controller.program_oath_hotp', [slot, key, digits], cb)
     }
 }

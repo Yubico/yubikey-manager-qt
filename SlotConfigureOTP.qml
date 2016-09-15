@@ -16,6 +16,7 @@ ColumnLayout {
     signal goToSlotStatus
     signal goToConfigureOTP
     signal goToChallengeResponse
+    signal goToStaticPassword
 
     Text {
         textFormat: Text.StyledText
