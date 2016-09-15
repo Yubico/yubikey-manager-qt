@@ -5,11 +5,13 @@
 import os
 import json
 import types
+import struct
 #os.environ['PYUSB_DEBUG'] = 'debug'
 raise ValueError(os.environ['DYLD_LIBRARY_PATH'])
 
 from ykman.descriptor import get_descriptors
-from ykman.util import CAPABILITY, TRANSPORT, Mode
+from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode
+from binascii import b2a_hex, a2b_hex
 
 NON_FEATURE_CAPABILITIES = [CAPABILITY.CCID, CAPABILITY.NFC]
 
@@ -86,5 +88,36 @@ class Controller(object):
         dev = self._descriptor.open_device(TRANSPORT.OTP)
         dev.driver.zap_slot(slot)
 
+    def swap_slots(self):
+        dev = self._descriptor.open_device(TRANSPORT.OTP)
+        dev.driver.swap_slots()
+
+    def serial_modhex(self):
+        dev = self._descriptor.open_device(TRANSPORT.OTP)
+        return modhex_encode(b'\xff\x00' + struct.pack(b'>I', dev.serial))
+
+    def random_uid(self):
+        return b2a_hex(os.urandom(6)).decode('ascii')
+
+    def random_key(self, bytes):
+        return b2a_hex(os.urandom(int(bytes))).decode('ascii')
+
+    def program_otp(self, slot, public_id, private_id, key):
+        try:
+            key = a2b_hex(key)
+            public_id = modhex_decode(public_id)
+            private_id = a2b_hex(private_id)
+            dev = self._descriptor.open_device(TRANSPORT.OTP)
+            dev.driver.program_otp(slot, key, public_id, private_id)
+        except Exception as e:
+            return str(e)
+
+    def program_challenge_response(self, slot, key, touch):
+        try:
+            key = a2b_hex(key)
+            dev = self._descriptor.open_device(TRANSPORT.OTP)
+            dev.driver.program_chalresp(slot, key, touch)
+        except Exception as e:
+            return str(e)
 
 controller = Controller()

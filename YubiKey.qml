@@ -1,4 +1,4 @@
-import QtQuick 2.5
+import QtQuick 2.0
 import io.thp.pyotherside 1.4
 
 
@@ -65,5 +65,30 @@ Python {
 
     function erase_slot(slot) {
         do_call('yubikey.controller.erase_slot', [slot])
+    }
+
+    function swap_slots() {
+        do_call('yubikey.controller.swap_slots', [])
+    }
+
+    function serial_modhex(cb) {
+        do_call('yubikey.controller.serial_modhex', [], cb)
+    }
+
+    function random_uid(cb) {
+        do_call('yubikey.controller.random_uid', [], cb)
+    }
+
+    function random_key(bytes, cb) {
+        do_call('yubikey.controller.random_key', [bytes], cb)
+    }
+
+    function program_otp(slot, public_id, private_id, key, cb) {
+        do_call('yubikey.controller.program_otp', [slot, public_id, private_id, key], cb)
+    }
+
+
+    function program_challenge_response(slot, key, touch, cb) {
+        do_call('yubikey.controller.program_challenge_response', [slot, key, touch], cb)
     }
 }

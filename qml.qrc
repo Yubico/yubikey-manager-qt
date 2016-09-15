@@ -7,5 +7,11 @@
         <file>ConnectionsDialog.qml</file>
         <file>DefaultDialog.qml</file>
         <file>SlotDialog.qml</file>
+        <file>SlotOverview.qml</file>
+        <file>SlotStatus.qml</file>
+        <file>SlotSelectType.qml</file>
+        <file>slotutils.js</file>
+        <file>SlotConfigureOTP.qml</file>
+        <file>SlotConfigureChallengeResponse.qml</file>
     </qresource>
 </RCC>
