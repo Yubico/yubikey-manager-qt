@@ -1,2 +1,4 @@
 ykman-gui.pro.user*
 *.autosave
+dist/
+lib/
