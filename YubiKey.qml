@@ -20,7 +20,7 @@ Python {
 
     Component.onCompleted: {
         importModule('os', function() {
-            call('os.environ.__setitem__', ["DYLD_LIBRARY_PATH", appDir + "/lib"], function() {
+            call('os.environ.__setitem__', ["DYLD_LIBRARY_PATH", appDir + "/../Frameworks"], function() {
                 addImportPath(Qt.resolvedUrl('.'))
                 importModule('yubikey', function () {
                     ready = true
@@ -41,7 +41,7 @@ Python {
     }
 
     function do_call(func, args, cb) {
-        if(!ready) {
+        if (!ready) {
             queue.push([func, args, cb])
         } else {
             call(func, args, function(json) {
