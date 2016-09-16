@@ -11,9 +11,12 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    putenv("PYTHONDONTWRITEBYTECODE=1");
+
+    QString pythonNoBytecode = "PYTHONDONTWRITEBYTECODE=1";
+    putenv(pythonNoBytecode.toUtf8().data());
     QString frameworks = "DYLD_LIBRARY_PATH=" + app.applicationDirPath() + "/../Frameworks";
     putenv(frameworks.toUtf8().data());
+
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
     return app.exec();
