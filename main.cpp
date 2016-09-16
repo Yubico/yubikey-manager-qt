@@ -10,9 +10,10 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    setenv("PYTHONDONTWRITEBYTECODE", "1", 1);
-    QString frameworks = app.applicationDirPath() + "/../Frameworks";
-    setenv("DYLD_LIBRARY_PATH", frameworks.toUtf8().data(), 1);
+    QString pythonNoBytecode = "PYTHONDONTWRITEBYTECODE=1";
+    putenv(pythonNoBytecode.toUtf8().data());
+    QString frameworks = "DYLD_LIBRARY_PATH=" + app.applicationDirPath() + "/../Frameworks";
+    putenv(frameworks.toUtf8().data());
 
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
