@@ -8,7 +8,7 @@ DefaultDialog {
 
     title: qsTr("Configure connections")
 
-    onAccepted: function () {
+    onAccepted: {
         var enabled = get_enabled()
         device.set_mode(enabled, function (e) {
             if (e) {
@@ -51,14 +51,14 @@ DefaultDialog {
             Button {
                 id: button_ok
                 text: qsTr("OK")
-                onClicked: function() {
+                onClicked: {
                     close()
                     accepted()
                 }
             }
             Button {
                 text: qsTr("Cancel")
-                onClicked: function() {
+                onClicked: {
                     close()
                     rejected()
                 }
@@ -89,12 +89,15 @@ DefaultDialog {
     }
 
     function check_acceptable() {
-        for (var i = 0; i < device.connections.length; i++) {
-            if (connections.itemAt(i).text === 'NFC') {
-                continue
-            }
-            if (connections.itemAt(i).checked) {
-                return true
+        for (var i = 0; i < connections.count; i++) {
+            var item = connections.itemAt(i)
+            if(item) {
+                if (item.text === 'NFC') {
+                    continue
+                }
+                if (item.checked) {
+                    return true
+                }
             }
         }
         return false
