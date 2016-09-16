@@ -1,3 +1,5 @@
 ykman-gui.pro.user*
 *.autosave
 .ropeproject
+dist/
+lib/

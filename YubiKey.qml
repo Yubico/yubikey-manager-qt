@@ -19,8 +19,6 @@ Python {
     property var queue: []
 
     Component.onCompleted: {
-        importModule('os', function() {
-            call('os.environ.__setitem__', ["DYLD_LIBRARY_PATH", appDir + "/../Frameworks"], function() {
                 addImportPath(Qt.resolvedUrl('.'))
                 importModule('yubikey', function () {
                     ready = true
@@ -32,8 +30,6 @@ Python {
                         queue = []
                     })
                 })
-            })
-        })
     }
 
     onError: {
