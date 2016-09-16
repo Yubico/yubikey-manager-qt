@@ -100,15 +100,17 @@ Item {
             id: connectionsDialog
             device: yk
         }
+
+        SlotDialog {
+            id: slotDialog
+            device: yk
+        }
     }
     function openSlotDialog() {
-        var component = Qt.createComponent("SlotDialog.qml")
-        var dialog = component.createObject(this, {
-                                                device: device
-                                            })
         device.slots_status(function (res) {
-            dialog.slotsEnabled = res
-            dialog.show()
+            slotDialog.slotsEnabled = res
+            slotDialog.reInit()
+            slotDialog.show()
         })
 
 
