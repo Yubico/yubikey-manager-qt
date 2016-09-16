@@ -69,10 +69,10 @@ DefaultDialog {
         }
 
         function start() {
+            loader.source = "SlotOverview.qml"
             device.slots_status(function (res) {
                 slotDialog.slotsEnabled = res
                 show()
-                loader.source = "SlotOverview.qml"
             })
         }
 
