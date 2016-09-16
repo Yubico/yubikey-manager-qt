@@ -16,6 +16,7 @@ ColumnLayout {
     signal goToConfigureOTP
     signal goToChallengeResponse
     signal goToStaticPassword
+    signal goToOathHotp
 
     onDeviceChanged: update()
 

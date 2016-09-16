@@ -17,6 +17,7 @@ ColumnLayout {
     signal goToConfigureOTP
     signal goToChallengeResponse
     signal goToStaticPassword
+    signal goToOathHotp
 
     Text {
         textFormat: Text.StyledText
