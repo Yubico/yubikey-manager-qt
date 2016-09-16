@@ -56,7 +56,7 @@ Item {
                     Layout.alignment: Qt.AlignRight
                     text: qsTr("Configure")
                     enabled: device.enabled.indexOf('OTP') >= 0
-                    onClicked: openSlotDialog()
+                    onClicked: slotDialog.start()
                 }
             }
         }
@@ -105,15 +105,6 @@ Item {
             id: slotDialog
             device: yk
         }
-    }
-    function openSlotDialog() {
-        device.slots_status(function (res) {
-            slotDialog.slotsEnabled = res
-            slotDialog.reInit()
-            slotDialog.show()
-        })
-
-
     }
 
     function readable_list(args) {

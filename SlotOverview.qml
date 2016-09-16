@@ -25,7 +25,10 @@ ColumnLayout {
         text: qsTr("<h2>Configure YubiKey slots</h2>")
     }
     GroupBox {
+        Layout.fillWidth: true
+
         GridLayout {
+            anchors.fill: parent
             columns: 3
             Text {
                 text: qsTr("Short press:")

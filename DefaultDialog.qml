@@ -19,10 +19,14 @@ ApplicationWindow {
         id: outer_content
         anchors.fill: parent
         anchors.margins: 12
-        spacing: 6
+        //spacing: 6
 
         ColumnLayout {
             id: inner_content
         }
+    }
+
+    function resize() {
+        setWidth(width)
     }
 }

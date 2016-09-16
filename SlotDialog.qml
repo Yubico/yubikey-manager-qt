@@ -12,16 +12,19 @@ DefaultDialog {
     property var slotsEnabled: [false, false]
     property bool hasDevice: device ? device.hasDevice : false
     property int selectedSlot
+    minimumWidth: 300
 
     onHasDeviceChanged: close()
 
         Loader {
             id: loader
             source: "SlotOverview.qml"
+            Layout.fillWidth: true
             onLoaded: {
                 deviceBinder.target = loader.item
                 selectedSlotBinder.target = loader.item
                 slotStatusBinder.target = loader.item
+                resize()
             }
         }
 
@@ -65,8 +68,12 @@ DefaultDialog {
             })
         }
 
-        function reInit() {
-            loader.source = "SlotOverview.qml"
+        function start() {
+            device.slots_status(function (res) {
+                slotDialog.slotsEnabled = res
+                show()
+                loader.source = "SlotOverview.qml"
+            })
         }
 
 }
