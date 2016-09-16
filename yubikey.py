@@ -6,12 +6,12 @@ import os
 import json
 import types
 import struct
-
-#os.environ['PYUSB_DEBUG'] = 'debug'
+from base64 import b32decode
+from binascii import b2a_hex, a2b_hex
 
 from ykman.descriptor import get_descriptors
 from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode
-from binascii import b2a_hex, a2b_hex
+
 
 
 
@@ -132,11 +132,12 @@ class Controller(object):
         except Exception as e:
             return str(e)
 
-
     def program_oath_hotp(self, slot, key, digits):
         try:
+            unpadded = key.upper().rstrip('=').replace(' ', '')
+            key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
             dev = self._descriptor.open_device(TRANSPORT.OTP)
-            dev.driver.program_hotp(slot, key, digits == 8)
+            dev.driver.program_hotp(slot, key, hotp8=(digits == 8))
         except Exception as e:
             return str(e)
 

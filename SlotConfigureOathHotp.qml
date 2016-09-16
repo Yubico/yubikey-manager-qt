@@ -33,7 +33,7 @@ ColumnLayout {
             implicitWidth: 240
             font.family: "Courier"
             validator: RegExpValidator {
-                regExp: /[2-7a-fA-F]+/
+                regExp: /[ 2-7a-zA-Z]+=*/
             }
         }
     }
