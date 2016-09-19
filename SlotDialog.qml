@@ -66,6 +66,7 @@ DefaultDialog {
         }
 
         function reInit() {
+
             loader.source = "SlotOverview.qml"
         }
 

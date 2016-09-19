@@ -14,7 +14,6 @@ DefaultDialog {
             if (e) {
                 console.log('Error setting mode: ' + e)
             } else {
-                console.log('Mode set: "' + enabled + '", eject now.')
                 ejectNow.open()
             }
         })
@@ -70,7 +69,7 @@ DefaultDialog {
         id: ejectNow
         title: qsTr('Connections configured')
         icon: StandardIcon.Information
-        text: qsTr('Please remove, then re-insert your YubiKey.')
+        text: qsTr('Connections are now configured. Remove and re-insert your YubiKey.')
         standardButtons: StandardButton.NoButton
 
         readonly property bool hasDevice: device.hasDevice
