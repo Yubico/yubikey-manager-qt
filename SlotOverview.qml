@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
@@ -25,7 +25,10 @@ ColumnLayout {
         text: qsTr("<h2>Configure YubiKey slots</h2>")
     }
     GroupBox {
+        Layout.fillWidth: true
+
         GridLayout {
+            anchors.fill: parent
             columns: 3
             Text {
                 text: qsTr("Short press:")

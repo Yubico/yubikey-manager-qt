@@ -3,6 +3,7 @@
 #include <QQmlContext>
 #include <stdlib.h>
 #include <QtGlobal>
+
 int main(int argc, char *argv[])
 {
     //TODO: Run this on Qt versions which support it...
@@ -10,6 +11,7 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
     QString pythonNoBytecode = "PYTHONDONTWRITEBYTECODE=1";
     putenv(pythonNoBytecode.toUtf8().data());
     QString frameworks = "DYLD_LIBRARY_PATH=" + app.applicationDirPath() + "/../Frameworks";
