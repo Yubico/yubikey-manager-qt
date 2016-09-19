@@ -3,3 +3,4 @@ ykman-gui.pro.user*
 .ropeproject
 dist/
 lib/
+__pycache__/
