@@ -12,12 +12,12 @@ DefaultDialog {
     property var slotsEnabled: [false, false]
     property bool hasDevice: device ? device.hasDevice : false
     property int selectedSlot
-    minimumWidth: 300
+    minimumWidth: 500
 
     onHasDeviceChanged: close()
 
     onVisibleChanged: {
-        if(visible) {
+        if (visible) {
             resize()
         } else {
             loader.source = "SlotOverview.qml"

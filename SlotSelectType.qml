@@ -25,6 +25,7 @@ ColumnLayout {
     }
     RowLayout {
         ColumnLayout {
+            id: typeColumn
             ExclusiveGroup {
                 id: typeAlternatives
             }
@@ -54,11 +55,17 @@ ColumnLayout {
                 property string desc: qsTr("Stores a numeric one-time-password using the OATH-HOTP standard.")
             }
         }
-
-        Text {
-            text: typeAlternatives.current.desc
-            verticalAlignment: Text.AlignVCenter
+        Item {
+            width: minimumWidth - typeColumn.width - margins * 2
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: typeAlternatives.current.desc
+                verticalAlignment: Text.AlignVCenter
+            }
         }
+
     }
 
     RowLayout {

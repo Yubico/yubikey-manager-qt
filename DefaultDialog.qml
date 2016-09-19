@@ -13,13 +13,13 @@ ApplicationWindow {
     color: palette.window
     signal accepted
     signal rejected
+    property int margins: 12
 
 
     ColumnLayout {
         id: outer_content
         anchors.fill: parent
-        anchors.margins: 12
-        //spacing: 6
+        anchors.margins: margins
 
         ColumnLayout {
             id: inner_content
