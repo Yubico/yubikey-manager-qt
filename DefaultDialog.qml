@@ -27,6 +27,11 @@ ApplicationWindow {
     }
 
     function resize() {
-        setWidth(width)
+        var w = 0
+
+        for(var i=0; i<inner_content.visibleChildren.length; i++) {
+            w = Math.max(w, inner_content.visibleChildren[i].implicitWidth)
+        }
+        setWidth(w + 2*outer_content.anchors.margins)
     }
 }

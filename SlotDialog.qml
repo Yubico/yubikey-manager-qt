@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
 DefaultDialog {
-
     title: qsTr("Configure YubiKey slots")
 
     property var device
@@ -17,11 +16,10 @@ DefaultDialog {
     onHasDeviceChanged: close()
 
     onVisibleChanged: {
-        if (visible) {
-            resize()
-        } else {
+        if(!visible) {
             loader.source = "SlotOverview.qml"
         }
+        resize()
     }
 
     Loader {
