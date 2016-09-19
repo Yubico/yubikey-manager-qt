@@ -21,7 +21,19 @@ ColumnLayout {
 
     Text {
         textFormat: Text.StyledText
-        text: "<h2>Configure static password</h2><br/><p>When triggered, the YubiKey will output a fixed password.</p><br/><p>To avoid problems with different keyboard layouts, the password should only contain modhex characters.<p>"
+        text: "<h2>Configure static password</h2>"
+    }
+
+    Item {
+        width: minimumWidth - margins * 2
+        implicitHeight: desc.implicitHeight
+
+        Text {
+            id: desc
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "When triggered, the YubiKey will output a fixed password. To avoid problems with different keyboard layouts, the password should only contain modhex characters."
+        }
     }
 
     RowLayout {
@@ -65,15 +77,15 @@ ColumnLayout {
 
     function programStaticPassword() {
         device.program_static_password(selectedSlot, passwordInput.text,
-                                          function (error) {
-                                              if (!error) {
-                                                  updateStatus()
-                                                  confirmConfigured.open()
-                                              } else {
-                                                  // TODO: Handle errors, access code case.
-                                                  console.log(error)
-                                              }
-                                          })
+                                       function (error) {
+                                           if (!error) {
+                                               updateStatus()
+                                               confirmConfigured.open()
+                                           } else {
+                                               // TODO: Handle errors, access code case.
+                                               console.log(error)
+                                           }
+                                       })
     }
 
     MessageDialog {
