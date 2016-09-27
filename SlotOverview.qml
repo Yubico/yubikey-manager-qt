@@ -26,35 +26,54 @@ ColumnLayout {
     }
     GroupBox {
         Layout.fillWidth: true
+        flat: true
 
         GridLayout {
             anchors.fill: parent
             columns: 3
+
             Text {
+                id: shortPressLabel
                 text: qsTr("Short press:")
             }
 
             Text {
+                anchors {
+                    margins: 10
+                    left: shortPressLabel.right
+                }
                 text: slotsEnabled[0] ? qsTr("Configured") : qsTr("Empty")
             }
 
             Button {
+                anchors {
+                    right: parent.right
+                }
                 text: qsTr("Configure")
                 onClicked: configureSlot(1)
             }
 
             Text {
+                id: longPressLabel
                 text: qsTr("Long press:")
             }
 
             Text {
-                text: slotsEnabled[1] ? qsTr("Configured") : qsTr("Empty")
+                anchors {
+                    margins: 10
+                    left: longPressLabel.right
+                }
+                text: slotsEnabled[1] ? qsTr(" Configured") : qsTr("Empty")
             }
 
             Button {
+                anchors {
+                    right: parent.right
+                }
                 text: qsTr("Configure")
                 onClicked: configureSlot(2)
             }
+
             Button {
                 text: qsTr("Swap credentials between slots")
                 Layout.columnSpan: 2
@@ -65,8 +84,6 @@ ColumnLayout {
 
     RowLayout {
         Layout.alignment: Qt.AlignRight
-
-
 
         Button {
             text: qsTr("Close")
@@ -100,4 +117,3 @@ ColumnLayout {
         }
     }
 }
-
