@@ -79,7 +79,7 @@ Python {
     }
 
     function swap_slots() {
-        do_call('yubikey.controller.swap_slots', [])
+        do_call('yubikey.controller.swap_slots')
     }
 
     function serial_modhex(cb) {

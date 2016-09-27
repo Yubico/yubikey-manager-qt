@@ -50,7 +50,7 @@ ColumnLayout {
         id: confirmErase
         icon: StandardIcon.Warning
         title: "Erase YubiKey " + SlotUtils.slotName(selectedSlot) + "slot"
-        text: "Do you want to erase the content of " + SlotUtils.slotName(selectedSlot)
+        text: "Do you want to erase the content of the " + SlotUtils.slotName(selectedSlot)
               + " slot? This permanently deletes the contents of this slot."
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
