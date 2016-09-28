@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     title: qsTr("YubiKey Manager")
     minimumHeight: 300
-    minimumWidth: 350
+    minimumWidth: 370
 
     // @disable-check M301
     YubiKey {

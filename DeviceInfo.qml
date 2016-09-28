@@ -7,6 +7,9 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        anchors.bottomMargin: 10
         GroupBox {
             title: qsTr("Device")
             Layout.fillWidth: true
