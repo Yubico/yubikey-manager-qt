@@ -7,7 +7,7 @@ DefaultDialog {
     property var device
 
     title: qsTr("Configure connections")
-
+    minimumWidth: 500
     onAccepted: {
         var enabled = get_enabled()
         device.set_mode(enabled, function (e) {
@@ -24,13 +24,24 @@ DefaultDialog {
 
         Text {
             textFormat: Text.StyledText
-            text: qsTr("<h2>Configure enabled connection protocols</h2>
-<p>Set the enabled connection protocols for your YubiKey.</p>
-<p>Once changed, you will need to unplug and re-insert your YubiKey for the settings to take effect.</p>")
+            text: "<h2>Configure enabled connection protocols</h2>"
+        }
+
+        Item {
+            width: minimumWidth - margins * 2
+            implicitHeight: infoText.implicitHeight
+
+            Text {
+                id: infoText
+                text: qsTr("Set the enabled connection protocols for your YubiKey. Once changed, you will need to unplug and re-insert your YubiKey for the settings to take effect.")
+                wrapMode: Text.Wrap
+                width: parent.width
+            }
         }
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter
             Repeater {
                 id: connections
                 model: device.connections
@@ -73,7 +84,8 @@ DefaultDialog {
         standardButtons: StandardButton.NoButton
 
         readonly property bool hasDevice: device.hasDevice
-        onHasDeviceChanged: if (!hasDevice) ejectNow.close()
+        onHasDeviceChanged: if (!hasDevice)
+                                ejectNow.close()
     }
 
     function get_enabled() {
@@ -90,7 +102,7 @@ DefaultDialog {
     function check_acceptable() {
         for (var i = 0; i < connections.count; i++) {
             var item = connections.itemAt(i)
-            if(item) {
+            if (item) {
                 if (item.text === 'NFC') {
                     continue
                 }
