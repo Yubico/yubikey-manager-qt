@@ -46,6 +46,25 @@ Python {
         }
     }
 
+    function getSortedFeatures() {
+        var sortedFeatures = []
+        if (features.indexOf('OTP') != -1) {
+         sortedFeatures.push('OTP');
+        }
+        if (features.indexOf('PIV') != -1) {
+         sortedFeatures.push('PIV');
+        }
+        if (features.indexOf('OATH') != -1) {
+         sortedFeatures.push('OATH');
+        }
+        if (features.indexOf('OPGP') != -1) {
+         sortedFeatures.push('OPGP');
+        }
+        if (features.indexOf('U2F') != -1) {
+         sortedFeatures.push('U2F');
+        }
+        return sortedFeatures;
+    }
 
     function refresh() {
         do_call('yubikey.controller.count_devices', [], function (n) {

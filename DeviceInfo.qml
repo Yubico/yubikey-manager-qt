@@ -36,10 +36,10 @@ Item {
             GridLayout {
                 anchors.fill: parent
                 flow: GridLayout.TopToBottom
-                rows: device.features.length
+                rows: device.getSortedFeatures().length
 
                 Repeater {
-                    model: device.features
+                    model: device.getSortedFeatures()
 
                     Label {
                         text: modelData + ':'
@@ -47,7 +47,7 @@ Item {
                 }
 
                 Repeater {
-                    model: device.features
+                    model: device.getSortedFeatures()
                     Label {
                         text: device.enabled.indexOf(
                                   modelData) >= 0 ? qsTr("Enabled") : qsTr(
