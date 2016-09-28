@@ -42,7 +42,7 @@ Item {
                     model: device.getSortedFeatures()
 
                     Label {
-                        text: modelData + ':'
+                        text: (modelData === 'OPGP') ? 'OpenPGP' + ':' : modelData + ':'
                     }
                 }
 
