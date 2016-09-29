@@ -15,5 +15,6 @@
         <file>SlotConfigureChallengeResponse.qml</file>
         <file>SlotConfigureStaticPassword.qml</file>
         <file>SlotConfigureOathHotp.qml</file>
+        <file>SlotOverwriteWarning.qml</file>
     </qresource>
 </RCC>

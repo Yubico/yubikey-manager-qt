@@ -18,6 +18,7 @@ ColumnLayout {
     signal goToChallengeResponse
     signal goToStaticPassword
     signal goToOathHotp
+    signal confirmed
 
     Text {
         textFormat: Text.StyledText
@@ -59,14 +60,27 @@ ColumnLayout {
         Button {
             text: qsTr("Finish")
             enabled: secretKeyInput.acceptableInput
-            onClicked: programChallengeResponse()
+            onClicked: finish()
         }
+    }
+
+    SlotOverwriteWarning {
+        id: warning
+        onAccepted: programChallengeResponse()
     }
 
     function generateKey() {
         device.random_key(20, function (res) {
             secretKeyInput.text = res
         })
+    }
+
+    function finish() {
+        if (slotsEnabled[selectedSlot - 1]) {
+            warning.open()
+        } else {
+            programChallengeResponse()
+        }
     }
 
     function programChallengeResponse() {
@@ -83,14 +97,5 @@ ColumnLayout {
                                           })
     }
 
-    MessageDialog {
-        id: confirmConfigured
-        icon: StandardIcon.Information
-        title: "Slot configured"
-        text: "The slot is now configured."
-        standardButtons: StandardButton.Ok
-        onAccepted: {
-            goToOverview()
-        }
-    }
+
 }

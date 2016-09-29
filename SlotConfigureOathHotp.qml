@@ -57,7 +57,20 @@ ColumnLayout {
         Button {
             text: qsTr("Finish")
             enabled: secretKeyInput.acceptableInput
-            onClicked: programOathHotp()
+            onClicked: finish()
+        }
+    }
+
+    SlotOverwriteWarning {
+        id: warning
+        onAccepted: programOathHotp()
+    }
+
+    function finish() {
+        if (slotsEnabled[selectedSlot - 1]) {
+            warning.open()
+        } else {
+            programOathHotp()
         }
     }
 
@@ -75,14 +88,4 @@ ColumnLayout {
                                           })
     }
 
-    MessageDialog {
-        id: confirmConfigured
-        icon: StandardIcon.Information
-        title: "Slot configured"
-        text: "The slot is now configured."
-        standardButtons: StandardButton.Ok
-        onAccepted: {
-            goToOverview()
-        }
-    }
 }

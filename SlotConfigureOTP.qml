@@ -91,7 +91,20 @@ ColumnLayout {
             enabled: publicIdInput.acceptableInput
                      && privateIdInput.acceptableInput
                      && secretKeyInput.acceptableInput
-            onClicked: programOTP()
+            onClicked: finish()
+        }
+    }
+
+    SlotOverwriteWarning {
+        id: warning
+        onAccepted: programOTP()
+    }
+
+    function finish() {
+        if (slotsEnabled[selectedSlot - 1]) {
+            warning.open()
+        } else {
+            programOTP()
         }
     }
 
@@ -129,14 +142,4 @@ ColumnLayout {
                            })
     }
 
-    MessageDialog {
-        id: confirmConfigured
-        icon: StandardIcon.Information
-        title: "Slot configured"
-        text: "The slot is now configured."
-        standardButtons: StandardButton.Ok
-        onAccepted: {
-            goToOverview()
-        }
-    }
 }

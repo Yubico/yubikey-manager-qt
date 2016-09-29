@@ -41,7 +41,9 @@ Python {
             queue.push([func, args, cb])
         } else {
             call(func, args, function(json) {
-                cb(json ? JSON.parse(json) : undefined)
+                if (cb) {
+                    cb(json ? JSON.parse(json) : undefined)
+                }
             })
         }
     }

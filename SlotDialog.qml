@@ -12,9 +12,11 @@ DefaultDialog {
     property var slotsEnabled: [false, false]
     property bool hasDevice: device ? device.hasDevice : false
     property int selectedSlot
+    signal goToOverview
     minimumWidth: 500
 
     onHasDeviceChanged: close()
+    onGoToOverview: loader.source = "SlotOverview.qml"
 
     onVisibleChanged: {
         if (visible) {
@@ -68,6 +70,17 @@ DefaultDialog {
          onGoToStaticPassword: loader.source = "SlotConfigureStaticPassword.qml"
          onGoToOathHotp: loader.source = "SlotConfigureOathHotp.qml"
      }
+
+    MessageDialog {
+        id: confirmConfigured
+        icon: StandardIcon.Information
+        title: "Slot configured"
+        text: "The slot is now configured."
+        standardButtons: StandardButton.Ok
+        onAccepted: {
+            slotDialog.close()
+        }
+    }
 
     function updateStatus() {
         device.slots_status(function (res) {
