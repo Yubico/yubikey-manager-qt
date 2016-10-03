@@ -8,7 +8,8 @@ point.
 
 
 ## Building for macOS
-
+    qmake ykman-gui.pro -r -spec macx-clang CONFIG+=x86_64
+    make
     macdeployqt ykman-gui.app -qmldir=yubikey-manager-gui
     cp -r /Library/Frameworks/Python.framework/Versions/3.4 ykman-gui.app/Contents/Frameworks/Python.framework/Versions/
     add .dylib files to .app bundle
