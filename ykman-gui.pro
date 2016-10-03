@@ -14,5 +14,10 @@ QML_IMPORT_PATH =
 # Default rules for deployment.
 include(deployment.pri)
 
+# Icon files
+RC_ICONS = resources/icons/ykman.ico
+ICON = resources/icons/ykman.icns
+
+
 DISTFILES += \
     yubikey.py
