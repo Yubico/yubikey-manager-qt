@@ -4,3 +4,5 @@ ykman-gui.pro.user*
 dist/
 lib/
 __pycache__/
+Makefile
+.qmake.stash
