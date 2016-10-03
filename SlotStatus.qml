@@ -54,9 +54,17 @@ ColumnLayout {
               + " slot? This permanently deletes the contents of this slot."
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
-            device.erase_slot(selectedSlot)
-            close()
-            updateStatus()
+            device.erase_slot(selectedSlot, function (error) {
+                if (!error) {
+                    close()
+                    updateStatus()
+                } else {
+                    if (error === 3) {
+                      writeError.open()
+                    }
+                }
+            })
+
         }
         onNo: close()
     }

@@ -66,6 +66,15 @@ ColumnLayout {
         onAccepted: programOathHotp()
     }
 
+    MessageDialog {
+        id: paddingError
+        icon: StandardIcon.Critical
+        title: "Wrong padding"
+        text: "The padding of the key is incorrect."
+        standardButtons: StandardButton.Ok
+    }
+
+
     function finish() {
         if (slotsEnabled[selectedSlot - 1]) {
             warning.open()
@@ -82,8 +91,12 @@ ColumnLayout {
                                                   updateStatus()
                                                   confirmConfigured.open()
                                               } else {
-                                                  // TODO: Handle errors, access code case.
-                                                  console.log(error)
+                                                  if (error === 'Incorrect padding') {
+                                                    paddingError.open()
+                                                  }
+                                                  if (error === 3) {
+                                                    writeError.open()
+                                                  }
                                               }
                                           })
     }

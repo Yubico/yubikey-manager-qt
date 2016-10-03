@@ -94,10 +94,17 @@ ColumnLayout {
         text: "Do you want to swap the credentials between the short press and the long press slot?"
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
-            device.swap_slots()
-            updateStatus()
-            close()
-            confirmSwapped.open()
+            device.swap_slots(function (error) {
+                if (!error) {
+                    close()
+                    updateStatus()
+                    confirmSwapped.open()
+                } else {
+                    if (error === 3) {
+                        writeError.open()
+                    }
+                }
+            })
         }
         onNo: close()
     }

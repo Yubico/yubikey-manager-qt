@@ -95,12 +95,12 @@ Python {
         do_call('yubikey.controller.slots_status', [], cb)
     }
 
-    function erase_slot(slot) {
-        do_call('yubikey.controller.erase_slot', [slot])
+    function erase_slot(slot, cb) {
+        do_call('yubikey.controller.erase_slot', [slot], cb)
     }
 
-    function swap_slots() {
-        do_call('yubikey.controller.swap_slots')
+    function swap_slots(cb) {
+        do_call('yubikey.controller.swap_slots', [], cb)
     }
 
     function serial_modhex(cb) {

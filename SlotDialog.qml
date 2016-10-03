@@ -82,6 +82,14 @@ DefaultDialog {
         }
     }
 
+    MessageDialog {
+        id: writeError
+        icon: StandardIcon.Critical
+        title: "Error writing to  slot"
+        text: "Failed to write to the slot. Make sure the YubiKey does not have restricted access."
+        standardButtons: StandardButton.Ok
+    }
+
     function updateStatus() {
         device.slots_status(function (res) {
             slotsEnabled = res

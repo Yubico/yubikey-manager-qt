@@ -7,11 +7,11 @@ import json
 import types
 import struct
 from base64 import b32decode
-from binascii import b2a_hex, a2b_hex
+from binascii import b2a_hex, a2b_hex, Error
 
 from ykman.descriptor import get_descriptors
 from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode
-
+from ykman.driver_otp import YkpersError
 
 
 
@@ -87,12 +87,18 @@ class Controller(object):
         return dev.driver.slot_status
 
     def erase_slot(self, slot):
-        dev = self._descriptor.open_device(TRANSPORT.OTP)
-        dev.driver.zap_slot(slot)
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.OTP)
+            dev.driver.zap_slot(slot)
+        except YkpersError as e:
+            return e.errno
 
     def swap_slots(self):
-        dev = self._descriptor.open_device(TRANSPORT.OTP)
-        dev.driver.swap_slots()
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.OTP)
+            dev.driver.swap_slots()
+        except YkpersError as e:
+            return e.errno
 
     def serial_modhex(self):
         dev = self._descriptor.open_device(TRANSPORT.OTP)
@@ -114,23 +120,23 @@ class Controller(object):
             private_id = a2b_hex(private_id)
             dev = self._descriptor.open_device(TRANSPORT.OTP)
             dev.driver.program_otp(slot, key, public_id, private_id)
-        except Exception as e:
-            return str(e)
+        except YkpersError as e:
+            return e.errno
 
     def program_challenge_response(self, slot, key, touch):
         try:
             key = a2b_hex(key)
             dev = self._descriptor.open_device(TRANSPORT.OTP)
             dev.driver.program_chalresp(slot, key, touch)
-        except Exception as e:
-            return str(e)
+        except YkpersError as e:
+            return e.errno
 
     def program_static_password(self, slot, key):
         try:
             dev = self._descriptor.open_device(TRANSPORT.OTP)
             dev.driver.program_static(slot, key)
-        except Exception as e:
-            return str(e)
+        except YkpersError as e:
+            return e.errno
 
     def program_oath_hotp(self, slot, key, digits):
         try:
@@ -138,8 +144,10 @@ class Controller(object):
             key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
             dev = self._descriptor.open_device(TRANSPORT.OTP)
             dev.driver.program_hotp(slot, key, hotp8=(digits == 8))
-        except Exception as e:
+        except Error as e:
             return str(e)
+        except YkpersError as e:
+            return e.errno
 
 
 controller = Controller()

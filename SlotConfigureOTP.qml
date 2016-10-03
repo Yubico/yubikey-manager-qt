@@ -136,8 +136,9 @@ ColumnLayout {
                                    updateStatus()
                                    confirmConfigured.open()
                                } else {
-                                   // TODO: Handle errors, access code case.
-                                   console.log(error)
+                                   if (error === 3) {
+                                     writeError.open()
+                                   }
                                }
                            })
     }
