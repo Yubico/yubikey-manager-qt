@@ -24,61 +24,57 @@ ColumnLayout {
         textFormat: Text.StyledText
         text: qsTr("<h2>Configure YubiKey slots</h2>")
     }
-    GroupBox {
+
+    GridLayout {
         Layout.fillWidth: true
-        flat: true
+        columns: 3
 
-        GridLayout {
-            anchors.fill: parent
-            columns: 3
+        Text {
+            id: shortPressLabel
+            text: qsTr("Short press:")
+        }
 
-            Text {
-                id: shortPressLabel
-                text: qsTr("Short press:")
+        Text {
+            anchors {
+                margins: 10
+                left: shortPressLabel.right
             }
+            text: slotsEnabled[0] ? qsTr("Configured") : qsTr("Empty")
+        }
 
-            Text {
-                anchors {
-                    margins: 10
-                    left: shortPressLabel.right
-                }
-                text: slotsEnabled[0] ? qsTr("Configured") : qsTr("Empty")
+        Button {
+            anchors {
+                right: parent.right
             }
+            text: qsTr("Configure")
+            onClicked: configureSlot(1)
+        }
 
-            Button {
-                anchors {
-                    right: parent.right
-                }
-                text: qsTr("Configure")
-                onClicked: configureSlot(1)
-            }
+        Text {
+            id: longPressLabel
+            text: qsTr("Long press:")
+        }
 
-            Text {
-                id: longPressLabel
-                text: qsTr("Long press:")
+        Text {
+            anchors {
+                margins: 10
+                left: longPressLabel.right
             }
+            text: slotsEnabled[1] ? qsTr(" Configured") : qsTr("Empty")
+        }
 
-            Text {
-                anchors {
-                    margins: 10
-                    left: longPressLabel.right
-                }
-                text: slotsEnabled[1] ? qsTr(" Configured") : qsTr("Empty")
+        Button {
+            anchors {
+                right: parent.right
             }
+            text: qsTr("Configure")
+            onClicked: configureSlot(2)
+        }
 
-            Button {
-                anchors {
-                    right: parent.right
-                }
-                text: qsTr("Configure")
-                onClicked: configureSlot(2)
-            }
-
-            Button {
-                text: qsTr("Swap credentials between slots")
-                Layout.columnSpan: 2
-                onClicked: confirmSwap.open()
-            }
+        Button {
+            text: qsTr("Swap credentials between slots")
+            Layout.columnSpan: 2
+            onClicked: confirmSwap.open()
         }
     }
 
