@@ -21,7 +21,9 @@ ColumnLayout {
 
     Text {
         textFormat: Text.StyledText
-        text: "<h2>" + SlotUtils.slotNameCapitalized(selectedSlot) + "</h2> <p>The slot is " + SlotUtils.configuredTxt(slotsEnabled[selectedSlot - 1]) + ".</p>"
+        text: "<h2>" + SlotUtils.slotNameCapitalized(
+                  selectedSlot) + "</h2> <p>The slot is " + SlotUtils.configuredTxt(
+                  slotsEnabled[selectedSlot - 1]) + ".</p>"
     }
 
     GridLayout {
@@ -50,22 +52,30 @@ ColumnLayout {
         id: confirmErase
         icon: StandardIcon.Warning
         title: "Erase YubiKey " + SlotUtils.slotName(selectedSlot) + "slot"
-        text: "Do you want to erase the content of the " + SlotUtils.slotName(selectedSlot)
-              + " slot? This permanently deletes the contents of this slot."
+        text: "Do you want to erase the content of the " + SlotUtils.slotName(
+                  selectedSlot) + " slot? This permanently deletes the contents of this slot."
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
             device.erase_slot(selectedSlot, function (error) {
                 if (!error) {
                     close()
                     updateStatus()
+                    confirmErased.open()
                 } else {
                     if (error === 3) {
-                      writeError.open()
+                        writeError.open()
                     }
                 }
             })
-
         }
         onNo: close()
+    }
+
+    MessageDialog {
+        id: confirmErased
+        icon: StandardIcon.Information
+        title: "The credentials have been erased"
+        text: "The credentials in the slot have now been erased."
+        standardButtons: StandardButton.Ok
     }
 }
