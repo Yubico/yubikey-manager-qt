@@ -10,10 +10,13 @@ DefaultDialog {
     minimumWidth: 500
     onAccepted: {
         var enabled = get_enabled()
-        device.set_mode(enabled, function (e) {
-            if (e) {
-                console.log('Error setting mode: ' + e)
+        device.set_mode(enabled, function (error) {
+            if (error) {
+                if (error === 'Failed to switch mode.') {
+                    modeSwitchError.open()
+                }
             } else {
+                close()
                 ejectNow.open()
             }
         })
@@ -62,7 +65,6 @@ DefaultDialog {
                 id: button_ok
                 text: qsTr("OK")
                 onClicked: {
-                    close()
                     accepted()
                 }
             }
@@ -87,6 +89,15 @@ DefaultDialog {
         onHasDeviceChanged: if (!hasDevice)
                                 ejectNow.close()
     }
+
+    MessageDialog {
+        id: modeSwitchError
+        title: qsTr('Error configuring connections')
+        icon: StandardIcon.Critical
+        text: qsTr('Failed to configure connections. Make sure the YubiKey does not have restricted access.')
+        standardButtons: StandardButton.Ok
+    }
+
 
     function get_enabled() {
         var enabled = []

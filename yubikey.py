@@ -11,6 +11,7 @@ from binascii import b2a_hex, a2b_hex, Error
 
 from ykman.descriptor import get_descriptors
 from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode
+from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 
 
@@ -78,9 +79,8 @@ class Controller(object):
         try:
             transports = sum([TRANSPORT[c] for c in connections])
             dev.mode = Mode(transports & TRANSPORT.usb_transports())
-        except Exception as e:
+        except ModeSwitchError as e:
             return str(e)
-        return None
 
     def slots_status(self):
         dev = self._descriptor.open_device(TRANSPORT.OTP)
