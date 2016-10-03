@@ -94,6 +94,7 @@ Item {
                 Button {
                     Layout.alignment: Qt.AlignRight
                     text: qsTr("Configure")
+                    enabled: device.connections.length > 1
                     onClicked: connectionsDialog.show()
                 }
             }
