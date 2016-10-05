@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.1
 ApplicationWindow {
     visible: true
     title: qsTr("YubiKey Manager")
-    minimumHeight: 300
+    minimumHeight: 270
     minimumWidth: 370
 
     // @disable-check M301

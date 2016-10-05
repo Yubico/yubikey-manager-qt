@@ -4,15 +4,18 @@ import QtQuick.Layouts 1.1
 
 Item {
     property var device
+    property int margin: width / 30
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
-        anchors.bottomMargin: 10
+        anchors.leftMargin: margin
+        anchors.rightMargin: margin
+        anchors.bottomMargin: margin
         GroupBox {
+            id: deviceBox
             title: qsTr("Device")
             Layout.fillWidth: true
+            anchors.topMargin: margin
 
             GridLayout {
                 anchors.fill: parent
@@ -30,6 +33,9 @@ Item {
         }
 
         GroupBox {
+            id: featureBox
+            anchors.top: deviceBox.bottom
+            anchors.topMargin: margin
             title: qsTr("Features")
             Layout.fillWidth: true
 
@@ -67,6 +73,9 @@ Item {
         GroupBox {
             title: qsTr("Connections")
             Layout.fillWidth: true
+            anchors.top: featureBox.bottom
+            anchors.topMargin: margin
+            anchors.bottomMargin: margin
 
             GridLayout {
                 anchors.fill: parent
