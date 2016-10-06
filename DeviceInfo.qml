@@ -6,11 +6,15 @@ Item {
     property var device
     property int margin: width / 30
 
+    width: 370
+    height: deviceBox.height + featureBox.height + connectionsBox.height + margin * 4
+
     ColumnLayout {
         anchors.fill: parent
         anchors.leftMargin: margin
         anchors.rightMargin: margin
         anchors.bottomMargin: margin
+
         GroupBox {
             id: deviceBox
             title: qsTr("Device")
@@ -71,6 +75,7 @@ Item {
         }
 
         GroupBox {
+            id: connectionsBox
             title: qsTr("Connections")
             Layout.fillWidth: true
             anchors.top: featureBox.bottom

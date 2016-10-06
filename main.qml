@@ -5,9 +5,6 @@ import QtQuick.Layouts 1.1
 ApplicationWindow {
     visible: true
     title: qsTr("YubiKey Manager")
-    minimumHeight: 270
-    minimumWidth: 370
-
     // @disable-check M301
     YubiKey {
         id: yk
@@ -22,14 +19,15 @@ ApplicationWindow {
     }
 
     Loader {
-        anchors.fill: parent
-        anchors.margins: 5
+        id: loader
         sourceComponent: yk.hasDevice ? deviceInfo : message
     }
 
     Component {
         id: message
         Text {
+            width: 350
+            height: 300
             text: if (yk.nDevices == 0) {
                       qsTr("No YubiKey detected")
                   } else if (yk.nDevices == 1) {
@@ -45,6 +43,7 @@ ApplicationWindow {
     Component {
         id: deviceInfo
         DeviceInfo {
+            id: x
             device: yk
         }
     }
