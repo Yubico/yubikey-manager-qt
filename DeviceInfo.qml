@@ -20,7 +20,7 @@ Item {
             title: qsTr("Device")
             Layout.fillWidth: true
             anchors.topMargin: margin
-
+            anchors.top: parent.top
             GridLayout {
                 anchors.fill: parent
                 columns: 2
