@@ -14,21 +14,7 @@ from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 
-
-
 NON_FEATURE_CAPABILITIES = [CAPABILITY.CCID, CAPABILITY.NFC]
-
-import ctypes.util
-def find_library(libname):
-    if os.path.isfile(libname):
-        return libname
-    bundle_path = os.path.join(os.environ['DYLD_LIBRARY_PATH'], libname)
-    if os.path.isfile(bundle_path):
-        return bundle_path
-    return ctypes.util.find_library(libname)
-
-import usb.backend.libusb1
-backend = usb.backend.libusb1.get_backend(find_library=find_library)
 
 def as_json(f):
     def wrapped(*args, **kwargs):

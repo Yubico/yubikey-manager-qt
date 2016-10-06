@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import io.thp.pyotherside 1.4
 
-
 // @disable-check M300
 Python {
     id: py
@@ -14,7 +13,6 @@ Python {
     property var features: []
     property var connections: []
     property var enabled: []
-
     property bool ready: false
     property var queue: []
 
@@ -135,3 +133,5 @@ Python {
         do_call('yubikey.controller.program_oath_hotp', [slot, key, digits], cb)
     }
 }
+
+

@@ -1,14 +1,29 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
+import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     visible: true
     title: qsTr("YubiKey Manager")
+
     // @disable-check M301
     YubiKey {
         id: yk
+        onError: {
+            errorBox.text = traceback;
+            errorBox.open()
+        }
     }
+
+    MessageDialog {
+        id: errorBox
+        icon: StandardIcon.Critical
+        title: qsTr("Error!")
+        text: ""
+        standardButtons: StandardButton.Ok
+    }
+
     Timer {
         id: timer
         triggeredOnStart: true
