@@ -58,7 +58,6 @@ ApplicationWindow {
     Component {
         id: deviceInfo
         DeviceInfo {
-            id: x
             device: yk
         }
     }
