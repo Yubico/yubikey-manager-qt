@@ -76,7 +76,7 @@ Var MYTMP
 
 # Last section is a hidden one.
 Section
-  WriteUninstaller "$INSTDIR\uninstall.exe"
+  WriteUninstaller "$INSTDIR\uninstall-ykman.exe"
 
   ; Write the installation path into the registry
   WriteRegStr HKLM "Software\Yubico\yubikey-manager" "Install_Dir" "$INSTDIR"
@@ -84,7 +84,7 @@ Section
   # Windows Add/Remove Programs support
   StrCpy $MYTMP "Software\Microsoft\Windows\CurrentVersion\Uninstall\yubikey-manager"
   WriteRegStr       HKLM $MYTMP "DisplayName"     "YubiKey Manager"
-  WriteRegExpandStr HKLM $MYTMP "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegExpandStr HKLM $MYTMP "UninstallString" '"$INSTDIR\uninstall-ykman.exe"'
   WriteRegExpandStr HKLM $MYTMP "InstallLocation" "$INSTDIR"
   WriteRegStr       HKLM $MYTMP "DisplayVersion"  "${VERSION}"
   WriteRegStr       HKLM $MYTMP "Publisher"       "Yubico AB"
@@ -98,7 +98,7 @@ Section
   SetShellVarContext all
   SetOutPath "$SMPROGRAMS\$STARTMENU_FOLDER"
   CreateShortCut "YubiKey Manager.lnk" "$INSTDIR\ykman-gui.exe" "" "$INSTDIR\ykman-gui.exe" 0
-  CreateShortCut "Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 1
+  CreateShortCut "Uninstall YubiKey Manager.lnk" "$INSTDIR\uninstall-ykman.exe" "" "$INSTDIR\uninstall-ykman.exe" 1
 !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -126,31 +126,30 @@ Section "Uninstall"
   ${EndIf}
   ${nsProcess::Unload}
 
-  ; Remove all
-  DELETE "$INSTDIR\*"
+  ; Remove the installation directory recursively
+  ; NOTE! This behaviour assumes installation directory is hardcoded.
+  RMDir /r "$INSTDIR"
 
   ; Remove shortcuts, if any
   !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
   SetShellVarContext all
 
-  Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall YubiKey Manager.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\YubiKey Manager.lnk"
 
   ;Delete empty start menu parent diretories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
 
   startMenuDeleteLoop:
-	ClearErrors
+    ClearErrors
     RMDir $MUI_TEMP
     GetFullPathName $MUI_TEMP "$MUI_TEMP\.."
 
     IfErrors startMenuDeleteLoopDone
 
     StrCmp $MUI_TEMP $SMPROGRAMS startMenuDeleteLoopDone startMenuDeleteLoop
-  startMenuDeleteLoopDone:
+    startMenuDeleteLoopDone:
 
   DeleteRegKey /ifempty HKCU "Software\Yubico\yubikey-manager"
 
-  ; Remove directories used
-  RMDir "$INSTDIR"
 SectionEnd
