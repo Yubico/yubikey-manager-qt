@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>cli.qml</file>
+        <file>cli.py</file>
+    </qresource>
+</RCC>

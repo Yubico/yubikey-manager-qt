@@ -1,8 +1,11 @@
-ykman-gui.pro.user*
 *.autosave
 .ropeproject
 dist/
 lib/
 __pycache__/
-Makefile
+Makefile*
 .qmake.stash
+*.user
+*/release/
+*.rc
+*.dll
