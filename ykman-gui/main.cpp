@@ -9,6 +9,9 @@
 int main(int argc, char *argv[])
 {
     QtSingleApplication app(argc, argv);
+    if (app.isRunning()) {
+        return 0;
+    }
     QQmlApplicationEngine engine;
     app.setWindowIcon(QIcon("resources/icons/ykman.png"));
     QString pythonNoBytecode = "PYTHONDONTWRITEBYTECODE=1";
