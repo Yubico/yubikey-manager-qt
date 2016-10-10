@@ -49,6 +49,8 @@ class Controller(object):
         desc = descriptors[0]
         if desc.fingerprint != (self._descriptor.fingerprint if self._descriptor else None):
             dev = desc.open_device()
+            if not dev:
+                return
             self._dev_info = {
                 'name': dev.device_name,
                 'version': '.'.join(str(x) for x in dev.version),

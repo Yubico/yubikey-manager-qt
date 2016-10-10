@@ -71,7 +71,7 @@ Python {
             nDevices = n
             if (nDevices == 1) {
                 do_call('yubikey.controller.refresh', [], function (dev) {
-                    hasDevice = dev !== undefined
+                    hasDevice = dev !== undefined && dev !== null
                     name = dev ? dev.name : ''
                     version = dev ? dev.version : ''
                     serial = dev ? dev.serial : ''
