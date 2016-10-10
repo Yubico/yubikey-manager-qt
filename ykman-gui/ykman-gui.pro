@@ -13,6 +13,7 @@ QML_IMPORT_PATH =
 
 # Default rules for deployment.
 include(deployment.pri)
+include(vendor/qt-solutions/qtsingleapplication/src/qtsingleapplication.pri)
 
 # Icon files
 RC_ICONS = resources/icons/ykman.ico
