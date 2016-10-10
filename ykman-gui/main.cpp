@@ -8,10 +8,12 @@
 
 int main(int argc, char *argv[])
 {
+    // Only allow a single instance running.
     QtSingleApplication app(argc, argv);
-    if (app.isRunning()) {
+    if (app.sendMessage("")) {
         return 0;
     }
+
     QQmlApplicationEngine engine;
     app.setWindowIcon(QIcon("resources/icons/ykman.png"));
     QString pythonNoBytecode = "PYTHONDONTWRITEBYTECODE=1";
@@ -19,5 +21,14 @@ int main(int argc, char *argv[])
     QString frameworks = "DYLD_LIBRARY_PATH=" + app.applicationDirPath() + "/../Frameworks";
     putenv(frameworks.toUtf8().data());
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+
+    // Raise the root window on a message from new instance.
+    for (auto object : engine.rootObjects()) {
+        if (QWindow *window = qobject_cast<QWindow*>(object)) {
+            QObject::connect(&app, &QtSingleApplication::messageReceived, [window]() {
+                window->raise();
+            });
+        }
+    }
     return app.exec();
 }
