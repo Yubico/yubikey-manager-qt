@@ -22,13 +22,16 @@ int main(int argc, char *argv[])
     putenv(frameworks.toUtf8().data());
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
-    // Raise the root window on a message from new instance.
+    // Wake up the root window on a message from new instance.
     for (auto object : engine.rootObjects()) {
         if (QWindow *window = qobject_cast<QWindow*>(object)) {
             QObject::connect(&app, &QtSingleApplication::messageReceived, [window]() {
+                window->show();
                 window->raise();
+                window->requestActivate();
             });
         }
     }
+
     return app.exec();
 }
