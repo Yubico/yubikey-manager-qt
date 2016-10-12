@@ -1,0 +1,6 @@
+libhidapi
+libjson-c
+libu2f-host
+libusb-1.0
+libykpers-1
+libyubikey
