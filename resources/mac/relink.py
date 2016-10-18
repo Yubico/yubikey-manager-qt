@@ -1,3 +1,5 @@
+#/bin/env python 
+
 import os
 from subprocess import check_output
 
@@ -35,6 +37,7 @@ def main():
     dylibs = [f for f in os.listdir('.') if f.endswith('.dylib')]
     hits = REPLACEMENTS.keys() + dylibs
     for lib in dylibs:
+        print(lib)
         relink(lib, hits)
 
 
