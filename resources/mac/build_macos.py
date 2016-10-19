@@ -9,6 +9,10 @@ from distutils.util import strtobool
 PYTHON_VERSION = '3'
 
 
+def sh(commands):
+    call(commands, shell=True)
+
+
 def verify_macos():
     if sys.platform != 'darwin':
         print("This script is only for macOS.")
@@ -66,38 +70,37 @@ def verify_python3():
             raise ValueError
     except (ValueError, CalledProcessError, OSError):
         print("Python 3 not found.")
-        print("To install Python 3 from Homebrew:")
-        print(
-            "brew install python3"
-            " && pip3 install --upgrade pip setuptools wheel")
+        print("To install Python 3 from pyenv:")
+        print('brew install pyenv')
+        print('env PYTHON_CONFIGURE_OPTS="--enable-framework CC=clang" pyenv install 3.5.2')
+        print('echo "eval "$(pyenv init -)"" >> .profile')
+        print('pyenv global 3.5.2')
         sys.exit()
 
 
 def install_libs():
     print("Installing and copying dependencies from homebrew...")
-    call('brew install ykpers', shell=True) 
-    call('brew install libyubikey', shell=True) 
-    call('brew install hidapi', shell=True)
-    call('brew install libu2f-host', shell=True)
-    call('brew install libusb', shell=True)
-    call("find /usr/local/Cellar/json-c/"
-        " -type f -name '*.dylib' -exec cp '{}' lib/libjson-c.dylib ';'", shell=True)
-    call("find /usr/local/Cellar/ykpers/"
-        " -type f -name '*.dylib' -exec cp '{}' lib/libykpers-1.dylib ';'", shell=True)
-    call("find /usr/local/Cellar/libyubikey/"
-        " -type f -name '*.dylib' -exec cp '{}' lib/libyubikey.dylib ';'", shell=True)
-    call("find /usr/local/Cellar/hidapi/"
-        " -type f -name '*.dylib' -exec cp '{}' lib/libhidapi.dylib ';'", shell=True)
-    call("find /usr/local/Cellar/libu2f-host/"
-        " -type f -name '*.dylib' -exec cp '{}' lib/libu2f-host.dylib ';'", shell=True)
-    call("find /usr/local/Cellar/libusb/"
-        " -type f -name '*.dylib' -exec cp '{}' lib/libusb-1.0.dylib ';'", shell=True)
-    call('chmod +w ./lib/*', shell=True)
+    libs = ['ykpers', 'libyubikey', 'hidapi', 'libu2f-host', 'libusb']
+    for lib in libs:
+        sh('brew install ' + lib)
+    sh("find /usr/local/Cellar/json-c/"
+        " -type f -name '*.dylib' -exec cp '{}' lib/libjson-c.dylib ';'")
+    sh("find /usr/local/Cellar/ykpers/"
+        " -type f -name '*.dylib' -exec cp '{}' lib/libykpers-1.dylib ';'")
+    sh("find /usr/local/Cellar/libyubikey/"
+        " -type f -name '*.dylib' -exec cp '{}' lib/libyubikey.dylib ';'")
+    sh("find /usr/local/Cellar/hidapi/"
+        " -type f -name '*.dylib' -exec cp '{}' lib/libhidapi.dylib ';'")
+    sh("find /usr/local/Cellar/libu2f-host/"
+        " -type f -name '*.dylib' -exec cp '{}' lib/libu2f-host.dylib ';'")
+    sh("find /usr/local/Cellar/libusb/"
+        " -type f -name '*.dylib' -exec cp '{}' lib/libusb-1.0.dylib ';'")
+    sh('chmod +w ./lib/*')
 
 
 def verify_libs():
     if not os.path.isdir("lib"):
-        call("mkdir lib", shell=True) 
+        sh("mkdir lib") 
     libs = os.listdir("lib")
     missing = False
     print("Verifying library dependencies...")
@@ -116,7 +119,7 @@ def verify_libs():
 
 def install_ykman():
     print("Installing ykman in a separate folder.")
-    call('rm -rf ./ykman-install && mkdir ./ykman-install', shell=True)
+    sh('rm -rf ./ykman-install && mkdir ./ykman-install')
     check_call(['pip3', 'install', 'vendor/yubikey-manager/.[cli]',
         '--target=./ykman-install'])
 
@@ -125,49 +128,53 @@ def build_pyotherside():
     # TODO: Don't build if already built.
     print("Building pyotherside...")
     os.chdir('./vendor/pyotherside')
-    call('qmake', shell=True)
-    call('make', shell=True)
-    call('make install', shell=True)
+    sh('qmake')
+    sh('make')
+    sh('make install')
     os.chdir('../../')
 
 
 def build_binaries():
     print("Building yubikey manager...")
-    call('qmake yubikey-manager-qt.pro -r -spec macx-clang CONFIG+=x86_64',
-        shell=True)
-    call('rm -rf ./ykman-gui/ykman-gui.app', shell=True)
-    call('make clean', shell=True)
-    call('make', shell=True)
-    
-    call('macdeployqt ./ykman-gui/ykman-gui.app/ -qmldir=./ykman-gui/ -always-overwrite', shell=True)
-    call('cp -R /Library/Frameworks/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/', shell=True)
-    call('rm -rf ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/Resources', shell=True)
-    call('rm -rf ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/share', shell=True)
-    call('rm -rf ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/bin', shell=True)
-    call('rm -rf ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages', shell=True)
-    call('find ykman-gui/ykman-gui.app -name __pycache__ -exec rm -rf {} \;', shell=True)
-    call('rsync -r ./ykman-install/* '
-        './ykman-gui/ykman-gui.app/Contents/'
-        'Frameworks/Python.framework/'
-        'Versions/3.5/lib/python3.5/site-packages/', shell=True)
-    call('cp ./ykman-cli/ykman ./ykman-gui/ykman-gui.app/Contents/MacOS/', shell=True)
-    call('cp -R ./lib/* ./ykman-gui/ykman-gui.app/Contents/Frameworks/', shell=True)
+    APP = './ykman-gui/ykman-gui.app'
+    FRAMEWORKS = '/Contents/Frameworks'
+    PYTHON_FRAMEWORK = FRAMEWORKS + '/Python.framework/Versions/3.5'
+    SITE_PACKAGES = '/lib/python3.5/site-packages'
+    sh('qmake yubikey-manager-qt.pro -r -spec macx-clang CONFIG+=x86_64')
+    sh('rm -rf ' + APP)
+    sh('make clean')
+    sh('make')
+    sh('cp ./ykman-cli/ykman ' + APP + '/Contents/MacOS/')
+    sh('macdeployqt ' + APP + ' -qmldir=./ykman-gui/ -always-overwrite')
+    sh('cp -a ~/.pyenv/versions/3.5.2/Python.framework ' + APP + FRAMEWORKS + '/') 
+    sh('rm -rf ' + APP + PYTHON_FRAMEWORK + SITE_PACKAGES)
+    sh('find ' + APP + ' -name __pycache__ -exec rm -rf {} \;')
+    sh('rsync -r ./ykman-install/* ' + APP + PYTHON_FRAMEWORK + SITE_PACKAGES)
+    sh('cp -R ./lib/* ' + APP + FRAMEWORKS + '/')
 
 
 def relink_pyotherside():
     print("Relinking pyotherside...")
-    call('install_name_tool -change '
-    '/Library/Frameworks/Python.framework/Versions/3.5/Python '
+    # TODO: User must be yubico here..
+    sh('install_name_tool -change '
+    '/Users/yubico/.pyenv/versions/3.5.2/Python.framework/Versions/3.5/Python '
     '@executable_path/../Frameworks/Python.framework/Versions/3.5/Python ' 
     'ykman-gui/ykman-gui.app/Contents/Resources/'
-    'qml/io/thp/pyotherside/libpyothersideplugin.dylib', shell=True)
+    'qml/io/thp/pyotherside/libpyothersideplugin.dylib')
 
 
 def relink_libs():
     print("Relinking libs...")
     os.chdir('./lib')
-    call('python ../resources/mac/relink.py', shell=True)
+    sh('python ../resources/mac/relink.py')
     os.chdir('..')
+
+
+def relink_ykman_cli():
+    print("Relinking cli...")
+    sh('install_name_tool -change @rpath/QtQml.framework/Versions/5/QtQml @executable_path/../Frameworks/QtQml.framework/Versions/5/QtQml ykman-gui/ykman-gui.app/Contents/MacOS/ykman')
+    sh('install_name_tool -change @rpath/QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork ykman-gui/ykman-gui.app/Contents/MacOS/ykman')
+    sh('install_name_tool -change @rpath/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore ykman-gui/ykman-gui.app/Contents/MacOS/ykman')
 
 
 def main():
@@ -183,6 +190,7 @@ def main():
     build_pyotherside()
     build_binaries()
     relink_pyotherside()
+    relink_ykman_cli()    
     print("Done!")
 
 
