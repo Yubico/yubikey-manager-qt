@@ -3,7 +3,6 @@
 import sys
 import os
 from subprocess import call, check_call, check_output, CalledProcessError
-from distutils.util import strtobool
 
 
 PYTHON_VERSION = '3'
@@ -33,7 +32,8 @@ def verify_brew():
     except OSError:
         print("Homebrew not found.")
         print("To install homebrew:")
-        print('/usr/bin/ruby -e "$(curl -fsSL '
+        print(
+            '/usr/bin/ruby -e "$(curl -fsSL '
             'https://raw.githubusercontent.com/'
             'Homebrew/install/master/install)"')
         sys.exit()
@@ -72,7 +72,9 @@ def verify_python3():
         print("Python 3 not found.")
         print("To install Python 3 from pyenv:")
         print('brew install pyenv')
-        print('env PYTHON_CONFIGURE_OPTS="--enable-framework CC=clang" pyenv install 3.5.2')
+        print(
+            'env PYTHON_CONFIGURE_OPTS="--enable-framework CC=clang"'
+            ' pyenv install 3.5.2')
         print('echo "eval "$(pyenv init -)"" >> .profile')
         print('pyenv global 3.5.2')
         sys.exit()
@@ -100,7 +102,7 @@ def install_libs():
 
 def verify_libs():
     if not os.path.isdir("lib"):
-        sh("mkdir lib") 
+        sh("mkdir lib")
     libs = os.listdir("lib")
     missing = False
     print("Verifying library dependencies...")
@@ -109,7 +111,7 @@ def verify_libs():
         for lib in libs:
             if dep in lib:
                 print("Found {0}.".format(dep))
-                break;
+                break
         else:
             missing = True
             print("Missing dependency {0} in lib folder.".format(dep))
@@ -120,12 +122,14 @@ def verify_libs():
 def install_ykman():
     print("Installing ykman in a separate folder.")
     sh('rm -rf ./ykman-install && mkdir ./ykman-install')
-    check_call(['pip3', 'install', 'vendor/yubikey-manager/.[cli]',
-        '--target=./ykman-install'])
+    check_call(
+        ['pip', 'install', 'vendor/yubikey-manager/.[cli]',
+            '--target=./ykman-install'])
 
 
 def build_pyotherside():
     # TODO: Don't build if already built.
+    # May fail building with pyenv python, might need brew python3.
     print("Building pyotherside...")
     os.chdir('./vendor/pyotherside')
     sh('qmake')
@@ -146,7 +150,10 @@ def build_binaries():
     sh('make')
     sh('cp ./ykman-cli/ykman ' + APP + '/Contents/MacOS/')
     sh('macdeployqt ' + APP + ' -qmldir=./ykman-gui/ -always-overwrite')
-    sh('cp -a ~/.pyenv/versions/3.5.2/Python.framework ' + APP + FRAMEWORKS + '/') 
+    # Note: only python 3 from pyenv built with
+    # --enable-framework flags eems to work in a app.bundle
+    sh('cp -a /usr/local/var/pyenv/versions/3.5.2/Python.framework '
+        + APP + FRAMEWORKS + '/')
     sh('rm -rf ' + APP + PYTHON_FRAMEWORK + SITE_PACKAGES)
     sh('find ' + APP + ' -name __pycache__ -exec rm -rf {} \;')
     sh('rsync -r ./ykman-install/* ' + APP + PYTHON_FRAMEWORK + SITE_PACKAGES)
@@ -156,11 +163,13 @@ def build_binaries():
 def relink_pyotherside():
     print("Relinking pyotherside...")
     # TODO: User must be yubico here..
-    sh('install_name_tool -change '
-    '/Users/yubico/.pyenv/versions/3.5.2/Python.framework/Versions/3.5/Python '
-    '@executable_path/../Frameworks/Python.framework/Versions/3.5/Python ' 
-    'ykman-gui/ykman-gui.app/Contents/Resources/'
-    'qml/io/thp/pyotherside/libpyothersideplugin.dylib')
+    sh(
+        'install_name_tool -change '
+        '/usr/local/opt/python3/'
+        'Frameworks/Python.framework/Versions/3.5/Python '  # brew python3
+        '@executable_path/../Frameworks/Python.framework/Versions/3.5/Python '
+        'ykman-gui/ykman-gui.app/Contents/Resources/'
+        'qml/io/thp/pyotherside/libpyothersideplugin.dylib')
 
 
 def relink_libs():
@@ -172,9 +181,17 @@ def relink_libs():
 
 def relink_ykman_cli():
     print("Relinking cli...")
-    sh('install_name_tool -change @rpath/QtQml.framework/Versions/5/QtQml @executable_path/../Frameworks/QtQml.framework/Versions/5/QtQml ykman-gui/ykman-gui.app/Contents/MacOS/ykman')
-    sh('install_name_tool -change @rpath/QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork ykman-gui/ykman-gui.app/Contents/MacOS/ykman')
-    sh('install_name_tool -change @rpath/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore ykman-gui/ykman-gui.app/Contents/MacOS/ykman')
+    sh('install_name_tool -change @rpath/QtQml.framework/Versions/5/QtQml '
+        '@executable_path/../Frameworks/QtQml.framework/Versions/5/QtQml '
+        'ykman-gui/ykman-gui.app/Contents/MacOS/ykman')
+    sh('install_name_tool -change '
+        '@rpath/QtNetwork.framework/Versions/5/QtNetwork '
+        '@executable_path/../Frameworks/'
+        'QtNetwork.framework/Versions/5/QtNetwork '
+        'ykman-gui/ykman-gui.app/Contents/MacOS/ykman')
+    sh('install_name_tool -change @rpath/QtCore.framework/Versions/5/QtCore '
+        '@executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore '
+        'ykman-gui/ykman-gui.app/Contents/MacOS/ykman')
 
 
 def main():
@@ -190,7 +207,7 @@ def main():
     build_pyotherside()
     build_binaries()
     relink_pyotherside()
-    relink_ykman_cli()    
+    relink_ykman_cli()
     print("Done!")
 
 
