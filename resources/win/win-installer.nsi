@@ -33,7 +33,7 @@ Var STARTMENU_FOLDER
   Name "YubiKey Manager"
   
   ; The file to write
-  OutFile "../release/yubikey-manager-${VERSION}-win.exe"
+  OutFile "../../ykman-gui/release/yubikey-manager-${VERSION}-win.exe"
   
   ; The default installation directory
   InstallDir "$PROGRAMFILES\Yubico\YubiKey Manager"
@@ -66,7 +66,7 @@ Var STARTMENU_FOLDER
       SetShellVarContext all
       SetOutPath "$SMPROGRAMS\$STARTMENU_FOLDER"
       CreateShortCut "YubiKey Manager.lnk" "$INSTDIR\ykman-gui.exe" "" "$INSTDIR\ykman-gui.exe" 0
-      CreateShortCut "Uninstall YubiKey Manager.lnk" "$INSTDIR\uninstall-ykman.exe" "" "$INSTDIR\uninstall-ykman.exe" 1
+      CreateShortCut "Uninstall YubiKey Manager.lnk" "$INSTDIR\ykman-uninstall.exe" "" "$INSTDIR\ykman-uninstall.exe" 1
     !insertmacro MUI_STARTMENU_WRITE_END
   SectionEnd
   
@@ -98,7 +98,7 @@ Var MYTMP
 Section "YubiKey Manager"
   SectionIn RO
   SetOutPath $INSTDIR
-  FILE /r "..\release\*"
+  FILE /r "..\..\ykman-gui\release\*"
   
   ; Write the installation path into the registry
   WriteRegStr HKLM "Software\Yubico\yubikey-manager" "Install_Dir" "$INSTDIR"
@@ -106,7 +106,7 @@ Section "YubiKey Manager"
   ; Windows Add/Remove Programs support
   StrCpy $MYTMP "Software\Microsoft\Windows\CurrentVersion\Uninstall\yubikey-manager"
   WriteRegStr       HKLM $MYTMP "DisplayName"     "YubiKey Manager"
-  WriteRegExpandStr HKLM $MYTMP "UninstallString" '"$INSTDIR\uninstall-ykman.exe"'
+  WriteRegExpandStr HKLM $MYTMP "UninstallString" '"$INSTDIR\ykman-uninstall.exe"'
   WriteRegExpandStr HKLM $MYTMP "InstallLocation" "$INSTDIR"
   WriteRegStr       HKLM $MYTMP "DisplayVersion"  "${VERSION}"
   WriteRegStr       HKLM $MYTMP "Publisher"       "Yubico AB"
