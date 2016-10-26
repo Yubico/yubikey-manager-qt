@@ -78,7 +78,7 @@ DefaultDialog {
         text: "The slot is now configured."
         standardButtons: StandardButton.Ok
         onAccepted: {
-            slotDialog.close()
+            goToOverview()
         }
     }
 
