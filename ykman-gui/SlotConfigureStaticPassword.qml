@@ -45,7 +45,7 @@ ColumnLayout {
             implicitWidth: 280
             font.family: "Courier"
             validator: RegExpValidator {
-                regExp: /[cbdefghijklnrtuv]{1,32}$/
+                regExp: /[cbdefghijklnrtuv]{1,38}$/
             }
         }
         Button {
