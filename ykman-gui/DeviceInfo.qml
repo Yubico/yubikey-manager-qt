@@ -7,7 +7,7 @@ Item {
     property int margin: width / 30
 
     width: 370
-    height: deviceBox.height + featureBox.height + connectionsBox.height + margin * 4
+    height: deviceBox.implicitHeight + featureBox.implicitHeight + connectionsBox.implicitHeight + margin * 4
 
     ColumnLayout {
         anchors.fill: parent
