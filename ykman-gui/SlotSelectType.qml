@@ -30,11 +30,11 @@ ColumnLayout {
                 id: typeAlternatives
             }
             RadioButton {
-                text: qsTr("YubiKey OTP")
+                text: qsTr("Yubico OTP")
                 exclusiveGroup: typeAlternatives
                 checked: true
                 property string name: "otp"
-                property string desc: qsTr("Programs a one-time-password credential using the YubiKey OTP protocol.")
+                property string desc: qsTr("Programs a one-time-password credential using the Yubico OTP protocol.")
             }
             RadioButton {
                 text: qsTr("Challenge-response")

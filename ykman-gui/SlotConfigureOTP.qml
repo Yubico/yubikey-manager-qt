@@ -21,7 +21,7 @@ ColumnLayout {
 
     Text {
         textFormat: Text.StyledText
-        text: "<h2>Configure YubiKey OTP</h2><br/><p>When triggered, the YubiKey will output a one time password.</p>"
+        text: "<h2>Configure Yubico OTP</h2><br/><p>When triggered, the YubiKey will output a one time password.</p>"
     }
 
     GridLayout {
