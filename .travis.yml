@@ -6,9 +6,18 @@ before_install:
   - sudo add-apt-repository -y ppa:yubico/stable
   - sudo add-apt-repository -y ppa:beineri/opt-qt57-trusty
   - sudo apt-get update
-  - sudo apt-get install -y swig libpcsclite-dev libykpers-1-dev libu2f-host-dev qt57base qt57declarative qt57quickcontrols g++
-  - source /opt/qt57/bin/qt57-env.sh
 
+install:
+  - sudo apt-get install -y swig libpcsclite-dev libykpers-1-dev \
+    libu2f-host-dev qt57base qt57declarative qt57quickcontrols \
+    qt57svg g++ python3-dev
+  - source /opt/qt57/bin/qt57-env.sh
+  - cd vendor/pyotherside
+  - qmake
+  - make
+  - sudo make install
+  - cd ../..
+  
 script:
   - qmake
   - make
