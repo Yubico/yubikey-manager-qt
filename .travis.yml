@@ -8,9 +8,7 @@ before_install:
   - sudo apt-get update
 
 install:
-  - sudo apt-get install -y swig libpcsclite-dev libykpers-1-dev \
-    libu2f-host-dev qt57base qt57declarative qt57quickcontrols \
-    qt57svg g++ python3-dev
+  - sudo apt-get install -y swig libpcsclite-dev libykpers-1-dev libu2f-host-dev qt57base qt57declarative qt57quickcontrols qt57svg g++ python3-dev
   - source /opt/qt57/bin/qt57-env.sh
   - cd vendor/pyotherside
   - qmake
