@@ -9,6 +9,6 @@ before_install:
   - sudo apt-get install -y swig libpcsclite-dev libykpers-1-dev libu2f-host-dev qt57base qt57declarative qt57quickcontrols g++
   - source /opt/qt57/bin/qt57-env.sh
 
-install:
+script:
   - qmake
   - make
