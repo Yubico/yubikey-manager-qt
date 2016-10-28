@@ -69,7 +69,8 @@ script:
       find /usr/local/Cellar/libusb/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
       cp -a /usr/local/Cellar/python3/3.5.2_3/Frameworks/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
-      cp -R /usr/local/lib/python3.5/site-packages ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/
+      rsync -r /usr/local/lib/python3.5/site-packages ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/
+      sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman-gui /usr/local
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman-gui /usr/local
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman /usr/local
       sudo install_name_tool -change @executable_path/../Frameworks/Python @executable_path/../Frameworks/Python.framework/Versions/3.5/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
