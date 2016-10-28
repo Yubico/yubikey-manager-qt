@@ -60,6 +60,7 @@ script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
+      macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/
       find /usr/local/Cellar/json-c/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/ykpers/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/libyubikey/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
@@ -69,8 +70,7 @@ script:
       cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
       cp -a /usr/local/Cellar/python3/3.5.2_3/Frameworks/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
       cp -R /usr/local/lib/python3.5/site-packages ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/
-      macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman-gui /usr/local
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman /usr/local
-      install_name_tool -change @executable_path/../Frameworks/Python @executable_path/../Frameworks/Python.framework/Versions/3.5/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
+      sudo install_name_tool -change @executable_path/../Frameworks/Python @executable_path/../Frameworks/Python.framework/Versions/3.5/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
     fi
