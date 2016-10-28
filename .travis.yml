@@ -58,7 +58,7 @@ script:
   - qmake
   - make
 
-before_deploy:
+after_sucess:
     - |
       if [[ "$TRAVIS_OS_NAME" == "osx" ]]
       then
