@@ -45,7 +45,10 @@ install:
       brew install qt5 swig
       brew link qt5 -f
       brew install ykpers libyubikey hidapi libu2f-host libusb
-      brew install python3
+      brew install pyenv
+      env PYTHON_CONFIGURE_OPTS="--enable-framework CC=clang" pyenv install 3.5.2
+      eval "$(pyenv init -)"
+      pyenv global system 3.5.2 
       cd vendor/pyotherside
       qmake
       make
@@ -68,11 +71,8 @@ script:
       find /usr/local/Cellar/libu2f-host/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/libusb/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
-      cp -a /usr/local/Cellar/python3/3.5.2_3/Frameworks/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
-      rsync -r /usr/local/lib/python3.5/site-packages ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/
-      sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman-gui /usr/local
-      sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman-gui /usr/local
+      cp -a ~/.pyenv/versions/3.5.2/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman-gui /usr/local
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman /usr/local
-      sudo install_name_tool -change @executable_path/../Frameworks/Python @executable_path/../Frameworks/Python.framework/Versions/3.5/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
+      sudo install_name_tool -change /Users/travis/.pyenv/versions/3.5.2/Python.framework/Versions/3.5/Python @executable_path/../Frameworks/Python.framework/Versions/3.5/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
     fi
