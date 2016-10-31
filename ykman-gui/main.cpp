@@ -12,11 +12,15 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     #endif
 
-    // Only allow a single instance running.
+    // Non Darwin platforms uses QSingleApplication to ensure only one running instance.
+    #ifndef Q_OS_DARWIN
     QtSingleApplication app(argc, argv);
     if (app.sendMessage("")) {
         return 0;
     }
+    #else
+    QApplication app(argc, argv);
+    #endif
 
     app.setOrganizationName("Yubico");
     app.setApplicationName("YubiKey Manager");
@@ -30,6 +34,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
+    #ifndef Q_OS_DARWIN
     // Wake up the root window on a message from new instance.
     for (auto object : engine.rootObjects()) {
         if (QWindow *window = qobject_cast<QWindow*>(object)) {
@@ -40,6 +45,7 @@ int main(int argc, char *argv[])
             });
         }
     }
+    #endif
 
     return app.exec();
 }
