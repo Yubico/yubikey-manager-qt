@@ -2,7 +2,7 @@
 
     python resources/mac/build_macos.py
     codesign --deep --force --verify --verbose --sign 'Developer ID Application' YubiKey\ Manager.app --entitlements resources/mac/Entitlements.plist
-    sudo pkgbuild --sign 'Developer ID Installer' --install-location /Applications --component YubiKey\ Manager.app/ yubikey-manager-VERSION-mac.pkg
+    productbuild --sign 'Developer ID Installer' --component YubiKey\ Manager.app/ /Applications/ yubikey-manager-VERSION-mac.pkg
     gpg --detach-sign dist/yubikey-manager-VERSION-mac.pkg
     
 == Releasing on Windows
