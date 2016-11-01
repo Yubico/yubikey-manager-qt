@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <QtGlobal>
 #include <QtWidgets>
+#ifndef Q_OS_DARWIN
 #include <QtSingleApplication>
+#endif
 
 int main(int argc, char *argv[])
 {

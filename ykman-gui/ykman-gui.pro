@@ -8,17 +8,23 @@ SOURCES += main.cpp
 
 RESOURCES += qml.qrc
 
-# Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
+VERSION = 0.2.1
+
 
 # Default rules for deployment.
 include(deployment.pri)
-include(vendor/qt-solutions/qtsingleapplication/src/qtsingleapplication.pri)
+
+!macx {
+    include(vendor/qt-solutions/qtsingleapplication/src/qtsingleapplication.pri)
+}
 
 # Icon files
 RC_ICONS = resources/icons/ykman.ico
-ICON = resources/icons/ykman.icns
 
+macx {
+    ICON = resources/icons/ykman.icns
+    QMAKE_INFO_PLIST = ../resources/mac/Info.plist.in
+}
 
 DISTFILES += \
     yubikey.py
