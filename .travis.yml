@@ -75,6 +75,7 @@ script:
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman-gui /usr/local
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman /usr/local
       sudo install_name_tool -change /Users/travis/.pyenv/versions/3.5.2/Python.framework/Versions/3.5/Python @executable_path/../Frameworks/Python.framework/Versions/3.5/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
+      rsync -r ykman-gui.app ../deploy/
     fi
 
 deploy:
@@ -84,4 +85,6 @@ deploy:
   bucket: "$GCS_BUCKET"
   skip_cleanup: true
   acl: public-read
-  local-dir: "ykman-gui/ykman-gui.app"
+  local-dir: "deploy/"
+  on:
+    condition: $TRAVIS_OS_NAME == osx
