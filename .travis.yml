@@ -77,3 +77,14 @@ script:
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman /usr/local
       sudo install_name_tool -change /Users/travis/.pyenv/versions/3.5.2/Python.framework/Versions/3.5/Python @executable_path/../Frameworks/Python.framework/Versions/3.5/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
     fi
+
+deploy:
+  provider: gcs
+  access_key_id: "$GCS_ID"
+  secret_access_key: "$GCS_KEY"
+  bucket: "$GCS_BUCKET"
+  skip_cleanup: true
+  acl: public-read
+  local-dir: "ykman-gui/ykman-gui.app"
+  on:
+    condition: "$TRAVIS_OS_NAME" == "osx"
