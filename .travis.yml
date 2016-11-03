@@ -50,6 +50,7 @@ install:
       eval "$(pyenv init -)"
       pyenv global system 3.5.2 
       cd vendor/pyotherside
+      echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> src/src.pro
       qmake
       make
       sudo make install
