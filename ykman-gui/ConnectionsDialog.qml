@@ -3,9 +3,20 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
-DefaultDialog {
-    property var device
+ApplicationWindow {
 
+    // This is duplicated from "DefaultDialog.qml" to avoid crashing on Sierra,
+    // waiting for response on https://bugreports.qt.io/browse/QTBUG-56909
+    SystemPalette { id: palette }
+    signal accepted
+    signal rejected
+    property int margins: 12
+    flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
+    modality: Qt.ApplicationModal
+    color: palette.window
+
+
+    property var device
     title: qsTr("Configure connections")
     minimumWidth: 500
     onAccepted: {
@@ -24,7 +35,7 @@ DefaultDialog {
 
     ColumnLayout {
         anchors.fill: parent
-
+        anchors.margins: margins
         Text {
             textFormat: Text.StyledText
             text: "<h2>Configure enabled connection protocols</h2>"
