@@ -50,7 +50,13 @@ install:
     fi
 
 script:
-  - qmake -qt=qt5
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    then
+      qmake -qt=qt5
+    else
+      qmake
+    fi
   - make
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
