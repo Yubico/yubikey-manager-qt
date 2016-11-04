@@ -69,6 +69,7 @@ script:
       find /usr/local/Cellar/libu2f-host/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/libusb/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
+      cp -r ykman-gui/pymodules ykman-gui/ykman-gui.app/Contents/MacOS/
       cp -a ~/.pyenv/versions/3.5.2/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
       sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '*.pyc' -delete
       sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '__pycache__' -delete
