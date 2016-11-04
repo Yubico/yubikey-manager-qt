@@ -20,5 +20,9 @@
         <string>@SHORT_VERSION@</string>
         <key>LSApplicationCategoryType</key>
         <string>public.app-category.utilities</string>
+        <key>NSPrincipalClass</key>
+        <string>NSApplication</string>
+        <key>NSHighResolutionCapable</key>
+        <string>True</string>
 </dict>
 </plist>
