@@ -29,12 +29,34 @@ int main(int argc, char *argv[])
     app.setApplicationDisplayName("YubiKey Manager");
     app.setApplicationVersion("0.2.0");
 
+    QString app_dir = app.applicationDirPath();
+    QString main_qml = "/qml/Main.qml";
+    QString path_prefix;
+    QString url_prefix;
+
+    if (QFileInfo::exists(":" + main_qml)) {
+        // Embedded resources
+        path_prefix = ":";
+        url_prefix = "qrc://";
+    } else if (QFileInfo::exists(app_dir + main_qml)) {
+        // Try relative to executable
+        path_prefix = app_dir;
+        url_prefix = app_dir;
+    } else {  //Assume qml/main.qml in cwd.
+        app_dir = ".";
+        path_prefix = ".";
+        url_prefix = ".";
+    }
+
+    app.setWindowIcon(QIcon(path_prefix + "/images/windowicon.png"));
+
+    QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("appDir", app_dir);
+    engine.rootContext()->setContextProperty("urlPrefix", url_prefix);
+
     qputenv("PYTHONDONTWRITEBYTECODE", "1");
 
-    app.setWindowIcon(QIcon("resources/icons/ykman.png"));
-    app.setOrganizationName("Yubico");
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+    engine.load(QUrl(url_prefix + main_qml));
 
     #ifndef Q_OS_DARWIN
     // Wake up the root window on a message from new instance.

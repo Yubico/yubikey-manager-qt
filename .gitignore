@@ -14,6 +14,8 @@ ykman-cli/qrc_qml.cpp
 ykman-cli/ykman
 ykman-gui/moc_qtlocalpeer.cpp
 ykman-gui/moc_qtsingleapplication.cpp
-ykman-gui/qrc_qml.cpp
+ykman-gui/qrc_resources.cpp
 ykman-gui/ykman-gui.app/
 ykman-gui/ykman-gui
+ykman-gui/pymodules/
+ykman-gui/resources.qrc

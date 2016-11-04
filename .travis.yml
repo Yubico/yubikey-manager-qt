@@ -13,7 +13,6 @@ before_install:
   if [[ "$TRAVIS_OS_NAME" == "linux" ]]
   then
     sudo add-apt-repository -y ppa:yubico/stable
-    sudo add-apt-repository -y ppa:beineri/opt-qt57-trusty
     sudo apt-get update
   fi
 - |
@@ -29,15 +28,8 @@ install:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       sudo apt-get install -y libykpers-1-dev libu2f-host-dev 
-      sudo apt-get install -y qt57base qt57declarative qt57quickcontrols qt57svg g++ swig 
-      sudo apt-get install -y libpcsclite-dev python3-dev python-pyscard python3-pip pcscd
-      source /opt/qt57/bin/qt57-env.sh
-      cd vendor/pyotherside
-      qmake
-      make
-      sudo make install
-      cd ../..
-      sudo pip3 install vendor/yubikey-manager
+      sudo apt-get install -y qtbase5-dev qtdeclarative5-dev g++ swig 
+      sudo apt-get install -y libpcsclite-dev python3-dev python3-pip
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
@@ -54,8 +46,7 @@ install:
       qmake
       make
       sudo make install
-      cd ../..
-      sudo pip3 install vendor/yubikey-manager
+      cd ../../
     fi
 
 script:
@@ -64,7 +55,7 @@ script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
-      macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/
+      macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/
       find /usr/local/Cellar/json-c/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/ykpers/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/libyubikey/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
