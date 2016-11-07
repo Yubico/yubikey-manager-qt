@@ -88,6 +88,6 @@ deploy:
   skip_cleanup: true
   acl: public-read
   local-dir: "deploy/"
-  all_branches: true
   on:
+    all_branches: true
     condition: $TRAVIS_OS_NAME == osx
