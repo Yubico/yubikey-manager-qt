@@ -17,17 +17,19 @@ Python {
     property var queue: []
 
     Component.onCompleted: {
-        addImportPath(appDir + '/pymodules')
-        addImportPath(urlPrefix + '/py')
-
-        importModule('yubikey', function () {
-            ready = true
-            do_call('yubikey.controller.get_features', [], function (res) {
-                features = res
-                for(var i in queue) {
-                    do_call(queue[i][0], queue[i][1], queue[i][2])
-                }
-                queue = []
+        importModule('site', function() {
+            call('site.addsitedir', [appDir + '/pymodules'], function() {
+                addImportPath(urlPrefix + '/py')
+                importModule('yubikey', function () {
+                    ready = true
+                    do_call('yubikey.controller.get_features', [], function (res) {
+                        features = res
+                        for(var i in queue) {
+                            do_call(queue[i][0], queue[i][1], queue[i][2])
+                        }
+                        queue = []
+                    })
+                })
             })
         })
     }

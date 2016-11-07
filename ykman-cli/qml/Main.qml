@@ -7,10 +7,13 @@ Python {
     }
 
     Component.onCompleted: {
-        addImportPath(appDir + '/pymodules')
-        addImportPath(urlPrefix + '/py')
-        importModule('cli', function() {
-            call('cli.run', [Qt.application.arguments], Qt.quit)
+        importModule('site', function() {
+            call('site.addsitedir', [appDir + '/pymodules'], function() {
+                addImportPath(urlPrefix + '/py')
+                importModule('cli', function() {
+                    call('cli.run', [Qt.application.arguments], Qt.quit)
+                })
+            })
         })
     }
 }
