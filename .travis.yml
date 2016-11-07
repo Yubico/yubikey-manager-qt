@@ -62,22 +62,31 @@ script:
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
       macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/
+      # Copy needed dylibs
       find /usr/local/Cellar/json-c/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/ykpers/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/libyubikey/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/hidapi/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/libu2f-host/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/libusb/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
-      cp -r ykman-gui/pymodules ykman-gui/ykman-gui.app/Contents/MacOS/
+      # Copy Python framework
       cp -a ~/.pyenv/versions/3.5.2/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
       sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '*.pyc' -delete
       sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '__pycache__' -delete
+      # Combine pymodules from gui and cli
+      cp -r ykman-gui/pymodules ykman-gui/ykman-gui.app/Contents/MacOS/
+      cp -rn ykman-cli/pymodules ykman-gui/ykman-gui.app/Contents/MacOS/
+      # Copy cli executable
+      cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
+      # Fix stuff that macdeployqt does incorrectly.
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman-gui /usr/local
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman /usr/local
+      # Fix linking for PyOtherSide
       sudo install_name_tool -change /Users/travis/.pyenv/versions/3.5.2/Python.framework/Versions/3.5/Python @executable_path/../Frameworks/Python.framework/Versions/3.5/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
+      # Create .pkg
       pkgbuild --install-location /Applications --component ykman-gui/ykman-gui.app yubikey-manager-HEAD-$TRAVIS_BRANCH-mac.pkg
-      rsync yubikey-manager-HEAD-$TRAVIS_BRANCH-mac.pkg deploy/
+      # Copy to deploy dir
+      rsync yubikey-manager-$TRAVIS_BRANCH-HEAD-mac.pkg deploy/
     fi
 
 deploy:

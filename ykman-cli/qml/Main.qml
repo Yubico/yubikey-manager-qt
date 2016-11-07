@@ -7,7 +7,8 @@ Python {
     }
 
     Component.onCompleted: {
-        addImportPath(Qt.resolvedUrl('.'))
+        addImportPath(appDir + '/pymodules')
+        addImportPath(urlPrefix + '/py')
         importModule('cli', function() {
             call('cli.run', [Qt.application.arguments], Qt.quit)
         })

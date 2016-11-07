@@ -10,12 +10,12 @@ Makefile*
 *.rc
 *.dll
 *.o
-ykman-cli/qrc_qml.cpp
+# We generate .qrc files, so don't commit them:
+*.qrc
+qrc_*.cpp
+moc_*.cpp
 ykman-cli/ykman
-ykman-gui/moc_qtlocalpeer.cpp
-ykman-gui/moc_qtsingleapplication.cpp
-ykman-gui/qrc_resources.cpp
-ykman-gui/ykman-gui.app/
 ykman-gui/ykman-gui
+ykman-gui/ykman-gui.app/
+ykman-cli/pymodules/
 ykman-gui/pymodules/
-ykman-gui/resources.qrc
