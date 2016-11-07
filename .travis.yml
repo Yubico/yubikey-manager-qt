@@ -84,7 +84,7 @@ script:
       # Fix linking for PyOtherSide
       sudo install_name_tool -change /Users/travis/.pyenv/versions/3.5.2/Python.framework/Versions/3.5/Python @executable_path/../Frameworks/Python.framework/Versions/3.5/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
       # Create .pkg
-      pkgbuild --install-location /Applications --component ykman-gui/ykman-gui.app yubikey-manager-HEAD-$TRAVIS_BRANCH-mac.pkg
+      pkgbuild --install-location /Applications --component ykman-gui/ykman-gui.app yubikey-manager-$TRAVIS_BRANCH-HEAD-mac.pkg
       # Copy to deploy dir
       rsync yubikey-manager-$TRAVIS_BRANCH-HEAD-mac.pkg deploy/
     fi
