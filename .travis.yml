@@ -28,7 +28,7 @@ install:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       sudo apt-get install -y libykpers-1-1 libu2f-host0
-      sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev-tools qml-module-io-thp-pyotherside
+      sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev-tools
       sudo apt-get install -y g++ swig libpcsclite-dev python3-dev python3-pip
     fi
   - |
@@ -61,10 +61,10 @@ script:
       qmake
     fi
   - make
-  - (cd ykman-cli && ./test.py)
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
+      (cd ykman-cli && ./test.py)
       macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/
       # Copy needed dylibs
       find /usr/local/Cellar/json-c/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
@@ -78,8 +78,8 @@ script:
       sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '*.pyc' -delete
       sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '__pycache__' -delete
       # Move pymodules from app bundle to site-packages, to be accepted by codesign
-      cp -r ykman-gui/ykman-gui.app/Contents/MacOS/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/
-      rm -rf ykman-gui/ykman-gui.app/Contents/MacOS/pymodules
+      mv ykman-gui/ykman-gui.app/Contents/MacOS/pymodules/* ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/
+      rm -d ykman-gui/ykman-gui.app/Contents/MacOS/pymodules
       # Add cli executable
       cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
       # Add pymodules from cli
@@ -93,6 +93,9 @@ script:
       pkgbuild --install-location /Applications --component ykman-gui/ykman-gui.app yubikey-manager-$TRAVIS_BRANCH-HEAD-mac.pkg
       # Copy to deploy dir
       cp yubikey-manager-$TRAVIS_BRANCH-HEAD-mac.pkg deploy/
+      # Test ykman-cli in .app bundle
+      cp ykman-cli/test.py ykman-gui/ykman-gui.app/Contents/MacOS/
+      (cd ykman-gui/ykman-gui.app/Contents/MacOS && ./test.py)
     fi
 
 deploy:
