@@ -28,8 +28,14 @@ install:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       sudo apt-get install -y libykpers-1-1 libu2f-host0
-      sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev-tools
+      sudo apt-get install -y qtbase5-dev libqt5svg5-dev qtdeclarative5-dev qttools5-dev-tools
       sudo apt-get install -y g++ swig libpcsclite-dev python3-dev python3-pip
+      cd vendor/pyotherside
+      echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> src/src.pro
+      qmake -qt=qt5
+      make
+      sudo make install
+      cd ../../
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
@@ -54,6 +60,7 @@ script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
+      export LD_LIBRARY_PATH=/opt/python/3.5.0/lib/
       qmake -qt=qt5
       lupdate ykman-gui/ykman-gui.pro -ts ykman-gui.ts
       grep -o '<source>\(.*\)</source>' ykman-gui.ts | sed 's,\(^<source>\)\|\(</source>$\),,g' | sort | uniq -u > deploy/yubikey-manager-$TRAVIS_BRANCH-HEAD-strings.txt
@@ -61,10 +68,10 @@ script:
       qmake
     fi
   - make
+  - (cd ykman-cli && ./test.py)
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
-      (cd ykman-cli && ./test.py)
       macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/
       # Copy needed dylibs
       find /usr/local/Cellar/json-c/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
