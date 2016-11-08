@@ -75,11 +75,13 @@ script:
       cp -a ~/.pyenv/versions/3.5.2/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
       sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '*.pyc' -delete
       sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '__pycache__' -delete
-      # Combine pymodules from gui and cli
-      cp -r ykman-gui/pymodules ykman-gui/ykman-gui.app/Contents/MacOS/
-      cp -rn ykman-cli/pymodules ykman-gui/ykman-gui.app/Contents/MacOS/
-      # Copy cli executable
+      # Move pymodules from app bundle to site-packages, to be accepted by codesign
+      cp -r ykman-gui/ykman-gui.app/Contents/MacOS/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/
+      rm -d ykman-gui/ykman-gui.app/Contents/MacOS/pymodules
+      # Add cli executable
       cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
+      # Add pymodules from cli
+      cp -rn ykman-cli/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/
       # Fix stuff that macdeployqt does incorrectly.
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman-gui /usr/local
       sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman /usr/local
