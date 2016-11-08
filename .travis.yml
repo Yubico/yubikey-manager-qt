@@ -61,6 +61,7 @@ script:
       qmake
     fi
   - make
+  - (cd ykman-cli && ./test.py)
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
