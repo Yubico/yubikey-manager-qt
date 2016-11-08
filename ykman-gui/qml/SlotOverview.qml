@@ -60,7 +60,7 @@ ColumnLayout {
                 margins: 10
                 left: longPressLabel.right
             }
-            text: slotsEnabled[1] ? qsTr(" Configured") : qsTr("Empty")
+            text: slotsEnabled[1] ? qsTr("Configured") : qsTr("Empty")
         }
 
         Button {
