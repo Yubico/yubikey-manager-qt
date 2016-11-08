@@ -78,7 +78,7 @@ script:
       sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '__pycache__' -delete
       # Move pymodules from app bundle to site-packages, to be accepted by codesign
       cp -r ykman-gui/ykman-gui.app/Contents/MacOS/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/
-      rm -d ykman-gui/ykman-gui.app/Contents/MacOS/pymodules
+      rm -rf ykman-gui/ykman-gui.app/Contents/MacOS/pymodules
       # Add cli executable
       cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
       # Add pymodules from cli
