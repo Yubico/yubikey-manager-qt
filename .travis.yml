@@ -56,7 +56,7 @@ script:
     then
       qmake -qt=qt5
       lupdate ykman-gui/ykman-gui.pro -ts ykman-gui.ts
-      grep -o '<source>\(.*\)</source>' ykman-gui.ts | sed 's,\(^<source>\)\|\(</source>$\),,g' > deploy/yubikey-manager-$TRAVIS_BRANCH-HEAD-strings.txt
+      grep -o '<source>\(.*\)</source>' ykman-gui.ts | sed 's,\(^<source>\)\|\(</source>$\),,g' | sort | uniq -u > deploy/yubikey-manager-$TRAVIS_BRANCH-HEAD-strings.txt
     else
       qmake
     fi
