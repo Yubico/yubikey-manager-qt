@@ -1,7 +1,7 @@
 image: Visual Studio 2015
 
 init:
-  - C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
 
 install:
   - git submodule update --init --recursive
