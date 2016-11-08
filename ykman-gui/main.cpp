@@ -24,11 +24,6 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     #endif
 
-    app.setOrganizationName("Yubico");
-    app.setApplicationName("YubiKey Manager");
-    app.setApplicationDisplayName("YubiKey Manager");
-    app.setApplicationVersion("0.2.0");
-
     QString app_dir = app.applicationDirPath();
     QString main_qml = "/qml/Main.qml";
     QString path_prefix;
