@@ -28,7 +28,7 @@ install:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       sudo apt-get install -y libykpers-1-dev libu2f-host-dev 
-      sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev-tools g++ swig 
+      sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev-tools g++ swig
       sudo apt-get install -y libpcsclite-dev python3-dev python3-pip
     fi
   - |
@@ -50,6 +50,7 @@ install:
     fi
 
 script:
+  - mkdir deploy/
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
@@ -87,7 +88,7 @@ script:
       # Create .pkg
       pkgbuild --install-location /Applications --component ykman-gui/ykman-gui.app yubikey-manager-$TRAVIS_BRANCH-HEAD-mac.pkg
       # Copy to deploy dir
-      rsync yubikey-manager-$TRAVIS_BRANCH-HEAD-mac.pkg deploy/
+      cp yubikey-manager-$TRAVIS_BRANCH-HEAD-mac.pkg deploy/
     fi
 
 deploy:
@@ -100,4 +101,3 @@ deploy:
   local-dir: "deploy/"
   on:
     all_branches: true
-    condition: $TRAVIS_OS_NAME == osx
