@@ -45,3 +45,8 @@ macx {
     QMAKE_INFO_PLIST = ../resources/mac/Info.plist.in
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9 # Mavericks
 }
+
+lupdate_only {
+  SOURCES = qml/*.qml \
+  qml/slot/*.qml
+}

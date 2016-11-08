@@ -10,6 +10,7 @@ Makefile*
 *.rc
 *.dll
 *.o
+*.ts
 # We generate .qrc files, so don't commit them:
 *.qrc
 qrc_*.cpp
