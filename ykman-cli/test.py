@@ -5,7 +5,7 @@ import re
 
 
 def main():
-    out = check_output(['./ykman', '-v'])
+    out = check_output(['./ykman', '-v'], timeout=5)
 
     assert re.search(br'libykpers\s+(1\.\d+\.\d+)', out)
     assert re.search(br'libu2f-host0?\s+(1\.\d+\.\d+)', out)
