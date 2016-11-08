@@ -9,7 +9,7 @@ install:
 before_build: 
   - set PATH=%PATH%;C:\Python35\Scripts
   - rm .\vendor\yubikey-manager\ykman\yubicommon
-  - xcopy .\vendor\yubikey-manager\vendor\yubicommon .\vendor\yubikey-manager\ykman\yubicommon
+  - xcopy /i .\vendor\yubikey-manager\vendor\yubicommon .\vendor\yubikey-manager\ykman\yubicommon
   - C:\Qt\5.7\msvc2015_64\bin\qmake yubikey-manager-qt.pro
   - C:\Qt\Tools\QtCreator\bin\jom
 
