@@ -1,8 +1,8 @@
 image: Visual Studio 2015
 
 before_build: 
-  - qmake yubikey-manager-qt.pro
-  - jom
+  - C:\Qt\5.7\msvc2015_64\bin\qmake yubikey-manager-qt.pro
+  - C:\Qt\5.7\msvc2015_64\bin\jom
 
 after_build:
   - cd ykman-gui
