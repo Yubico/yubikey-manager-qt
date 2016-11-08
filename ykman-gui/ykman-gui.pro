@@ -38,10 +38,10 @@ include(deployment.pri)
 }
 
 # Icon files
-RC_ICONS = resources/icons/ykman.ico
+RC_ICONS = ../resources/icons/ykman.ico
 
 macx {
-    ICON = resources/icons/ykman.icns
+    ICON = ../resources/icons/ykman.icns
     QMAKE_INFO_PLIST = ../resources/mac/Info.plist.in
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9 # Mavericks
 }
