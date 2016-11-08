@@ -1,6 +1,7 @@
 image: Visual Studio 2015
 
 before_build: 
+  - set PATH=%PATH%;C:\Python35\Scripts
   - C:\Qt\5.7\msvc2015_64\bin\qmake yubikey-manager-qt.pro
   - C:\Qt\Tools\QtCreator\bin\jom
 
