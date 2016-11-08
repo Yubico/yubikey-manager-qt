@@ -1,0 +1,11 @@
+image: Visual Studio 2015
+
+before_build: 
+  - qmake yubikey-manager-qt.pro
+  - jom
+
+after_build:
+  - cd ykman-gui
+  - windeployqtqt release\ykman-gui.exe -qmldir=qml
+  - cp -r pymodules release\
+
