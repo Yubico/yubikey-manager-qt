@@ -62,6 +62,7 @@ install:
   - cd vendor/pyotherside
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    then
       qmake -qt=qt5
     else
       qmake
