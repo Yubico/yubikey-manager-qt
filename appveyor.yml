@@ -1,20 +1,36 @@
+# appveyor.yml
+
+# Building, testing and deployment for Windows
+
+# Syntax for this file:
+# https://www.appveyor.com/docs/appveyor-yml
+
 image: Visual Studio 2015
 
 init:
+  # Needed for jom to work.
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+  # Add python and Qt to PATH
+  - set PATH=%PATH%;C:\Python35\Scripts;C:\Qt\5.7\msvc2015_64\bin;C:\Qt\Tools\QtCreator\bin
 
 install:
+  # Submodules are not cloned by default
   - git submodule update --init --recursive
+  # Swig needed for pyscard
+  - choco install swig -y
 
-before_build: 
-  - set PATH=%PATH%;C:\Python35\Scripts
+before_build:
+  # Fix problem with symbolic link
   - rm .\vendor\yubikey-manager\ykman\yubicommon
   - xcopy /i /e .\vendor\yubikey-manager\vendor\yubicommon\yubicommon .\vendor\yubikey-manager\ykman\yubicommon
-  - C:\Qt\5.7\msvc2015_64\bin\qmake yubikey-manager-qt.pro
-  - C:\Qt\Tools\QtCreator\bin\jom
+
+build_script:
+  - qmake yubikey-manager-qt.pro
+  - jom
 
 after_build:
   - cd ykman-gui
+  # Use Qt deployment tool on executable
   - windeployqtqt release\ykman-gui.exe -qmldir=qml
   - cp -r pymodules release\
 
