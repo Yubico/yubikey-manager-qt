@@ -31,6 +31,6 @@ build_script:
 after_build:
   - cd ykman-gui
   # Use Qt deployment tool on executable
-  - windeployqtqt release\ykman-gui.exe -qmldir=qml
+  - windeployqt release\ykman-gui.exe -qmldir=qml
   - cp -r pymodules release\
 
