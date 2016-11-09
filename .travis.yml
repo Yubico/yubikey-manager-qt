@@ -1,3 +1,9 @@
+# .travis.yml
+
+# Building, testing and deployment on OS X and Linux
+
+# Reference: https://docs.travis-ci.com/user/customizing-the-build
+
 language: cpp
 
 os:
@@ -9,19 +15,20 @@ dist: trusty
 sudo: required
 
 before_install:
-- |
-  if [[ "$TRAVIS_OS_NAME" == "linux" ]]
-  then
-    sudo add-apt-repository -y ppa:yubico/stable
-    sudo apt-get update
-  fi
-- |
-  if [[ "$TRAVIS_OS_NAME" == "osx" ]]
-  then
-    export MACOSX_DEPLOYMENT_TARGET=10.9
-    brew update
-    git clone https://github.com/iltommi/macdeployqtfix.git
-  fi
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    then
+      sudo add-apt-repository -y ppa:yubico/stable
+      sudo apt-get update
+    fi
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+    then
+      export MACOSX_DEPLOYMENT_TARGET=10.9
+      brew update
+    fi
+  # Patch PyOtherSide to not be built with debug output
+  - echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> vendor/pyotherside/src/src.pro
 
 install:
   - |
@@ -30,45 +37,63 @@ install:
       sudo apt-get install -y libykpers-1-1 libu2f-host0
       sudo apt-get install -y qtbase5-dev libqt5svg5-dev qtdeclarative5-dev qttools5-dev-tools
       sudo apt-get install -y g++ swig libpcsclite-dev python3-dev python3-pip
-      cd vendor/pyotherside
-      echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> src/src.pro
-      qmake -qt=qt5
-      make
-      sudo make install
-      cd ../../
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
+      git clone https://github.com/iltommi/macdeployqtfix.git
       brew install qt5 swig
       brew link qt5 -f
       brew install ykpers libyubikey hidapi libu2f-host libusb
+      # Build Python 3 with --enable-framework, to be able to distribute it in a .app bundle
       brew install pyenv
+      eval "$(pyenv init -)"
       env PYTHON_CONFIGURE_OPTS="--enable-framework CC=clang" pyenv install 3.5.2
       eval "$(pyenv init -)"
-      pyenv global system 3.5.2 
+      pyenv global system 3.5.2
+      # Build and install PyOtherside
       cd vendor/pyotherside
-      echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> src/src.pro
       qmake
       make
       sudo make install
       cd ../../
     fi
-
-script:
-  - mkdir deploy/
+  # Build and install PyOtherside
+  - cd vendor/pyotherside
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+      qmake -qt=qt5
+    else
+      qmake
+    fi
+  - make
+  - sudo make install
+  - cd ../../
+ 
+before_script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
+      # To run the test with the correct python
       export LD_LIBRARY_PATH=/opt/python/3.5.0/lib/
+    fi
+
+script:
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    then
       qmake -qt=qt5
-      lupdate ykman-gui/ykman-gui.pro -ts ykman-gui.ts
-      grep -o '<source>\(.*\)</source>' ykman-gui.ts | sed 's,\(^<source>\)\|\(</source>$\),,g' | sort | uniq -u > deploy/yubikey-manager-$TRAVIS_BRANCH-HEAD-strings.txt
     else
       qmake
     fi
   - make
   - (cd ykman-cli && ./test.py)
+
+after_success:
+  - mkdir deploy/
+  # Exctract all user facing strings and create a textfile with them for deployment.
+  - lupdate ykman-gui/ykman-gui.pro -ts ykman-gui.ts
+  - grep -o '<source>\(.*\)</source>' ykman-gui.ts | sed 's,\(^<source>\)\|\(</sourcese>$\),,g' | sort | uniq -u > deploy/yubikey-manager-$TRAVIS_BRANCH-HEAD-strings.txt
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
