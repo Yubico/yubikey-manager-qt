@@ -57,9 +57,9 @@ artifacts:
 
 deploy:
   - provider: S3
-    access_key_id: %AWS_KEY_ID%
-    secret_access_key: %AWS_SECRET_KEY%
-    bucket: %AWS_BUCKET%
+    access_key_id: $(AWS_KEY_ID)
+    secret_access_key: $(AWS_SECRET_KEY)
+    bucket: $(AWS_BUCKET)
     region: eu-west-1
     set_public: true
     artifact: yubikey-manager-win
