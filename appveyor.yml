@@ -22,6 +22,8 @@ install:
   - set PATH=%PATH%;%APPVEYOR_BUILD_FOLDER%\swigwin-3.0.10
   # Build and install PyOtherSide
   - cd .\vendor\pyotherside
+  - ps: Clear-Content python.pri
+  - ps: Add-Content python.pri 'PYTHON_CONFIG = python3-config`nQMAKE_LIBS += -LC:\Python35\libs -lpython35`nQMAKE_CXXFLAGS += -IC:\Python35\include\'
   - qmake
   - jom
   - jom install
