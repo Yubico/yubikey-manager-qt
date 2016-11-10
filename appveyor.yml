@@ -20,6 +20,12 @@ install:
   - ps: wget http://freefr.dl.sourceforge.net/project/swig/swigwin/swigwin-3.0.10/swigwin-3.0.10.zip -OutFile swigwin-3.0.10.zip
   - 7z x swigwin-3.0.10.zip
   - set PATH=%PATH%;%APPVEYOR_BUILD_FOLDER%\swigwin-3.0.10
+  # Build and install PyOtherSide
+  - cd .\vendor\pyotherside
+  - qmake
+  - jom
+  - jom install
+  - cd %APPVEYOR_BUILD_FOLDER%
 
 before_build:
   # Fix problem with symbolic link
