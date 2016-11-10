@@ -53,7 +53,7 @@ after_build:
   # Add .dlls for redistrubution, see https://blogs.msdn.microsoft.com/vcblog/2015/03/03/introducing-the-universal-crt/
   - xcopy "C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x86" ".\ykman-gui\release"
   # Use Qt deployment tool on executable
-  - windeployqt .\ykman-gui\release\ykman-gui.exe -qmldir=qml
+  - windeployqt .\ykman-gui\release\ykman-gui.exe -qmldir=.\ykman-gui\qml
   # Add python dependencies to release folder
   - xcopy /i /e .\ykman-gui\pymodules .\ykman-gui\release
   # Add CLI executable to release folder
