@@ -53,13 +53,13 @@ after_build:
 
 artifacts:
   - path: .\ykman-gui\release
-  - name: yubikey-manager-win
+    name: yubikey-manager-win
 
 deploy:
- - provider: S3
-  access_key_id: %AWS_KEY_ID%
-  secret_access_key: %AWS_SECRET_KEY%
-  bucket: %AWS_BUCKET%
-  region: eu-west-1
-  set_public: true
-  artifact: yubikey-manager-win
+  - provider: S3
+    access_key_id: %AWS_KEY_ID%
+    secret_access_key: %AWS_SECRET_KEY%
+    bucket: %AWS_BUCKET%
+    region: eu-west-1
+    set_public: true
+    artifact: yubikey-manager-win
