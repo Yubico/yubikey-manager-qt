@@ -49,4 +49,17 @@ after_build:
   # Add python dependencies to release folder
   - xcopy /i /e .\ykman-gui\pymodules .\ykman-gui\release
   # Add CLI executable to release folder
-  - copy .\ykman-cli\ykman.exe .\ykman-gui\release
+  - copy .\ykman-cli\release\ykman.exe .\ykman-gui\release
+
+artifacts:
+  - path: .\ykman-gui\release
+  - name: yubikey-manager-win
+
+deploy:
+ - provider: S3
+  access_key_id: %AWS_KEY_ID%
+  secret_access_key: %AWS_SECRET_KEY%
+  bucket: %AWS_BUCKET%
+  region: eu-west-1
+  set_public: true
+  artifact: yubikey-manager-win
