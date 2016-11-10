@@ -20,8 +20,10 @@ install:
   - ps: wget http://freefr.dl.sourceforge.net/project/swig/swigwin/swigwin-3.0.10/swigwin-3.0.10.zip -OutFile swigwin-3.0.10.zip
   - 7z x swigwin-3.0.10.zip
   - set PATH=%PATH%;%APPVEYOR_BUILD_FOLDER%\swigwin-3.0.10
-  # Build and install PyOtherSide
+  # Build and install PyOtherSide 
+  # Reference: https://pyotherside.readthedocs.io/en/latest/#building-for-windows
   - cd .\vendor\pyotherside
+  - ps: (Get-Content .\src\qmldir).replace('pyothersideplugin', 'pyothersideplugin1') | Set-Content .\src\qmldir
   - ps: Clear-Content python.pri
   - ps: Add-Content python.pri "PYTHON_CONFIG = python3-config`nQMAKE_LIBS += -LC:\Python35\libs -lpython35`nQMAKE_CXXFLAGS += -IC:\Python35\include`n"
   - qmake
