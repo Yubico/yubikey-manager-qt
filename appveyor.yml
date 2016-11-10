@@ -50,7 +50,7 @@ after_build:
   - mkdir ykpers
   - ps: wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-1.17.3-win32.zip -OutFile ykpers-1.17.3-win32.zip  
   - 7z x ykpers-1.17.3-win32.zip -o".\ykpers"
-  - ps: Copy-Item --force .\ykpers\bin\*.dll .\ykman-gui\release 
+  - ps: Copy-Item .\ykpers\bin\*.dll .\ykman-gui\release -Force 
   # Add embedded python
   - ps: wget https://www.python.org/ftp/python/3.5.2/python-3.5.2-embed-win32.zip -OutFile python-3.5.2-embed-win32.zip
   - 7z x python-3.5.2-embed-win32.zip -o".\ykman-gui\release"
