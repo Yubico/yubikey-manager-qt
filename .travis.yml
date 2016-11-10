@@ -138,6 +138,7 @@ deploy:
   bucket: "$AWS_BUCKET"
   skip_cleanup: true
   acl: public-read
+  region: eu-west-1
   local-dir: "deploy/"
   on:
     all_branches: true
