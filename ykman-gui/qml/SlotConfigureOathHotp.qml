@@ -3,6 +3,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
+import "slotutils.js" as SlotUtils
 
 ColumnLayout {
 
@@ -20,7 +21,7 @@ ColumnLayout {
     signal goToOathHotp
 
     Text {
-        text: "Configure HOTP credential"
+        text: "Configure HOTP credential for " + SlotUtils.slotNameCapitalized(selectedSlot)
         font.bold: true
     }
 

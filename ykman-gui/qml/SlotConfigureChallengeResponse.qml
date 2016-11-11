@@ -3,6 +3,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
+import "slotutils.js" as SlotUtils
 
 ColumnLayout {
 
@@ -21,7 +22,8 @@ ColumnLayout {
     signal confirmed
 
     Text {
-        text: "Configure challenge-response"
+        text: "Configure challenge-response for " + SlotUtils.slotNameCapitalized(selectedSlot)
+        font.bold: true
     }
 
     Text {

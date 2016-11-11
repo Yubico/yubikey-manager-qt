@@ -7,9 +7,9 @@ function slotName(slotNumber) {
 
 function slotNameCapitalized(slotNumber){
     if (slotNumber === 1)
-        return "Short Press"
+        return "Short Press (Slot 1)"
     if (slotNumber === 2)
-        return "Long Press"
+        return "Long Press (Slot 2)"
 }
 
 function configuredTxt(configured) {
