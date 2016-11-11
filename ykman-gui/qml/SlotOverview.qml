@@ -31,7 +31,7 @@ ColumnLayout {
 
         Text {
             id: shortPressLabel
-            text: qsTr("Short press:")
+            text: qsTr("Short Press (Slot 1):")
         }
 
         Text {
@@ -52,7 +52,7 @@ ColumnLayout {
 
         Text {
             id: longPressLabel
-            text: qsTr("Long press:")
+            text: qsTr("Long Press (Slot 2):")
         }
 
         Text {

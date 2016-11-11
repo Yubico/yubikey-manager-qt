@@ -6,7 +6,10 @@ function slotName(slotNumber) {
 }
 
 function slotNameCapitalized(slotNumber){
-    return capitalizeFirstLetter(slotName(slotNumber))
+    if (slotNumber === 1)
+        return "Short Press"
+    if (slotNumber === 2)
+        return "Long Press"
 }
 
 function configuredTxt(configured) {
