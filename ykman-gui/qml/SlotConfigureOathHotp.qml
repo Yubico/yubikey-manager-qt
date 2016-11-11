@@ -20,8 +20,12 @@ ColumnLayout {
     signal goToOathHotp
 
     Text {
-        textFormat: Text.StyledText
-        text: "<h2>Configure HOTP credential</h2><br/><p>When triggered, the YubiKey will output a HOTP code.<p>"
+        text: "Configure HOTP credential"
+        font.bold: true
+    }
+
+    Text {
+        text: "When triggered, the YubiKey will output a HOTP code."
     }
 
     RowLayout {

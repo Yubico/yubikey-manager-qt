@@ -20,8 +20,12 @@ ColumnLayout {
     signal goToOathHotp
 
     Text {
-        textFormat: Text.StyledText
-        text: "<h2>Configure Yubico OTP</h2><br/><p>When triggered, the YubiKey will output a one time password.</p>"
+        text: "Configure Yubico OTP"
+        font.bold: true
+    }
+
+    Text {
+        text: "When triggered, the YubiKey will output a one time password."
     }
 
     GridLayout {

@@ -20,8 +20,8 @@ ColumnLayout {
     signal goToOathHotp
 
     Text {
-        textFormat: Text.StyledText
-        text: "<h2>Configure static password</h2>"
+        text: "Configure static password"
+        font.bold: true
     }
 
     Item {

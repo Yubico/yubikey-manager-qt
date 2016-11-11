@@ -21,8 +21,8 @@ ColumnLayout {
     onDeviceChanged: update()
 
     Text {
-        textFormat: Text.StyledText
-        text: qsTr("<h2>Configure YubiKey slots</h2>")
+        text: qsTr("Configure YubiKey Slots")
+        font.bold: true
     }
 
     GridLayout {

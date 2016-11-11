@@ -21,8 +21,11 @@ ColumnLayout {
     signal confirmed
 
     Text {
-        textFormat: Text.StyledText
-        text: "<h2>Configure challenge-response</h2><br/><p>When queried, the YubiKey will respond to a challenge.<p>"
+        text: "Configure challenge-response"
+    }
+
+    Text {
+        text: "When queried, the YubiKey will respond to a challenge."
     }
 
     RowLayout {

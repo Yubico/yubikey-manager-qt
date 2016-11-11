@@ -20,10 +20,12 @@ ColumnLayout {
     signal goToOathHotp
 
     Text {
-        textFormat: Text.StyledText
-        text: "<h2>" + SlotUtils.slotNameCapitalized(
-                  selectedSlot) + "</h2> <p>The slot is " + SlotUtils.configuredTxt(
-                  slotsEnabled[selectedSlot - 1]) + ".</p>"
+        text: SlotUtils.slotNameCapitalized(selectedSlot)
+        font.bold: true
+    }
+
+    Text {
+        text: "The slot is " + SlotUtils.configuredTxt(slotsEnabled[selectedSlot - 1]) + "."
     }
 
     GridLayout {

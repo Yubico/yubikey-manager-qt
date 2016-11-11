@@ -20,9 +20,14 @@ ColumnLayout {
     signal goToOathHotp
 
     Text {
-        textFormat: Text.StyledText
-        text: "<h2>" + qsTr("Configure ") + SlotUtils.slotNameCapitalized(selectedSlot) + "</h2> <p>Select the type of functionality to configure:</p>"
+        text: qsTr("Configure ") + SlotUtils.slotNameCapitalized(selectedSlot)
+        font.bold: true
     }
+
+    Text {
+        text: "Choose which function to configure in this slot:"
+    }
+
     RowLayout {
         ColumnLayout {
             id: typeColumn

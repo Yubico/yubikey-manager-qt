@@ -25,8 +25,8 @@ DefaultDialog {
     ColumnLayout {
         anchors.fill: parent
         Text {
-            textFormat: Text.StyledText
-            text: "<h2>Configure enabled connection protocols</h2>"
+            text: "Configure enabled connection protocols"
+            font.bold: true
         }
 
         Item {
