@@ -69,10 +69,11 @@ after_build:
   - xcopy /i /e .\ykman-gui\pymodules .\ykman-gui\release
   # Add CLI executable to release folder
   - copy .\ykman-cli\release\ykman.exe .\ykman-gui\release
+  # Create zip for deployment
+  - 7z a yubikey-manager-%APPVEYOR_REPO_BRANCH%-HEAD-win.zip .\ykman-gui\release\*
 
 artifacts:
-  - path: .\ykman-gui\release
-    name: yubikey-manager-win
+  - path: yubikey-manager-%APPVEYOR_REPO_BRANCH%-HEAD-win.zip
 
 deploy:
   - provider: S3
@@ -81,4 +82,3 @@ deploy:
     bucket: $(AWS_BUCKET)
     region: eu-west-1
     set_public: true
-    artifact: yubikey-manager-win
