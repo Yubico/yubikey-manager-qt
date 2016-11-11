@@ -23,11 +23,15 @@ Item {
             anchors.top: parent.top
             GridLayout {
                 anchors.fill: parent
-                columns: 2
+                columns: 1
 
                 Label {
                     id: deviceName
-                    text: device.name + ' (' + device.version + ')'
+                    text: device.name
+                }
+
+                Label {
+                    text: "Firmware: " + device.version
                 }
 
                 Label {
