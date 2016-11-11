@@ -56,7 +56,7 @@ Item {
                     model: device.getSortedFeatures()
 
                     Label {
-                        text: (modelData === 'OPGP') ? 'OpenPGP' + ':' : modelData + ':'
+                        text: getFeatureTitle(modelData) + ':'
                     }
                 }
 
@@ -139,7 +139,13 @@ Item {
             var last = args.pop()
             return args.join(', ') + qsTr(' and ') + last
         }
+    }
 
-
+    function getFeatureTitle(model) {
+        if (model === 'OPGP')
+            return 'OpenPGP'
+        if (model === 'OTP')
+            return 'YubiKey Slots'
+        return model
     }
 }
