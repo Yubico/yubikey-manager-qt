@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.2
 DefaultDialog {
 
     property var device
-    title: qsTr("Configure connections")
+    title: qsTr("Configure Connections")
     minimumWidth: 500
     onAccepted: {
         var enabled = get_enabled()
@@ -35,7 +35,7 @@ DefaultDialog {
 
             Text {
                 id: infoText
-                text: qsTr("Set the enabled connection protocols for your YubiKey. Once changed, you will need to unplug and re-insert your YubiKey for the settings to take effect.")
+                text: qsTr("Select the connections you want to enable for your YubiKey. Then click OK and remove and re-insert your YubiKey for the settings to take effect.")
                 wrapMode: Text.Wrap
                 width: parent.width
             }

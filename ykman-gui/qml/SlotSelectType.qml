@@ -34,13 +34,13 @@ ColumnLayout {
                 exclusiveGroup: typeAlternatives
                 checked: true
                 property string name: "otp"
-                property string desc: qsTr("Programs a one-time-password credential using the Yubico OTP protocol.")
+                property string desc: qsTr("Programs a one-time password credential using the Yubico OTP protocol.")
             }
             RadioButton {
                 text: qsTr("Challenge-response")
                 exclusiveGroup: typeAlternatives
                 property string name: "challengeResponse"
-                property string desc: qsTr("Programs a HMAC-SHA1 credential, which can be used for local authentication or encryption.")
+                property string desc: qsTr("Programs a HMAC-SHA1 credential, that can be used for local authentication or encryption.")
             }
             RadioButton {
                 text: qsTr("Static password")
@@ -52,7 +52,7 @@ ColumnLayout {
                 text: qsTr("OATH-HOTP")
                 exclusiveGroup: typeAlternatives
                 property string name: "oathHotp"
-                property string desc: qsTr("Stores a numeric one-time-password using the OATH-HOTP standard.")
+                property string desc: qsTr("Stores a numeric one-time password using the OATH-HOTP standard.")
             }
         }
         Item {

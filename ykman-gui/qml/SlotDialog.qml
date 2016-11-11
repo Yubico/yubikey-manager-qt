@@ -6,7 +6,7 @@ import QtQuick.Window 2.0
 
 DefaultDialog {
 
-    title: qsTr("Configure YubiKey slots")
+    title: qsTr("Configure YubiKey Slots")
 
     property var device
     property var slotsEnabled: [false, false]
