@@ -66,7 +66,7 @@ after_build:
   # Use Qt deployment tool on executable
   - windeployqt .\ykman-gui\release\ykman-gui.exe -qmldir=.\ykman-gui\qml
   # Add python dependencies to release folder
-  - xcopy /i /e .\ykman-gui\pymodules .\ykman-gui\release
+  - ps: Copy-Item .\ykman-gui\pymodules .\ykman-gui\release -recurse
   # Add CLI executable to release folder
   - copy .\ykman-cli\release\ykman.exe .\ykman-gui\release
   # Create zip for deployment
