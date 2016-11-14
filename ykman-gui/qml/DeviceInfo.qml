@@ -35,7 +35,8 @@ Item {
                 }
 
                 Label {
-                    text: device.serial ? qsTr("Serial: ") + device.serial : ''
+                    visible: device.serial
+                    text: "Serial: " + device.serial
                 }
             }
         }
