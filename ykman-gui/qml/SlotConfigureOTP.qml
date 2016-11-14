@@ -29,59 +29,93 @@ ColumnLayout {
         text: "When triggered, the YubiKey will output a one time password."
     }
 
-    GridLayout {
-        columns: 3
-        Text {
-            text: qsTr("Public ID")
+
+    GroupBox {
+        title: qsTr("Public ID")
+        Layout.fillWidth: true
+        ColumnLayout {
+
+         RowLayout{
+             TextField {
+                 id: publicIdInput
+                 implicitWidth: 110
+                 font.family: "Courier"
+                 validator: RegExpValidator {
+                     regExp: /[cbdefghijklnrtuv]{12}$/
+                 }
+             }
+             CheckBox {
+                 id: useSerialCb
+                 anchors.margins: 5
+                 anchors.left: publicIdInput.right
+                 text: qsTr("Use encoded serial number")
+                 onCheckedChanged: useSerial()
+             }
+         }
+         RowLayout {
+             Text {
+                 text: "The Public ID can contain the following characters: cbdefghijklnrtuv."
+             }
+         }
+
         }
-        TextField {
-            id: publicIdInput
-            implicitWidth: 110
-            font.family: "Courier"
-            validator: RegExpValidator {
-                regExp: /[cbdefghijklnrtuv]{12}$/
-            }
+    }
+
+    GroupBox {
+        title: qsTr("Private ID")
+        Layout.fillWidth: true
+        ColumnLayout {
+
+             RowLayout{
+                 TextField {
+                     id: privateIdInput
+                     implicitWidth: 110
+                     font.family: "Courier"
+                     validator: RegExpValidator {
+                         regExp: /[0-9a-fA-F]{12}$/
+                     }
+                 }
+                 Button {
+                     anchors.margins: 5
+                     text: qsTr("Generate")
+                     anchors.left: privateIdInput.right
+                     onClicked: generatePrivateId()
+                 }
+             }
+             RowLayout {
+                 Text {
+                     text: "The Private ID contains 12 hexadecimal characters."
+                 }
+             }
         }
-        CheckBox {
-            id: useSerialCb
-            anchors.margins: 5
-            anchors.left: publicIdInput.right
-            text: qsTr("Use serial number")
-            onCheckedChanged: useSerial()
-        }
-        Text {
-            text: qsTr("Private ID")
-        }
-        TextField {
-            id: privateIdInput
-            implicitWidth: 110
-            font.family: "Courier"
-            validator: RegExpValidator {
-                regExp: /[0-9a-fA-F]{12}$/
-            }
-        }
-        Button {
-            anchors.margins: 5
-            text: qsTr("Generate")
-            anchors.left: privateIdInput.right
-            onClicked: generatePrivateId()
-        }
-        Text {
-            text: qsTr("Secret key")
-        }
-        TextField {
-            id: secretKeyInput
-            implicitWidth: 260
-            font.family: "Courier"
-            validator: RegExpValidator {
-                regExp: /[0-9a-fA-F]{32}$/
-            }
-        }
-        Button {
-            anchors.margins: 5
-            anchors.left: secretKeyInput.right
-            text: qsTr("Generate")
-            onClicked: generateKey()
+    }
+
+    GroupBox {
+        title: qsTr("Secret key")
+        Layout.fillWidth: true
+        ColumnLayout {
+
+             RowLayout{
+                 TextField {
+                     id: secretKeyInput
+                     implicitWidth: 260
+                     font.family: "Courier"
+                     validator: RegExpValidator {
+                         regExp: /[0-9a-fA-F]{32}$/
+                     }
+                 }
+                 Button {
+                     anchors.margins: 5
+                     anchors.left: secretKeyInput.right
+                     text: qsTr("Generate")
+                     onClicked: generateKey()
+                 }
+             }
+             RowLayout {
+                 Text {
+                     text: "The Secret key contains 32 hexadecimal characters."
+                 }
+             }
         }
     }
 

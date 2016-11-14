@@ -30,30 +30,40 @@ ColumnLayout {
         text: "When queried, the YubiKey will respond to a challenge."
     }
 
-    RowLayout {
-        Text {
-            text: qsTr("Secret key")
-        }
-        TextField {
-            id: secretKeyInput
-            implicitWidth: 310
-            font.family: "Courier"
-            validator: RegExpValidator {
-                regExp: /[0-9a-fA-F]{40}$/
+    GroupBox {
+        title: "Secret key"
+        Layout.fillWidth: true
+        ColumnLayout {
+            RowLayout {
+                TextField {
+                    id: secretKeyInput
+                    implicitWidth: 320
+                    font.family: "Courier"
+                    validator: RegExpValidator {
+                        regExp: /[0-9a-fA-F]{40}$/
+                    }
+                }
+                Button {
+                    anchors.margins: 5
+                    text: qsTr("Generate")
+                    anchors.left: secretKeyInput.right
+                    onClicked: generateKey()
+                }
+
             }
-        }
+            RowLayout {
+                Text {
+                    text: "The Secret key contains 40 hexadecimal characters."
+                }
+            }
+            RowLayout{
+                CheckBox {
+                    id: requireTouch
+                    text: qsTr("Require touch")
+                }
+            }
 
-        Button {
-            anchors.margins: 5
-            text: qsTr("Generate")
-            anchors.left: secretKeyInput.right
-            onClicked: generateKey()
         }
-    }
-
-    CheckBox {
-        id: requireTouch
-        text: qsTr("Require touch")
     }
 
     RowLayout {

@@ -28,29 +28,37 @@ ColumnLayout {
     Text {
         text: "When triggered, the YubiKey will output a HOTP code."
     }
+    GroupBox {
+        title: "Secret key"
+        Layout.fillWidth: true
+        ColumnLayout {
+            RowLayout {
+                TextField {
+                    id: secretKeyInput
+                    implicitWidth: 240
+                    font.family: "Courier"
+                    validator: RegExpValidator {
+                        regExp: /[ 2-7a-zA-Z]+=*/
+                    }
+                }
+            }
+            RowLayout {
+                Text {
+                    text: "The Secret key should be encoded in base32."
+                }
+            }
 
-    RowLayout {
-        Text {
-            text: qsTr("Secret key")
-        }
-        TextField {
-            id: secretKeyInput
-            implicitWidth: 240
-            font.family: "Courier"
-            validator: RegExpValidator {
-                regExp: /[ 2-7a-zA-Z]+=*/
+            RowLayout {
+                Text {
+                    text: qsTr("Digits")
+                }
+                ComboBox {
+                    model: [ 6, 8 ]
+                }
             }
         }
     }
 
-    RowLayout {
-        Text {
-            text: qsTr("Digits")
-        }
-        ComboBox {
-            model: [ 6, 8 ]
-        }
-    }
 
 
     RowLayout {

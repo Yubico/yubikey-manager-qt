@@ -29,35 +29,36 @@ ColumnLayout {
         textFormat: Text.StyledText
         text: "When triggered, the YubiKey will output a fixed password."
     }
-
-    Item {
-        width: minimumWidth - margins * 2
-        implicitHeight: desc.implicitHeight
-        Text {
-            id: desc
-            width: parent.width
-            wrapMode: Text.Wrap
-            text: "To avoid problems with different keyboard layouts, only the following characters are allowed: cbdefghijklnrtuv"
-        }
-    }
-
-    RowLayout {
-        Text {
-            text: qsTr("Password")
-        }
-        TextField {
-            id: passwordInput
-            implicitWidth: 280
-            font.family: "Courier"
-            validator: RegExpValidator {
-                regExp: /[cbdefghijklnrtuv]{1,38}$/
+    GroupBox {
+        title: "Password"
+        Layout.fillWidth: true
+        ColumnLayout {
+            RowLayout {
+                TextField {
+                    id: passwordInput
+                    implicitWidth: 280
+                    font.family: "Courier"
+                    validator: RegExpValidator {
+                        regExp: /[cbdefghijklnrtuv]{1,38}$/
+                    }
+                }
+                Button {
+                    anchors.margins: 5
+                    text: qsTr("Generate")
+                    anchors.left: passwordInput.right
+                    onClicked: generatePassword()
+                }
             }
-        }
-        Button {
-            anchors.margins: 5
-            text: qsTr("Generate")
-            anchors.left: passwordInput.right
-            onClicked: generatePassword()
+            Item {
+                width: minimumWidth - margins * 2
+                implicitHeight: desc.implicitHeight
+                Text {
+                    id: desc
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    text: "To avoid problems with different keyboard layouts, only the following characters are allowed: cbdefghijklnrtuv"
+                }
+            }
         }
     }
 
