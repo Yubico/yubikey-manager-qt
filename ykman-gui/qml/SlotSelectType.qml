@@ -29,48 +29,48 @@ ColumnLayout {
     }
 
     RowLayout {
-        ColumnLayout {
-            id: typeColumn
-            ExclusiveGroup {
-                id: typeAlternatives
-            }
-            RadioButton {
-                text: qsTr("Yubico OTP")
-                exclusiveGroup: typeAlternatives
-                checked: true
-                property string name: "otp"
-                property string desc: qsTr("Programs a one-time password credential using the Yubico OTP protocol.")
-            }
-            RadioButton {
-                text: qsTr("Challenge-response")
-                exclusiveGroup: typeAlternatives
-                property string name: "challengeResponse"
-                property string desc: qsTr("Programs a HMAC-SHA1 credential, that can be used for local authentication or encryption.")
-            }
-            RadioButton {
-                text: qsTr("Static password")
-                exclusiveGroup: typeAlternatives
-                property string name: "staticPassword"
-                property string desc: qsTr("Stores a fixed password, which will be output each time you touch the button.")
-            }
-            RadioButton {
-                text: qsTr("OATH-HOTP")
-                exclusiveGroup: typeAlternatives
-                property string name: "oathHotp"
-                property string desc: qsTr("Stores a numeric one-time password using the OATH-HOTP standard.")
-            }
+        id: typeColumn
+        ExclusiveGroup {
+            id: typeAlternatives
         }
+        RadioButton {
+            text: qsTr("Yubico OTP")
+            exclusiveGroup: typeAlternatives
+            checked: true
+            property string name: "otp"
+            property string desc: qsTr("Programs a one-time password credential using the Yubico OTP protocol.")
+        }
+        RadioButton {
+            text: qsTr("Challenge-response")
+            exclusiveGroup: typeAlternatives
+            property string name: "challengeResponse"
+            property string desc: qsTr("Programs a HMAC-SHA1 credential, that can be used for local authentication or encryption.")
+        }
+        RadioButton {
+            text: qsTr("Static password")
+            exclusiveGroup: typeAlternatives
+            property string name: "staticPassword"
+            property string desc: qsTr("Stores a fixed password, which will be output each time you touch the button.")
+        }
+        RadioButton {
+            text: qsTr("OATH-HOTP")
+            exclusiveGroup: typeAlternatives
+            property string name: "oathHotp"
+            property string desc: qsTr("Stores a numeric one-time password using the OATH-HOTP standard.")
+        }
+    }
+
+    RowLayout {
         Item {
-            width: minimumWidth - typeColumn.width - margins * 2
+            width: minimumWidth - margins * 2
+            implicitHeight: desc.implicitHeight
             Text {
-                anchors.verticalCenter: parent.verticalCenter
+                id: desc
                 width: parent.width
                 wrapMode: Text.Wrap
                 text: typeAlternatives.current.desc
-                verticalAlignment: Text.AlignVCenter
             }
         }
-
     }
 
     RowLayout {
