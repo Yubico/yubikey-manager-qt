@@ -44,7 +44,7 @@ macx {
     ICON = ../resources/icons/ykman.icns
     QMAKE_INFO_PLIST = ../resources/mac/Info.plist.in
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9 # Mavericks
-    QMAKE_POST_LINK += cp -rn pymodules ykman-gui.app/Contents/MacOS/
+    QMAKE_POST_LINK += cp -rnf pymodules ykman-gui.app/Contents/MacOS/
 }
 
 lupdate_only {
