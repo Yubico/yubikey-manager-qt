@@ -40,7 +40,7 @@ ColumnLayout {
                     implicitWidth: 320
                     font.family: "Courier"
                     validator: RegExpValidator {
-                        regExp: /[0-9a-fA-F]{40}$/
+                        regExp: /([0-9a-fA-F]{2}){1,20}$/
                     }
                 }
                 Button {
@@ -53,7 +53,7 @@ ColumnLayout {
             }
             RowLayout {
                 Text {
-                    text: "The Secret key contains 40 hexadecimal characters."
+                    text: "The Secret key contains an even number of up to 40 hexadecimal characters."
                 }
             }
             RowLayout{
