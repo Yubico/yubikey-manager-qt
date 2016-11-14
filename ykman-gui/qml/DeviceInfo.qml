@@ -26,7 +26,6 @@ Item {
                 columns: 1
 
                 Label {
-                    id: deviceName
                     text: device.name
                 }
 
