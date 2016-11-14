@@ -25,15 +25,19 @@ ColumnLayout {
         font.bold: true
     }
 
+    Text {
+        textFormat: Text.StyledText
+        text: "When triggered, the YubiKey will output a fixed password."
+    }
+
     Item {
         width: minimumWidth - margins * 2
         implicitHeight: desc.implicitHeight
-
         Text {
             id: desc
             width: parent.width
             wrapMode: Text.Wrap
-            text: "When triggered, the YubiKey will output a fixed password. To avoid problems with different keyboard layouts, the password should only contain modhex characters."
+            text: "To avoid problems with different keyboard layouts, only the following characters are allowed: cbdefghijklnrtuv"
         }
     }
 
