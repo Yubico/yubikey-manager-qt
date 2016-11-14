@@ -35,7 +35,7 @@ DefaultDialog {
 
             Text {
                 id: infoText
-                text: qsTr("Select the connections you want to enable for your YubiKey. Then click OK and remove and re-insert your YubiKey for the settings to take effect.")
+                text: qsTr("Select the connections you want to enable for your YubiKey. Then click Confirm and remove and re-insert your YubiKey for the settings to take effect.")
                 wrapMode: Text.Wrap
                 width: parent.width
             }
@@ -53,7 +53,7 @@ DefaultDialog {
                     text: modelData
                     checked: device.enabled.indexOf(modelData) >= 0
                     enabled: modelData !== 'NFC'
-                    onCheckedChanged: button_ok.enabled = check_acceptable()
+                    onCheckedChanged: button_confirm.enabled = check_acceptable()
                 }
             }
         }
@@ -61,8 +61,8 @@ DefaultDialog {
         RowLayout {
             Layout.alignment: Qt.AlignRight
             Button {
-                id: button_ok
-                text: qsTr("OK")
+                id: button_confirm
+                text: qsTr("Confirm")
                 onClicked: {
                     accepted()
                 }
