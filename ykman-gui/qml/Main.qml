@@ -8,9 +8,19 @@ ApplicationWindow {
     title: qsTr("YubiKey Manager")
 
     menuBar: MenuBar {
+
         Menu {
+            title: qsTr("File")
             MenuItem {
-                text: "About"
+                text: qsTr("Exit")
+                onTriggered: Qt.quit()
+            }
+        }
+
+        Menu {
+            title: qsTr("Help")
+            MenuItem {
+                text: qsTr("About YubiKey Manager")
                 onTriggered: aboutPage.show()
             }
         }
