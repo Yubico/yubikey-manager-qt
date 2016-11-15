@@ -7,6 +7,7 @@ CONFIG += c++11
 SOURCES += main.cpp
 
 VERSION = 0.2.1
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 
 buildqrc.commands = python ../build_qrc.py ${QMAKE_FILE_IN}

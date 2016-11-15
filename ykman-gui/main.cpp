@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("appDir", app_dir);
     engine.rootContext()->setContextProperty("urlPrefix", url_prefix);
+    engine.rootContext()->setContextProperty("appVersion", APP_VERSION);
 
     qputenv("PYTHONDONTWRITEBYTECODE", "1");
 

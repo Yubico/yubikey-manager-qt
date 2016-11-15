@@ -7,6 +7,19 @@ ApplicationWindow {
     visible: true
     title: qsTr("YubiKey Manager")
 
+    menuBar: MenuBar {
+        Menu {
+            MenuItem {
+                text: "About"
+                onTriggered: aboutPage.show()
+            }
+        }
+    }
+
+    AboutPage {
+        id: aboutPage
+    }
+
     // @disable-check M301
     YubiKey {
         id: yk
