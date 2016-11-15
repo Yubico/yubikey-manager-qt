@@ -21,15 +21,15 @@ ColumnLayout {
     signal goToOathHotp
 
     Text {
-        text: "Configure HOTP credential for " + SlotUtils.slotNameCapitalized(selectedSlot)
+        text: qsTr("Configure HOTP credential for ") + SlotUtils.slotNameCapitalized(selectedSlot)
         font.bold: true
     }
 
     Text {
-        text: "When triggered, the YubiKey will output a HOTP code."
+        text: qsTr("When triggered, the YubiKey will output a HOTP code.")
     }
     GroupBox {
-        title: "Secret key"
+        title: qsTr("Secret key")
         Layout.fillWidth: true
         ColumnLayout {
             RowLayout {
@@ -44,7 +44,7 @@ ColumnLayout {
             }
             RowLayout {
                 Text {
-                    text: "The Secret key should be encoded in base32."
+                    text: qsTr("The Secret key should be encoded in base32.")
                 }
             }
 
@@ -82,8 +82,8 @@ ColumnLayout {
     MessageDialog {
         id: paddingError
         icon: StandardIcon.Critical
-        title: "Wrong padding"
-        text: "The padding of the key is incorrect."
+        title: qsTr("Wrong padding")
+        text: qsTr("The padding of the key is incorrect.")
         standardButtons: StandardButton.Ok
     }
 

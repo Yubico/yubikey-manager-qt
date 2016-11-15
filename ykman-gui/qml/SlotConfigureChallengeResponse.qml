@@ -22,12 +22,12 @@ ColumnLayout {
     signal confirmed
 
     Text {
-        text: "Configure challenge-response for " + SlotUtils.slotNameCapitalized(selectedSlot)
+        text: qsTr("Configure challenge-response for ") + SlotUtils.slotNameCapitalized(selectedSlot)
         font.bold: true
     }
 
     Text {
-        text: "When queried, the YubiKey will respond to a challenge."
+        text: qsTr("When queried, the YubiKey will respond to a challenge.")
     }
 
     GroupBox {
@@ -53,7 +53,7 @@ ColumnLayout {
             }
             RowLayout {
                 Text {
-                    text: "The Secret key contains an even number of up to 40 hexadecimal characters."
+                    text: qsTr("The Secret key contains an even number of up to 40 hexadecimal characters.")
                 }
             }
             RowLayout{

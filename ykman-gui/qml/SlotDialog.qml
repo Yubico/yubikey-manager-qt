@@ -74,8 +74,8 @@ DefaultDialog {
     MessageDialog {
         id: confirmConfigured
         icon: StandardIcon.Information
-        title: "Slot configured"
-        text: "The slot is now configured."
+        title: qsTr("Slot configured")
+        text: qsTr("The slot is now configured.")
         standardButtons: StandardButton.Ok
         onAccepted: {
             goToOverview()
@@ -85,8 +85,8 @@ DefaultDialog {
     MessageDialog {
         id: writeError
         icon: StandardIcon.Critical
-        title: "Error writing to  slot"
-        text: "Failed to write to the slot. Make sure the YubiKey does not have restricted access."
+        title: qsTr("Error writing to  slot")
+        text: qsTr("Failed to write to the slot. Make sure the YubiKey does not have restricted access.")
         standardButtons: StandardButton.Ok
     }
 

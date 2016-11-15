@@ -21,13 +21,13 @@ ColumnLayout {
     signal goToOathHotp
 
     Text {
-        text: "Configure static password for " + SlotUtils.slotNameCapitalized(selectedSlot)
+        text: qsTr("Configure static password for ") + SlotUtils.slotNameCapitalized(selectedSlot)
         font.bold: true
     }
 
     Text {
         textFormat: Text.StyledText
-        text: "When triggered, the YubiKey will output a fixed password."
+        text: qsTr("When triggered, the YubiKey will output a fixed password.")
     }
     GroupBox {
         title: "Password"
@@ -56,7 +56,7 @@ ColumnLayout {
                     id: desc
                     width: parent.width
                     wrapMode: Text.Wrap
-                    text: "To avoid problems with different keyboard layouts, only the following characters are allowed: cbdefghijklnrtuv"
+                    text: qsTr("To avoid problems with different keyboard layouts, only the following characters are allowed: cbdefghijklnrtuv")
                 }
             }
         }

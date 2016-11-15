@@ -6,25 +6,25 @@ DefaultDialog {
     title: qsTr("About YubiKey Manager")
 
     Text {
-        text:"YubiKey Manager"
+        text: qsTr("YubiKey Manager")
         font.bold: true
     }
 
     Text {
-        text: "Version: " + appVersion
+        text: qsTr("Version: ") + appVersion
     }
 
     Text {
-        text:"Copyright © 2016, Yubico Inc. All rights reserved."
+        text: qsTr("Copyright © 2016, Yubico Inc. All rights reserved.")
     }
 
     Text {
-        text: "Need help?"
+        text: qsTr("Need help?")
         font.bold: true
     }
 
     Text {
-        text: "Visit Yubico <a href='https://www.yubico.com/support/knowledge-base/'>Knowledge Base</a>"
+        text: qsTr("Visit Yubico <a href='https://www.yubico.com/support/knowledge-base/'>Knowledge Base</a>")
         onLinkActivated: Qt.openUrlExternally(link)
 
         MouseArea {

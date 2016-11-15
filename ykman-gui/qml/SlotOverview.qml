@@ -90,8 +90,8 @@ ColumnLayout {
     MessageDialog {
         id: confirmSwap
         icon: StandardIcon.Warning
-        title: "Swap credentials between slots"
-        text: "Do you want to swap the credentials between the short press and the long press slot?"
+        title: qsTr("Swap credentials between slots")
+        text: qsTr("Do you want to swap the credentials between the short press and the long press slot?")
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
             device.swap_slots(function (error) {
@@ -112,8 +112,8 @@ ColumnLayout {
     MessageDialog {
         id: confirmSwapped
         icon: StandardIcon.Information
-        title: "Slot credentials swapped"
-        text: "The credentials in the short press and the long press slot has now been swapped."
+        title: qsTr("Slot credentials swapped")
+        text: qsTr("The credentials in the short press and the long press slot has now been swapped.")
         standardButtons: StandardButton.Ok
         onAccepted: {
             goToOverview()

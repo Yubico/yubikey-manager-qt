@@ -21,12 +21,12 @@ ColumnLayout {
     signal goToOathHotp
 
     Text {
-        text: "Configure Yubico OTP for " + SlotUtils.slotNameCapitalized(selectedSlot)
+        text: qsTr("Configure Yubico OTP for ") + SlotUtils.slotNameCapitalized(selectedSlot)
         font.bold: true
     }
 
     Text {
-        text: "When triggered, the YubiKey will output a one time password."
+        text: qsTr("When triggered, the YubiKey will output a one time password.")
     }
 
 
@@ -54,7 +54,7 @@ ColumnLayout {
          }
          RowLayout {
              Text {
-                 text: "The Public ID can contain the following characters: cbdefghijklnrtuv."
+                 text: qsTr("The Public ID can contain the following characters: cbdefghijklnrtuv.")
              }
          }
 
@@ -84,7 +84,7 @@ ColumnLayout {
              }
              RowLayout {
                  Text {
-                     text: "The Private ID contains 12 hexadecimal characters."
+                     text: qsTr("The Private ID contains 12 hexadecimal characters.")
                  }
              }
         }
@@ -113,7 +113,7 @@ ColumnLayout {
              }
              RowLayout {
                  Text {
-                     text: "The Secret key contains 32 hexadecimal characters."
+                     text: qsTr("The Secret key contains 32 hexadecimal characters.")
                  }
              }
         }

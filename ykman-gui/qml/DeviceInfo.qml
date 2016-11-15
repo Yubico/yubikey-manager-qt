@@ -30,12 +30,12 @@ Item {
                 }
 
                 Label {
-                    text: "Firmware: " + device.version
+                    text: qsTr("Firmware: ") + device.version
                 }
 
                 Label {
                     visible: device.serial
-                    text: "Serial: " + device.serial
+                    text: qsTr("Serial: ") + device.serial
                 }
             }
         }
@@ -143,9 +143,9 @@ Item {
 
     function getFeatureTitle(model) {
         if (model === 'OPGP')
-            return 'OpenPGP'
+            return qsTr('OpenPGP')
         if (model === 'OTP')
-            return 'YubiKey Slots'
+            return qsTr('YubiKey Slots')
         return model
     }
 }

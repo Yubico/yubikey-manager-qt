@@ -25,18 +25,18 @@ ColumnLayout {
     }
 
     Text {
-        text: "The slot is " + SlotUtils.configuredTxt(slotsEnabled[selectedSlot - 1]) + "."
+        text: qsTr("The slot is ") + SlotUtils.configuredTxt(slotsEnabled[selectedSlot - 1]) + "."
     }
 
     GridLayout {
         columns: 2
         Button {
-            text: "New configuration"
+            text: qsTr("New configuration")
             onClicked: goToSelectType()
         }
 
         Button {
-            text: "Erase"
+            text: qsTr("Erase")
             enabled: slotsEnabled[selectedSlot - 1]
             onClicked: confirmErase.open()
         }
@@ -53,9 +53,9 @@ ColumnLayout {
     MessageDialog {
         id: confirmErase
         icon: StandardIcon.Warning
-        title: "Erase YubiKey " + SlotUtils.slotName(selectedSlot) + "slot"
-        text: "Do you want to erase the content of the " + SlotUtils.slotName(
-                  selectedSlot) + " slot? This permanently deletes the contents of this slot."
+        title: qsTr("Erase YubiKey ") + SlotUtils.slotName(selectedSlot) + qsTr("slot")
+        text: qsTr("Do you want to erase the content of the ") + SlotUtils.slotName(
+                  selectedSlot) + qsTr(" slot? This permanently deletes the contents of this slot.")
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
             device.erase_slot(selectedSlot, function (error) {
@@ -76,8 +76,8 @@ ColumnLayout {
     MessageDialog {
         id: confirmErased
         icon: StandardIcon.Information
-        title: "The credentials have been erased"
-        text: "The credentials in the slot have now been erased."
+        title: qsTr("The credentials have been erased")
+        text: qsTr("The credentials in the slot have now been erased.")
         standardButtons: StandardButton.Ok
     }
 }

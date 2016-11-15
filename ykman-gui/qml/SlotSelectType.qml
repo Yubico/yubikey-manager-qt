@@ -25,7 +25,7 @@ ColumnLayout {
     }
 
     Text {
-        text: "Choose which function to configure in this slot:"
+        text: qsTr("Choose which function to configure in this slot:")
     }
 
     RowLayout {
