@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.2
 ApplicationWindow {
     visible: true
     title: qsTr("YubiKey Manager")
-
+    flags: Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint | Qt.MSWindowsFixedSizeDialogHint
     menuBar: MenuBar {
 
         Menu {
