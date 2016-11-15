@@ -52,7 +52,6 @@ DefaultDialog {
                     Layout.fillWidth: true
                     text: modelData
                     checked: device.enabled.indexOf(modelData) >= 0
-                    enabled: modelData !== 'NFC'
                     onCheckedChanged: button_confirm.enabled = check_acceptable()
                 }
             }
@@ -113,9 +112,6 @@ DefaultDialog {
         for (var i = 0; i < connections.count; i++) {
             var item = connections.itemAt(i)
             if (item) {
-                if (item.text === 'NFC') {
-                    continue
-                }
                 if (item.checked) {
                     return true
                 }
