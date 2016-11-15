@@ -4,7 +4,7 @@ QT += qml quick widgets
 
 CONFIG += c++11
 
-SOURCES += main.cpp py/yubikey.py
+SOURCES += main.cpp
 
 VERSION = 0.2.1
 
