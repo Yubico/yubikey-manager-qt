@@ -13,6 +13,7 @@
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Yubico\Yubikey Manager"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 !define MUI_ABORTWARNING
+!define MUI_FINISHPAGE_RUN "$INSTDIR\ykman-gui.exe"
 
 Var STARTMENU_FOLDER
   

@@ -10,6 +10,9 @@
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 !define MUI_ABORTWARNING
 
+;Checkbox on finish page, "Run YubiKey Manager"
+!define MUI_FINISHPAGE_RUN "$INSTDIR\ykman-gui.exe"
+
 Var STARTMENU_FOLDER
 
 !ifdef INNER
