@@ -95,7 +95,6 @@ after_success:
   # Exctract all user facing strings and create a textfile with them for deployment.
   - lupdate ykman-gui/ykman-gui.pro -ts ykman-gui.ts
   - cp ykman-gui.ts deploy/yubikey-manager-$TRAVIS_BRANCH-HEAD-strings.xml
-  - grep -o '<source>\(.*\)</source>' ykman-gui.ts | sed 's,\(^<source>\)\|\(</sourcese>$\),,g' | sort | uniq -u > deploy/yubikey-manager-$TRAVIS_BRANCH-HEAD-strings.txt
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
