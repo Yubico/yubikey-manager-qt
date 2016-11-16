@@ -1,7 +1,7 @@
 !include "MUI2.nsh"
 !include "nsProcess.nsh"
 
-!define MUI_ICON "icons/ykman.ico"
+!define MUI_ICON "../../resources/icons/ykman.ico"
 
 ;Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "Yubico\Yubikey Manager"
@@ -33,7 +33,7 @@ Var STARTMENU_FOLDER
   Name "YubiKey Manager"
   
   ; The file to write
-  OutFile "../../ykman-gui/release/yubikey-manager-${VERSION}-win.exe"
+  OutFile "../../yubikey-manager-${VERSION}-win.exe"
   
   ; The default installation directory
   InstallDir "$PROGRAMFILES\Yubico\YubiKey Manager"
