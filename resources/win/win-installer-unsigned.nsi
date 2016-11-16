@@ -17,7 +17,7 @@
 Var STARTMENU_FOLDER
   
 Name "YubiKey Manager"
-OutFile "yubikey-manager-${VERSION}-win.exe"
+OutFile "..\..\yubikey-manager-${VERSION}-win.exe"
 InstallDir "$PROGRAMFILES\Yubico\YubiKey Manager"
 InstallDirRegKey HKLM "Software\Yubico\yubikey-manager" "Install_Dir"
 SetCompressor /SOLID lzma
