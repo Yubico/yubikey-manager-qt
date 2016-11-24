@@ -49,7 +49,6 @@ install:
       brew install pyenv
       eval "$(pyenv init -)"
       env PYTHON_CONFIGURE_OPTS="--enable-framework CC=clang" pyenv install 3.5.2
-      eval "$(pyenv init -)"
       pyenv global system 3.5.2
       # Build and install PyOtherside
       cd vendor/pyotherside
@@ -94,7 +93,7 @@ after_success:
   - mkdir deploy/
   # Exctract all user facing strings and create a textfile with them for deployment.
   - lupdate ykman-gui/ykman-gui.pro -ts ykman-gui.ts
-  - cp ykman-gui.ts deploy/yubikey-manager-$TRAVIS_BRANCH-HEAD-strings.xml
+  - cp ykman-gui.ts deploy/yubikey-manager-qt-$TRAVIS_BRANCH-HEAD-strings.xml
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
@@ -123,9 +122,9 @@ after_success:
       # Fix linking for PyOtherSide
       sudo install_name_tool -change /Users/travis/.pyenv/versions/3.5.2/Python.framework/Versions/3.5/Python @executable_path/../Frameworks/Python.framework/Versions/3.5/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
       # Create .pkg
-      pkgbuild --install-location /Applications --component ykman-gui/ykman-gui.app yubikey-manager-$TRAVIS_BRANCH-HEAD-mac.pkg
+      pkgbuild --install-location /Applications --component ykman-gui/ykman-gui.app yubikey-manager-qt-$TRAVIS_BRANCH-HEAD-mac.pkg
       # Copy to deploy dir
-      cp yubikey-manager-$TRAVIS_BRANCH-HEAD-mac.pkg deploy/
+      cp yubikey-manager-qt-$TRAVIS_BRANCH-HEAD-mac.pkg deploy/
       # Test ykman-cli in .app bundle
       cp ykman-cli/test.py ykman-gui/ykman-gui.app/Contents/MacOS/
       (cd ykman-gui/ykman-gui.app/Contents/MacOS && ./test.py)
@@ -140,5 +139,6 @@ deploy:
   acl: public-read
   region: eu-west-1
   local-dir: "deploy/"
+  upload-dir: "yubikey-manager-qt"
   on:
     all_branches: true
