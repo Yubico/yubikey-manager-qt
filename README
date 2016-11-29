@@ -14,12 +14,4 @@ commonly used configuration tasks.
 image::screenshot.png[]
 
 === Command line tool
-This projects also includes the https://github.com/Yubico/yubikey-manager[YubiKey Manager CLI]
-
-=== Installation
-
-=== Bash completion
-Experimental Bash completion for the command line tool is available, but not
-enabled by default. To enable it, run this command once:
-
-    $ source <(_YKMAN_COMPLETE=source ykman | sudo tee /etc/bash_completion.d/ykman)
+This project also includes the https://github.com/Yubico/yubikey-manager[YubiKey Manager CLI]
