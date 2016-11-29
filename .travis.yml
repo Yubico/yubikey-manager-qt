@@ -69,7 +69,9 @@ install:
   - make
   - sudo make install
   - cd ../../
- 
+  # Install pre-commit
+  - pip install pre-commit
+
 before_script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
@@ -77,6 +79,7 @@ before_script:
       # To run the test with the correct python
       export LD_LIBRARY_PATH=/opt/python/3.5.0/lib/
     fi
+  - pre-commit run --all-files
 
 script:
   - |
