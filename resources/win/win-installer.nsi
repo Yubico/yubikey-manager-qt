@@ -68,8 +68,9 @@ Var STARTMENU_FOLDER
       ;Create shortcuts
       SetShellVarContext all
       SetOutPath "$SMPROGRAMS\$STARTMENU_FOLDER"
-      CreateShortCut "YubiKey Manager.lnk" "$INSTDIR\ykman-gui.exe" "" "$INSTDIR\ykman-gui.exe" 0
-      CreateShortCut "Uninstall YubiKey Manager.lnk" "$INSTDIR\ykman-uninstall.exe" "" "$INSTDIR\ykman-uninstall.exe" 1
+      CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
+      CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\YubiKey Manager.lnk" "$INSTDIR\ykman-gui.exe"
+      CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall YubiKey Manager.lnk" "$INSTDIR\ykman-uninstall.exe"
     !insertmacro MUI_STARTMENU_WRITE_END
   SectionEnd
   
