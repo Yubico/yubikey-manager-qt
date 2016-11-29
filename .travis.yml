@@ -79,7 +79,12 @@ before_script:
       # To run the test with the correct python
       export LD_LIBRARY_PATH=/opt/python/3.5.0/lib/
     fi
-  - pre-commit run --all-files
+  # qmllint is not in trusty version of Qt, so lint on OS X.
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+    then
+       pre-commit run --all-files
+    fi
 
 script:
   - |
