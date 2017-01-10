@@ -47,6 +47,7 @@ ColumnLayout {
              CheckBox {
                  id: useSerialCb
                  anchors.margins: 5
+                 enabled: device.serial
                  anchors.left: publicIdInput.right
                  text: qsTr("Use encoded serial number")
                  onCheckedChanged: useSerial()
