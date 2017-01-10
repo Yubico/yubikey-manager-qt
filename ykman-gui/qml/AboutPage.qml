@@ -15,7 +15,7 @@ DefaultDialog {
     }
 
     Text {
-        text: qsTr("Copyright © 2016, Yubico Inc. All rights reserved.")
+        text: qsTr("Copyright © 2017, Yubico Inc. All rights reserved.")
     }
 
     Text {
