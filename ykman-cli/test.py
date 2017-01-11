@@ -5,7 +5,7 @@ import re
 
 
 def main():
-    out = check_output(['./ykman', '-v'], timeout=5)
+    out = check_output(['./ykman', '-v'], timeout=10)
     print('ykman')
     print(out.decode('utf8'))
 
