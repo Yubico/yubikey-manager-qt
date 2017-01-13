@@ -117,8 +117,8 @@ Python {
         do_call('yubikey.controller.random_key', [bytes], cb)
     }
 
-    function random_modhex(bytes, cb) {
-        do_call('yubikey.controller.random_modhex', [bytes], cb)
+    function generate_static_pw(cb) {
+        do_call('yubikey.controller.generate_static_pw', [], cb)
     }
 
     function program_otp(slot, public_id, private_id, key, cb) {

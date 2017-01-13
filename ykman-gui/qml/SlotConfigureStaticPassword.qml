@@ -36,10 +36,10 @@ ColumnLayout {
             RowLayout {
                 TextField {
                     id: passwordInput
-                    implicitWidth: 280
+                    implicitWidth: 310
                     font.family: "Courier"
                     validator: RegExpValidator {
-                        regExp: /[cbdefghijklnrtuv]{1,38}$/
+                        regExp: /[cbdefghijklnrtuvCBDEFGHIJKLMNRTUV]{1,38}$/
                     }
                 }
                 Button {
@@ -89,7 +89,7 @@ ColumnLayout {
     }
 
     function generatePassword() {
-        device.random_modhex(16, function (res) {
+        device.generate_static_pw(function (res) {
             passwordInput.text = res
         })
     }

@@ -10,7 +10,7 @@ from base64 import b32decode
 from binascii import b2a_hex, a2b_hex, Error
 
 from ykman.descriptor import get_descriptors
-from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode
+from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode, generate_static_pw
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 
@@ -92,8 +92,8 @@ class Controller(object):
         dev = self._descriptor.open_device(TRANSPORT.OTP)
         return modhex_encode(b'\xff\x00' + struct.pack(b'>I', dev.serial))
 
-    def random_modhex(self, bytes):
-        return modhex_encode(os.urandom(int(bytes)))
+    def generate_static_pw(self):
+        return generate_static_pw(38).decode('utf-8')
 
     def random_uid(self):
         return b2a_hex(os.urandom(6)).decode('ascii')

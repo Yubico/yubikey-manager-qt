@@ -50,3 +50,6 @@ lupdate_only {
   SOURCES = qml/*.qml \
   qml/slot/*.qml
 }
+
+DISTFILES += \
+    py/yubikey.py
