@@ -61,8 +61,7 @@ install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      export PATH="/opt/python/3.5.0/bin/python-config:$PATH"
-      echo $PATH
+      export PATH="/opt/python/3.5.0/bin:$PATH"
       qmake -qt=qt5
     else
       qmake
