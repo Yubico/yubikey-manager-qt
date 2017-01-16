@@ -11,7 +11,6 @@ os:
   - osx
 
 dist: trusty
-python: 3.5
 sudo: required
 
 before_install:
@@ -62,6 +61,8 @@ install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
+      export PATH="/opt/python/3.5.0/bin/python-config:$PATH"
+      echo $PATH
       qmake -qt=qt5
     else
       qmake
