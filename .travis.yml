@@ -61,7 +61,7 @@ install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      export PATH="/opt/python/3.5.0/bin:$PATH"
+      export PATH="/opt/python/3.5.2/bin:$PATH"
       qmake -qt=qt5
     else
       qmake
@@ -77,7 +77,7 @@ before_script:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       # To run the test with the correct python
-      export LD_LIBRARY_PATH=/opt/python/3.5.0/lib/
+      export LD_LIBRARY_PATH=/opt/python/3.5.2/lib/
     fi
   # qmllint is not in trusty version of Qt, so lint on OS X.
   - |
