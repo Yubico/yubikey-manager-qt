@@ -23,6 +23,7 @@ RUN apt-get install -qq \
     qt5-default \
     qml-module-qtquick-controls \
     qml-module-qtquick-dialogs \
+    qml-module-io-thp-pyotherside \
     python3-pip \
     python3-dev
 RUN pip3 install --upgrade pip
