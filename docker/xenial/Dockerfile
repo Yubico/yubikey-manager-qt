@@ -20,9 +20,12 @@ RUN apt-get install -qq \
     python3-pyscard \
     devscripts \
     debhelper \
+    qt5-default \
     qml-module-qtquick-controls \
+    qml-module-qtquick-dialogs \
     python3-pip \
     python3-dev
+RUN pip3 install --upgrade pip
 RUN git clone --recursive https://github.com/Yubico/yubikey-manager-qt
 RUN echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> yubikey-manager-qt/vendor/pyotherside/src/src.pro
 RUN cd yubikey-manager-qt/vendor/pyotherside && qmake -qt=qt5 && make && make install

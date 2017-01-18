@@ -5,7 +5,19 @@ Uploaders: Dag Heyman <dag@yubico.com>,
 Section: utils
 Priority: optional
 Standards-Version: 3.9.7
-Build-Depends: debhelper (>= 9)
+Build-Depends: debhelper (>= 9),
+               python3-pip,
+               swig,
+               python,
+               libpcsclite-dev,
+               libssl-dev,
+               libffi-dev,
+               qtbase5-dev,
+               qtdeclarative5-dev,
+               qml-module-qtquick-controls,
+               qml-module-qtquick-dialogs,
+               qml-module-io-thp-pyotherside,
+               libqt5svg5-dev
 Homepage: https://developers.yubico.com/yubikey-manager-qt/
 
 Package: yubikey-manager-qt
