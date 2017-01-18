@@ -5,38 +5,31 @@
 # Reference: https://docs.travis-ci.com/user/customizing-the-build
 
 language: cpp
+sudo: required
 
 os:
-  - linux
   - osx
+  - linux
 
-dist: trusty
-sudo: required
+services:
+  - docker
 
 before_install:
   - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
-      sudo add-apt-repository -y ppa:yubico/stable
-      sudo apt-get update
+      docker build -t xenial docker/xenial
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
       export MACOSX_DEPLOYMENT_TARGET=10.9
       brew update
+      # Patch PyOtherSide to not be built with debug output
+      echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> vendor/pyotherside/src/src.pro
     fi
-  # Patch PyOtherSide to not be built with debug output
-  - echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> vendor/pyotherside/src/src.pro
 
 install:
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
-    then
-      sudo apt-get install -y libykpers-1-1 libu2f-host0
-      sudo apt-get install -y qtbase5-dev libqt5svg5-dev qtdeclarative5-dev qttools5-dev-tools
-      sudo apt-get install -y g++ swig libpcsclite-dev python3-dev python3-pip
-    fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
@@ -55,31 +48,12 @@ install:
       make
       sudo make install
       cd ../../
-    fi
-  # Build and install PyOtherside
-  - cd vendor/pyotherside
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
-    then
-      export PATH="/opt/python/3.5.2/bin:$PATH"
-      qmake -qt=qt5
-    else
       qmake
     fi
-  - make
-  - sudo make install
-  - cd ../../
   # Install pre-commit
   - pip install pre-commit
 
 before_script:
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
-    then
-      # To run the test with the correct python
-      export LD_LIBRARY_PATH=/opt/python/3.5.2/lib/
-    fi
-  # qmllint is not in trusty version of Qt, so lint on OS X.
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
@@ -90,12 +64,15 @@ script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      qmake -qt=qt5
-    else
-      qmake
+      docker run xenial
     fi
-  - make
-  - (cd ykman-cli && ./test.py)
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+    then
+      qmake
+      make
+      cd ykman-cli && ./test.py
+    fi
 
 after_success:
   - mkdir deploy/
