@@ -22,11 +22,11 @@ QRC_JSON = resources.json
 system(python ../build_qrc.py resources.json)
 
 # Install python dependencies with pip
-# pip.target = pymodules
-# pip.commands = pip3 install -r requirements.txt --target pymodules
-# QMAKE_EXTRA_TARGETS += pip
-# PRE_TARGETDEPS += pymodules
-# QMAKE_CLEAN += -r pymodules
+pip.target = pymodules
+pip.commands = pip3 install -r requirements.txt --target pymodules
+QMAKE_EXTRA_TARGETS += pip
+PRE_TARGETDEPS += pymodules
+QMAKE_CLEAN += -r pymodules
 
 # Default rules for deployment.
 include(deployment.pri)
