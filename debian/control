@@ -21,7 +21,7 @@ Build-Depends: debhelper (>= 9),
 Homepage: https://developers.yubico.com/yubikey-manager-qt/
 
 Package: yubikey-manager-qt
-Architecture: all
+Architecture: any
 Depends: ${misc:Depends},
          ${shlibs:Depends},
          python3-yubikey-manager,
