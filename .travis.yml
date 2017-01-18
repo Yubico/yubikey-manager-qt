@@ -16,7 +16,7 @@ services:
 
 before_install:
   - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       docker build -t xenial docker/xenial
     fi
