@@ -1,0 +1,19 @@
+Source: yubikey-manager-qt
+Maintainer: Debian Authentication Maintainers <pkg-auth-maintainers@lists.alioth.debian.org>
+Uploaders: Dag Heyman <dag@yubico.com>,
+           Dain Nilsson <dain@yubico.com>
+Section: utils
+Priority: optional
+Standards-Version: 3.9.7
+Build-Depends: debhelper (>= 9)
+Homepage: https://developers.yubico.com/yubikey-manager-qt/
+
+Package: yubikey-manager-qt
+Architecture: any
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+         python3-yubikey-manager,
+         qml-module-io-thp-pyotherside,
+         pcscd
+Description: Graphical application for configuring a YubiKey
+ A graphical application for configuring a YubiKey over all transport modes.

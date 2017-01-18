@@ -114,6 +114,13 @@ after_success:
       cp ykman-cli/test.py ykman-gui/ykman-gui.app/Contents/MacOS/
       (cd ykman-gui/ykman-gui.app/Contents/MacOS && ./test.py)
     fi
+  - | 
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    then
+      id=$(docker create xenial)
+      docker cp $id:/yubikey-manager-qt-debian-builds.tar.gz deploy/
+      mv deploy/yubikey-manager-qt-debian-builds.tar.gz deploy/yubikey-manager-qt-debian-builds-$TRAVIS_BRANCH-HEAD.tar.gz
+    fi
 
 deploy:
   provider: s3
