@@ -34,7 +34,7 @@ RUN cd yubikey-manager-qt && qmake -qt=qt5 && make
 RUN cd yubikey-manager-qt && debuild -us -uc
 RUN mkdir /deploy
 RUN mv /yubikey-manager-qt_* /deploy
-RUN cd / && tar czf yubikey-manager-debian-qt-builds.tar.gz deploy
+RUN cd / && tar czf yubikey-manager-qt-debian-builds.tar.gz deploy
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
