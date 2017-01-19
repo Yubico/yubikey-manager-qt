@@ -27,5 +27,6 @@ Depends: ${misc:Depends},
          python3-yubikey-manager,
          qml-module-io-thp-pyotherside,
          pcscd
+Recommends: yubikey-manager
 Description: Graphical application for configuring a YubiKey
  A graphical application for configuring a YubiKey over all transport modes.
