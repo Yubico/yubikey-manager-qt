@@ -26,6 +26,8 @@ Depends: ${misc:Depends},
          ${shlibs:Depends},
          python3-yubikey-manager,
          qml-module-io-thp-pyotherside,
+         qml-module-qtquick-controls,
+         qml-module-qtquick-dialogs,
          pcscd
 Recommends: yubikey-manager
 Description: Graphical application for configuring a YubiKey
