@@ -36,7 +36,7 @@ Var STARTMENU_FOLDER
   Name "YubiKey Manager"
   
   ; The file to write
-  OutFile "../../yubikey-manager-${VERSION}-win.exe"
+  OutFile "../../yubikey-manager-qt-${VERSION}-win.exe"
   
   ; The default installation directory
   InstallDir "$PROGRAMFILES\Yubico\YubiKey Manager"
