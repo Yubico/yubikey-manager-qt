@@ -79,8 +79,6 @@ after_build:
   - copy .\ykman-cli\release\ykman.exe .\ykman-gui\release
   # Create zip for deployment
   - 7z a yubikey-manager-%APPVEYOR_REPO_BRANCH%-HEAD-win.zip .\ykman-gui\release\*
-  # Create a unsigned installer
-  - makensis /DVERSION=%APPVEYOR_REPO_BRANCH%-HEAD .\resources\win\win-installer-unsigned.nsi
   # Verify that the cli tool can run
   - copy .\ykman-cli\test.py .\ykman-gui\release
   - cd .\ykman-gui\release
@@ -89,7 +87,6 @@ after_build:
 
 artifacts:
   - path: yubikey-manager-%APPVEYOR_REPO_BRANCH%-HEAD-win.zip
-  - path: yubikey-manager-%APPVEYOR_REPO_BRANCH%-HEAD-win.exe
  
 deploy:
   - provider: S3
