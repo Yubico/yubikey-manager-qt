@@ -110,7 +110,7 @@ after_success:
       # Copy to deploy dir
       cp yubikey-manager-qt-$TRAVIS_BRANCH-HEAD-mac.pkg deploy/
       # Copy .app to deploy dir
-      cp ykman-gui/ykman-gui.app deploy/ykman-gui-$TRAVIS_BRANCH-HEAD.app
+      cp -R ykman-gui/ykman-gui.app deploy/ykman-gui-$TRAVIS_BRANCH-HEAD.app
       # Test ykman-cli in .app bundle
       cp ykman-cli/test.py ykman-gui/ykman-gui.app/Contents/MacOS/
       (cd ykman-gui/ykman-gui.app/Contents/MacOS && ./test.py)
