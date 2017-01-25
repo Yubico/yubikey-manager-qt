@@ -16,11 +16,11 @@ The current version can:
 
 * View the serial number and firmware version of a YubiKey.
 * Configure YubiKey Slots. A YubiKey have two slots (short press and long press), which may both be configured for different functionality. 
-This tool can configure a [Yubico OTP](https://developers.yubico.com/OTP/) secret, a static password, a challenge-response credential or an [OATH](https://developers.yubico.com/OATH/) HOTP credential in both of these slots.
+This tool can configure a https://developers.yubico.com/OTP/[Yubico OTP] secret, a static password, a challenge-response credential or an https://developers.yubico.com/OATH/[OATH] HOTP credential in both of these slots.
 * Swap the functionality between two configured YubiKey Slots
 * Enable or disable the different USB connections.
 
 === Installation
 
 === Command line version
-This project also bundles the [command line version](https://developers.yubico.com/yubikey-manager/)
+This project also bundles the https://developers.yubico.com/yubikey-manager/[command line version].
