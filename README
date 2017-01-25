@@ -1,17 +1,25 @@
 == YubiKey Manager
 image:https://travis-ci.org/Yubico/yubikey-manager-qt.svg?branch=master["Build Status", link="https://travis-ci.org/Yubico/yubikey-manager-qt"]
 
-Graphical application and command line tool for configuring a YubiKey.
-
 NOTE: This project is in BETA. Any part of the application may change before
 the next release, and some functionality and documentation is missing at this
 point.
 
-=== Graphical desktop tool
-An easy-to-use cross-platform desktop application with functionality to perform the most
-commonly used configuration tasks.
+Cross-platform application for configuring any YubiKey over all USB transports.
 
 image::screenshot.png[]
 
-=== Command line tool
-This project also includes the https://github.com/Yubico/yubikey-manager[YubiKey Manager CLI]
+=== Features
+This application provides an easy way to perform the most common configuration tasks on a YubiKey.
+
+The current version can:
+* View the serial number and firmware version of a YubiKey.
+* Configure YubiKey Slots. A YubiKey have two slots (short press and long press), which may both be configured for different functionality. 
+This tool can configure a [Yubico OTP](https://developers.yubico.com/OTP/) secret, a static password, a challenge-response credential or an [OATH](https://developers.yubico.com/OATH/) HOTP credential in both of these slots.
+* Swap the functionality between two configured YubiKey Slots
+* Enable or disable the different USB connections.
+
+=== Installation
+
+=== Command line version
+This project also bundles the [command line version](https://developers.yubico.com/yubikey-manager/)
