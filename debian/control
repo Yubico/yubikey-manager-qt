@@ -17,7 +17,8 @@ Build-Depends: debhelper (>= 9),
                qml-module-qtquick-controls,
                qml-module-qtquick-dialogs,
                qml-module-io-thp-pyotherside,
-               libqt5svg5-dev
+               libqt5svg5-dev,
+               yubikey-manager
 Homepage: https://developers.yubico.com/yubikey-manager-qt/
 
 Package: yubikey-manager-qt
