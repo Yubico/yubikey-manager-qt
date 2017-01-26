@@ -22,5 +22,14 @@ This tool can configure a https://developers.yubico.com/OTP/[Yubico OTP] credent
 
 === Installation
 
+==== Windows and macOS
+Installers are available https://developers.yubico.com/yubikey-manager-qt/Releases/[here].
+
+==== Ubuntu
+
+    $ sudo apt-add-repository ppa:yubico/stable
+    $ sudo apt update
+    $ sudo apt install yubikey-manager-qt
+
 === Command line version
 This project also bundles the https://developers.yubico.com/yubikey-manager/[command line version].
