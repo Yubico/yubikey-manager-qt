@@ -16,13 +16,14 @@ QRC_JSON = resources.json
 # Generate first time
 system(python ../build_qrc.py resources.json)
 
-# Install python dependencies with pip
-pip.target = pymodules
-pip.commands = pip3 install -r requirements.txt --target pymodules
-QMAKE_EXTRA_TARGETS += pip
-PRE_TARGETDEPS += pymodules
-QMAKE_CLEAN += -r pymodules
-
+# Install python dependencies with pip for win and mac
+mac|win32 {
+    pip.target = pymodules
+    pip.commands = pip3 install -r requirements.txt --target pymodules
+    QMAKE_EXTRA_TARGETS += pip
+    PRE_TARGETDEPS += pymodules
+    QMAKE_CLEAN += -r pymodules
+}
 # On mac, embedd a Info.plist file in the binary, needed for codesign
 macx{
     QMAKE_LFLAGS += -sectcreate __TEXT __info_plist $$shell_quote(../resources/mac/Info.plist.cli)

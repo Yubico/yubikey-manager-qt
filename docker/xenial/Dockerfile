@@ -25,7 +25,8 @@ RUN apt-get install -qq \
     qml-module-qtquick-dialogs \
     qml-module-io-thp-pyotherside \
     python3-pip \
-    python3-dev
+    python3-dev \
+    yubikey-manager
 RUN pip3 install --upgrade pip
 RUN git clone --recursive https://github.com/Yubico/yubikey-manager-qt
 RUN echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> yubikey-manager-qt/vendor/pyotherside/src/src.pro
