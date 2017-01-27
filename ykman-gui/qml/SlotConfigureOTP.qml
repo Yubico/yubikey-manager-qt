@@ -38,6 +38,7 @@ ColumnLayout {
          RowLayout{
              TextField {
                  id: publicIdInput
+                 enabled: !useSerialCb.checked
                  implicitWidth: 110
                  font.family: "Courier"
                  validator: RegExpValidator {
