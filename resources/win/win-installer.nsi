@@ -101,12 +101,16 @@ FunctionEnd
 Var MYTMP
 Section "YubiKey Manager"
   SectionIn RO
+
+  ; Delete any old installation
+  RMDir /r $INSTDIR
+
   SetOutPath $INSTDIR
   FILE /r "..\..\ykman-gui\release\*"
-  
+
   ; Write the installation path into the registry
   WriteRegStr HKLM "Software\Yubico\yubikey-manager" "Install_Dir" "$INSTDIR"
-  
+
   ; Windows Add/Remove Programs support
   StrCpy $MYTMP "Software\Microsoft\Windows\CurrentVersion\Uninstall\yubikey-manager"
   WriteRegStr       HKLM $MYTMP "DisplayName"     "YubiKey Manager"
