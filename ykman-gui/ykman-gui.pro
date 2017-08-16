@@ -24,10 +24,16 @@ system(python ../build_qrc.py resources.json)
 # Install python dependencies with pip on mac and win
 win32|macx {
     pip.target = pymodules
-    pip.commands = pip3 install -r requirements.txt --target pymodules
     QMAKE_EXTRA_TARGETS += pip
     PRE_TARGETDEPS += pymodules
     QMAKE_CLEAN += -r pymodules
+}
+
+macx {
+    pip.commands = python3 -m venv pymodules && source pymodules/bin/activate && pip3 install -r requirements.txt && deactivate
+}
+win32 {
+    pip.commands = pip3 install -r requirements-win.txt --target pymodules
 }
 
 # Default rules for deployment.
@@ -46,7 +52,7 @@ macx {
     ICON = ../resources/icons/ykman.icns
     QMAKE_INFO_PLIST = ../resources/mac/Info.plist.in
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9 # Mavericks
-    QMAKE_POST_LINK += cp -rnf pymodules ykman-gui.app/Contents/MacOS/
+    QMAKE_POST_LINK += cp -rnf pymodules/lib/python3*/site-packages/ ykman-gui.app/Contents/MacOS/pymodules/
 }
 
 # For generating a XML file with all strings.
