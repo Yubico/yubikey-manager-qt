@@ -26,6 +26,7 @@ RUN apt-get install -qq \
     qml-module-io-thp-pyotherside \
     python3-pip \
     python3-dev \
+    locales \
     yubikey-manager
 RUN pip3 install --upgrade pip
 RUN git clone --recursive https://github.com/Yubico/yubikey-manager-qt
