@@ -33,7 +33,7 @@ macx {
     pip.commands = python3 -m venv pymodules && source pymodules/bin/activate && pip3 install -r requirements.txt && deactivate
 }
 win32 {
-    pip.commands = pip3 install -r requirements-win.txt --target pymodules
+    pip.commands = pip3 install -r requirements.txt --target pymodules
 }
 
 # Default rules for deployment.
