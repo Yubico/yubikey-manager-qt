@@ -78,7 +78,7 @@ Var STARTMENU_FOLDER
   ${nsProcess::FindProcess} "ykman-gui.exe" $R0
   ${If} $R0 == 0
     DetailPrint "YubiKey Manager (CLI) is running. Closing..."
-    ${nsProcess::CloseProcess} "ykman-gui.exe" $R0
+    ${nsProcess::CloseProcess} "ykman.exe" $R0
     Sleep 2000
   ${EndIf}
   ${nsProcess::FindProcess} "ykman-gui.exe" $R0
@@ -121,6 +121,13 @@ Section "YubiKey Manager"
   WriteRegStr       HKLM $MYTMP "URLInfoAbout"    "https://www.yubico.com"
   WriteRegDWORD     HKLM $MYTMP "NoModify"        "1"
   WriteRegDWORD     HKLM $MYTMP "NoRepair"        "1"
+
+  ; Install Visual C++ Redistrubutable Packages
+  ; will do nothing if already installed
+  ExecWait "$INSTDIR\vcredist_x86.exe /q /norestart"
+  ; Delete redist packages
+  Delete "$INSTDIR\vcredist_x86.exe"
+
 SectionEnd
  
 Section  
