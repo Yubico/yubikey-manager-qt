@@ -4,6 +4,7 @@
 import sys
 from ykman.cli.__main__ import main
 
+
 def run(argv):
     sys.argv = argv
 
