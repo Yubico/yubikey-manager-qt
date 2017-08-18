@@ -15,6 +15,9 @@ int main(int argc, char *argv[])
     // This workaround enables a local menubar.
     qputenv("UBUNTU_MENUPROXY","0");
 
+    // Don't write .pyc files.
+    qputenv("PYTHONDONTWRITEBYTECODE", "1");
+
     #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     #endif
@@ -33,6 +36,13 @@ int main(int argc, char *argv[])
     QString main_qml = "/qml/Main.qml";
     QString path_prefix;
     QString url_prefix;
+
+    app.setApplicationName("YubiKey Manager");
+    app.setOrganizationName("Yubico");
+    app.setOrganizationDomain("com.yubico");
+
+    // Use ANGLE on Windows
+    app.setAttribute(Qt::AA_UseOpenGLES);
 
     if (QFileInfo::exists(":" + main_qml)) {
         // Embedded resources
@@ -54,8 +64,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("appDir", app_dir);
     engine.rootContext()->setContextProperty("urlPrefix", url_prefix);
     engine.rootContext()->setContextProperty("appVersion", APP_VERSION);
-
-    qputenv("PYTHONDONTWRITEBYTECODE", "1");
 
     engine.load(QUrl(url_prefix + main_qml));
 
