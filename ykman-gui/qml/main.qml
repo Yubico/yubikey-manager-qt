@@ -61,7 +61,7 @@ ApplicationWindow {
             width: 370
             height: 360
             text: if (yk.nDevices == 0) {
-                      qsTr("No YubiKey detected")
+                      qsTr("No YubiKey detected.")
                   } else if (yk.nDevices == 1) {
                       qsTr("Connecting to YubiKey...")
                   } else {

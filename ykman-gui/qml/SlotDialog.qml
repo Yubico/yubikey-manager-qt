@@ -85,7 +85,7 @@ DefaultDialog {
     MessageDialog {
         id: writeError
         icon: StandardIcon.Critical
-        title: qsTr("Error writing to  slot")
+        title: qsTr("Error writing to slot")
         text: qsTr("Failed to write to the slot. Make sure the YubiKey does not have restricted access.")
         standardButtons: StandardButton.Ok
     }
