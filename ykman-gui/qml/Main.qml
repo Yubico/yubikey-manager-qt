@@ -33,18 +33,7 @@ ApplicationWindow {
     // @disable-check M301
     YubiKey {
         id: yk
-        onError: {
-            errorBox.text = traceback;
-            errorBox.open()
-        }
-    }
-
-    MessageDialog {
-        id: errorBox
-        icon: StandardIcon.Critical
-        title: qsTr("Error!")
-        text: ""
-        standardButtons: StandardButton.Ok
+        onError: console.log(traceback)
     }
 
     Timer {
