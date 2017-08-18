@@ -30,6 +30,11 @@ ApplicationWindow {
         id: aboutPage
     }
 
+    Shortcut {
+        sequence: StandardKey.Close
+        onActivated: close()
+    }
+
     // @disable-check M301
     YubiKey {
         id: yk
