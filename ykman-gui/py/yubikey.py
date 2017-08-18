@@ -10,11 +10,14 @@ from base64 import b32decode
 from binascii import b2a_hex, a2b_hex, Error
 
 from ykman.descriptor import get_descriptors
-from ykman.util import CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode, generate_static_pw
+from ykman.util import (
+    CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode,
+    generate_static_pw)
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 
 NON_FEATURE_CAPABILITIES = [CAPABILITY.CCID, CAPABILITY.NFC]
+
 
 def as_json(f):
     def wrapped(*args, **kwargs):
@@ -35,7 +38,8 @@ class Controller(object):
                     setattr(self, f, as_json(func))
 
     def get_features(self):
-        return [c.name for c in CAPABILITY if c not in NON_FEATURE_CAPABILITIES]
+        return [
+            c.name for c in CAPABILITY if c not in NON_FEATURE_CAPABILITIES]
 
     def count_devices(self):
         return len(list(get_descriptors()))
@@ -47,7 +51,8 @@ class Controller(object):
             return
 
         desc = descriptors[0]
-        if desc.fingerprint != (self._descriptor.fingerprint if self._descriptor else None):
+        if desc.fingerprint != (
+                self._descriptor.fingerprint if self._descriptor else None):
             dev = desc.open_device()
             if not dev:
                 return
@@ -56,7 +61,8 @@ class Controller(object):
                 'version': '.'.join(str(x) for x in dev.version),
                 'serial': dev.serial or '',
                 'enabled': [c.name for c in CAPABILITY if c & dev.enabled],
-                'connections': [t.name for t in TRANSPORT if t & dev.capabilities]
+                'connections': [
+                    t.name for t in TRANSPORT if t & dev.capabilities]
             }
             self._descriptor = desc
 
