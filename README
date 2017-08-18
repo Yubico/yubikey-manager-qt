@@ -19,7 +19,7 @@ The current version can:
 * Configure YubiKey Slots. A YubiKey have two slots (short press and long press), which may both be configured for different functionality. 
 This tool can configure a https://developers.yubico.com/OTP/[Yubico OTP] credential, a static password, a challenge-response credential or an https://developers.yubico.com/OATH/[OATH] HOTP credential in both of these slots.
 * Swap the functionality between two configured YubiKey slots.
-* Enable or disable the different USB connectios (USB modes).
+* Enable or disable the different USB connections (USB modes).
 
 === Installation
 
