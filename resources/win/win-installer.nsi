@@ -13,6 +13,9 @@
 ;Checkbox on finish page, "Run YubiKey Manager"
 !define MUI_FINISHPAGE_RUN "$INSTDIR\ykman-gui.exe"
 
+;Support High DPI displays.
+ManifestDPIAware true
+
 Var STARTMENU_FOLDER
 
 !ifdef INNER
