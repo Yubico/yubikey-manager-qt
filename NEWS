@@ -1,3 +1,8 @@
+* Version 0.3.1 (released 2017-08-29)
+ ** Update CLI version to ykman 0.4.1
+ ** Don't show raw error messages in popups.
+ ** Fix issues with OpenGL and ANGLE.
+
 * Version 0.3.0 (released 2017-01-25)
  ** Initial release for beta testing.
  ** Added support for mode switching.
