@@ -29,14 +29,12 @@ RUN apt-get install -qq \
     locales \
     yubikey-manager
 RUN pip3 install --upgrade pip
-RUN git clone --recursive https://github.com/Yubico/yubikey-manager-qt
-RUN echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> yubikey-manager-qt/vendor/pyotherside/src/src.pro
-RUN cd yubikey-manager-qt/vendor/pyotherside && qmake -qt=qt5 && make && make install
+COPY . yubikey-manager-qt
 RUN cd yubikey-manager-qt && qmake -qt=qt5 && make
 RUN cd yubikey-manager-qt && debuild -us -uc
-RUN mkdir /deploy
-RUN mv /yubikey-manager-qt_* /deploy
-RUN cd / && tar czf yubikey-manager-qt-debian-builds.tar.gz deploy
+RUN mkdir /deb
+RUN mv /yubikey-manager-qt_* /deb
+RUN cd / && tar czf yubikey-manager-qt-debian-packages.tar.gz deb
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
