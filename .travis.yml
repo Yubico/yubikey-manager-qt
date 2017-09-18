@@ -118,7 +118,7 @@ after_success:
       sudo install_name_tool -change /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib @executable_path/../Frameworks/libcrypto.1.0.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload/_hashlib.cpython-36m-darwin.so
       sudo install_name_tool -change /usr/local/opt/openssl/lib/libssl.1.0.0.dylib @executable_path/../Frameworks/libssl.1.0.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload/_hashlib.cpython-36m-darwin.so
       # Copy .app to deploy dir
-      tar -czf deploy/ykman-gui-$TRAVIS_BRANCH.app.tar ykman-gui/ykman-gui.app
+      tar -czf deploy/yubikey-manager-qt-$TRAVIS_BRANCH.app.tar ykman-gui/ykman-gui.app
       # Test ykman-cli in .app bundle
       cp ykman-cli/test.py ykman-gui/ykman-gui.app/Contents/MacOS/
       (cd ykman-gui/ykman-gui.app/Contents/MacOS && ./test.py)
