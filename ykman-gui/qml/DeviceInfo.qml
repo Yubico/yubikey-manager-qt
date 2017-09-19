@@ -49,24 +49,36 @@ Item {
 
             GridLayout {
                 anchors.fill: parent
-                flow: GridLayout.TopToBottom
-                rows: device.getSortedFeatures().length
-
-                Repeater {
-                    model: device.getSortedFeatures()
-
-                    Label {
-                        text: getFeatureTitle(modelData) + ':'
-                    }
+                columns: 2
+                Label {
+                    text: qsTr("YubiKey Slots:")
                 }
-
-                Repeater {
-                    model: device.getSortedFeatures()
-                    Label {
-                        text: device.enabled.indexOf(
-                                  modelData) >= 0 ? qsTr("Enabled") : qsTr(
-                                                        "Disabled")
-                    }
+                Label {
+                    text: isEnabled('OTP') ? qsTr("Enabled") : qsTr("Disabled")
+                }
+                Label {
+                    text: qsTr("PIV:")
+                }
+                Label {
+                    text: isEnabled('PIV') ? qsTr("Enabled") : qsTr("Disabled")
+                }
+                Label {
+                    text: qsTr("OATH:")
+                }
+                Label {
+                    text: isEnabled('OATH') ? qsTr("Enabled") : qsTr("Disabled")
+                }
+                Label {
+                    text: qsTr("OpenPGP:")
+                }
+                Label {
+                    text: isEnabled('OPGP') ? qsTr("Enabled") : qsTr("Disabled")
+                }
+                Label {
+                    text: qsTr("U2F:")
+                }
+                Label {
+                    text: isEnabled('U2F') ? qsTr("Enabled") : qsTr("Disabled")
                 }
 
                 Button {
@@ -129,6 +141,10 @@ Item {
         }
     }
 
+    function isEnabled(feature) {
+        return device.enabled.indexOf(feature) !== -1
+    }
+
     function readable_list(args) {
         if (args.length === 0) {
             return ''
@@ -139,13 +155,5 @@ Item {
             var last = args.pop()
             return args.join(', ') + qsTr(' and ') + last
         }
-    }
-
-    function getFeatureTitle(model) {
-        if (model === 'OPGP')
-            return qsTr('OpenPGP')
-        if (model === 'OTP')
-            return qsTr('YubiKey Slots')
-        return model
     }
 }
