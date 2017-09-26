@@ -21,6 +21,8 @@ and is included as a submodule in the repository. It can also be installed throu
 === Install dependencies on macOS 10.12 (Sierra)
 
     $ brew install python3 swig ykpers libu2f-host libusb qt5
+    # Allow access to qmake - see https://superuser.com/a/1153338/104372
+    $ brew link qt5 --force
     $ cd vendor/pyotherside && qmake && make && make install && cd ../..
 
 === Compile the app:
