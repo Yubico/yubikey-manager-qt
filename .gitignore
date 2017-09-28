@@ -20,3 +20,4 @@ ykman-gui/ykman-gui
 ykman-gui/ykman-gui.app/
 ykman-cli/pymodules/
 ykman-gui/pymodules/
+.vagrant/
