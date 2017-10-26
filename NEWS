@@ -1,3 +1,7 @@
+* Version 0.3.2 (released 2017-10-26)
+ ** Update CLI version to ykman 0.4.6
+ ** Enable NSSupportsAutomaticGraphicsSwitching in OS X
+
 * Version 0.3.1 (released 2017-08-29)
  ** Update CLI version to ykman 0.4.1
  ** Don't show raw error messages in popups.
