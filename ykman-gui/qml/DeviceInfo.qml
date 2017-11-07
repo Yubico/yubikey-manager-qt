@@ -66,7 +66,14 @@ Item {
                 }
                 Repeater {
                     model: parent.features
-                    Label { text: isEnabled(modelData.id) ? qsTr("Enabled") : qsTr("Disabled") }
+                    Label {
+                        text: (isCapable(modelData.id)
+                            ? isEnabled(modelData.id)
+                                ? qsTr("Enabled")
+                                : qsTr("Disabled")
+                            : qsTr("Not available")
+                        )
+                    }
                 }
 
                 Button {
@@ -131,6 +138,10 @@ Item {
 
     function isEnabled(feature) {
         return device.enabled.indexOf(feature) !== -1
+    }
+
+    function isCapable(feature) {
+        return device.capabilities.indexOf(feature) !== -1
     }
 
     function readable_list(args) {
