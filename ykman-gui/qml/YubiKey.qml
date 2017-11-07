@@ -12,6 +12,7 @@ Python {
     property string version
     property string serial
     property var connections: []
+    property var capabilities: []
     property var enabled: []
     property bool ready: false
     property var queue: []
@@ -51,6 +52,7 @@ Python {
                     name = dev ? dev.name : ''
                     version = dev ? dev.version : ''
                     serial = dev ? dev.serial : ''
+                    capabilities = dev ? dev.capabilities : []
                     enabled = dev ? dev.enabled : []
                     connections = dev ? dev.connections : []
                 })

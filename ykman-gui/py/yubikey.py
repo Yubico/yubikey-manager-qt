@@ -55,6 +55,8 @@ class Controller(object):
                 'version': '.'.join(str(x) for x in dev.version),
                 'serial': dev.serial or '',
                 'enabled': [c.name for c in CAPABILITY if c & dev.enabled],
+                'capabilities': [
+                    c.name for c in CAPABILITY if c & dev.capabilities],
                 'connections': [
                     t.name for t in TRANSPORT if t & dev.capabilities]
             }
