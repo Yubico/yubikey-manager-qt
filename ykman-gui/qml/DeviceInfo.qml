@@ -49,36 +49,24 @@ Item {
 
             GridLayout {
                 anchors.fill: parent
-                columns: 2
-                Label {
-                    text: qsTr("YubiKey Slots:")
+                flow: GridLayout.TopToBottom
+                rows: features.length
+
+                property var features: [
+                    { id: 'OTP', label: qsTr('YubiKey Slots') },
+                    { id: 'PIV', label: qsTr('PIV') },
+                    { id: 'OATH', label: qsTr('OATH') },
+                    { id: 'OpenPGP', label: qsTr('OpenPGP') },
+                    { id: 'U2F', label: qsTr('U2F') },
+                ]
+
+                Repeater {
+                    model: parent.features
+                    Label { text: modelData.label + ':' }
                 }
-                Label {
-                    text: isEnabled('OTP') ? qsTr("Enabled") : qsTr("Disabled")
-                }
-                Label {
-                    text: qsTr("PIV:")
-                }
-                Label {
-                    text: isEnabled('PIV') ? qsTr("Enabled") : qsTr("Disabled")
-                }
-                Label {
-                    text: qsTr("OATH:")
-                }
-                Label {
-                    text: isEnabled('OATH') ? qsTr("Enabled") : qsTr("Disabled")
-                }
-                Label {
-                    text: qsTr("OpenPGP:")
-                }
-                Label {
-                    text: isEnabled('OPGP') ? qsTr("Enabled") : qsTr("Disabled")
-                }
-                Label {
-                    text: qsTr("U2F:")
-                }
-                Label {
-                    text: isEnabled('U2F') ? qsTr("Enabled") : qsTr("Disabled")
+                Repeater {
+                    model: parent.features
+                    Label { text: isEnabled(modelData.id) ? qsTr("Enabled") : qsTr("Disabled") }
                 }
 
                 Button {
