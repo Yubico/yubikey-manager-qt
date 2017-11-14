@@ -16,6 +16,7 @@ from ykman.util import (
     generate_static_pw)
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
+from ykman.piv import PivController
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +54,8 @@ class Controller(object):
             dev = desc.open_device()
             if not dev:
                 return
+            self._descriptor = desc
+
             self._dev_info = {
                 'name': dev.device_name,
                 'version': '.'.join(str(x) for x in dev.version),
@@ -61,9 +64,12 @@ class Controller(object):
                 'capabilities': [
                     c.name for c in CAPABILITY if c & dev.capabilities],
                 'connections': [
-                    t.name for t in TRANSPORT if t & dev.capabilities]
+                    t.name for t in TRANSPORT if t & dev.capabilities
+                ],
+                'piv': {
+                    'version': '.'.join(str(x) for x in self._piv_version())
+                }
             }
-            self._descriptor = desc
 
         return self._dev_info
 
@@ -146,6 +152,14 @@ class Controller(object):
             return str(e)
         except YkpersError as e:
             return e.errno
+
+    def _piv_version(self):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.CCID)
+            piv_controller = PivController(dev.driver)
+            return piv_controller.version
+        except AttributeError:
+            return None
 
 
 controller = Controller()

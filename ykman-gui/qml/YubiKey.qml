@@ -18,6 +18,7 @@ Python {
     property bool loggingReady: false
     readonly property bool ready: yubikeyReady && loggingReady
     property var queue: []
+    property var piv: {}
 
     signal enableLogging(string log_level)
 
@@ -72,6 +73,7 @@ Python {
                     capabilities = dev ? dev.capabilities : []
                     enabled = dev ? dev.enabled : []
                     connections = dev ? dev.connections : []
+                    piv = dev ? dev.piv : {}
                 })
             } else if (hasDevice) {
                 hasDevice = false

@@ -149,6 +149,7 @@ Item {
 
         PivManager {
             id: pivDialog
+            device: yk
         }
     }
 
