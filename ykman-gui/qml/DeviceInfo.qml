@@ -78,10 +78,21 @@ Item {
                 }
 
                 Button {
+                    Layout.column: 2
+                    Layout.row: parent.features.findIndex(function(f) { return f.id === 'OTP'; })
                     Layout.alignment: Qt.AlignRight
                     text: qsTr("Configure")
                     enabled: device.enabled.indexOf('OTP') >= 0
                     onClicked: slotDialog.start()
+                }
+
+                Button {
+                    Layout.column: 2
+                    Layout.row: parent.features.findIndex(function(f) { return f.id === 'PIV'; })
+                    Layout.alignment: Qt.AlignRight
+                    text: qsTr("Configure")
+                    enabled: device.enabled.indexOf('PIV') >= 0
+                    onClicked: pivDialog.start()
                 }
             }
         }
@@ -134,6 +145,10 @@ Item {
         SlotDialog {
             id: slotDialog
             device: yk
+        }
+
+        PivManager {
+            id: pivDialog
         }
     }
 
