@@ -174,4 +174,9 @@ Python {
     function openpgp_get_version(cb) {
         do_call('yubikey.controller.openpgp_get_version', [], cb)
     }
+
+    function piv_change_pin(old_pin, new_pin, cb) {
+        do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin], cb)
+    }
+
 }

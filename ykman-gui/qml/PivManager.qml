@@ -33,8 +33,40 @@ DefaultDialog {
         codeName: 'PIN'
 
         onCodeChanged: {
-            console.log('Change PIN', 'from', currentCode, 'to', newCode)
+            device.piv_change_pin(currentCode, newCode, function(success) {
+                if (success) {
+                    showMessage(qsTr('Success'), qsTr('PIN was successfully changed.'))
+                } else {
+                    showError(qsTr('Error'), qsTr('PIN change failed.'))
+                }
+            })
         }
+    }
+
+    function showError(title, text) {
+        errorDialog.title = title
+        errorDialog.text = text
+        errorDialog.open()
+    }
+
+    function showMessage(title, text) {
+        messageDialog.title = title
+        messageDialog.text = text
+        messageDialog.open()
+    }
+
+    MessageDialog {
+        id: errorDialog
+        icon: StandardIcon.Critical
+        standardButtons: StandardButton.Ok
+
+        onAccepted: startChangePin()
+    }
+
+    MessageDialog {
+        id: messageDialog
+        icon: StandardIcon.Information
+        standardButtons: StandardButton.Ok
     }
 
     function start() {
