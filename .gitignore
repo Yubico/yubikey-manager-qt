@@ -16,6 +16,7 @@ Makefile*
 qrc_*.cpp
 moc_*.cpp
 ykman-cli/ykman
+ykman-gui/moc_predefs.h
 ykman-gui/ykman-gui
 ykman-gui/ykman-gui.app/
 ykman-cli/pymodules/
