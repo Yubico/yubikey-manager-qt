@@ -33,6 +33,7 @@ def as_json(f):
 class Controller(object):
     _descriptor = None
     _dev_info = None
+    _piv_controller = None
 
     def __init__(self):
         # Wrap all return values as JSON.
@@ -58,6 +59,9 @@ class Controller(object):
             if not dev:
                 return
             self._descriptor = desc
+
+            if self._piv_controller is None:
+                self._piv_controller = PivController(dev.driver)
 
             self._dev_info = {
                 'name': dev.device_name,
@@ -233,11 +237,12 @@ class Controller(object):
             return None
 
     def _piv_version(self):
-        try:
-            dev = self._descriptor.open_device(TRANSPORT.CCID)
-            piv_controller = PivController(dev.driver)
-            return piv_controller.version
-        except AttributeError:
+        if self._piv_controller:
+            try:
+                return self._piv_controller.version
+            except AttributeError:
+                return None
+        else:
             return None
 
 
