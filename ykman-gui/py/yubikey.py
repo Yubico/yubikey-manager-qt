@@ -166,5 +166,15 @@ class Controller(object):
         else:
             return None
 
+    def change_piv_pin(self, old_pin, new_pin):
+        if self._piv_controller:
+            try:
+                self._piv_controller.change_pin(old_pin, new_pin)
+                return True
+            except:
+                return False
+        else:
+            return False
+
 
 controller = Controller()
