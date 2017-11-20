@@ -56,7 +56,7 @@ Item {
                     { id: 'OTP', label: qsTr('YubiKey Slots') },
                     { id: 'PIV', label: qsTr('PIV') },
                     { id: 'OATH', label: qsTr('OATH') },
-                    { id: 'OpenPGP', label: qsTr('OpenPGP') },
+                    { id: 'OPGP', label: qsTr('OpenPGP') },
                     { id: 'U2F', label: qsTr('U2F') },
                 ]
 
