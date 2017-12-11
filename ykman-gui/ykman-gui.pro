@@ -5,8 +5,26 @@ SOURCES += main.cpp
 
 # This is the verson number for the application,
 # will be in info.plist file, about page etc.
-VERSION = 0.4.0-SNAPSHOT
+
+PYTHON3_BINARY_NAME=python3
+win32|win64 {
+  PYTHON3_BINARY_NAME=python
+}
+
+VERSION = $$system($$PYTHON3_BINARY_NAME ../compute-version.py -f VERSION yubikey-manager-qt-)
+
+message(Version of this build: $$VERSION)
+
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
+win32|win64 {
+  # Strip suffixes from version number
+  # Append ".0" if "-dirty" or append ".1" if not "-dirty"
+  # Because rc compiler requires only numerals in the version number
+  VERSION ~= s/^([0-9]+\.[0-9]+\.[0-9]+).*-dirty$/\1.0
+  VERSION ~= s/^([0-9]+\.[0-9]+\.[0-9]+)-.*/\1.1
+  message(Version tweaked for Windows build: $$VERSION)
+}
 
 buildqrc.commands = python ../build_qrc.py ${QMAKE_FILE_IN}
 buildqrc.input = QRC_JSON
