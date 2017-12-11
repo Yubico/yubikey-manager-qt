@@ -71,7 +71,7 @@ script:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       docker build -t ykman-qt-xenial -f docker/xenial/Dockerfile .
-      docker run ykman-qt-xenial
+      docker run --rm -t ykman-qt-xenial
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
