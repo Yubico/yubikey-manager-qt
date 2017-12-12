@@ -21,7 +21,10 @@ before_install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      docker build -t xenial -f docker/xenial/Dockerfile .
+      cd vendor/yubikey-manager && docker build -t ykman-xenial -f docker/Dockerfile .
+      id=$(docker create ykman-xenial)
+      docker cp $id:/yubikey-manager-debian-packages.tar.gz ykman-deb.tar.gz
+      docker build -t ykman-qt-xenial -f docker/xenial/Dockerfile .
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
@@ -68,7 +71,7 @@ script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      docker run xenial
+      docker run ykman-qt-xenial
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
@@ -125,7 +128,7 @@ after_success:
   - | 
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      id=$(docker create xenial)
+      id=$(docker create ykman-qt-xenial)
       docker cp $id:/yubikey-manager-qt-debian-packages.tar.gz deploy/yubikey-manager-qt-$TRAVIS_BRANCH-deb.tar.gz
     fi
 

@@ -26,13 +26,15 @@ RUN apt-get install -qq \
     qml-module-io-thp-pyotherside \
     python3-pip \
     python3-dev \
-    locales \
-    yubikey-manager
+    locales
 RUN pip3 install --upgrade pip
 COPY . yubikey-manager-qt
+RUN tar xfa yubikey-manager-qt/ykman-deb.tar.gz
+RUN dpkg -i /deb/python3-yubikey_manager_*.deb; exit 0
+RUN dpkg -i /deb/yubikey-manager_*.deb; exit 0
+RUN apt-get install -f -qq
 RUN cd yubikey-manager-qt && qmake -qt=qt5 && make
 RUN cd yubikey-manager-qt && debuild -us -uc
-RUN mkdir /deb
 RUN mv /yubikey-manager-qt_* /deb
 RUN cd / && tar czf yubikey-manager-qt-debian-packages.tar.gz deb
 RUN locale-gen en_US.UTF-8
