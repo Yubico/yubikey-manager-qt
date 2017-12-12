@@ -38,12 +38,18 @@ install:
   - cd %APPVEYOR_BUILD_FOLDER%
 
 before_build:
+  # Clean up dirt from installing pyotherside
+  - git -C vendor/pyotherside reset --hard
+  - git -C vendor/pyotherside clean -dfx
+
+build_script:
+
+  - qmake yubikey-manager-qt.pro
+  - qmake -o ykman-gui\Makefile ykman-gui\ykman-gui.pro
+
   # Fix problem with symbolic link
   - rm .\vendor\yubikey-manager\ykman\yubicommon
   - xcopy /i /e .\vendor\yubikey-manager\vendor\yubicommon\yubicommon .\vendor\yubikey-manager\ykman\yubicommon
-
-build_script:
-  - qmake yubikey-manager-qt.pro
   - jom
 
 after_build:
