@@ -4,6 +4,7 @@
 
 import os
 import json
+import logging
 import types
 import struct
 from base64 import b32decode
@@ -15,6 +16,8 @@ from ykman.util import (
     generate_static_pw)
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
+
+logger = logging.getLogger(__name__)
 
 
 def as_json(f):
@@ -65,11 +68,16 @@ class Controller(object):
         return self._dev_info
 
     def set_mode(self, connections):
+        logger.debug('connections: %s', connections)
+
         dev = self._descriptor.open_device()
+        logger.debug('dev: %s', dev)
+
         try:
             transports = sum([TRANSPORT[c] for c in connections])
             dev.mode = Mode(transports & TRANSPORT.usb_transports())
         except ModeSwitchError as e:
+            logger.error('Failed to set modes', exc_info=e)
             return str(e)
 
     def slots_status(self):
