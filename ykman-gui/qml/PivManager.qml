@@ -21,6 +21,15 @@ DefaultDialog {
             )
         }
 
+        GroupBox {
+            //: PIV certificates list heading
+            title: qsTr("Certificates")
+            Layout.fillWidth: true
+
+            PivCertificates {
+            }
+        }
+
         Button {
             text: qsTr("Change PIN")
             onClicked: startChangePin()
