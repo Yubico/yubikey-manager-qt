@@ -19,9 +19,7 @@ DefaultDialog {
     onGoToOverview: loader.source = "SlotOverview.qml"
 
     onVisibleChanged: {
-        if (visible) {
-            resize()
-        } else {
+        if (!visible) {
             loader.source = "SlotOverview.qml"
         }
     }

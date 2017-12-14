@@ -39,7 +39,4 @@ ApplicationWindow {
         }
     }
 
-    function resize() {
-        setWidth(width)
-    }
 }
