@@ -4,9 +4,10 @@ import QtQuick.Layouts 1.1
 
 Item {
     property var device
-    property int margin: width / 30
+    property int margin: Layout.minimumWidth / 30
 
-    width: 370
+    Layout.minimumWidth: 370
+    Layout.minimumHeight: 360
     height: deviceBox.implicitHeight + featureBox.implicitHeight + connectionsBox.implicitHeight + margin * 4
 
     ColumnLayout {

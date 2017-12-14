@@ -29,7 +29,7 @@ DefaultDialog {
     Loader {
         id: loader
         source: "SlotOverview.qml"
-        Layout.fillWidth: true
+        anchors.fill: parent
         onLoaded: {
             deviceBinder.target = loader.item
             selectedSlotBinder.target = loader.item

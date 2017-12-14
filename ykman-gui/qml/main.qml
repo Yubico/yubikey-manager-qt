@@ -53,13 +53,15 @@ ApplicationWindow {
     Loader {
         id: loader
         sourceComponent: yk.hasDevice ? deviceInfo : message
+
+        anchors.fill: parent
+        Layout.minimumWidth: item.Layout.minimumWidth
+        Layout.minimumHeight: item.Layout.minimumHeight
     }
 
     Component {
         id: message
         Text {
-            width: 370
-            height: 360
             text: if (yk.nDevices == 0) {
                       qsTr("No YubiKey detected.")
                   } else if (yk.nDevices == 1) {
@@ -67,6 +69,8 @@ ApplicationWindow {
                   } else {
                       qsTr("Multiple YubiKeys detected!")
                   }
+            Layout.minimumWidth: 370
+            Layout.minimumHeight: 360
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
