@@ -21,7 +21,7 @@ Dialog {
             reset()
         } else {
             state.attemptMade = true
-            open()
+            retryTimer.start()
         }
     }
 
@@ -45,6 +45,17 @@ Dialog {
         newInput.text = ''
         repeatInput.text = ''
         state.attemptMade = false
+    }
+
+    Timer {
+        // Ugly workaround to a likely bug in Qt: open() in onAccepted fails if
+        // the user clicks the Ok button, but works if the user presses Return.
+        // Using a 0 ms timer ensures the open() call is deferred to after the
+        // window is properly destroyed.
+        id: retryTimer
+        interval: 0
+        repeat: false
+        onTriggered: open()
     }
 
     // Private state container
