@@ -78,4 +78,9 @@ ApplicationWindow {
             device: yk
         }
     }
+
+    function enableLogging(logLevel) {
+      yk.enableLogging(logLevel)
+    }
+
 }
