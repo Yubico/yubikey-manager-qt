@@ -11,7 +11,7 @@ REM Download Appveyor build
 REM powershell -Command "(New-Object Net.WebClient).DownloadFile('https://yubico-builds.s3-eu-west-1.amazonaws.com/yubikey-manager-qt/yubikey-manager-qt-yubikey-manager-qt-%VERSION%-win.zip', 'C:\Users\vagrant\Downloads\yubikey-manager-qt-%VERSION%-win.zip')"
 REM 7z x -o"%RELEASE_DIR%" C:\Users\vagrant\Downloads\yubikey-manager-qt-%VERSION%-win.zip
 
-signtool sign /fd SHA256 /t http://timestamp.verisign.com/scripts/timstamp.dll "%RELEASE_DIR%"\yubikey-manager-qt.exe
+signtool sign /fd SHA256 /t http://timestamp.verisign.com/scripts/timstamp.dll "%RELEASE_DIR%"\ykman-gui.exe
 makensis -D"VERSION=%VERSION%" resources\win\win-installer.nsi
 signtool sign /fd SHA256 /t http://timestamp.verisign.com/scripts/timstamp.dll "yubikey-manager-qt-%VERSION%-win.exe"
 gpg --detach-sign "yubikey-manager-qt-%VERSION%-win.exe"
