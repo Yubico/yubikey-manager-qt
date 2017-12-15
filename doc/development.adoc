@@ -94,7 +94,9 @@ Then:
     alice@work $ cd yubikey-manager-qt/vagrant/ppa
     alice@work $ vagrant up
     alice@work $ vagrant ssh
+    ubuntu@ubuntu-xenial $ gpg --recv-keys ABCDEF78
     ubuntu@ubuntu-xenial $ gpg2 --recv-keys ABCDEF78
     ubuntu@ubuntu-xenial $ gpg2 --card-status
     ubuntu@ubuntu-xenial $ cd yubikey-manager-qt
+    ubuntu@ubuntu-xenial $ python3 compute-version.py yubikey-manager-qt- > VERSION
     ubuntu@ubuntu-xenial $ ~/scripts/make-ppa -k ABCDEF78 -p gpg2
