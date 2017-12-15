@@ -1,4 +1,4 @@
-yubikey-manager-qt (0.3.0~ppa1) xenial; urgency=low
+yubikey-manager-qt (0.4.0) xenial; urgency=low
 
   * Build for ppa
 
