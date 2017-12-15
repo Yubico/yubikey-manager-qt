@@ -132,8 +132,8 @@ Python {
         do_call('yubikey.controller.program_oath_hotp', [slot, key, digits], cb)
     }
 
-    function change_piv_pin(old_pin, new_pin, cb) {
-        do_call('yubikey.controller.change_piv_pin', [old_pin, new_pin], cb)
+    function piv_change_pin(old_pin, new_pin, cb) {
+        do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin], cb)
     }
 
 }

@@ -42,7 +42,7 @@ DefaultDialog {
         codeName: 'PIN'
 
         onCodeChanged: {
-            device.change_piv_pin(currentCode, newCode, function(result) {
+            device.piv_change_pin(currentCode, newCode, function(result) {
                 var success = result[0];
                 var retries = result[1];
                 if (success) {
