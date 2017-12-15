@@ -170,11 +170,16 @@ class Controller(object):
         if self._piv_controller:
             try:
                 self._piv_controller.change_pin(old_pin, new_pin)
-                return True
-            except:
-                return False
+                logger.debug('PIN change successful!')
+                return (True, None)
+            except Exception as e:
+                retries = self._piv_controller.get_pin_tries()
+                logger.debug('PIN change failed. %s retries left.',
+                             retries, exc_info=e)
+                return (False, retries)
         else:
-            return False
+            logger.error('PIV controller not available.')
+            return (False, None)
 
 
 controller = Controller()
