@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import io.thp.pyotherside 1.4
 
+
 // @disable-check M300
 Python {
     id: py
@@ -10,60 +11,53 @@ Python {
     property string name
     property string version
     property string serial
-    property var features: []
     property var connections: []
+    property var capabilities: []
     property var enabled: []
-    property bool ready: false
+    property bool yubikeyReady: false
+    property bool loggingReady: false
+    readonly property bool ready: yubikeyReady && loggingReady
     property var queue: []
 
+    signal enableLogging(string log_level)
+
     Component.onCompleted: {
-        importModule('site', function() {
-            call('site.addsitedir', [appDir + '/pymodules'], function() {
+        importModule('site', function () {
+            call('site.addsitedir', [appDir + '/pymodules'], function () {
                 addImportPath(urlPrefix + '/py')
                 importModule('yubikey', function () {
-                    ready = true
-                    do_call('yubikey.controller.get_features', [], function (res) {
-                        features = res
-                        for(var i in queue) {
-                            do_call(queue[i][0], queue[i][1], queue[i][2])
-                        }
-                        queue = []
-                    })
+                    yubikeyReady = true
+                })
+                importModule('logging_setup', function() {
+                    loggingReady = true
                 })
             })
         })
+    }
+
+    onEnableLogging: {
+        do_call('logging_setup.setup', [log_level || 'DEBUG'])
+    }
+
+    onReadyChanged: {
+        if (ready) {
+            for (var i in queue) {
+                do_call(queue[i][0], queue[i][1], queue[i][2])
+            }
+            queue = []
+        }
     }
 
     function do_call(func, args, cb) {
         if (!ready) {
             queue.push([func, args, cb])
         } else {
-            call(func, args, function(json) {
+            call(func, args, function (json) {
                 if (cb) {
                     cb(json ? JSON.parse(json) : undefined)
                 }
             })
         }
-    }
-
-    function getSortedFeatures() {
-        var sortedFeatures = []
-        if (features.indexOf('OTP') != -1) {
-         sortedFeatures.push('OTP');
-        }
-        if (features.indexOf('PIV') != -1) {
-         sortedFeatures.push('PIV');
-        }
-        if (features.indexOf('OATH') != -1) {
-         sortedFeatures.push('OATH');
-        }
-        if (features.indexOf('OPGP') != -1) {
-         sortedFeatures.push('OPGP');
-        }
-        if (features.indexOf('U2F') != -1) {
-         sortedFeatures.push('U2F');
-        }
-        return sortedFeatures;
     }
 
     function refresh() {
@@ -75,6 +69,7 @@ Python {
                     name = dev ? dev.name : ''
                     version = dev ? dev.version : ''
                     serial = dev ? dev.serial : ''
+                    capabilities = dev ? dev.capabilities : []
                     enabled = dev ? dev.enabled : []
                     connections = dev ? dev.connections : []
                 })
@@ -82,7 +77,6 @@ Python {
                 hasDevice = false
             }
         })
-
     }
 
     function set_mode(connections, cb) {
@@ -118,20 +112,21 @@ Python {
     }
 
     function program_otp(slot, public_id, private_id, key, cb) {
-        do_call('yubikey.controller.program_otp', [slot, public_id, private_id, key], cb)
+        do_call('yubikey.controller.program_otp',
+                [slot, public_id, private_id, key], cb)
     }
 
     function program_challenge_response(slot, key, touch, cb) {
-        do_call('yubikey.controller.program_challenge_response', [slot, key, touch], cb)
+        do_call('yubikey.controller.program_challenge_response',
+                [slot, key, touch], cb)
     }
 
     function program_static_password(slot, password, cb) {
-        do_call('yubikey.controller.program_static_password', [slot, password], cb)
+        do_call('yubikey.controller.program_static_password',
+                [slot, password], cb)
     }
 
     function program_oath_hotp(slot, key, digits, cb) {
         do_call('yubikey.controller.program_oath_hotp', [slot, key, digits], cb)
     }
 }
-
-

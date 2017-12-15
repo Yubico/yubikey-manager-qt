@@ -4,6 +4,7 @@
 
 import os
 import json
+import logging
 import types
 import struct
 from base64 import b32decode
@@ -16,7 +17,7 @@ from ykman.util import (
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 
-NON_FEATURE_CAPABILITIES = [CAPABILITY.CCID, CAPABILITY.NFC]
+logger = logging.getLogger(__name__)
 
 
 def as_json(f):
@@ -36,10 +37,6 @@ class Controller(object):
                 func = getattr(self, f)
                 if isinstance(func, types.MethodType):
                     setattr(self, f, as_json(func))
-
-    def get_features(self):
-        return [
-            c.name for c in CAPABILITY if c not in NON_FEATURE_CAPABILITIES]
 
     def count_devices(self):
         return len(list(get_descriptors()))
@@ -61,6 +58,8 @@ class Controller(object):
                 'version': '.'.join(str(x) for x in dev.version),
                 'serial': dev.serial or '',
                 'enabled': [c.name for c in CAPABILITY if c & dev.enabled],
+                'capabilities': [
+                    c.name for c in CAPABILITY if c & dev.capabilities],
                 'connections': [
                     t.name for t in TRANSPORT if t & dev.capabilities]
             }
@@ -69,11 +68,16 @@ class Controller(object):
         return self._dev_info
 
     def set_mode(self, connections):
+        logger.debug('connections: %s', connections)
+
         dev = self._descriptor.open_device()
+        logger.debug('dev: %s', dev)
+
         try:
             transports = sum([TRANSPORT[c] for c in connections])
             dev.mode = Mode(transports & TRANSPORT.usb_transports())
         except ModeSwitchError as e:
+            logger.error('Failed to set modes', exc_info=e)
             return str(e)
 
     def slots_status(self):

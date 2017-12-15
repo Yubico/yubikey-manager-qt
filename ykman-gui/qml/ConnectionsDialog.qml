@@ -30,7 +30,7 @@ DefaultDialog {
         }
 
         Item {
-            width: minimumWidth - margins * 2
+            Layout.fillWidth: true
             implicitHeight: infoText.implicitHeight
 
             Text {

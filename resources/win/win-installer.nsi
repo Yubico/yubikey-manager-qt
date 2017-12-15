@@ -27,7 +27,7 @@ Var STARTMENU_FOLDER
   
   ; Call makensis again, defining INNER.  This writes an installer for us which, when
   ; it is invoked, will just write the uninstaller to some location, and then exit.
-  !system "$\"${NSISDIR}\makensis$\" /DINNER win-installer.nsi" = 0
+  !system "$\"${NSISDIR}\makensis$\" /DVERSION=${VERSION} /DINNER win-installer.nsi" = 0
  
   ; Run temp installer. Since it calls quit the return value isn't zero.
   !system "$%TEMP%\tempinstaller.exe" = 2

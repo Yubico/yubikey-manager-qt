@@ -1,3 +1,12 @@
+* Version 0.4.0
+ ** Update CLI version to ykman 0.5.0
+ ** Now requires ykman version >= 0.5.0
+ ** Features:
+  *** Now differentiates between disabled and unavailable features
+  *** Added `--log-level` CLI option with same function as `--log-level` option to `ykman` version 0.5.0; see `ykman --help` for usage
+ ** Bugfixes:
+  *** Made main view and Configure Connections dialog respond to resizing window
+
 * Version 0.3.2 (released 2017-10-26)
  ** Update CLI version to ykman 0.4.6
  ** Enable NSSupportsAutomaticGraphicsSwitching in OS X

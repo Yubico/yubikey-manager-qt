@@ -4,9 +4,10 @@ import QtQuick.Layouts 1.1
 
 Item {
     property var device
-    property int margin: width / 30
+    property int margin: Layout.minimumWidth / 30
 
-    width: 370
+    Layout.minimumWidth: 370
+    Layout.minimumHeight: 360
     height: deviceBox.implicitHeight + featureBox.implicitHeight + connectionsBox.implicitHeight + margin * 4
 
     ColumnLayout {
@@ -50,22 +51,29 @@ Item {
             GridLayout {
                 anchors.fill: parent
                 flow: GridLayout.TopToBottom
-                rows: device.getSortedFeatures().length
+                rows: features.length
+
+                property var features: [
+                    { id: 'OTP', label: qsTr('YubiKey Slots') },
+                    { id: 'PIV', label: qsTr('PIV') },
+                    { id: 'OATH', label: qsTr('OATH') },
+                    { id: 'OPGP', label: qsTr('OpenPGP') },
+                    { id: 'U2F', label: qsTr('U2F') },
+                ]
 
                 Repeater {
-                    model: device.getSortedFeatures()
-
-                    Label {
-                        text: getFeatureTitle(modelData) + ':'
-                    }
+                    model: parent.features
+                    Label { text: modelData.label + ':' }
                 }
-
                 Repeater {
-                    model: device.getSortedFeatures()
+                    model: parent.features
                     Label {
-                        text: device.enabled.indexOf(
-                                  modelData) >= 0 ? qsTr("Enabled") : qsTr(
-                                                        "Disabled")
+                        text: (isCapable(modelData.id)
+                            ? isEnabled(modelData.id)
+                                ? qsTr("Enabled")
+                                : qsTr("Disabled")
+                            : qsTr("Not available")
+                        )
                     }
                 }
 
@@ -129,6 +137,14 @@ Item {
         }
     }
 
+    function isEnabled(feature) {
+        return device.enabled.indexOf(feature) !== -1
+    }
+
+    function isCapable(feature) {
+        return device.capabilities.indexOf(feature) !== -1
+    }
+
     function readable_list(args) {
         if (args.length === 0) {
             return ''
@@ -139,13 +155,5 @@ Item {
             var last = args.pop()
             return args.join(', ') + qsTr(' and ') + last
         }
-    }
-
-    function getFeatureTitle(model) {
-        if (model === 'OPGP')
-            return qsTr('OpenPGP')
-        if (model === 'OTP')
-            return qsTr('YubiKey Slots')
-        return model
     }
 }

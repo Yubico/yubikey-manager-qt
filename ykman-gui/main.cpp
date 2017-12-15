@@ -67,6 +67,10 @@ int main(int argc, char *argv[])
 
     engine.load(QUrl(url_prefix + main_qml));
 
+    if (argc > 2 && strcmp(argv[1], "--log-level") == 0) {
+        QMetaObject::invokeMethod(engine.rootObjects().first(), "enableLogging", Q_ARG(QVariant, argv[2]));
+    }
+
     #ifndef Q_OS_DARWIN
     // Wake up the root window on a message from new instance.
     for (auto object : engine.rootObjects()) {

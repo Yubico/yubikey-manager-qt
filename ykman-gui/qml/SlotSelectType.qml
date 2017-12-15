@@ -62,7 +62,7 @@ ColumnLayout {
 
     RowLayout {
         Item {
-            width: minimumWidth - margins * 2
+            Layout.fillWidth: true
             implicitHeight: desc.implicitHeight
             Text {
                 id: desc

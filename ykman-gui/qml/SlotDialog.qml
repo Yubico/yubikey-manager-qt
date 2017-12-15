@@ -19,9 +19,7 @@ DefaultDialog {
     onGoToOverview: loader.source = "SlotOverview.qml"
 
     onVisibleChanged: {
-        if (visible) {
-            resize()
-        } else {
+        if (!visible) {
             loader.source = "SlotOverview.qml"
         }
     }
@@ -29,7 +27,7 @@ DefaultDialog {
     Loader {
         id: loader
         source: "SlotOverview.qml"
-        Layout.fillWidth: true
+        anchors.fill: parent
         onLoaded: {
             deviceBinder.target = loader.item
             selectedSlotBinder.target = loader.item
