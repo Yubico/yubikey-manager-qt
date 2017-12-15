@@ -33,11 +33,18 @@ DefaultDialog {
         codeName: 'PIN'
 
         onCodeChanged: {
-            device.piv_change_pin(currentCode, newCode, function(success) {
-                if (success) {
+            device.piv_change_pin(currentCode, newCode, function(result) {
+                if (result.success) {
                     showMessage(qsTr('Success'), qsTr('PIN was successfully changed.'))
                 } else {
-                    showError(qsTr('Error'), qsTr('PIN change failed.'))
+                    if (result.tries_left === null) {
+                        showError(
+                            qsTr('Error'),
+                            qsTr('PIN change failed. This is probably a bug, please report it to the developers.')
+                        )
+                    } else {
+                        showError(qsTr('Error'), qsTr('PIN change failed. Tries left: %1').arg(result.tries_left))
+                    }
                 }
             })
         }
