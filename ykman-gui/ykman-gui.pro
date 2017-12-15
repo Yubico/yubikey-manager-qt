@@ -11,7 +11,7 @@ win32|win64 {
   PYTHON3_BINARY_NAME=python
 }
 
-VERSION = $$system($$PYTHON3_BINARY_NAME ../compute-version.py -f VERSION yubikey-manager-qt-)
+VERSION = $$system($$PYTHON3_BINARY_NAME ../compute-version.py -f ../VERSION yubikey-manager-qt-)
 
 message(Version of this build: $$VERSION)
 
