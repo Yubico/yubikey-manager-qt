@@ -1,3 +1,10 @@
+yubikey-manager-qt (0.4.0-1) xenial; urgency=low
+
+  * Fix up yubikey-manager dependency configuration
+
+ -- Emil Lundberg <emil@yubico.com>  Mon, 18 Dec 2017 16:10:12 +0100
+
+
 yubikey-manager-qt (0.4.0) xenial; urgency=low
 
   * Build for ppa
