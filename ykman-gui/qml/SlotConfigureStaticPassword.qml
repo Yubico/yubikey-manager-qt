@@ -20,13 +20,12 @@ ColumnLayout {
     signal goToStaticPassword
     signal goToOathHotp
 
-    Text {
+    Label {
         text: qsTr("Configure static password for ") + SlotUtils.slotNameCapitalized(selectedSlot)
         font.bold: true
     }
 
-    Text {
-        textFormat: Text.StyledText
+    Label {
         text: qsTr("When triggered, the YubiKey will output a fixed password.")
     }
     GroupBox {
@@ -52,7 +51,7 @@ ColumnLayout {
             Item {
                 width: minimumWidth - margins * 2
                 implicitHeight: desc.implicitHeight
-                Text {
+                Label {
                     id: desc
                     width: parent.width
                     wrapMode: Text.Wrap

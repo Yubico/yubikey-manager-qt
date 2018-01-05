@@ -21,12 +21,12 @@ ColumnLayout {
     signal goToOathHotp
     signal confirmed
 
-    Text {
+    Label {
         text: qsTr("Configure challenge-response for ") + SlotUtils.slotNameCapitalized(selectedSlot)
         font.bold: true
     }
 
-    Text {
+    Label {
         text: qsTr("When queried, the YubiKey will respond to a challenge.")
     }
 
@@ -52,7 +52,7 @@ ColumnLayout {
 
             }
             RowLayout {
-                Text {
+                Label {
                     text: qsTr("The Secret key contains an even number of up to 40 hexadecimal characters.")
                 }
             }
