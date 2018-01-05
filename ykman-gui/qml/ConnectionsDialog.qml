@@ -52,7 +52,6 @@ DefaultDialog {
                     Layout.fillWidth: true
                     text: modelData
                     checked: device.enabled.indexOf(modelData) >= 0
-                    onCheckedChanged: button_confirm.enabled = check_acceptable()
                 }
             }
         }
@@ -60,17 +59,18 @@ DefaultDialog {
         RowLayout {
             Layout.alignment: Qt.AlignRight
             Button {
-                id: button_confirm
-                text: qsTr("Confirm")
-                onClicked: {
-                    accepted()
-                }
-            }
-            Button {
                 text: qsTr("Cancel")
                 onClicked: {
                     close()
                     rejected()
+                }
+            }
+            Button {
+                id: button_confirm
+                enabled: check_acceptable()
+                text: qsTr("Save connections")
+                onClicked: {
+                    accepted()
                 }
             }
         }

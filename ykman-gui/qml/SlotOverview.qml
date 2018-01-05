@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
+import "slotutils.js" as SlotUtils
 
 ColumnLayout {
 
@@ -20,85 +21,94 @@ ColumnLayout {
 
     onDeviceChanged: update()
 
-    Text {
+    Label {
         text: qsTr("Configure YubiKey Slots")
         font.bold: true
     }
 
+
     GridLayout {
         Layout.fillWidth: true
-        columns: 3
+        columns: 2
 
-        Text {
-            id: shortPressLabel
+        RadioButton {
+            id: shortPress
+            exclusiveGroup: slotRadioBtns
+            checked: selectedSlot == 1
             text: qsTr("Short Press (Slot 1):")
+            property int slotNumber: 1
         }
 
-        Text {
+        Label {
             anchors {
                 margins: 10
-                left: shortPressLabel.right
+                left: shortPress.right
             }
             text: slotsEnabled[0] ? qsTr("Configured") : qsTr("Empty")
         }
 
-        Button {
-            anchors {
-                right: parent.right
-            }
-            text: qsTr("Configure")
-            onClicked: configureSlot(1)
-        }
-
-        Text {
-            id: longPressLabel
+        RadioButton {
+            id: longPress
+            exclusiveGroup: slotRadioBtns
+            checked: selectedSlot == 2
             text: qsTr("Long Press (Slot 2):")
+            property int slotNumber: 2
         }
 
-        Text {
+        Label {
             anchors {
                 margins: 10
-                left: longPressLabel.right
+                left: longPress.right
             }
             text: slotsEnabled[1] ? qsTr("Configured") : qsTr("Empty")
         }
+    }
 
-        Button {
-            anchors {
-                right: parent.right
-            }
-            text: qsTr("Configure")
-            onClicked: configureSlot(2)
-        }
-
-        Button {
-            text: qsTr("Swap credentials between slots")
-            Layout.columnSpan: 2
-            onClicked: confirmSwap.open()
-        }
+    ExclusiveGroup {
+        id: slotRadioBtns
     }
 
     RowLayout {
         Layout.alignment: Qt.AlignRight
 
         Button {
-            text: qsTr("Close")
+            text: qsTr("Cancel")
             onClicked: close()
+        }
+        Button {
+            text: qsTr("Delete configuration")
+            enabled: slotRadioBtns.current !== null
+                     && slotsEnabled[slotRadioBtns.current.slotNumber - 1]
+            onClicked: {
+                confirmErase.slotNumber = slotRadioBtns.current.slotNumber
+                confirmErase.open()
+            }
+        }
+        Button {
+            text: qsTr("New configuration")
+            enabled: slotRadioBtns.current !== null
+            onClicked: configureSlot(slotRadioBtns.current.slotNumber)
         }
     }
 
     MessageDialog {
-        id: confirmSwap
+
+        property int slotNumber
+
+        id: confirmErase
         icon: StandardIcon.Warning
-        title: qsTr("Swap credentials between slots")
-        text: qsTr("Do you want to swap the credentials between the short press and the long press slot?")
+        title: qsTr("Erase YubiKey ") + SlotUtils.slotName(
+                   slotNumber) + qsTr("slot")
+        text: qsTr("Do you want to erase the content of the ") + SlotUtils.slotName(
+                  slotNumber) + qsTr(
+                  " slot? This permanently deletes the contents of this slot.")
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
-            device.swap_slots(function (error) {
+            device.erase_slot(slotNumber, function (error) {
                 if (!error) {
                     close()
                     updateStatus()
-                    confirmSwapped.open()
+                    confirmErased.open()
                 } else {
                     if (error === 3) {
                         writeError.open()
@@ -110,13 +120,10 @@ ColumnLayout {
     }
 
     MessageDialog {
-        id: confirmSwapped
+        id: confirmErased
         icon: StandardIcon.Information
-        title: qsTr("Slot credentials swapped")
-        text: qsTr("The credentials in the short press and the long press slot has now been swapped.")
+        title: qsTr("The credentials have been erased")
+        text: qsTr("The credentials in the slot have now been erased.")
         standardButtons: StandardButton.Ok
-        onAccepted: {
-            goToOverview()
-        }
     }
 }

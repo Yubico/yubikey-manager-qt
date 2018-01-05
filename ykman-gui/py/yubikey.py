@@ -16,6 +16,7 @@ from ykman.util import (
     generate_static_pw)
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
+from ykman.opgp import OpgpController, KEY_SLOT
 
 logger = logging.getLogger(__name__)
 
@@ -146,6 +147,53 @@ class Controller(object):
             return str(e)
         except YkpersError as e:
             return e.errno
+
+    def openpgp_reset(self):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.CCID)
+            controller = OpgpController(dev.driver)
+            controller.reset()
+        except Exception as e:
+            return str(e)
+
+    def openpgp_get_touch(self):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.CCID)
+            controller = OpgpController(dev.driver)
+            auth = controller.get_touch(KEY_SLOT.AUTHENTICATE)
+            enc = controller.get_touch(KEY_SLOT.ENCRYPT)
+            sig = controller.get_touch(KEY_SLOT.SIGN)
+            return [auth, enc, sig]
+        except Exception as e:
+            return str(e)
+
+    def openpgp_set_touch(self, admin_pin, auth, enc, sig):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.CCID)
+            controller = OpgpController(dev.driver)
+            if auth >= 0:
+                controller.set_touch(
+                    KEY_SLOT.AUTHENTICATE, int(auth), admin_pin.encode())
+            if enc >= 0:
+                controller.set_touch(
+                    KEY_SLOT.ENCRYPT, int(enc), admin_pin.encode())
+            if sig >= 0:
+                controller.set_touch(
+                    KEY_SLOT.SIGN, int(sig), admin_pin.encode())
+        except Exception as e:
+            return str(e)
+
+    def openpgp_set_pin_retries(
+            self, admin_pin, pin_retries, reset_code_retries,
+            admin_pin_retries):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.CCID)
+            controller = OpgpController(dev.driver)
+            controller.set_pin_retries(
+                int(pin_retries), int(reset_code_retries),
+                int(admin_pin_retries), admin_pin.encode())
+        except Exception as e:
+            return str(e)
 
 
 controller = Controller()

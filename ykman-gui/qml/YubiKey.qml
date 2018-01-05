@@ -129,4 +129,20 @@ Python {
     function program_oath_hotp(slot, key, digits, cb) {
         do_call('yubikey.controller.program_oath_hotp', [slot, key, digits], cb)
     }
+
+    function openpgp_reset(cb) {
+        do_call('yubikey.controller.openpgp_reset', [], cb)
+    }
+
+    function openpgp_get_touch(cb) {
+        do_call('yubikey.controller.openpgp_get_touch', [], cb)
+    }
+
+    function openpgp_set_touch(adminPin, authKeyPolicy, encKeyPolicy, sigKeyPolicy, cb) {
+        do_call('yubikey.controller.openpgp_set_touch', [adminPin, authKeyPolicy, encKeyPolicy, sigKeyPolicy ], cb)
+    }
+
+    function openpgp_set_pin_retries(adminPin, pinRetries, resetCodeRetries, adminPinRetries, cb) {
+        do_call('yubikey.controller.openpgp_set_pin_retries', [adminPin, pinRetries, resetCodeRetries, adminPinRetries], cb)
+    }
 }

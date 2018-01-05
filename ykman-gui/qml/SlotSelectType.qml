@@ -13,7 +13,6 @@ ColumnLayout {
     signal updateStatus
     signal goToOverview
     signal goToSelectType
-    signal goToSlotStatus
     signal goToConfigureOTP
     signal goToChallengeResponse
     signal goToStaticPassword
@@ -77,7 +76,7 @@ ColumnLayout {
         Layout.alignment: Qt.AlignRight
         Button {
             text: qsTr("Back")
-            onClicked: goToSlotStatus()
+            onClicked: goToOverview()
         }
         Button {
             text: qsTr("Next")
