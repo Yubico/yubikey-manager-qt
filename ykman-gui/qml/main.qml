@@ -102,6 +102,12 @@ ApplicationWindow {
         id: openPgpTouchPolicy
         device: yk
     }
+
+    OpenPgpShowStatus {
+        id: openPgpStatus
+        device: yk
+    }
+
     MessageDialog {
         id: openPgpResetConfirm
         icon: StandardIcon.Information

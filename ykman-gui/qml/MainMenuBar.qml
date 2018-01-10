@@ -86,6 +86,10 @@ MenuBar {
             enabled: enabledFeatures.indexOf('OPGP') !== -1
             visible: supportForOpenPGP
             MenuItem {
+                text: qsTr("Show Status")
+                onTriggered: openPgpStatus.load()
+            }
+            MenuItem {
                 text: qsTr("Change PIN Retries...")
                 onTriggered: openPgpPinRetries.show()
             }

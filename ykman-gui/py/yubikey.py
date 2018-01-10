@@ -195,5 +195,21 @@ class Controller(object):
         except Exception as e:
             return str(e)
 
+    def openpgp_get_version(self):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.CCID)
+            controller = OpgpController(dev.driver)
+            return controller.version
+        except Exception as e:
+            return str(e)
+
+    def openpgp_get_remaining_pin_retries(self):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.CCID)
+            controller = OpgpController(dev.driver)
+            return controller.get_remaining_pin_tries()
+        except Exception as e:
+            return str(e)
+
 
 controller = Controller()

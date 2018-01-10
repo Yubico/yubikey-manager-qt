@@ -145,4 +145,12 @@ Python {
     function openpgp_set_pin_retries(adminPin, pinRetries, resetCodeRetries, adminPinRetries, cb) {
         do_call('yubikey.controller.openpgp_set_pin_retries', [adminPin, pinRetries, resetCodeRetries, adminPinRetries], cb)
     }
+
+    function openpgp_get_remaining_pin_retries(cb) {
+        do_call('yubikey.controller.openpgp_get_remaining_pin_retries', [], cb)
+    }
+
+    function openpgp_get_version(cb) {
+        do_call('yubikey.controller.openpgp_get_version', [], cb)
+    }
 }
