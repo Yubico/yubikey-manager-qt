@@ -6,18 +6,19 @@ DefaultDialog {
     title: qsTr("Status for OpenPGP")
     property var device
     property var openPgpVersion
-    property var pinRetries
-    property var resetCodeRetries
-    property var adminPinRetries
+    property int pinRetries
+    property int resetCodeRetries
+    property int adminPinRetries
 
     Label {
         text: qsTr("OpenPGP")
         font.bold: true
     }
+
     Label {
-        text: qsTr("Version: ") + (openPgpVersion ? openPgpVersion.join(
-                                                        '.') : '')
+        text: qsTr("Version: ") + (openPgpVersion ? openPgpVersion.join('.') : '')
     }
+
     Label {
         text: qsTr("PIN retries remaining: ") + pinRetries
     }
