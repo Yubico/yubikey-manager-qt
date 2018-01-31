@@ -158,4 +158,7 @@ ApplicationWindow {
     function enableLogging(logLevel) {
         yk.enableLogging(logLevel)
     }
+    function disableLogging() {
+        yk.disableLogging()
+    }
 }

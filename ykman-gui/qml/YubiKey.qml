@@ -15,17 +15,20 @@ Python {
     property var capabilities: []
     property var enabled: []
     property bool yubikeyReady: false
-    property bool loggingReady: false
-    readonly property bool ready: yubikeyReady && loggingReady
+    property bool loggingModuleLoaded: false
+    property bool loggingConfigured: false
     property var queue: []
 
     signal enableLogging(string log_level)
+    signal disableLogging()
 
     Component.onCompleted: {
         importModule('ykman.logging_setup', function () {
-            loggingReady = true
+            loggingModuleLoaded = true
         })
+    }
 
+    function loadYubikeyModule() {
         importModule('site', function () {
             call('site.addsitedir', [appDir + '/pymodules'], function () {
                 addImportPath(urlPrefix + '/py')
@@ -37,12 +40,32 @@ Python {
     }
 
     onEnableLogging: {
-        do_call('ykman.logging_setup.setup', [log_level || 'DEBUG'])
+        do_call('ykman.logging_setup.setup', [log_level || 'DEBUG'], function() {
+            loggingConfigured = true
+        })
     }
 
-    onReadyChanged: {
-        if (ready) {
-            runQueue()
+    onDisableLogging: {
+        loggingConfigured = true
+    }
+
+    onYubikeyReadyChanged: {
+        runQueue()
+    }
+
+    onLoggingModuleLoadedChanged: {
+        runQueue()
+    }
+
+    onLoggingConfiguredChanged: {
+        loadYubikeyModule()
+    }
+
+    function isModuleLoaded(funcName) {
+        if (funcName.startsWith("ykman.logging_setup.")) {
+            return loggingModuleLoaded
+        } else {
+            return yubikeyReady
         }
     }
 
@@ -55,7 +78,7 @@ Python {
     }
 
     function do_call(func, args, cb) {
-        if (!ready) {
+        if (!isModuleLoaded(func)) {
             queue.push([func, args, cb])
         } else {
             call(func, args, function (json) {
