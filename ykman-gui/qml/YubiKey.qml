@@ -19,7 +19,7 @@ Python {
     property bool loggingConfigured: false
     property var queue: []
 
-    signal enableLogging(string log_level)
+    signal enableLogging(string log_level, string log_file)
     signal disableLogging()
 
     Component.onCompleted: {
@@ -40,7 +40,7 @@ Python {
     }
 
     onEnableLogging: {
-        do_call('ykman.logging_setup.setup', [log_level || 'DEBUG'], function() {
+        do_call('ykman.logging_setup.setup', [log_level || 'DEBUG', log_file || undefined], function() {
             loggingConfigured = true
         })
     }
