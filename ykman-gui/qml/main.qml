@@ -156,7 +156,7 @@ ApplicationWindow {
     }
 
     function enableLogging(logLevel) {
-        yk.enableLogging(logLevel, undefined)
+        yk.enableLogging(logLevel, null)
     }
     function enableLoggingToFile(logLevel, logFile) {
         yk.enableLogging(logLevel, logFile)
