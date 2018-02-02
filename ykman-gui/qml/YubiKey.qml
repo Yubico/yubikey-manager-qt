@@ -26,22 +26,20 @@ Python {
         importModule('site', function () {
             call('site.addsitedir', [appDir + '/pymodules'], function () {
                 addImportPath(urlPrefix + '/py')
-
-                importModule('logging_setup', function () {
-                    loggingModuleLoaded = true
-                })
+                loadLoggingModule()
             })
         })
     }
 
+    function loadLoggingModule() {
+        importModule('logging_setup', function () {
+            loggingModuleLoaded = true
+        })
+    }
+
     function loadYubikeyModule() {
-        importModule('site', function () {
-            call('site.addsitedir', [appDir + '/pymodules'], function () {
-                addImportPath(urlPrefix + '/py')
-                importModule('yubikey', function () {
-                    yubikeyReady = true
-                })
-            })
+        importModule('yubikey', function () {
+            yubikeyReady = true
         })
     }
 
