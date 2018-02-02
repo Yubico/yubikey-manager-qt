@@ -36,34 +36,24 @@ Python {
             loggingModuleLoaded = true
         })
     }
-
-    function loadYubikeyModule() {
-        importModule('yubikey', function () {
-            yubikeyReady = true
-        })
-    }
+    onLoggingModuleLoadedChanged: runQueue()
 
     onEnableLogging: {
         do_call('logging_setup.setup', [log_level || 'DEBUG', log_file || null], function() {
             loggingConfigured = true
         })
     }
-
     onDisableLogging: {
         loggingConfigured = true
     }
+    onLoggingConfiguredChanged: loadYubikeyModule()
 
-    onYubikeyReadyChanged: {
-        runQueue()
+    function loadYubikeyModule() {
+        importModule('yubikey', function () {
+            yubikeyReady = true
+        })
     }
-
-    onLoggingModuleLoadedChanged: {
-        runQueue()
-    }
-
-    onLoggingConfiguredChanged: {
-        loadYubikeyModule()
-    }
+    onYubikeyReadyChanged: runQueue()
 
     function isModuleLoaded(funcName) {
         if (funcName.startsWith("logging_setup.")) {
