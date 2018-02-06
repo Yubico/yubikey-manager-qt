@@ -61,6 +61,7 @@ MenuBar {
             }
             MenuItem {
                 text: qsTr("Change PIN...")
+                onTriggered: pivManager.startChangePin()
             }
             MenuItem {
                 text: qsTr("Change PUK...")

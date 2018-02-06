@@ -32,13 +32,13 @@ DefaultDialog {
 
         Button {
             text: qsTr("Change PIN")
-            onClicked: changePin.open()
+            onClicked: startChangePin()
         }
 
     }
 
     ChangePinDialog {
-        id: changePin
+        id: changePivPin
         codeName: 'PIN'
 
         onCodeChanged: {
@@ -78,7 +78,7 @@ DefaultDialog {
         icon: StandardIcon.Critical
         standardButtons: StandardButton.Ok
 
-        onAccepted: changePin.open()
+        onAccepted: startChangePin()
     }
 
     MessageDialog {
@@ -89,6 +89,10 @@ DefaultDialog {
 
     function start() {
         show()
+    }
+
+    function startChangePin() {
+        changePivPin.open()
     }
 
 }
