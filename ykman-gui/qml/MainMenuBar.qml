@@ -55,7 +55,7 @@ MenuBar {
             enabled: enabledFeatures.indexOf('PIV') !== -1
             MenuItem {
                 text: qsTr("Certificates...")
-                onTriggered: pivDialog.start()
+                onTriggered: pivManager.start()
             }
             MenuSeparator {
             }

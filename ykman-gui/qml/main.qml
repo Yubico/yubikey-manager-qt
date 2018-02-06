@@ -79,7 +79,7 @@ ApplicationWindow {
     }
 
     PivManager {
-        id: pivDialog
+        id: pivManager
         device: yk
     }
 
