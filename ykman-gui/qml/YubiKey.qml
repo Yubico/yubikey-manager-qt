@@ -15,41 +15,64 @@ Python {
     property var capabilities: []
     property var enabled: []
     property bool yubikeyReady: false
-    property bool loggingReady: false
-    readonly property bool ready: yubikeyReady && loggingReady
+    property bool loggingModuleLoaded: false
+    property bool loggingConfigured: false
     property var queue: []
 
-    signal enableLogging(string log_level)
+    signal enableLogging(string log_level, string log_file)
+    signal disableLogging()
 
     Component.onCompleted: {
         importModule('site', function () {
             call('site.addsitedir', [appDir + '/pymodules'], function () {
                 addImportPath(urlPrefix + '/py')
-                importModule('yubikey', function () {
-                    yubikeyReady = true
-                })
-                importModule('logging_setup', function() {
-                    loggingReady = true
-                })
+                loadLoggingModule()
             })
         })
     }
 
+    function loadLoggingModule() {
+        importModule('logging_setup', function () {
+            loggingModuleLoaded = true
+        })
+    }
+    onLoggingModuleLoadedChanged: runQueue()
+
     onEnableLogging: {
-        do_call('logging_setup.setup', [log_level || 'DEBUG'])
+        do_call('logging_setup.setup', [log_level || 'DEBUG', log_file || null], function() {
+            loggingConfigured = true
+        })
+    }
+    onDisableLogging: {
+        loggingConfigured = true
+    }
+    onLoggingConfiguredChanged: loadYubikeyModule()
+
+    function loadYubikeyModule() {
+        importModule('yubikey', function () {
+            yubikeyReady = true
+        })
+    }
+    onYubikeyReadyChanged: runQueue()
+
+    function isModuleLoaded(funcName) {
+        if (funcName.startsWith("logging_setup.")) {
+            return loggingModuleLoaded
+        } else {
+            return yubikeyReady
+        }
     }
 
-    onReadyChanged: {
-        if (ready) {
-            for (var i in queue) {
-                do_call(queue[i][0], queue[i][1], queue[i][2])
-            }
-            queue = []
+    function runQueue() {
+        var oldQueue = queue
+        queue = []
+        for (var i in oldQueue) {
+            do_call(oldQueue[i][0], oldQueue[i][1], oldQueue[i][2])
         }
     }
 
     function do_call(func, args, cb) {
-        if (!ready) {
+        if (!isModuleLoaded(func)) {
             queue.push([func, args, cb])
         } else {
             call(func, args, function (json) {

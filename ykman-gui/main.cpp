@@ -68,7 +68,13 @@ int main(int argc, char *argv[])
     engine.load(QUrl(url_prefix + main_qml));
 
     if (argc > 2 && strcmp(argv[1], "--log-level") == 0) {
-        QMetaObject::invokeMethod(engine.rootObjects().first(), "enableLogging", Q_ARG(QVariant, argv[2]));
+        if (argc > 4 && strcmp(argv[3], "--log-file") == 0) {
+            QMetaObject::invokeMethod(engine.rootObjects().first(), "enableLoggingToFile", Q_ARG(QVariant, argv[2]), Q_ARG(QVariant, argv[4]));
+        } else {
+            QMetaObject::invokeMethod(engine.rootObjects().first(), "enableLogging", Q_ARG(QVariant, argv[2]));
+        }
+    } else {
+        QMetaObject::invokeMethod(engine.rootObjects().first(), "disableLogging");
     }
 
     #ifndef Q_OS_DARWIN
