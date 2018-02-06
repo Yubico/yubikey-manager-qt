@@ -4,12 +4,15 @@ import QtQuick.Controls 1.4
 
 ColumnLayout {
 
+    property var certificates
+    readonly property int numCerts: Object.keys(certificates || {}).length
+
     Label {
-      text: (0 === 0
+      text: (numCerts === 0
           ? qsTr("You have no certificates loaded.")
-          : 0 === 1
+          : numCerts === 1
               ? qsTr("You have 1 certificate loaded.")
-              : qsTr("You have %1 certificates loaded.").arg("0")
+              : qsTr("You have %1 certificates loaded.").arg(numCerts)
       )
     }
 
