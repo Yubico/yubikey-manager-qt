@@ -11,6 +11,7 @@ import ykman.logging_setup
 
 from base64 import b32decode
 from binascii import b2a_hex, a2b_hex, Error
+from cryptography import x509
 
 from ykman.descriptor import get_descriptors
 from ykman.util import (
@@ -262,6 +263,28 @@ class Controller(object):
         else:
             logger.error('PIV controller not available.')
             return {'success': False}
+
+    def piv_list_certificates(self):
+        if self._piv_controller:
+            certs = self._piv_controller.list_certificates()
+            logger.debug('Certificates: %s', certs)
+            certs = {slot: toDict(cert) for slot, cert in certs.items()}
+            logger.debug('Certificates: %s', certs)
+            return certs
+        else:
+            logger.error('PIV controller not available.')
+            return None
+
+
+def toDict(cert):
+    return {
+        'subject': {
+            'commonName': cert.subject.get_attributes_for_oid(x509.NameOID.COMMON_NAME)[0].value,  # noqa: E501
+        },
+        'issuer': {
+            'commonName': cert.issuer.get_attributes_for_oid(x509.NameOID.COMMON_NAME)[0].value,  # noqa: E501
+        },
+    }
 
 
 controller = None

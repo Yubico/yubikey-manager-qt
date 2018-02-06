@@ -9,7 +9,7 @@ DefaultDialog {
     title: qsTr("PIV Manager")
 
     property var device
-    property bool hasDevice: device ? device.hasDevice : false
+    property bool hasDevice: (device && device.hasDevice && device.piv) || false
     minimumWidth: 500
 
     ColumnLayout {
@@ -27,6 +27,7 @@ DefaultDialog {
             Layout.fillWidth: true
 
             PivCertificates {
+                certificates: hasDevice ? device.piv.certificates : {}
             }
         }
 
