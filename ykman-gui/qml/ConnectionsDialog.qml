@@ -24,7 +24,7 @@ DefaultDialog {
 
     ColumnLayout {
         anchors.fill: parent
-        Text {
+        Label {
             text: "Configure enabled connection protocols"
             font.bold: true
         }
@@ -33,9 +33,9 @@ DefaultDialog {
             Layout.fillWidth: true
             implicitHeight: infoText.implicitHeight
 
-            Text {
+            Label {
                 id: infoText
-                text: qsTr("Select the connections you want to enable for your YubiKey. Then click Confirm and remove and re-insert your YubiKey for the settings to take effect.")
+                text: qsTr("Select the connections you want to enable for your YubiKey. After saving you need to remove and re-insert your YubiKey for the settings to take effect.")
                 wrapMode: Text.Wrap
                 width: parent.width
             }
@@ -52,7 +52,6 @@ DefaultDialog {
                     Layout.fillWidth: true
                     text: modelData
                     checked: device.enabled.indexOf(modelData) >= 0
-                    onCheckedChanged: button_confirm.enabled = check_acceptable()
                 }
             }
         }
@@ -60,17 +59,18 @@ DefaultDialog {
         RowLayout {
             Layout.alignment: Qt.AlignRight
             Button {
-                id: button_confirm
-                text: qsTr("Confirm")
-                onClicked: {
-                    accepted()
-                }
-            }
-            Button {
                 text: qsTr("Cancel")
                 onClicked: {
                     close()
                     rejected()
+                }
+            }
+            Button {
+                id: button_confirm
+                enabled: check_acceptable()
+                text: qsTr("Save connections")
+                onClicked: {
+                    accepted()
                 }
             }
         }

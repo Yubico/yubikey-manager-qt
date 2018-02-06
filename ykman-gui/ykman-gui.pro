@@ -11,7 +11,7 @@ win32|win64 {
   PYTHON3_BINARY_NAME=python
 }
 
-VERSION = $$system($$PYTHON3_BINARY_NAME ../compute-version.py -f VERSION yubikey-manager-qt-)
+VERSION = $$system($$PYTHON3_BINARY_NAME ../compute-version.py -f ../VERSION yubikey-manager-qt-)
 
 message(Version of this build: $$VERSION)
 
@@ -22,7 +22,7 @@ win32|win64 {
   # Append ".0" if "-dirty" or append ".1" if not "-dirty"
   # Because rc compiler requires only numerals in the version number
   VERSION ~= s/^([0-9]+\.[0-9]+\.[0-9]+).*-dirty$/\1.0
-  VERSION ~= s/^([0-9]+\.[0-9]+\.[0-9]+)-.*/\1.1
+  VERSION ~= s/^([0-9]+\.[0-9]+\.[0-9]+)(-.*)?/\1.1
   message(Version tweaked for Windows build: $$VERSION)
 }
 

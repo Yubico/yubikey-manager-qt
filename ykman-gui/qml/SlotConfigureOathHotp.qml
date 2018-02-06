@@ -20,12 +20,12 @@ ColumnLayout {
     signal goToStaticPassword
     signal goToOathHotp
 
-    Text {
+    Label {
         text: qsTr("Configure HOTP credential for ") + SlotUtils.slotNameCapitalized(selectedSlot)
         font.bold: true
     }
 
-    Text {
+    Label {
         text: qsTr("When triggered, the YubiKey will output a HOTP code.")
     }
     GroupBox {
@@ -43,13 +43,13 @@ ColumnLayout {
                 }
             }
             RowLayout {
-                Text {
+                Label {
                     text: qsTr("The Secret key should be encoded in base32.")
                 }
             }
 
             RowLayout {
-                Text {
+                Label {
                     text: qsTr("Digits")
                 }
                 ComboBox {

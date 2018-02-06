@@ -55,19 +55,18 @@ DefaultDialog {
 
     Connections {
         target: loader.item
-         onConfigureSlot: {
-             selectedSlot = slot
-             loader.source = "SlotStatus.qml"
-         }
-         onUpdateStatus: updateStatus()
-         onGoToOverview: loader.source = "SlotOverview.qml"
-         onGoToSlotStatus: loader.source = "SlotStatus.qml"
-         onGoToSelectType: loader.source = "SlotSelectType.qml"
-         onGoToConfigureOTP: loader.source = "SlotConfigureOTP.qml"
-         onGoToChallengeResponse: loader.source = "SlotConfigureChallengeResponse.qml"
-         onGoToStaticPassword: loader.source = "SlotConfigureStaticPassword.qml"
-         onGoToOathHotp: loader.source = "SlotConfigureOathHotp.qml"
-     }
+        onConfigureSlot: {
+            selectedSlot = slot
+            loader.source = "SlotSelectType.qml"
+        }
+        onUpdateStatus: updateStatus()
+        onGoToOverview: loader.source = "SlotOverview.qml"
+        onGoToSelectType: loader.source = "SlotSelectType.qml"
+        onGoToConfigureOTP: loader.source = "SlotConfigureOTP.qml"
+        onGoToChallengeResponse: loader.source = "SlotConfigureChallengeResponse.qml"
+        onGoToStaticPassword: loader.source = "SlotConfigureStaticPassword.qml"
+        onGoToOathHotp: loader.source = "SlotConfigureOathHotp.qml"
+    }
 
     MessageDialog {
         id: confirmConfigured
@@ -99,6 +98,7 @@ DefaultDialog {
     }
 
     function start() {
+        selectedSlot = 0
         device.slots_status(function (res) {
             slotDialog.slotsEnabled = res
             show()

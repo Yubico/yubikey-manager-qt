@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
@@ -13,18 +13,17 @@ ColumnLayout {
     signal updateStatus
     signal goToOverview
     signal goToSelectType
-    signal goToSlotStatus
     signal goToConfigureOTP
     signal goToChallengeResponse
     signal goToStaticPassword
     signal goToOathHotp
 
-    Text {
+    Label {
         text: qsTr("Configure ") + SlotUtils.slotNameCapitalized(selectedSlot)
         font.bold: true
     }
 
-    Text {
+    Label {
         text: qsTr("Choose which function to configure in this slot:")
     }
 
@@ -64,7 +63,7 @@ ColumnLayout {
         Item {
             Layout.fillWidth: true
             implicitHeight: desc.implicitHeight
-            Text {
+            Label {
                 id: desc
                 width: parent.width
                 wrapMode: Text.Wrap
@@ -77,7 +76,7 @@ ColumnLayout {
         Layout.alignment: Qt.AlignRight
         Button {
             text: qsTr("Back")
-            onClicked: goToSlotStatus()
+            onClicked: goToOverview()
         }
         Button {
             text: qsTr("Next")

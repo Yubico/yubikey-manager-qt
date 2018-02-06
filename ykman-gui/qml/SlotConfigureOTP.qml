@@ -20,12 +20,12 @@ ColumnLayout {
     signal goToStaticPassword
     signal goToOathHotp
 
-    Text {
+    Label {
         text: qsTr("Configure Yubico OTP for ") + SlotUtils.slotNameCapitalized(selectedSlot)
         font.bold: true
     }
 
-    Text {
+    Label {
         text: qsTr("When triggered, the YubiKey will output a one time password.")
     }
 
@@ -55,7 +55,7 @@ ColumnLayout {
              }
          }
          RowLayout {
-             Text {
+             Label {
                  text: qsTr("The Public ID can contain the following characters: cbdefghijklnrtuv.")
              }
          }
@@ -85,7 +85,7 @@ ColumnLayout {
                  }
              }
              RowLayout {
-                 Text {
+                 Label {
                      text: qsTr("The Private ID contains 12 hexadecimal characters.")
                  }
              }
@@ -114,7 +114,7 @@ ColumnLayout {
                  }
              }
              RowLayout {
-                 Text {
+                 Label {
                      text: qsTr("The Secret key contains 32 hexadecimal characters.")
                  }
              }
