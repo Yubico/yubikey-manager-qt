@@ -9,7 +9,7 @@ MenuBar {
     property bool enablePgpPinRetries
 
     // Feature flag for PIV menu items
-    property bool supportForPIV: false
+    property bool supportForPIV: true
 
     // Feature flag for OpenPGP menu items
     property bool supportForOATH: false
