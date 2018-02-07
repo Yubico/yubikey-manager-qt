@@ -39,6 +39,11 @@ DefaultDialog {
             onClicked: startChangePin()
         }
 
+        Button {
+            text: qsTr("Change PUK")
+            onClicked: startChangePuk()
+        }
+
     }
 
     ChangePinDialog {
@@ -51,22 +56,50 @@ DefaultDialog {
                     showMessage(qsTr('Success'), qsTr('PIN was successfully changed.'))
                 } else {
                     if (result.tries_left === null) {
-                        showError(
+                        showPinError(
                             qsTr('Error'),
                             qsTr('PIN change failed. This is probably a bug, please report it to the developers.')
                         )
                     } else {
-                        showError(qsTr('Error'), qsTr('PIN change failed. Tries left: %1').arg(result.tries_left))
+                        showPinError(qsTr('Error'), qsTr('PIN change failed. Tries left: %1').arg(result.tries_left))
                     }
                 }
             })
         }
     }
 
-    function showError(title, text) {
-        errorDialog.title = title
-        errorDialog.text = text
-        errorDialog.open()
+    ChangePinDialog {
+        id: changePivPuk
+        codeName: 'PUK'
+
+        onCodeChanged: {
+            device.piv_change_puk(currentCode, newCode, function(result) {
+                if (result.success) {
+                    showMessage(qsTr('Success'), qsTr('PUK was successfully changed.'))
+                } else {
+                    if (result.tries_left === null) {
+                        showPukError(
+                            qsTr('Error'),
+                            qsTr('PUK change failed. This is probably a bug, please report it to the developers.')
+                        )
+                    } else {
+                        showPukError(qsTr('Error'), qsTr('PUK change failed. Tries left: %1').arg(result.tries_left))
+                    }
+                }
+            })
+        }
+    }
+
+    function showPinError(title, text) {
+        pinErrorDialog.title = title
+        pinErrorDialog.text = text
+        pinErrorDialog.open()
+    }
+
+    function showPukError(title, text) {
+        pukErrorDialog.title = title
+        pukErrorDialog.text = text
+        pukErrorDialog.open()
     }
 
     function showMessage(title, text) {
@@ -76,11 +109,19 @@ DefaultDialog {
     }
 
     MessageDialog {
-        id: errorDialog
+        id: pinErrorDialog
         icon: StandardIcon.Critical
         standardButtons: StandardButton.Ok
 
         onAccepted: startChangePin()
+    }
+
+    MessageDialog {
+        id: pukErrorDialog
+        icon: StandardIcon.Critical
+        standardButtons: StandardButton.Ok
+
+        onAccepted: startChangePuk()
     }
 
     MessageDialog {
@@ -95,6 +136,10 @@ DefaultDialog {
 
     function startChangePin() {
         changePivPin.open()
+    }
+
+    function startChangePuk() {
+        changePivPuk.open()
     }
 
 }
