@@ -6,6 +6,8 @@ import os
 import logging
 import types
 import struct
+import ykman.logging_setup
+
 from base64 import b32decode
 from binascii import b2a_hex, a2b_hex, Error
 
@@ -206,4 +208,17 @@ class Controller(object):
             return str(e)
 
 
-controller = Controller()
+controller = None
+
+
+def initWithLogging(log_level, log_file=None):
+    logging_setup = as_json(ykman.logging_setup.setup)
+    logging_setup(log_level, log_file)
+
+    init()
+
+
+def init():
+    global controller
+    controller = Controller()
+    controller.refresh()
