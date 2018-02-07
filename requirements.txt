@@ -1,1 +1,1 @@
-yubikey-manager>=0.6,<0.7
+git+https://github.com/Yubico/yubikey-manager.git@61a84ec1493822bf029cdac5a421d4e1f849582a
