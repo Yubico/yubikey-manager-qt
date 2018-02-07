@@ -3,6 +3,7 @@
 
 
 import os
+import json
 import logging
 import types
 import struct
@@ -18,9 +19,14 @@ from ykman.util import (
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
-from json_util import as_json
 
 logger = logging.getLogger(__name__)
+
+
+def as_json(f):
+    def wrapped(*args, **kwargs):
+        return json.dumps(f(*args, **kwargs))
+    return wrapped
 
 
 class Controller(object):
