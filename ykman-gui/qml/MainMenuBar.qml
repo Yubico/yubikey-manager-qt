@@ -65,6 +65,7 @@ MenuBar {
             }
             MenuItem {
                 text: qsTr("Change PUK...")
+                onTriggered: pivManager.startChangePuk()
             }
             MenuItem {
                 text: qsTr("Change Management Key...")

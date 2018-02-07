@@ -240,6 +240,15 @@ class Controller(object):
             logger.error('PIV controller not available.')
             return (False, None)
 
+    def piv_change_puk(self, old_puk, new_puk):
+        if self._piv_controller:
+            result = self._piv_controller.change_puk(old_puk, new_puk)
+            logger.debug('PUK change result: %s', result)
+            return result
+        else:
+            logger.error('PIV controller not available.')
+            return (False, None)
+
     def piv_list_certificates(self):
         if self._piv_controller:
             certs = self._piv_controller.list_certificates()

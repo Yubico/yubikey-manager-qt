@@ -190,6 +190,10 @@ Python {
         do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin], cb)
     }
 
+    function piv_change_puk(old_puk, new_puk, cb) {
+        do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk], cb)
+    }
+
     function piv_list_certificates(cb) {
         do_call('yubikey.controller.piv_list_certificates', [], cb)
     }
