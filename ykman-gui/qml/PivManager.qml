@@ -55,7 +55,7 @@ DefaultDialog {
                             qsTr('PIN change failed. This is probably a bug, please report it to the developers.')
                         )
                     } else {
-                        showError(qsTr('Error'), qsTr('PIN change failed. %1 tries left.').arg(retries))
+                        showError(qsTr('Error'), qsTr('PIN change failed. Tries left: %1').arg(retries))
                     }
                 }
             })
