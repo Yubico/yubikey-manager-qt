@@ -3,9 +3,12 @@
 
 
 import os
+import json
 import logging
 import types
 import struct
+import ykman.logging_setup
+
 from base64 import b32decode
 from binascii import b2a_hex, a2b_hex, Error
 
@@ -16,9 +19,14 @@ from ykman.util import (
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
-from json_util import as_json
 
 logger = logging.getLogger(__name__)
+
+
+def as_json(f):
+    def wrapped(*args, **kwargs):
+        return json.dumps(f(*args, **kwargs))
+    return wrapped
 
 
 class Controller(object):
@@ -206,4 +214,17 @@ class Controller(object):
             return str(e)
 
 
-controller = Controller()
+controller = None
+
+
+def init_with_logging(log_level, log_file=None):
+    logging_setup = as_json(ykman.logging_setup.setup)
+    logging_setup(log_level, log_file)
+
+    init()
+
+
+def init():
+    global controller
+    controller = Controller()
+    controller.refresh()
