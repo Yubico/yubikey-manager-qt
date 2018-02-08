@@ -198,4 +198,7 @@ Python {
         do_call('yubikey.controller.piv_list_certificates', [], cb)
     }
 
+    function piv_reset(cb) {
+        do_call('yubikey.controller.piv_reset', [], cb)
+    }
 }

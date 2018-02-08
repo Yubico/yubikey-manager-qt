@@ -216,6 +216,11 @@ class Controller(object):
         except Exception as e:
             return str(e)
 
+    def piv_reset(self):
+        dev = self._descriptor.open_device(TRANSPORT.CCID)
+        controller = PivController(dev.driver)
+        controller.reset()
+
     def _piv_version(self):
         if self._piv_controller:
             try:

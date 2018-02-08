@@ -113,6 +113,19 @@ ApplicationWindow {
         device: yk
     }
 
+    PivResetDialog {
+        id: pivResetDialog
+        device: yk
+    }
+
+    MessageDialog {
+        id: pivResetConfirm
+        icon: StandardIcon.Information
+        title: qsTr("PIV functionality has been reset.")
+        text: qsTr("All data has been cleared and default PIN, PUK and Management Key are set.")
+        standardButtons: StandardButton.Ok
+    }
+
     MessageDialog {
         id: openPgpResetConfirm
         icon: StandardIcon.Information
