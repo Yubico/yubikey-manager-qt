@@ -18,7 +18,7 @@ Python {
     property bool yubikeyReady: false
     property var queue: []
 
-    signal enableLogging(string log_level, string log_file)
+    signal enableLogging(string logLevel, string logFile)
     signal disableLogging()
 
     Component.onCompleted: {
@@ -34,7 +34,7 @@ Python {
     }
 
     onEnableLogging: {
-        do_call('yubikey.initWithLogging', [log_level || 'DEBUG', log_file || null], function() {
+        do_call('yubikey.init_with_logging', [logLevel || 'DEBUG', logFile || null], function() {
             yubikeyReady = true
         })
     }
