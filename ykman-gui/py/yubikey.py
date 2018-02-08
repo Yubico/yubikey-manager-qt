@@ -240,6 +240,11 @@ class Controller(object):
                          exc_info=e)
             return None
 
+    def piv_reset(self):
+        dev = self._descriptor.open_device(TRANSPORT.CCID)
+        controller = PivController(dev.driver)
+        controller.reset()
+
     def _piv_version(self):
         if self._piv_controller:
             try:

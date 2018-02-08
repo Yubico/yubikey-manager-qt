@@ -183,4 +183,8 @@ Python {
         do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk], cb)
     }
 
+    function piv_reset(cb) {
+        do_call('yubikey.controller.piv_reset', [], cb)
+    }
+
 }
