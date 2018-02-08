@@ -29,9 +29,9 @@ DefaultDialog {
         onLinkActivated: Qt.openUrlExternally(link)
 
         MouseArea {
-           anchors.fill: parent
-           acceptedButtons: Qt.NoButton
-           cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+            anchors.fill: parent
+            acceptedButtons: Qt.NoButton
+            cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
         }
     }
 }
