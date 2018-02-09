@@ -64,6 +64,8 @@ class Controller(object):
             if self._piv_controller is None:
                 self._piv_controller = PivController(dev.driver)
 
+            piv_certificates = self._piv_list_certificates()
+
             self._dev_info = {
                 'name': dev.device_name,
                 'version': '.'.join(str(x) for x in dev.version),
@@ -75,7 +77,8 @@ class Controller(object):
                     t.name for t in TRANSPORT if t & dev.capabilities
                 ],
                 'piv': {
-                    'version': '.'.join(str(x) for x in self._piv_version())
+                    'version': '.'.join(str(x) for x in self._piv_version()),
+                    'certificates': piv_certificates
                 }
             }
 
@@ -272,7 +275,7 @@ class Controller(object):
             logger.error('PIV controller not available.')
             return (False, None)
 
-    def piv_list_certificates(self):
+    def _piv_list_certificates(self):
         if self._piv_controller:
             certs = self._piv_controller.list_certificates()
             logger.debug('Certificates: %s', certs)

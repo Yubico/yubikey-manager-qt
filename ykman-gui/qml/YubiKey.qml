@@ -17,9 +17,7 @@ Python {
     property bool yubikeyModuleLoaded: false
     property bool yubikeyReady: false
     property var queue: []
-    property var piv: {
-
-    }
+    property var piv
 
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
@@ -91,18 +89,7 @@ Python {
                     capabilities = dev ? dev.capabilities : []
                     enabled = dev ? dev.enabled : []
                     connections = dev ? dev.connections : []
-
-                    var dev_piv = dev ? dev.piv : {
-
-                                        }
-
-                    piv_list_certificates(function (certs) {
-                        piv = Object.assign({
-
-                                            }, dev_piv, {
-                                                certificates: certs
-                                            })
-                    })
+                    piv = dev && dev.piv
                 })
             } else if (hasDevice) {
                 hasDevice = false
@@ -193,10 +180,6 @@ Python {
 
     function piv_change_puk(old_puk, new_puk, cb) {
         do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk], cb)
-    }
-
-    function piv_list_certificates(cb) {
-        do_call('yubikey.controller.piv_list_certificates', [], cb)
     }
 
     function piv_reset(cb) {
