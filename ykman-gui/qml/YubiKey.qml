@@ -90,14 +90,7 @@ Python {
                     capabilities = dev ? dev.capabilities : []
                     enabled = dev ? dev.enabled : []
                     connections = dev ? dev.connections : []
-
-                    var dev_piv = dev ? dev.piv : {}
-
-                    piv_list_certificates(function(certs) {
-                        piv = Object.assign({}, dev_piv, {
-                            certificates: certs,
-                        })
-                    })
+                    piv = dev && dev.piv
                 })
             } else if (hasDevice) {
                 hasDevice = false
@@ -184,10 +177,6 @@ Python {
 
     function piv_change_pin(old_pin, new_pin, cb) {
         do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin], cb)
-    }
-
-    function piv_list_certificates(cb) {
-        do_call('yubikey.controller.piv_list_certificates', [], cb)
     }
 
 }
