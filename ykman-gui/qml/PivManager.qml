@@ -9,6 +9,7 @@ DefaultDialog {
     title: qsTr("PIV Manager")
 
     property var device
+    readonly property var yk: device // Needed so that we can pass `device: yk` to subcomponents
     property bool hasDevice: (device && device.hasDevice && device.piv) || false
     readonly property var certificates: hasDevice && device.piv.certificates || {}
     readonly property int numCerts: Object.keys(certificates).length
@@ -90,6 +91,15 @@ DefaultDialog {
         }
     }
 
+    DefaultDialog {
+        id: changePivManagementKeyDialog
+
+        PivSetManagementKeyForm {
+            id: pivSetManagementKeyForm
+            device: yk
+        }
+    }
+
     PivResetDialog {
         id: pivResetDialog
         device: yk
@@ -145,6 +155,10 @@ DefaultDialog {
 
     function startChangePuk() {
         changePivPuk.open()
+    }
+
+    function startChangeManagementKey() {
+        changePivManagementKeyDialog.show()
     }
 
     function startReset() {
