@@ -69,6 +69,7 @@ MenuBar {
             }
             MenuItem {
                 text: qsTr("Change Management Key...")
+                onTriggered: pivManager.startChangeManagementKey()
             }
             MenuSeparator {
             }

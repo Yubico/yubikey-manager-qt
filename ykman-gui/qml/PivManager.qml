@@ -86,6 +86,15 @@ DefaultDialog {
         }
     }
 
+    DefaultDialog {
+        id: changePivManagementKeyDialog
+
+        PivSetManagementKeyForm {
+            id: pivSetManagementKeyForm
+            device: device
+        }
+    }
+
     function showPinError(title, text) {
         pinErrorDialog.title = title
         pinErrorDialog.text = text
@@ -136,6 +145,10 @@ DefaultDialog {
 
     function startChangePuk() {
         changePivPuk.open()
+    }
+
+    function startChangeManagementKey() {
+        changePivManagementKeyDialog.show()
     }
 
 }
