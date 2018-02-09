@@ -18,6 +18,10 @@ int main(int argc, char *argv[])
     // Don't write .pyc files.
     qputenv("PYTHONDONTWRITEBYTECODE", "1");
 
+    #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    #endif
+
     // Non Darwin platforms uses QSingleApplication to ensure only one running instance.
     #ifndef Q_OS_DARWIN
     QtSingleApplication app(argc, argv);
@@ -36,6 +40,9 @@ int main(int argc, char *argv[])
     app.setApplicationName("YubiKey Manager");
     app.setOrganizationName("Yubico");
     app.setOrganizationDomain("com.yubico");
+
+    // Use ANGLE on Windows
+    app.setAttribute(Qt::AA_UseOpenGLES);
 
     if (QFileInfo::exists(":" + main_qml)) {
         // Embedded resources

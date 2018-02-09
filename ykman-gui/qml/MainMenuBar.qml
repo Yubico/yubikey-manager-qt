@@ -74,7 +74,6 @@ MenuBar {
             }
             MenuItem {
                 text: qsTr("Reset")
-                onTriggered: pivResetDialog.open()
             }
         }
         Menu {

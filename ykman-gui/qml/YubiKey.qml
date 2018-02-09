@@ -18,12 +18,10 @@ Python {
     property bool loggingModuleLoaded: false
     property bool loggingConfigured: false
     property var queue: []
-    property var piv: {
-
-    }
+    property var piv: {}
 
     signal enableLogging(string log_level, string log_file)
-    signal disableLogging
+    signal disableLogging()
 
     Component.onCompleted: {
         importModule('site', function () {
@@ -42,10 +40,9 @@ Python {
     onLoggingModuleLoadedChanged: runQueue()
 
     onEnableLogging: {
-        do_call('logging_setup.setup',
-                [log_level || 'DEBUG', log_file || null], function () {
-                    loggingConfigured = true
-                })
+        do_call('logging_setup.setup', [log_level || 'DEBUG', log_file || null], function() {
+            loggingConfigured = true
+        })
     }
     onDisableLogging: {
         loggingConfigured = true
@@ -100,16 +97,12 @@ Python {
                     enabled = dev ? dev.enabled : []
                     connections = dev ? dev.connections : []
 
-                    var dev_piv = dev ? dev.piv : {
+                    var dev_piv = dev ? dev.piv : {}
 
-                                        }
-
-                    piv_list_certificates(function (certs) {
-                        piv = Object.assign({
-
-                                            }, dev_piv, {
-                                                certificates: certs
-                                            })
+                    piv_list_certificates(function(certs) {
+                        piv = Object.assign({}, dev_piv, {
+                            certificates: certs,
+                        })
                     })
                 })
             } else if (hasDevice) {
@@ -178,13 +171,11 @@ Python {
     }
 
     function openpgp_set_touch(adminPin, authKeyPolicy, encKeyPolicy, sigKeyPolicy, cb) {
-        do_call('yubikey.controller.openpgp_set_touch',
-                [adminPin, authKeyPolicy, encKeyPolicy, sigKeyPolicy], cb)
+        do_call('yubikey.controller.openpgp_set_touch', [adminPin, authKeyPolicy, encKeyPolicy, sigKeyPolicy ], cb)
     }
 
     function openpgp_set_pin_retries(adminPin, pinRetries, resetCodeRetries, adminPinRetries, cb) {
-        do_call('yubikey.controller.openpgp_set_pin_retries',
-                [adminPin, pinRetries, resetCodeRetries, adminPinRetries], cb)
+        do_call('yubikey.controller.openpgp_set_pin_retries', [adminPin, pinRetries, resetCodeRetries, adminPinRetries], cb)
     }
 
     function openpgp_get_remaining_pin_retries(cb) {
@@ -207,7 +198,4 @@ Python {
         do_call('yubikey.controller.piv_list_certificates', [], cb)
     }
 
-    function piv_reset(cb) {
-        do_call('yubikey.controller.piv_reset', [], cb)
-    }
 }
