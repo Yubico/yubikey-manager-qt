@@ -3,9 +3,12 @@
 
 
 import os
+import json
 import logging
 import types
 import struct
+import ykman.logging_setup
+
 from base64 import b32decode
 from binascii import b2a_hex, a2b_hex, Error
 from cryptography import x509
@@ -18,9 +21,14 @@ from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
 from ykman.piv import PivController
-from json_util import as_json
 
 logger = logging.getLogger(__name__)
+
+
+def as_json(f):
+    def wrapped(*args, **kwargs):
+        return json.dumps(f(*args, **kwargs))
+    return wrapped
 
 
 class Controller(object):
@@ -158,8 +166,10 @@ class Controller(object):
             dev = self._descriptor.open_device(TRANSPORT.CCID)
             controller = OpgpController(dev.driver)
             controller.reset()
+            return True
         except Exception as e:
-            return str(e)
+            logger.error('Failed to reset OpenPGP applet', exc_info=e)
+            return False
 
     def openpgp_get_touch(self):
         try:
@@ -170,7 +180,8 @@ class Controller(object):
             sig = controller.get_touch(KEY_SLOT.SIGN)
             return [auth, enc, sig]
         except Exception as e:
-            return str(e)
+            logger.error('Failed to get OpenPGP touch policy', exc_info=e)
+            return None
 
     def openpgp_set_touch(self, admin_pin, auth, enc, sig):
         try:
@@ -185,8 +196,10 @@ class Controller(object):
             if sig >= 0:
                 controller.set_touch(
                     KEY_SLOT.SIGN, int(sig), admin_pin.encode())
+            return True
         except Exception as e:
-            return str(e)
+            logger.error('Failed to set OpenPGP touch policy', exc_info=e)
+            return False
 
     def openpgp_set_pin_retries(
             self, admin_pin, pin_retries, reset_code_retries,
@@ -197,8 +210,10 @@ class Controller(object):
             controller.set_pin_retries(
                 int(pin_retries), int(reset_code_retries),
                 int(admin_pin_retries), admin_pin.encode())
+            return True
         except Exception as e:
-            return str(e)
+            logger.error('Failed to set OpenPGP PIN retries', exc_info=e)
+            return False
 
     def openpgp_get_version(self):
         try:
@@ -206,7 +221,8 @@ class Controller(object):
             controller = OpgpController(dev.driver)
             return controller.version
         except Exception as e:
-            return str(e)
+            logger.error('Failed to get OpenPGP applet version', exc_info=e)
+            return None
 
     def openpgp_get_remaining_pin_retries(self):
         try:
@@ -214,7 +230,9 @@ class Controller(object):
             controller = OpgpController(dev.driver)
             return controller.get_remaining_pin_tries()
         except Exception as e:
-            return str(e)
+            logger.error('Failed to get remaining OpenPGP PIN retries',
+                         exc_info=e)
+            return None
 
     def piv_reset(self):
         dev = self._descriptor.open_device(TRANSPORT.CCID)
@@ -277,5 +295,17 @@ def toDict(cert):
     }
 
 
-controller = Controller()
-controller.refresh()
+controller = None
+
+
+def init():
+    global controller
+    controller = Controller()
+    controller.refresh()
+
+
+def init_with_logging(log_level, log_file=None):
+    logging_setup = as_json(ykman.logging_setup.setup)
+    logging_setup(log_level, log_file)
+
+    init()
