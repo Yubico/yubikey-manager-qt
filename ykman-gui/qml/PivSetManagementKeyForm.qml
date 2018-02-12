@@ -44,7 +44,11 @@ ColumnLayout {
 
             Button {
                 text: qsTr("Randomize")
-                onClicked: newManagementKeyInput.text = getRandomManagementKey()
+                onClicked: {
+                  device.piv_generate_random_mgm_key(function(key) {
+                      newManagementKeyInput.text = key
+                  })
+                }
             }
 
             Button {
@@ -64,10 +68,6 @@ ColumnLayout {
         messageDialog.title = title
         messageDialog.text = text
         messageDialog.open()
-    }
-
-    function getRandomManagementKey() {
-        return "Very random"
     }
 
     function copyToClipboard(content) {
