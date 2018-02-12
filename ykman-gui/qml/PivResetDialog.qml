@@ -14,12 +14,12 @@ Item {
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
             wait.open()
-            device.piv_reset(function (error) {
+            device.piv_reset(function (success) {
                 wait.close()
-                if (error) {
-                    console.log(error)
-                } else {
+                if (success) {
                     confirmation.open()
+                } else {
+                    error.open()
                 }
             })
         }
@@ -41,6 +41,14 @@ Item {
         title: qsTr("PIV functionality has been reset.")
         text: qsTr("All data has been cleared and default PIN, PUK and Management Key are set.")
         standardButtons: StandardButton.Ok
+    }
+
+    MessageDialog {
+        id: error
+        icon: StandardIcon.Critical
+        title: entry.title
+        text: qsTr("An error occurred. See the logs for details.")
+        standardButtons: StandardButton.Close
     }
 
     function open() {

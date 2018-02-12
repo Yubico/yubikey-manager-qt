@@ -241,9 +241,15 @@ class Controller(object):
             return None
 
     def piv_reset(self):
-        dev = self._descriptor.open_device(TRANSPORT.CCID)
-        controller = PivController(dev.driver)
-        controller.reset()
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.CCID)
+            controller = PivController(dev.driver)
+            controller.reset()
+            return True
+
+        except Exception as e:
+            logger.error('Failed to reset PIV applet', exc_info=e)
+            return False
 
     def _piv_version(self):
         if self._piv_controller:
