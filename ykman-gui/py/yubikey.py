@@ -302,11 +302,7 @@ class Controller(object):
             return None
 
     def piv_generate_random_mgm_key(self):
-        if self._piv_controller:
-            return self._piv_controller.generate_random_management_key()
-        else:
-            logger.error('PIV controller not available.')
-            return None
+        return ykman.piv.generate_random_management_key()
 
 
 def toDict(cert):
