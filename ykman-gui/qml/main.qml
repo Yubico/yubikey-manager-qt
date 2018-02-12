@@ -113,11 +113,6 @@ ApplicationWindow {
         device: yk
     }
 
-    PivResetDialog {
-        id: pivResetDialog
-        device: yk
-    }
-
     MessageDialog {
         id: pivResetConfirm
         icon: StandardIcon.Information

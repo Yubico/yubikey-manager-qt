@@ -95,6 +95,11 @@ DefaultDialog {
         }
     }
 
+    PivResetDialog {
+        id: pivResetDialog
+        device: device
+    }
+
     function showPinError(title, text) {
         pinErrorDialog.title = title
         pinErrorDialog.text = text
@@ -149,6 +154,10 @@ DefaultDialog {
 
     function startChangeManagementKey() {
         changePivManagementKeyDialog.show()
+    }
+
+    function startReset() {
+        pivResetDialog.open()
     }
 
 }
