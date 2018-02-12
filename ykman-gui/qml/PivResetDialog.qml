@@ -13,7 +13,9 @@ Item {
         text: qsTr("Do you want to reset the PIV functionality for this YubiKey? This action will wipe all keys and certficates, and set PIN, PUK and Management Key to their default values.")
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
+            wait.open()
             device.piv_reset(function (error) {
+                wait.close()
                 if (error) {
                     console.log(error)
                 } else {
@@ -23,6 +25,14 @@ Item {
         }
         onNo: close()
 
+    }
+
+    MessageDialog {
+        id: wait
+        icon: StandardIcon.Information
+        title: entry.title
+        text: qsTr("Please wait. Do not disconnect the YubiKey.")
+        standardButtons: StandardButton.NoButton
     }
 
     MessageDialog {
