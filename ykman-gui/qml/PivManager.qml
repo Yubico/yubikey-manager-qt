@@ -90,6 +90,11 @@ DefaultDialog {
         }
     }
 
+    PivResetDialog {
+        id: pivResetDialog
+        device: yk
+    }
+
     function showPinError(title, text) {
         pinErrorDialog.title = title
         pinErrorDialog.text = text
@@ -140,6 +145,10 @@ DefaultDialog {
 
     function startChangePuk() {
         changePivPuk.open()
+    }
+
+    function startReset() {
+        pivResetDialog.open()
     }
 
 }

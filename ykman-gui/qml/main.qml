@@ -106,11 +106,6 @@ ApplicationWindow {
         id: touchYubiKeyPrompt
     }
 
-    PivResetDialog {
-        id: pivResetDialog
-        device: yk
-    }
-
     MessageDialog {
         id: pivResetConfirm
         icon: StandardIcon.Information
