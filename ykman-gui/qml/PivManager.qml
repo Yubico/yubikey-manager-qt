@@ -9,6 +9,7 @@ DefaultDialog {
     title: qsTr("PIV Manager")
 
     property var device
+    readonly property var yk: device // Needed so that we can pass `device: yk` to subcomponents
     property bool hasDevice: (device && device.hasDevice && device.piv) || false
     minimumWidth: 500
 
@@ -91,13 +92,13 @@ DefaultDialog {
 
         PivSetManagementKeyForm {
             id: pivSetManagementKeyForm
-            device: device
+            device: yk
         }
     }
 
     PivResetDialog {
         id: pivResetDialog
-        device: device
+        device: yk
     }
 
     function showPinError(title, text) {
