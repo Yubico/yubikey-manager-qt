@@ -77,7 +77,9 @@ after_build:
   # Add CLI executable to release folder
   - copy .\ykman-cli\release\ykman.exe .\ykman-gui\release
   # Create zip for deployment
-  - 7z a yubikey-manager-qt-%APPVEYOR_REPO_BRANCH%-win.zip .\ykman-gui\release\*
+  - set ARTIFACT_NAME=%APPVEYOR_REPO_BRANCH%
+  - if defined APPVEYOR_REPO_TAG_NAME set ARTIFACT_NAME=%APPVEYOR_REPO_TAG_NAME%
+  - 7z a yubikey-manager-qt-%ARTIFACT_NAME%-win.zip .\ykman-gui\release\*
   # Verify that the cli tool can run
   - copy .\ykman-cli\test.py .\ykman-gui\release
   - cd .\ykman-gui\release
@@ -85,7 +87,7 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
 
 artifacts:
-  - path: yubikey-manager-qt-%APPVEYOR_REPO_BRANCH%-win.zip
+  - path: yubikey-manager-qt-$(ARTIFACT_NAME)-win.zip
 
 deploy:
   - provider: S3
