@@ -43,13 +43,8 @@ install:
   - cd %APPVEYOR_BUILD_FOLDER%
 
 build_script:
-
   - qmake yubikey-manager-qt.pro
   - qmake -o ykman-gui\Makefile ykman-gui\ykman-gui.pro
-
-  # Fix problem with symbolic link
-  - rm .\vendor\yubikey-manager\ykman\yubicommon
-  - xcopy /i /e .\vendor\yubikey-manager\vendor\yubicommon\yubicommon .\vendor\yubikey-manager\ykman\yubicommon
   - jom
 
 after_build:
