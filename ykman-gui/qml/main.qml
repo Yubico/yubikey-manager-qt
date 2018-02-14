@@ -142,6 +142,14 @@ ApplicationWindow {
         standardButtons: StandardButton.Ok
     }
 
+    ClipBoard {
+        id: clipboard
+    }
+
+    function copyToClipboard(value) {
+        clipboard.setClipboard(value)
+    }
+
     function supportsOpenPgpTouch() {
         // Touch policy for OpenPGP is available from version 4.2.0.
         return parseInt(yk.version.split('.').join('')) >= 420
