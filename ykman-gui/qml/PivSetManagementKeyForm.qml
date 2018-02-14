@@ -72,10 +72,6 @@ ColumnLayout {
         messageDialog.open()
     }
 
-    function copyToClipboard(content) {
-        console.log("Copy to clipboard:", content)
-    }
-
     MessageDialog {
         id: pinErrorDialog
         icon: StandardIcon.Critical
