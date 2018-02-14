@@ -31,7 +31,7 @@ RUN pip3 install --upgrade pip
 COPY . yubikey-manager-qt
 RUN cd yubikey-manager-qt && qmake -qt=qt5 && make
 RUN cd yubikey-manager-qt && debuild -us -uc
-RUN mv /yubikey-manager-qt_* /deb
+RUN mkdir /deb && mv /yubikey-manager-qt_* /deb
 RUN cd / && tar czf yubikey-manager-qt-debian-packages.tar.gz deb
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
