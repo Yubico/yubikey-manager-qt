@@ -3,7 +3,7 @@
 YubiKey Manager is a Qt5 application written in QML that uses the plugin PyOtherSide to enable
 the backend logic to be written in Python 3. The python library yubikey-manager is needed to
 communicate with the YubiKey, and may be installed from pip or other package managers.
-If a specific version, (or branch or commit) is needed for development, point to that version
+If a specific version (or branch or commit) is needed for development, point to that version
 in requirements.txt
 
 == Setting up a development environment 
