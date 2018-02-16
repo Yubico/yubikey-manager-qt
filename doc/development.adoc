@@ -25,7 +25,8 @@ in requirements.txt
     $ brew install python3 swig ykpers libu2f-host libusb qt5
     # Allow access to qmake - see https://superuser.com/a/1153338/104372
     $ brew link qt5 --force
-    Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#building-pyotherside[PyOtherSide].
+
+Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#building-pyotherside[PyOtherSide].
 
 === Compile the app:
 
