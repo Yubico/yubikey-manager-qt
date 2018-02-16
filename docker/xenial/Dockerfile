@@ -29,7 +29,7 @@ RUN apt-get install -qq \
     locales
 RUN pip3 install --upgrade pip
 COPY . yubikey-manager-qt
-RUN pip3 install -r yubikey-manager-qt/ykman-gui/requirements.txt
+RUN pip3 install -r yubikey-manager-qt/requirements.txt
 RUN cd yubikey-manager-qt && qmake -qt=qt5 && make
 RUN cd yubikey-manager-qt && debuild -us -uc
 RUN mkdir /deb && mv /yubikey-manager-qt_* /deb
