@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
 DefaultDialog {
-
+    id: fidoChangePinDialog
     property var device
     title: qsTr("Reset FIDO 2")
     minimumWidth: 500
@@ -35,7 +35,32 @@ DefaultDialog {
         }
     }
 
+    MessageDialog {
+        id: fidoResetError
+        icon: StandardIcon.Critical
+        title: qsTr("FIDO 2 reset failed.")
+        standardButtons: StandardButton.Ok
+    }
+
+    MessageDialog {
+        id: fidoResetTouch
+        icon: StandardIcon.Information
+        title: qsTr("Touch your YubiKey!")
+        text: qsTr("Touch your YubiKey to confirm the reset.")
+        standardButtons: StandardButton.Ok
+        onAccepted: fidoChangePinDialog.close()
+    }
+
     function reset() {
-        device.fido_reset(function (err) {})
+        device.fido_reset(handleReset)
+    }
+
+    function handleReset(err) {
+        if (!err) {
+            fidoResetTouch.open()
+        } else {
+            fidoResetError.text = err
+            fidoResetError.open()
+        }
     }
 }

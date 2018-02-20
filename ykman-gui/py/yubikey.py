@@ -19,7 +19,7 @@ from ykman.util import (
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
-from ykman.fido import Fido2Controller
+from ykman.fido import Fido2Controller, CTAP2Error, CTAP2_ERR
 
 logger = logging.getLogger(__name__)
 
@@ -248,16 +248,29 @@ class Controller(object):
             dev = self._descriptor.open_device(TRANSPORT.U2F)
             controller = Fido2Controller(dev.driver)
             controller.change_pin(old_pin=current_pin, new_pin=new_pin)
-        except Exception as e:
-            logger.error('Failed to change PIN', exc_info=e)
+            return None
+        except CTAP2Error as e:
+            if e.code == CTAP2_ERR.PIN_INVALID:
+                return 'The current PIN is wrong.'
+            if e.code == CTAP2_ERR.PIN_AUTH_BLOCKED:
+                return 'PIN authentication is currently blocked. ' \
+                    'Remove and re-insert the YubiKey.'
+            if e.code == CTAP2_ERR.PIN_BLOCKED:
+                return 'PIN is blocked.'
 
     def fido_reset(self):
         try:
             dev = self._descriptor.open_device(TRANSPORT.U2F)
             controller = Fido2Controller(dev.driver)
             controller.reset()
+            return None
+        except CTAP2Error as e:
+            if e.code == CTAP2_ERR.NOT_ALLOWED:
+                return 'Failed to reset the YubiKey. The reset command' \
+                    'must be triggered within 10 seconds after the ' \
+                    'YubiKey is inserted.'
         except Exception as e:
-            logger.error('Failed to reset', exc_info=e)
+            logger.error('Reset throwed an exception', exc_info=e)
 
 
 controller = None

@@ -70,6 +70,13 @@ DefaultDialog {
         }
     }
 
+    MessageDialog {
+        id: fidoSetPinError
+        icon: StandardIcon.Critical
+        title: qsTr("OpenPGP functionality has been reset.")
+        standardButtons: StandardButton.Ok
+    }
+
     function load() {
         device.fido_has_pin(showDialog)
     }
@@ -89,11 +96,13 @@ DefaultDialog {
         }
     }
 
-    function handleChangePin(res) {
-        if (!res) {
+    function handleChangePin(err) {
+        if (!err) {
             close()
             fidoPinConfirmation.open()
+        } else {
+            fidoSetPinError.text = err
+            fidoSetPinError.open()
         }
-        close()
     }
 }
