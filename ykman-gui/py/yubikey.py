@@ -293,7 +293,8 @@ class Controller(object):
             return None
 
     def piv_generate_random_mgm_key(self):
-        return ykman.piv.generate_random_management_key()
+        return b2a_hex(ykman.piv.generate_random_management_key()).decode(
+            'utf-8')
 
 
 def toDict(cert):
