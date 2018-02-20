@@ -19,6 +19,7 @@ from ykman.util import (
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
+from ykman.fido import Fido2Controller
 
 logger = logging.getLogger(__name__)
 
@@ -222,6 +223,41 @@ class Controller(object):
             logger.error('Failed to get remaining OpenPGP PIN retries',
                          exc_info=e)
             return None
+
+    def fido_has_pin(self):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.U2F)
+            controller = Fido2Controller(dev.driver)
+            return controller.has_pin
+        except Exception as e:
+            logger.error('Failed to read if PIN is set', exc_info=e)
+
+    def fido_set_pin(self, new_pin):
+        try:
+            logger.debug(self._descriptor)
+            dev = self._descriptor.open_device(TRANSPORT.U2F)
+            controller = Fido2Controller(dev.driver)
+            controller.set_pin(new_pin)
+            return None
+        except Exception as e:
+            logger.error('Failed to set PIN', exc_info=e)
+            return e
+
+    def fido_change_pin(self, current_pin, new_pin):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.U2F)
+            controller = Fido2Controller(dev.driver)
+            controller.change_pin(old_pin=current_pin, new_pin=new_pin)
+        except Exception as e:
+            logger.error('Failed to change PIN', exc_info=e)
+
+    def fido_reset(self):
+        try:
+            dev = self._descriptor.open_device(TRANSPORT.U2F)
+            controller = Fido2Controller(dev.driver)
+            controller.reset()
+        except Exception as e:
+            logger.error('Failed to reset', exc_info=e)
 
 
 controller = None

@@ -171,4 +171,20 @@ Python {
     function openpgp_get_version(cb) {
         do_call('yubikey.controller.openpgp_get_version', [], cb)
     }
+
+    function fido_has_pin(cb) {
+        do_call('yubikey.controller.fido_has_pin', [], cb)
+    }
+
+    function fido_set_pin(newPin, cb) {
+        do_call('yubikey.controller.fido_set_pin', [newPin], cb)
+    }
+
+    function fido_change_pin(currentPin, newPin, cb) {
+        do_call('yubikey.controller.fido_change_pin', [currentPin, newPin], cb)
+    }
+
+    function fido_reset(cb) {
+        do_call('yubikey.controller.fido_reset', [], cb)
+    }
 }

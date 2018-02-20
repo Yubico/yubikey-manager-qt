@@ -17,6 +17,9 @@ MenuBar {
     // Feature flag for OpenPGP menu items
     property bool supportForOpenPGP: true
 
+    // Feature flag for FIDO 2 support
+    property bool supportForFido2: true
+
     Menu {
         title: qsTr("\&File")
         MenuItem {
@@ -103,6 +106,22 @@ MenuBar {
             MenuItem {
                 text: qsTr("Reset")
                 onTriggered: openPgpResetDialog.open()
+            }
+        }
+
+        Menu {
+            title: qsTr("FIDO 2")
+            enabled: true // TODO: depends on key
+            visible: supportForFido2
+            MenuItem {
+                text: qsTr("Set PIN...")
+                onTriggered: fidoChangePinDialog.load()
+            }
+            MenuSeparator {
+            }
+            MenuItem {
+                text: qsTr("Reset...")
+                onTriggered: fidoResetDialog.show()
             }
         }
     }
