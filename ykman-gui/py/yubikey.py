@@ -64,8 +64,6 @@ class Controller(object):
             if self._piv_controller is None:
                 self._piv_controller = PivController(dev.driver)
 
-            piv_certificates = self._piv_list_certificates()
-
             self._dev_info = {
                 'name': dev.device_name,
                 'version': '.'.join(str(x) for x in dev.version),
@@ -76,10 +74,15 @@ class Controller(object):
                 'connections': [
                     t.name for t in TRANSPORT if t & dev.capabilities
                 ],
-                'piv': {
-                    'version': '.'.join(str(x) for x in self._piv_version()),
-                    'certificates': piv_certificates
-                }
+                'piv': {}
+            }
+
+        if self._dev_info and self._piv_controller:
+            piv_certificates = self._piv_list_certificates()
+
+            self._dev_info['piv'] = {
+                'version': '.'.join(str(x) for x in self._piv_version()),
+                'certificates': piv_certificates
             }
 
         return self._dev_info
