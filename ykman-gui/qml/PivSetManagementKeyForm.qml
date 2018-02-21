@@ -11,7 +11,9 @@ ColumnLayout {
 
     ColumnLayout {
 
-        ExclusiveGroup { id: managementKeyTypeChoiceGroup }
+        ExclusiveGroup {
+            id: managementKeyTypeChoiceGroup
+        }
         RadioButton {
             id: pinAsManagementKeyChoice
             text: qsTr("Use PIN as management key")
@@ -45,9 +47,9 @@ ColumnLayout {
             Button {
                 text: qsTr("Randomize")
                 onClicked: {
-                  device.piv_generate_random_mgm_key(function(key) {
-                      newManagementKeyInput.text = key
-                  })
+                    device.piv_generate_random_mgm_key(function (key) {
+                        newManagementKeyInput.text = key
+                    })
                 }
             }
 
@@ -87,5 +89,4 @@ ColumnLayout {
         icon: StandardIcon.Information
         standardButtons: StandardButton.Ok
     }
-
 }
