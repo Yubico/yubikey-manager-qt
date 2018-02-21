@@ -111,7 +111,8 @@ MenuBar {
 
         Menu {
             title: qsTr("FIDO 2")
-            enabled: true // TODO: depends on key
+            enabled: enabledFeatures.indexOf(
+                         'U2F') !== -1 //TODO: Check for FIDO2 feature instead.
             visible: supportForFido2
             MenuItem {
                 text: qsTr("Set PIN...")
