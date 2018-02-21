@@ -114,6 +114,10 @@ ApplicationWindow {
         device: yk
     }
 
+    TouchYubiKey {
+        id: touchYubiKeyPrompt
+    }
+
     MessageDialog {
         id: openPgpResetConfirm
         icon: StandardIcon.Information
