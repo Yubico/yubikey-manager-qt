@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
+    id: root
     visible: true
     title: qsTr("YubiKey Manager")
 
