@@ -68,6 +68,9 @@ Item {
                     }, {
                         id: 'U2F',
                         label: qsTr('U2F')
+                    }, {
+                        id: 'FIDO2',
+                        label: qsTr('FIDO 2')
                     }]
 
                 Repeater {
