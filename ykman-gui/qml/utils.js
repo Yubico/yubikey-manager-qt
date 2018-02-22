@@ -36,3 +36,36 @@ function delay(callback, delayMillis) {
         }
     }
 }
+
+/**
+ * @param lst a QML basic type `list` value
+ * @return the `lst` converted to a JavaScript Array value
+ */
+function listToArray(lst) {
+    var result = []
+    for (var i = 0; i < lst.length; ++i) {
+        result.push(lst[i])
+    }
+    return result
+}
+
+/**
+ * @param arr an Array of numbers
+ * @return the sum of the numbers in `arr`
+ */
+function sum(arr) {
+    return arr.reduce(function(sum, next) { return sum + next }, 0)
+}
+
+/**
+ * @param arr an Array or QML list of objects
+ * @param name a String containing a property name
+ * @return `arr.map(function(item) { return item[name] })`
+ */
+function pick(arr, name) {
+    if (arr instanceof Array) {
+        return arr.map(function(item) { return item[name] })
+    } else {
+        return pick(listToArray(arr), name)
+    }
+}
