@@ -192,7 +192,11 @@ Python {
     }
 
     function piv_reset(cb) {
-        do_call('yubikey.controller.piv_reset', [], cb)
+        do_call('yubikey.controller.piv_reset', [], function(result) {
+            refresh(function() {
+                cb(result)
+            })
+        })
     }
 
 }
