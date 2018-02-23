@@ -83,6 +83,7 @@ class Controller(object):
             self._dev_info['piv'] = {
                 'version': '.'.join(str(x) for x in self._piv_version()),
                 'certificates': piv_certificates,
+                'has_protected_key': self._piv_controller.has_protected_key,
             }
 
         return self._dev_info
