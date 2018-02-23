@@ -330,14 +330,67 @@ class Controller(object):
                            touch=False, store_on_device=False):
         with self._open_piv() as piv_controller:
             if piv_controller.has_protected_key or store_on_device:
-                piv_controller.verify(pin)
+                try:
+                    piv_controller.verify(pin)
+                except ValueError as e:
+                    logger.debug('PIN verification failed', exc_info=e)
+                    return {
+                        'success': False,
+                        'message': str(e),
+                        'failure': {'pin': True},
+                    }
 
             if not piv_controller.has_protected_key:
-                current_key = a2b_hex(current_key_hex)
-                piv_controller.authenticate(current_key)
+                try:
+                    current_key = a2b_hex(current_key_hex)
+                except Exception as e:
+                    logger.debug('Failed to parse current management key',
+                                 exc_info=e)
+                    return {
+                        'success': False,
+                        'message': str(e),
+                        'failure': {'parseCurrentKey': True},
+                      }
 
-            new_key = a2b_hex(new_key_hex) if new_key_hex else None
-            return piv_controller.set_mgm_key(new_key, touch, store_on_device)
+                try:
+                    piv_controller.authenticate(current_key)
+                except Exception as e:
+                    logger.debug('Management key authentication failed',
+                                 exc_info=e)
+                    return {
+                        'success': False,
+                        'message': str(e),
+                        'failure': {'authenticate': True},
+                    }
+
+            try:
+                new_key = a2b_hex(new_key_hex) if new_key_hex else None
+            except Exception as e:
+                logger.debug('Failed to parse new management key', exc_info=e)
+                return {
+                    'success': False,
+                    'message': str(e),
+                    'failure': {'parseNewKey': True},
+                  }
+
+            if new_key is not None and len(new_key) != 24:
+                logger.debug('Wrong length for new management key: %d',
+                             len(new_key))
+                return {
+                    'success': False,
+                    'failure': {'newKeyLength': True},
+                }
+
+            try:
+                piv_controller.set_mgm_key(new_key, touch, store_on_device)
+                return {'success': True}
+            except Exception as e:
+                logger.error('Failed to change management key', exc_info=e)
+                return {
+                    'success': False,
+                    'message': str(e),
+                    'failure': {'setKey': True},
+                }
 
 
 def toDict(cert):

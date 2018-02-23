@@ -191,6 +191,20 @@ Python {
         do_call('yubikey.controller.piv_generate_random_mgm_key', [], cb)
     }
 
+    function piv_change_mgm_key(cb, pin, currentMgmKey, newKey, touch, touchCallback, storeOnDevice) {
+        var touchPromptTimer = Utils.delay(touchCallback, 500)
+
+        // PyOtherSide doesn't seem to support passing through functions as arguments
+        do_call('yubikey.controller.piv_change_mgm_key',
+                [pin, currentMgmKey, newKey, touch, storeOnDevice],
+                function (result) {
+                    touchPromptTimer.stop()
+                    refresh(function() {
+                        cb(result)
+                    })
+                })
+    }
+
     function piv_reset(cb) {
         do_call('yubikey.controller.piv_reset', [], function(result) {
             refresh(function() {
