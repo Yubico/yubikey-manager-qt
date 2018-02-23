@@ -300,6 +300,25 @@ class Controller(object):
         return b2a_hex(ykman.piv.generate_random_management_key()).decode(
             'utf-8')
 
+    def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
+                           touch=False, store_on_device=False):
+
+        if self._piv_controller:
+            ctrl = self._piv_controller
+
+            if ctrl.has_protected_key or store_on_device:
+                ctrl.verify(pin)
+
+            if not ctrl.has_protected_key:
+                current_key = a2b_hex(current_key_hex)
+                ctrl.authenticate(current_key)
+
+            new_key = a2b_hex(new_key_hex) if new_key_hex else None
+            return ctrl.set_mgm_key(new_key, touch, store_on_device)
+        else:
+            logger.error('PIV controller not available.')
+            return None
+
 
 def toDict(cert):
     return {
