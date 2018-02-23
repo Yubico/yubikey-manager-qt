@@ -78,7 +78,7 @@ Python {
         }
     }
 
-    function refresh() {
+    function refresh(doneCallback) {
         do_call('yubikey.controller.count_devices', [], function (n) {
             nDevices = n
             if (nDevices == 1) {
@@ -94,6 +94,10 @@ Python {
                 })
             } else if (hasDevice) {
                 hasDevice = false
+            }
+
+            if (doneCallback) {
+                doneCallback()
             }
         })
     }
