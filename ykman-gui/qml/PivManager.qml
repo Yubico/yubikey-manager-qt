@@ -93,6 +93,7 @@ DefaultDialog {
         PivSetManagementKeyForm {
             id: pivSetManagementKeyForm
             device: yk
+            onChangeSuccessful: changePivManagementKeyDialog.hide()
         }
     }
 
