@@ -57,10 +57,6 @@ macx {
 # Default rules for deployment.
 include(deployment.pri)
 
-# Mac doesn't use qSingleApplication
-!macx {
-    include(vendor/qt-solutions/qtsingleapplication/src/qtsingleapplication.pri)
-}
 
 # Icon file
 RC_ICONS = ../resources/icons/ykman.ico
