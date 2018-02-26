@@ -124,6 +124,7 @@ ColumnLayout {
 
         Button {
             text: 'Default'
+            enabled: currentManagementKeyInput.enabled
             onClicked: currentManagementKeyInput.text = '010203040506070801020304050607080102030405060708'
         }
     }
