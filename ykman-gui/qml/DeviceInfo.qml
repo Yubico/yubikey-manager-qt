@@ -90,7 +90,7 @@ Item {
                 Button {
                     Layout.alignment: Qt.AlignRight
                     text: qsTr("Configure")
-                    enabled: device.enabled.indexOf('OTP') >= 0
+                    enabled: isEnabled('OTP')
                     onClicked: slotDialog.start()
                 }
             }
