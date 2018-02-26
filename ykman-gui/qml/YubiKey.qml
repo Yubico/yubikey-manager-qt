@@ -205,6 +205,10 @@ Python {
                 })
     }
 
+    function piv_export_certificate(slotName, fileUrl, cb) {
+        do_call('yubikey.controller.piv_export_certificate', [slotName, fileUrl], cb)
+    }
+
     function piv_reset(cb) {
         do_call('yubikey.controller.piv_reset', [], function(result) {
             refresh(function() {

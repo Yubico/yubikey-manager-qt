@@ -13,6 +13,8 @@ ColumnLayout {
     readonly property string validFrom: hasCertificate ? new Date(certificate.validity.from).toLocaleString() : ''
     readonly property string validTo: hasCertificate ? new Date(certificate.validity.to).toLocaleString() : ''
 
+    signal exportCertificate
+
     Layout.fillWidth: true
 
     Text {
@@ -69,6 +71,8 @@ ColumnLayout {
             text: qsTr("Export certificate...")
             enabled: hasCertificate
             Layout.fillWidth: true
+
+            onClicked: exportCertificate()
         }
 
         Button {

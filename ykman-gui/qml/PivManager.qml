@@ -33,6 +33,26 @@ DefaultDialog {
 
         PivCertificates {
             certificates: hasDevice ? device.piv.certificates : {}
+
+            onExportCertificate: {
+                exportFileDialog.slotName = slotName
+                exportFileDialog.open()
+            }
+
+            FileDialog {
+                property string slotName
+
+                id: exportFileDialog
+                title: 'Select export destination file'
+                selectExisting: false
+                defaultSuffix: 'pem'
+                nameFilters: [ 'Certificate files (*.pem)', 'All files (*)']
+
+                onAccepted: {
+                    device.piv_export_certificate(slotName, fileUrls[0], function(result) {
+                    })
+                }
+            }
         }
 
         Button {
