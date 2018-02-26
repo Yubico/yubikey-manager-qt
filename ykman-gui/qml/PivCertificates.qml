@@ -4,8 +4,11 @@ import QtQuick.Controls 1.4
 import "utils.js" as Utils
 
 ColumnLayout {
+    id: pivCertificates
 
     property var certificates
+
+    signal exportCertificate(string slotName)
 
     property var certTypes: [{
             id: 'AUTHENTICATION',
@@ -47,6 +50,8 @@ ColumnLayout {
                 PivCertificateSlot {
                     certificate: certificates[modelData.id]
                     description: modelData.description
+
+                    onExportCertificate: pivCertificates.exportCertificate(modelData.id)
                 }
             }
         }

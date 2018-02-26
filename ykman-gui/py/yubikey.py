@@ -7,17 +7,20 @@ import logging
 import os
 import struct
 import types
+import urllib.parse
 import ykman.logging_setup
 
 from base64 import b32decode
 from binascii import b2a_hex, a2b_hex, Error
 from cryptography import x509
+from cryptography.hazmat.primitives import serialization
 
 from ykman.descriptor import get_descriptors
 from ykman.driver import ModeSwitchError
+from ykman.driver_ccid import APDUError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
-from ykman.piv import (PivController, SLOT)
+from ykman.piv import (PivController, SLOT, SW)
 from ykman.util import (
     CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode,
     generate_static_pw)
@@ -382,6 +385,38 @@ class Controller(object):
                     'message': str(e),
                     'failure': {'setKey': True},
                 }
+
+    def piv_export_certificate(self, slot_name, file_url):
+        logger.debug('piv_export_certificate %s %s', slot_name, file_url)
+
+        file_path = urllib.parse.urlparse(file_url).path
+
+        with self._open_piv() as piv_controller:
+            try:
+                cert = piv_controller.read_certificate(SLOT[slot_name])
+            except APDUError as e:
+                if e.sw == SW.NOT_FOUND:
+                    return {
+                        'success': False,
+                        'failure': {
+                            'notFound': True,
+                        },
+                    }
+                else:
+                    logger.error('Failed to read certificate from slot %s',
+                                 slot_name, exc_info=e)
+                    return {
+                        'success': False,
+                        'message': 'Failed to read certificate from slot %s' %
+                        slot_name,
+                        'failure': {},
+                    }
+
+            with open(file_path, 'w+b') as certificate_file:
+                certificate_file.write(cert.public_bytes(
+                    encoding=serialization.Encoding.PEM))
+
+            return {'success': True}
 
 
 def toDict(cert):
