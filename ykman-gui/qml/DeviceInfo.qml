@@ -87,6 +87,12 @@ Item {
                                                                            "Not available"))
                     }
                 }
+                Button {
+                    Layout.alignment: Qt.AlignRight
+                    text: qsTr("Configure")
+                    enabled: device.enabled.indexOf('OTP') >= 0
+                    onClicked: slotDialog.start()
+                }
             }
         }
 
@@ -119,6 +125,12 @@ Item {
                     text: readable_list(device.enabled.filter(function (e) {
                         return device.connections.indexOf(e) >= 0
                     }))
+                }
+                Button {
+                    Layout.alignment: Qt.AlignRight
+                    text: qsTr("Configure")
+                    enabled: device.connections.length > 1
+                    onClicked: connectionsDialog.show()
                 }
             }
         }

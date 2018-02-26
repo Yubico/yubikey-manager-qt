@@ -10,10 +10,6 @@ ApplicationWindow {
            | Qt.WindowMinimizeButtonHint | Qt.MSWindowsFixedSizeDialogHint
 
     menuBar: MainMenuBar {
-        enabledFeatures: yk.enabled
-        enableConnectionsDialog: yk.connections.length > 1
-        enablePgpTouch: supportsOpenPgpTouch()
-        enablePgpPinRetries: supportsOpenPgpPinRetries()
     }
 
     AboutPage {
