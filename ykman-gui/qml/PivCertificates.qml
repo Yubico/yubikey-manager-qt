@@ -7,6 +7,24 @@ ColumnLayout {
 
     property var certificates
 
+    property var certTypes: [{
+            id: 'AUTHENTICATION',
+            title: 'Authentication',
+            description: qsTr('The X.509 Certificate for PIV Authentication and its associated private key, as defined in FIPS 201, is used to authenticate the card and the cardholder.'),
+        }, {
+            id: 'SIGNATURE',
+            title: 'Digital Signature',
+            description: qsTr('The X.509 Certificate for Digital Signature and its associated private key, as defined in FIPS 201, support the use of digital signatures for the purpose of document signing.'),
+        }, {
+            id: 'KEY_MANAGEMENT',
+            title: 'Key Management',
+            description: qsTr('The X.509 Certificate for Key Management and its associated private key, as defined in FIPS 201, support the use of encryption for the purpose of confidentiality.'),
+        }, {
+            id: 'CARD_AUTH',
+            title: 'Card Authentication',
+            description: qsTr('FIPS 201 specifies the optional Card Authentication Key (CAK) as an asymmetric or symmetric key that is used to support additional physical access applications.'),
+        }]
+
     TabView {
         id: tabs
         Layout.fillWidth: true
@@ -19,50 +37,19 @@ ColumnLayout {
             tabs.currentIndex = 0
         }
 
-        Tab {
-            title: "Authentication"
-            anchors.margins: 12
+        Repeater {
+            model: certTypes
 
-            PivCertificateSlot {
-                certificate: certificates[0x9a.toString()]
-                description: qsTr("The X.509 Certificate for PIV Authentication and its associated private key, as defined in FIPS 201, is used to authenticate the card and the cardholder.")
-            }
-        }
+            Tab {
+                title: modelData.title
+                anchors.margins: 12
 
-        Tab {
-            title: "Digital Signature"
-
-            ColumnLayout {
-                Text {
-                    text: qsTr("The X.509 Certificate for Digital Signature and its associated private key, as defined in FIPS 201, support the use of digital signatures for the purpose of document signing. ")
-                    wrapMode: Text.WordWrap
+                PivCertificateSlot {
+                    certificate: certificates[modelData.id]
+                    description: modelData.description
                 }
             }
         }
-
-        Tab {
-            title: "Key Management"
-
-            ColumnLayout {
-                Text {
-                    text: qsTr("The X.509 Certificate for Key Management and its associated private key, as defined in FIPS 201, support the use of encryption for the purpose of confidentiality.")
-                    wrapMode: Text.WordWrap
-                }
-            }
-        }
-
-        Tab {
-            title: "Card Authentication"
-
-            ColumnLayout {
-                Text {
-                    text: qsTr("FIPS 201 specifies the optional Card Authentication Key (CAK) as an asymmetric or symmetric key that is used to support additional physical access applications. ")
-                    wrapMode: Text.WordWrap
-                }
-            }
-        }
-
-
     }
 
 }
