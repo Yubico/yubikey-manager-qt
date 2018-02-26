@@ -11,6 +11,9 @@ DefaultDialog {
     property var device
     readonly property var yk: device // Needed so that we can pass `device: yk` to subcomponents
     property bool hasDevice: (device && device.hasDevice && device.piv) || false
+    readonly property var certificates: hasDevice && device.piv.certificates || {}
+    readonly property int numCerts: Object.keys(certificates).length
+
     minimumWidth: 500
 
     ColumnLayout {
@@ -24,7 +27,7 @@ DefaultDialog {
 
         GroupBox {
             //: PIV certificates list heading
-            title: qsTr("Certificates")
+            title: qsTr("Certificates: %1").arg(numCerts)
             Layout.fillWidth: true
 
             PivCertificates {
