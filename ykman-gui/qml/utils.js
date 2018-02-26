@@ -50,6 +50,14 @@ function listToArray(lst) {
 }
 
 /**
+ * @param arr an array of numbers
+ * @return the greatest value in `arr`
+ */
+function maxIn(arr) {
+    return arr.reduce(function(max, next) { return Math.max(max, next) })
+}
+
+/**
  * @param arr an Array or QML list of objects
  * @param name a String containing a property name
  * @return `arr.map(function(item) { return item[name] })`
