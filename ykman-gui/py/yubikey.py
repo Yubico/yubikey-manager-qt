@@ -20,7 +20,7 @@ from ykman.util import (
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
-from ykman.piv import PivController
+from ykman.piv import (PivController, SLOT)
 
 logger = logging.getLogger(__name__)
 
@@ -318,7 +318,8 @@ class Controller(object):
         with self._open_piv() as piv_controller:
             certs = piv_controller.list_certificates()
             logger.debug('Certificates: %s', certs)
-            certs = {slot: toDict(cert) for slot, cert in certs.items()}
+            certs = {
+                SLOT(slot).name: toDict(cert) for slot, cert in certs.items()}
             logger.debug('Certificates: %s', certs)
             return certs
 
