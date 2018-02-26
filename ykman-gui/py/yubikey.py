@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-import os
 import json
 import logging
-import types
+import os
 import struct
+import types
 import ykman.logging_setup
 
 from base64 import b32decode
@@ -14,13 +14,13 @@ from binascii import b2a_hex, a2b_hex, Error
 from cryptography import x509
 
 from ykman.descriptor import get_descriptors
-from ykman.util import (
-    CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode,
-    generate_static_pw)
 from ykman.driver import ModeSwitchError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
 from ykman.piv import (PivController, SLOT)
+from ykman.util import (
+    CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode,
+    generate_static_pw)
 
 logger = logging.getLogger(__name__)
 
