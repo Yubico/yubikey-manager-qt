@@ -24,14 +24,14 @@ DefaultDialog {
             )
         }
 
-        GroupBox {
+        Label {
             //: PIV certificates list heading
-            title: qsTr("Certificates: %1").arg(numCerts)
+            text: qsTr("Certificates: %1").arg(numCerts)
             Layout.fillWidth: true
+        }
 
-            PivCertificates {
-                certificates: hasDevice ? device.piv.certificates : {}
-            }
+        PivCertificates {
+            certificates: hasDevice ? device.piv.certificates : {}
         }
 
         Button {
