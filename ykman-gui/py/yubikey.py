@@ -401,6 +401,10 @@ def toDict(cert):
         'issuer': {
             'commonName': cert.issuer.get_attributes_for_oid(x509.NameOID.COMMON_NAME)[0].value,  # noqa: E501
         },
+        'validity': {
+            'from': cert.not_valid_before.isoformat(),
+            'to': cert.not_valid_after.isoformat(),
+        }
     }
 
 
