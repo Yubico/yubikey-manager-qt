@@ -4,15 +4,15 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
 ColumnLayout {
+    width: 350
     Label {
         text: "Reset FIDO 2 credentials"
         font.bold: true
     }
     Label {
-        text: qsTr("A reset deletes all FIDO credentials on the device, and removes the PIN.
-
-The reset must triggered within 10 seconds after the YubiKey is inserted in the USB port,
-and requires a touch on the YubiKey.")
+        text: qsTr("A reset deletes all FIDO credentials on the device, and removes the PIN. The reset must triggered within 10 seconds after the YubiKey is inserted in the USB port, and requires a touch on the YubiKey.")
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
 
     RowLayout {

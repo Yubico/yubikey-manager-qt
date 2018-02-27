@@ -6,24 +6,19 @@ import QtQuick.Dialogs 1.2
 DefaultDialog {
 
     title: qsTr("Configure FIDO 2")
-    minimumHeight: calculatedHeight
-    minimumWidth: calculatedWidth
-    height: calculatedHeight
-    width: calculatedWidth
+    minimumHeight: calculated()
+    minimumWidth: 350
+    height: calculated()
+    width: 350
 
     property var device
     property bool hasPin
     property int pinRetries
-    property int calculatedHeight: calculated().h
-    property int calculatedWidth: calculated().w
 
     function calculated() {
         var stackItem = stack.currentItem
         var doubleMargins = margins * 2
-        return {
-            w: stackItem ? stackItem.implicitWidth + doubleMargins : 0,
-                           h: stackItem ? stackItem.implicitHeight + doubleMargins : 0
-        }
+        return stackItem ? stackItem.implicitHeight + doubleMargins : 0
     }
 
     function load() {
