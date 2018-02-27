@@ -3,87 +3,76 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
-DefaultDialog {
-
-    property var device
-    title: qsTr("Set PIN for FIDO 2")
-    minimumWidth: 250
-    maximumWidth: 250
-    modality: Qt.ApplicationModal
+ColumnLayout {
 
     property bool validNewPin: newPin.text.length >= 4
                                && newPin.text == confirmPin.text
-    property bool hasPin
-
-    ColumnLayout {
-
-        GridLayout {
-            columns: 2
-            Label {
-                text: qsTr("Current PIN: ")
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                Layout.fillWidth: false
-                visible: hasPin
-            }
-            TextField {
-                id: currentPin
-                echoMode: TextInput.Password
-                Layout.fillWidth: true
-                Keys.onEscapePressed: close()
-                visible: hasPin
-            }
-
-            Label {
-                text: qsTr("New PIN: ")
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                Layout.fillWidth: false
-            }
-            TextField {
-                id: newPin
-                echoMode: TextInput.Password
-                Layout.fillWidth: true
-                Keys.onEscapePressed: close()
-            }
-            Label {
-                text: qsTr("Confirm PIN: ")
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                Layout.fillWidth: false
-            }
-            TextField {
-                id: confirmPin
-                echoMode: TextInput.Password
-                Layout.fillWidth: true
-                Keys.onEscapePressed: close()
-            }
+    GridLayout {
+        columns: 2
+        Label {
+            text: qsTr("Current PIN: ")
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.fillWidth: false
+            visible: hasPin
         }
-        RowLayout {
-            Layout.alignment: Qt.AlignRight
-            Button {
-                text: qsTr("Cancel")
-                onClicked: close()
-            }
-            Button {
-                text: qsTr("Set PIN")
-                enabled: validNewPin
-                onClicked: updatePin()
-            }
+        TextField {
+            id: currentPin
+            echoMode: TextInput.Password
+            Layout.fillWidth: true
+            visible: hasPin
+        }
+
+        Label {
+            text: qsTr("New PIN: ")
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.fillWidth: false
+        }
+        TextField {
+            id: newPin
+            echoMode: TextInput.Password
+            Layout.fillWidth: true
+        }
+        Label {
+            text: qsTr("Confirm PIN: ")
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.fillWidth: false
+        }
+        TextField {
+            id: confirmPin
+            echoMode: TextInput.Password
+            Layout.fillWidth: true
+        }
+    }
+    RowLayout {
+        Layout.alignment: Qt.AlignRight
+        Button {
+            text: qsTr("Cancel")
+            onClicked: stack.pop({
+                                     immediate: true
+                                 })
+        }
+        Button {
+            text: qsTr("Set PIN")
+            enabled: validNewPin
+            onClicked: updatePin()
         }
     }
 
     MessageDialog {
         id: fidoSetPinError
         icon: StandardIcon.Critical
-        title: qsTr("OpenPGP functionality has been reset.")
+        title: qsTr("Failed to set PIN.")
         standardButtons: StandardButton.Ok
+        onAccepted: fidoDialog.load()
     }
 
-    function load() {
-        device.fido_has_pin(showDialog)
-    }
-
-    function showDialog(res) {
-        hasPin = res
-        show()
+    MessageDialog {
+        id: fidoPinConfirmation
+        icon: StandardIcon.Information
+        title: qsTr("A new PIN has been set!")
+        text: qsTr("A new PIN has been set for the FIDO 2 functionality.")
+        standardButtons: StandardButton.Ok
+        onAccepted: fidoDialog.load()
     }
 
     function updatePin() {
@@ -98,7 +87,6 @@ DefaultDialog {
 
     function handleChangePin(err) {
         if (!err) {
-            close()
             fidoPinConfirmation.open()
         } else {
             fidoSetPinError.text = err

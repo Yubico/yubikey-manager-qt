@@ -57,8 +57,8 @@ Item {
                         id: 'OTP',
                         label: qsTr('YubiKey Slots')
                     }, {
-                        id: 'PIV',
-                        label: qsTr('PIV')
+                        id: 'FIDO2',
+                        label: qsTr('FIDO 2')
                     }, {
                         id: 'OATH',
                         label: qsTr('OATH')
@@ -69,8 +69,8 @@ Item {
                         id: 'U2F',
                         label: qsTr('U2F')
                     }, {
-                        id: 'FIDO2',
-                        label: qsTr('FIDO 2')
+                        id: 'PIV',
+                        label: qsTr('PIV')
                     }]
 
                 Repeater {
@@ -95,6 +95,12 @@ Item {
                     text: qsTr("Configure")
                     enabled: isEnabled('OTP')
                     onClicked: slotDialog.start()
+                }
+                Button {
+                    Layout.alignment: Qt.AlignRight
+                    text: qsTr("Configure")
+                    enabled: isEnabled('FIDO2')
+                    onClicked: fidoDialog.load()
                 }
             }
         }

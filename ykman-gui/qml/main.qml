@@ -104,13 +104,8 @@ ApplicationWindow {
         device: yk
     }
 
-    FidoChangePinDialog {
-        id: fidoChangePinDialog
-        device: yk
-    }
-
-    FidoResetDialog {
-        id: fidoResetDialog
+    FidoDialog {
+        id: fidoDialog
         device: yk
     }
 
@@ -140,13 +135,6 @@ ApplicationWindow {
         icon: StandardIcon.Information
         title: qsTr("Pin retries for OpenPGP")
         text: qsTr("New pin retries for OpenPGP has been set.")
-        standardButtons: StandardButton.Ok
-    }
-    MessageDialog {
-        id: fidoPinConfirmation
-        icon: StandardIcon.Information
-        title: qsTr("A new PIN has been set!")
-        text: qsTr("A new PIN has been set for the FIDO 2 functionality.")
         standardButtons: StandardButton.Ok
     }
 
