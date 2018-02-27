@@ -6,10 +6,9 @@ Item {
     property var device
     property int margin: Layout.minimumWidth / 30
 
-    width: 370
-    height: 350
     Layout.minimumWidth: 370
-    Layout.minimumHeight: 350
+    Layout.minimumHeight: deviceBox.implicitHeight + featureBox.implicitHeight
+                          + connectionsBox.implicitHeight + margin * 4
 
     ColumnLayout {
         anchors.fill: parent
