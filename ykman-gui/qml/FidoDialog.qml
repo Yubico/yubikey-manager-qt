@@ -66,28 +66,50 @@ DefaultDialog {
     Component {
         id: initial
         ColumnLayout {
-            Label {
-                text: getPinMessage()
+            GroupBox {
+                Layout.fillWidth: true
+                title: qsTr("PIN Management")
+                RowLayout {
+                    anchors.fill: parent
+                    Label {
+                        text: getPinMessage()
+                    }
+                    Button {
+                        text: qsTr("Set PIN...")
+                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                        onClicked: stack.push({
+                                                  item: fidoChangePinDialog,
+                                                  immediate: true
+                                              })
+                    }
+                }
             }
+
+            GroupBox {
+                Layout.fillWidth: true
+                title: qsTr("Reset FIDO 2")
+                ColumnLayout {
+                    anchors.fill: parent
+                    Label {
+                        text: qsTr(
+                                  "Delete all FIDO credentials and remove PIN.")
+                    }
+                    Button {
+                        text: qsTr("Reset...")
+                        Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                        onClicked: stack.push({
+                                                  item: fidoResetDialog,
+                                                  immediate: true
+                                              })
+                    }
+                }
+            }
+
             RowLayout {
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 Button {
                     text: qsTr("Cancel")
                     onClicked: close()
-                }
-                Button {
-                    text: qsTr("Reset")
-                    onClicked: stack.push({
-                                              item: fidoResetDialog,
-                                              immediate: true
-                                          })
-                }
-                Button {
-                    text: qsTr("Set PIN")
-                    onClicked: stack.push({
-                                              item: fidoChangePinDialog,
-                                              immediate: true
-                                          })
                 }
             }
         }
