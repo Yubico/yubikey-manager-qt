@@ -38,6 +38,33 @@ function delay(callback, delayMillis) {
 }
 
 /**
+ * Add `objB` into a copy of `objA`.
+ *
+ * @param objA an object
+ * @param objB an object
+ *
+ * @return a new object containing all key-value pairs in `objA` and `objB`. If
+ * a key exists in both `objA` and `objB`, the corresponding value from `objB`
+ * is used.
+ */
+function extend(objA, objB) {
+    var copyOfA = Object.keys(objA).reduce(
+        function(result, key) {
+            result[key] = objA[key];
+            return result;
+        },
+        {}
+    );
+    return Object.keys(objB).reduce(
+        function(result, key) {
+            result[key] = objB[key];
+            return result;
+        },
+        copyOfA
+    );
+}
+
+/**
  * @param lst a QML basic type `list` value
  * @return the `lst` converted to a JavaScript Array value
  */
