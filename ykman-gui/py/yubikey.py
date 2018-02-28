@@ -34,17 +34,6 @@ def as_json(f):
     return wrapped
 
 
-class DeviceContextManager:
-    def __init__(self, dev):
-        self._dev = dev
-
-    def __enter__(self):
-        return self._dev
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self._dev.close()
-
-
 class PivContextManager:
     def __init__(self, dev):
         self._dev = dev
@@ -72,8 +61,7 @@ class Controller(object):
         return len(list(get_descriptors()))
 
     def _open_device(self, transports=sum(TRANSPORT)):
-        return DeviceContextManager(
-                self._descriptor.open_device(transports=transports))
+        return self._descriptor.open_device(transports=transports)
 
     def _open_piv(self):
         return PivContextManager(
