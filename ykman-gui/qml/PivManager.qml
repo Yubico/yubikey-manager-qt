@@ -6,6 +6,10 @@ import QtQuick.Window 2.0
 
 DefaultDialog {
 
+    height: calculateHeight()
+    minimumHeight: calculateHeight()
+    minimumWidth: calculateWidth()
+    width: minimumWidth
     title: qsTr("PIV Manager")
 
     property var device
@@ -14,77 +18,97 @@ DefaultDialog {
     readonly property var certificates: hasDevice && device.piv.certificates || {}
     readonly property int numCerts: Object.keys(certificates).length
 
-    minimumWidth: 500
+    function calculateHeight() {
+        var stackItem = stack.currentItem
+        var doubleMargins = margins * 2
+        return stackItem ? stackItem.implicitHeight + doubleMargins : 0
+    }
 
-    ColumnLayout {
+    function calculateWidth() {
+        var stackItem = stack.currentItem
+        var doubleMargins = margins * 2
+        return stackItem ? stackItem.implicitWidth + doubleMargins : 0
+    }
 
-        Label {
-            text: (hasDevice
-                ? qsTr("YubiKey present with applet version: %1").arg(device && device.piv && device.piv.version || '?')
-                : qsTr("No YubiKey detected.")
-            )
-        }
+    StackView {
+        id: stack
+        anchors.fill: parent
+        initialItem: overview
+    }
 
-        Label {
-            //: PIV certificates list heading
-            text: qsTr("Certificates: %1").arg(numCerts)
-            Layout.fillWidth: true
-        }
+    Component {
+        id: overview
 
-        PivCertificates {
-            certificates: hasDevice ? device.piv.certificates : {}
+        ColumnLayout {
 
-            onDeleteCertificate: {
-                device.piv_delete_certificate({
-                    slotName: slotName,
-                    callback: function(result) {
-                        if (!result.success) {
-                            showMessage('Delete failed', 'Failed to delete certificate: ' + (result.message || 'unknown error.'))
+            Label {
+                text: (hasDevice
+                    ? qsTr("YubiKey present with applet version: %1").arg(device && device.piv && device.piv.version || '?')
+                    : qsTr("No YubiKey detected.")
+                )
+            }
+
+            Label {
+                //: PIV certificates list heading
+                text: qsTr("Certificates: %1").arg(numCerts)
+                Layout.fillWidth: true
+            }
+
+            PivCertificates {
+                certificates: hasDevice ? device.piv.certificates : {}
+
+                onDeleteCertificate: {
+                    device.piv_delete_certificate({
+                        slotName: slotName,
+                        callback: function(result) {
+                            if (!result.success) {
+                                showMessage('Delete failed', 'Failed to delete certificate: ' + (result.message || 'unknown error.'))
+                            }
+                        },
+                        pinCallback: function(callback, message) {
+                            pinPromptDialog.ask(callback, message)
+                        },
+                        keyCallback: function(callback, message) {
+                            keyPromptDialog.ask(callback, message)
+                        },
+                        touchCallback: function() {
+                            touchYubiKeyPrompt.open()
                         }
-                    },
-                    pinCallback: function(callback, message) {
-                        pinPromptDialog.ask(callback, message)
-                    },
-                    keyCallback: function(callback, message) {
-                        keyPromptDialog.ask(callback, message)
-                    },
-                    touchCallback: function() {
-                        touchYubiKeyPrompt.open()
-                    }
-                })
-            }
-
-            onExportCertificate: {
-                exportFileDialog.slotName = slotName
-                exportFileDialog.open()
-            }
-
-            FileDialog {
-                property string slotName
-
-                id: exportFileDialog
-                title: 'Select export destination file'
-                selectExisting: false
-                defaultSuffix: 'pem'
-                nameFilters: [ 'Certificate files (*.pem)', 'All files (*)']
-
-                onAccepted: {
-                    device.piv_export_certificate(slotName, fileUrls[0], function(result) {
                     })
                 }
+
+                onExportCertificate: {
+                    exportFileDialog.slotName = slotName
+                    exportFileDialog.open()
+                }
+
+                FileDialog {
+                    property string slotName
+
+                    id: exportFileDialog
+                    title: 'Select export destination file'
+                    selectExisting: false
+                    defaultSuffix: 'pem'
+                    nameFilters: [ 'Certificate files (*.pem)', 'All files (*)']
+
+                    onAccepted: {
+                        device.piv_export_certificate(slotName, fileUrls[0], function(result) {
+                        })
+                    }
+                }
             }
-        }
 
-        Button {
-            text: qsTr("Change PIN")
-            onClicked: startChangePin()
-        }
+            Button {
+                text: qsTr("Change PIN")
+                onClicked: startChangePin()
+            }
 
-        Button {
-            text: qsTr("Change PUK")
-            onClicked: startChangePuk()
-        }
+            Button {
+                text: qsTr("Change PUK")
+                onClicked: startChangePuk()
+            }
 
+        }
     }
 
     ChangePinDialog {
