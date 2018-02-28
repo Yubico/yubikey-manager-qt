@@ -99,6 +99,7 @@ Item {
                     Layout.alignment: Qt.AlignRight
                     text: qsTr("Configure")
                     enabled: isEnabled('FIDO2')
+                    visible: isEnabled('FIDO2')
                     onClicked: fidoDialog.load()
                 }
             }

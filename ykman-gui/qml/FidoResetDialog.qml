@@ -4,13 +4,28 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
 ColumnLayout {
+    id: resetDialog
     width: 350
+
+    function reset() {
+        device.fido_reset(handleReset)
+    }
+
+    function handleReset(err) {
+        if (!err) {
+            fidoResetTouch.open()
+        } else {
+            fidoResetError.text = err
+            fidoResetError.open()
+        }
+    }
+
     Label {
         text: "Reset FIDO 2 credentials"
         font.bold: true
     }
     Label {
-        text: qsTr("A reset deletes all FIDO credentials on the device, and removes the PIN. The reset must triggered within 10 seconds after the YubiKey is inserted in the USB port, and requires a touch on the YubiKey.")
+        text: qsTr("A reset deletes all FIDO credentials on the device, inlcuding FIDO U2F credentials, and removes the PIN. The reset must triggered within 10 seconds after the YubiKey is inserted in the USB port, and requires a touch on the YubiKey.")
         Layout.fillWidth: true
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
@@ -25,9 +40,19 @@ ColumnLayout {
         }
         Button {
             text: qsTr("Reset")
-            onClicked: reset()
+            onClicked: resetWarning.open()
         }
     }
+
+    MessageDialog {
+        id: resetWarning
+        icon: StandardIcon.Warning
+        title: qsTr("Reset FIDO 2?")
+        text: qsTr("Are you sure you want to reset the FIDO 2 functionality? This will delete all credentials, including FIDO U2F credentials. This action cannot be undone.")
+        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        onAccepted: resetDialog.reset()
+    }
+
     MessageDialog {
         id: fidoResetError
         icon: StandardIcon.Critical
@@ -42,18 +67,5 @@ ColumnLayout {
         text: qsTr("Touch your YubiKey to confirm the reset.")
         standardButtons: StandardButton.Ok
         onAccepted: fidoDialog.load()
-    }
-
-    function reset() {
-        device.fido_reset(handleReset)
-    }
-
-    function handleReset(err) {
-        if (!err) {
-            fidoResetTouch.open()
-        } else {
-            fidoResetError.text = err
-            fidoResetError.open()
-        }
     }
 }
