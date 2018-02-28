@@ -8,6 +8,7 @@ ColumnLayout {
 
     property var certificates
 
+    signal deleteCertificate(string slotName)
     signal exportCertificate(string slotName)
 
     property var certTypes: [{
@@ -51,6 +52,7 @@ ColumnLayout {
                     certificate: certificates[modelData.id]
                     description: modelData.description
 
+                    onDeleteCertificate: pivCertificates.deleteCertificate(modelData.id)
                     onExportCertificate: pivCertificates.exportCertificate(modelData.id)
                 }
             }

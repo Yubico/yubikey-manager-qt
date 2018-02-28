@@ -209,6 +209,45 @@ Python {
         do_call('yubikey.controller.piv_export_certificate', [slotName, fileUrl], cb)
     }
 
+    function piv_delete_certificate(args) {
+        var touchPromptTimer = Utils.delay(args.touchCallback, 500)
+
+        // PyOtherSide doesn't seem to support passing through functions as arguments
+        do_call('yubikey.controller.piv_delete_certificate', [args.slotName, args.pin, args.keyHex],
+                function (result) {
+                    touchPromptTimer.stop()
+                    touchYubiKeyPrompt.close()
+
+                    if (!result.success && result.failure.pinRequired) {
+                        args.pinCallback(function(pin) {
+                            piv_delete_certificate(Utils.extend(args, { pin: pin }))
+                        })
+                    } else if (!result.success && result.failure.pinVerification) {
+                        args.pinCallback(
+                            function(pin) {
+                                piv_delete_certificate(Utils.extend(args, { pin: pin }))
+                            },
+                            result.message
+                        )
+                    } else if (!result.success && result.failure.keyRequired) {
+                        args.keyCallback(function(keyHex) {
+                            piv_delete_certificate(Utils.extend(args, { keyHex: keyHex }))
+                        })
+                    } else if (!result.success && result.failure.keyAuthentication) {
+                        args.keyCallback(
+                            function(keyHex) {
+                                piv_delete_certificate(Utils.extend(args, { keyHex: keyHex }))
+                            },
+                            result.message
+                        )
+                    } else {
+                        refresh(function() {
+                            args.callback(result)
+                        })
+                    }
+                })
+    }
+
     function piv_reset(cb) {
         do_call('yubikey.controller.piv_reset', [], function(result) {
             refresh(function() {
