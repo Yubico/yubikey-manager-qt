@@ -10,6 +10,7 @@ ColumnLayout {
 
     signal deleteCertificate(string slotName)
     signal exportCertificate(string slotName)
+    signal generateKey(string slotName)
 
     property var certTypes: [{
             id: 'AUTHENTICATION',
@@ -54,6 +55,7 @@ ColumnLayout {
 
                     onDeleteCertificate: pivCertificates.deleteCertificate(modelData.id)
                     onExportCertificate: pivCertificates.exportCertificate(modelData.id)
+                    onGenerateKey: pivCertificates.generateKey(modelData.id)
                 }
             }
         }
