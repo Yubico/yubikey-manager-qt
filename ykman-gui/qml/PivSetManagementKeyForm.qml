@@ -37,7 +37,7 @@ ColumnLayout {
         Tab {
             id: personalTab
             title: "Personal"
-            anchors.margins: 12
+            anchors.margins: margins
 
             ColumnLayout {
                 Label {
@@ -49,7 +49,7 @@ ColumnLayout {
         Tab {
             id: enterpriseTab
             title: "Enterprise"
-            anchors.margins: 12
+            anchors.margins: margins
 
             ColumnLayout {
                 id: foo

@@ -33,8 +33,8 @@ ColumnLayout {
         id: tabs
         Layout.fillWidth: true
 
-        Layout.minimumHeight: Utils.maxIn(Utils.pick(contentItem.children, 'implicitHeight')) + 24
-        Layout.minimumWidth: Utils.maxIn(Utils.pick(contentItem.children, 'implicitWidth')) + 24
+        Layout.minimumHeight: Utils.maxIn(Utils.pick(contentItem.children, 'implicitHeight')) + margins * 2
+        Layout.minimumWidth: Utils.maxIn(Utils.pick(contentItem.children, 'implicitWidth')) + margins * 2
 
         Component.onCompleted: {
             tabs.currentIndex = 1
@@ -46,7 +46,7 @@ ColumnLayout {
 
             Tab {
                 title: modelData.title
-                anchors.margins: 12
+                anchors.margins: margins
 
                 PivCertificateSlot {
                     certificate: certificates[modelData.id]
