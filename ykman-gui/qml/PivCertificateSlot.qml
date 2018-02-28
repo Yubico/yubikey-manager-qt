@@ -13,6 +13,7 @@ ColumnLayout {
     readonly property string validFrom: hasCertificate ? new Date(certificate.validity.from).toLocaleString() : ''
     readonly property string validTo: hasCertificate ? new Date(certificate.validity.to).toLocaleString() : ''
 
+    signal deleteCertificate
     signal exportCertificate
 
     Layout.fillWidth: true
@@ -79,6 +80,7 @@ ColumnLayout {
             Layout.fillWidth: true
             enabled: hasCertificate
             text: qsTr("Delete certificate")
+            onClicked: deleteCertificate()
         }
 
         Button {
