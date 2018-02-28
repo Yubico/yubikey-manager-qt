@@ -90,7 +90,7 @@ Item {
                     Layout.alignment: Qt.AlignRight
                     text: qsTr("Configure")
                     enabled: isEnabled('OTP')
-                    onClicked: slotDialog.start()
+                    onClicked: slotDialog.load()
                 }
             }
         }

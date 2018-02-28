@@ -6,66 +6,69 @@ import QtQuick.Window 2.0
 import "slotutils.js" as SlotUtils
 
 ColumnLayout {
-
-    property var device
-    property var slotsEnabled: [false, false]
-    property int selectedSlot
-    signal configureSlot(int slot)
-    signal updateStatus
-    signal goToOverview
-    signal goToSelectType
-    signal goToSlotStatus
-    signal goToConfigureOTP
-    signal goToChallengeResponse
-    signal goToStaticPassword
-    signal goToOathHotp
+    width: 350
+    id: confColumn
 
     Label {
-        text: qsTr("Configure HOTP credential for ") + SlotUtils.slotNameCapitalized(selectedSlot)
+        text: qsTr("Configure HOTP credential for ") + SlotUtils.slotNameCapitalized(
+                  selectedSlot)
         font.bold: true
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        Layout.maximumWidth: confColumn.width
     }
 
     Label {
         text: qsTr("When triggered, the YubiKey will output a HOTP code.")
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        Layout.maximumWidth: confColumn.width
     }
     GroupBox {
-        title: qsTr("Secret key")
+        title: qsTr("Secret Key")
         Layout.fillWidth: true
+        Layout.maximumWidth: confColumn.width
         ColumnLayout {
+            anchors.fill: parent
             RowLayout {
+                Layout.fillWidth: true
                 TextField {
                     id: secretKeyInput
-                    implicitWidth: 240
+                    Layout.fillWidth: true
                     font.family: "Courier"
                     validator: RegExpValidator {
                         regExp: /[ 2-7a-zA-Z]+=*/
                     }
                 }
             }
-            RowLayout {
-                Label {
-                    text: qsTr("The Secret key should be encoded in base32.")
-                }
+
+            Label {
+                text: qsTr("The Secret key should be encoded in base32.")
+                Layout.fillWidth: true
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.maximumWidth: confColumn.width
             }
 
             RowLayout {
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Label {
                     text: qsTr("Digits")
                 }
                 ComboBox {
-                    model: [ 6, 8 ]
+                    id: digits
+                    model: [6, 8]
                 }
             }
         }
     }
 
-
-
     RowLayout {
         Layout.alignment: Qt.AlignRight
         Button {
             text: qsTr("Back")
-            onClicked: goToSelectType()
+            onClicked: stack.pop({
+                                     immediate: true
+                                 })
         }
         Button {
             text: qsTr("Finish")
@@ -87,9 +90,8 @@ ColumnLayout {
         standardButtons: StandardButton.Ok
     }
 
-
     function finish() {
-        if (slotsEnabled[selectedSlot - 1]) {
+        if (slotsConfigured[selectedSlot - 1]) {
             warning.open()
         } else {
             programOathHotp()
@@ -98,20 +100,17 @@ ColumnLayout {
 
     function programOathHotp() {
         device.program_oath_hotp(selectedSlot, secretKeyInput.text,
-                                          8,
-                                          function (error) {
-                                              if (!error) {
-                                                  updateStatus()
-                                                  confirmConfigured.open()
-                                              } else {
-                                                  if (error === 'Incorrect padding') {
-                                                    paddingError.open()
-                                                  }
-                                                  if (error === 3) {
-                                                    writeError.open()
-                                                  }
-                                              }
-                                          })
+                                 digits.currentText, function (error) {
+                                     if (!error) {
+                                         confirmConfigured.open()
+                                     } else {
+                                         if (error === 'Incorrect padding') {
+                                             paddingError.open()
+                                         }
+                                         if (error === 3) {
+                                             writeError.open()
+                                         }
+                                     }
+                                 })
     }
-
 }
