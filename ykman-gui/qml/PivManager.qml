@@ -17,6 +17,7 @@ DefaultDialog {
     property bool hasDevice: (device && device.hasDevice && device.piv) || false
     readonly property var certificates: hasDevice && device.piv.certificates || {}
     readonly property int numCerts: Object.keys(certificates).length
+    property string generateKeySlotName: ''
 
     function calculateHeight() {
         var stackItem = stack.currentItem
@@ -93,6 +94,11 @@ DefaultDialog {
                     exportFileDialog.open()
                 }
 
+                onGenerateKey: {
+                    generateKeySlotName = slotName
+                    push(generateKeyView)
+                }
+
                 FileDialog {
                     property string slotName
 
@@ -114,6 +120,39 @@ DefaultDialog {
                 onClicked: startChangePin()
             }
 
+        }
+    }
+
+    Component {
+        id: generateKeyView
+
+        PivGenerateKeyView {
+            slotName: generateKeySlotName
+            onAccepted: {
+                device.piv_generate_certificate({
+                    slotName: slotName,
+                    algorithm: algorithm,
+                    csrFileUrl: csrFileUrl,
+                    expirationDate: expirationDate,
+                    selfSign: selfSign,
+                    subjectDn: subjectDn,
+                    callback: function(result) {
+                        if (!result.success) {
+                            showMessage('Generate failed', 'Failed to generate certificate: ' + (result.message || 'unknown error.'))
+                        }
+                    },
+                    pinCallback: function(callback, message) {
+                        pinPromptDialog.ask(callback, message)
+                    },
+                    keyCallback: function(callback, message) {
+                        keyPromptDialog.ask(callback, message)
+                    },
+                    touchCallback: function() {
+                        touchYubiKeyPrompt.show()
+                    },
+                })
+            }
+            onClosed: pop()
         }
     }
 

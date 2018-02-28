@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
+import datetime
 import json
 import logging
 import os
@@ -20,7 +21,7 @@ from ykman.driver import ModeSwitchError
 from ykman.driver_ccid import APDUError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
-from ykman.piv import (PivController, SLOT, SW)
+from ykman.piv import (ALGO, PIN_POLICY, PivController, SLOT, SW, TOUCH_POLICY)
 from ykman.util import (
     CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode,
     generate_static_pw)
@@ -457,6 +458,64 @@ class Controller(object):
                     return auth_failed
 
                 piv_controller.delete_certificate(SLOT[slot_name])
+                return {'success': True}
+            except APDUError as e:
+                logger.error('Failed', exc_info=e)
+                return {'success': False}
+
+    def piv_generate_certificate(
+            self, slot_name, algorithm, common_name, expiration_date,
+            self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None,
+            pin_policy=PIN_POLICY.DEFAULT, touch_policy=TOUCH_POLICY.DEFAULT):
+
+        file_path = urllib.parse.urlparse(csr_file_url).path
+
+        with self._open_piv() as piv_controller:
+            try:
+                auth_failed = self._piv_ensure_authenticated(
+                    piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+                if auth_failed:
+                    return auth_failed
+
+                now = datetime.datetime.now()
+                try:
+                    year = int(expiration_date[0:4])
+                    month = int(expiration_date[(4+1):(4+1+2)])
+                    day = int(expiration_date[(4+1+2+1):(4+1+2+1+2)])
+                    valid_to = datetime.datetime(year, month, day)
+                except ValueError as e:
+                    logger.debug('Failed to parse date: ' + expiration_date,
+                                 exc_info=e)
+                    return {
+                        'success': False,
+                        'message': 'Invalid date: ' + expiration_date,
+                        'failure': {'invalidDate': True},
+                    }
+
+                public_key = piv_controller.generate_key(
+                    SLOT[slot_name], ALGO[algorithm], pin_policy=pin_policy,
+                    touch_policy=touch_policy)
+
+                if self_sign:
+                    piv_controller.generate_self_signed_certificate(
+                        SLOT[slot_name], public_key, common_name, now,
+                        valid_to)
+                else:
+                    csr = piv_controller.generate_certificate_signing_request(
+                        SLOT[slot_name], public_key, common_name)
+                    try:
+                        with open(file_path, 'w+b') as csr_file:
+                            csr_file.write(csr.public_bytes(
+                                encoding=serialization.Encoding.PEM))
+                    except Exception as e:
+                        logger.error('Failed to write CSR file to %s',
+                                     csr_file_url, exc_info=e)
+                        return {
+                            'success': False,
+                            'message': str(e),
+                            'failure': {'writeFile'},
+                        }
+
                 return {'success': True}
             except APDUError as e:
                 logger.error('Failed', exc_info=e)

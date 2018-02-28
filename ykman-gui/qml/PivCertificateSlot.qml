@@ -15,6 +15,7 @@ ColumnLayout {
 
     signal deleteCertificate
     signal exportCertificate
+    signal generateKey
 
     Layout.fillWidth: true
 
@@ -91,6 +92,7 @@ ColumnLayout {
         Button {
             Layout.fillWidth: true
             text: qsTr("Generate new key...")
+            onClicked: generateKey()
         }
     }
 
