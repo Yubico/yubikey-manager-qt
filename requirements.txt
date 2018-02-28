@@ -1,1 +1,1 @@
-git+https://github.com/Yubico/yubikey-manager.git@11656239febc6f3f5ea11ab2e4717095ba57a541
+git+https://github.com/Yubico/yubikey-manager.git@56842dcb2a938613b3902dd4043d2b64125ca46f
