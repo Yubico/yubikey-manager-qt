@@ -14,6 +14,8 @@ DefaultDialog {
     property var device
     property bool hasPin
     property int pinRetries
+    property string pinMessage
+    property bool pinBlocked
 
     function calculated() {
         var stackItem = stack.currentItem
@@ -33,23 +35,22 @@ DefaultDialog {
             if (hasPin) {
                 device.fido_pin_retries(handleRetriesResp)
             } else {
+                pinMessage = qsTr("No PIN is set.")
                 show()
             }
         }
         function handleRetriesResp(resp) {
-            pinRetries = resp
+            if (!resp.error) {
+                pinRetries = resp.retries
+                pinMessage = qsTr("A PIN is set, ") + pinRetries + qsTr(
+                            " retries left.")
+            } else {
+                pinMessage = resp.error
+                pinBlocked = (resp.error === 'PIN is blocked.')
+            }
             show()
         }
-
         device.fido_has_pin(handlePinResp)
-    }
-
-    function getPinMessage() {
-        if (hasPin) {
-            return qsTr("A PIN is set, ") + pinRetries + qsTr(" retries left.")
-        } else {
-            return qsTr("No PIN is set.")
-        }
     }
 
     StackView {
@@ -67,10 +68,12 @@ DefaultDialog {
                 RowLayout {
                     anchors.fill: parent
                     Label {
-                        text: getPinMessage()
+                        text: pinMessage
                     }
                     Button {
-                        text: qsTr("Set PIN...")
+                        text: hasPin ? qsTr("Change PIN...") : qsTr(
+                                           "Set PIN...")
+                        enabled: !pinBlocked
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         onClicked: stack.push({
                                                   item: fidoChangePinDialog,

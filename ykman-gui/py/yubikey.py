@@ -236,9 +236,18 @@ class Controller(object):
         try:
             dev = self._descriptor.open_device(TRANSPORT.U2F)
             controller = Fido2Controller(dev.driver)
-            return controller.get_pin_retries()
+            return {'retries': controller.get_pin_retries(), 'error': None}
+        except CTAP2Error as e:
+            if e.code == CTAP2_ERR.PIN_AUTH_BLOCKED:
+                return {
+                    'retries': None,
+                    'error': 'PIN authentication is currently blocked. '
+                             'Remove and re-insert the YubiKey.'}
+            if e.code == CTAP2_ERR.PIN_BLOCKED:
+                return {'retries': None, 'error': 'PIN is blocked.'}
         except Exception as e:
             logger.error('Failed to read PIN retries', exc_info=e)
+            return {'retries': None, 'error': str(e)}
 
     def fido_set_pin(self, new_pin):
         try:
