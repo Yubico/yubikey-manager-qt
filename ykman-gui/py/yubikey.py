@@ -284,7 +284,7 @@ class Controller(object):
         except CTAP2Error as e:
             if e.code == CTAP2_ERR.NOT_ALLOWED:
                 return 'Failed to reset the YubiKey. The reset command' \
-                    'must be triggered within 10 seconds after the ' \
+                    ' must be triggered immediately after the ' \
                     'YubiKey is inserted.'
         except Exception as e:
             logger.error('Reset throwed an exception', exc_info=e)

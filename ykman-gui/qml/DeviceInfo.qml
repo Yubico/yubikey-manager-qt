@@ -9,7 +9,6 @@ Item {
     Layout.minimumWidth: 370
     Layout.minimumHeight: deviceBox.implicitHeight + featureBox.implicitHeight
                           + connectionsBox.implicitHeight + margin * 4
-
     ColumnLayout {
         anchors.fill: parent
         anchors.leftMargin: margin

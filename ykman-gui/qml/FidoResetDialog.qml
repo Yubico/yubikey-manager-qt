@@ -25,7 +25,7 @@ ColumnLayout {
         font.bold: true
     }
     Label {
-        text: qsTr("A reset deletes all FIDO credentials on the device, inlcuding FIDO U2F credentials, and removes the PIN. The reset must triggered within 10 seconds after the YubiKey is inserted in the USB port, and requires a touch on the YubiKey.")
+        text: qsTr("A reset deletes all FIDO 2 credentials on the device, including FIDO U2F credentials, and removes the PIN. The reset must triggered immediately after the YubiKey is inserted, and requires a touch on the YubiKey.")
         Layout.fillWidth: true
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
