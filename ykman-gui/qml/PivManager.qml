@@ -30,6 +30,17 @@ DefaultDialog {
         return stackItem ? stackItem.implicitWidth + doubleMargins : 0
     }
 
+    function push(item) {
+        stack.push({
+            item: item,
+            immediate: true,
+        })
+    }
+
+    function pop() {
+        stack.pop({ immediate: true })
+    }
+
     StackView {
         id: stack
         anchors.fill: parent
