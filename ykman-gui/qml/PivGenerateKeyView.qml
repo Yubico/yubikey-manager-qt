@@ -27,14 +27,10 @@ ColumnLayout {
                 font.bold: true
             }
 
-            ComboBox {
+            DropdownMenu {
                 id: algorithmChoice
                 Layout.fillWidth: true
-                currentIndex: 0
-                model: Utils.pick(values, 'text')
-
-                readonly property var value: values[currentIndex].value
-                readonly property var values: [{
+                values: [{
                     text: qsTr('ECC (P-256)'),
                     value: 'ECCP256',
                 }, {
@@ -56,14 +52,10 @@ ColumnLayout {
                 font.bold: true
             }
 
-            ComboBox {
+            DropdownMenu {
                 id: touchPolicyChoice
                 Layout.fillWidth: true
-                currentIndex: 0
-                model: Utils.pick(values, 'text')
-
-                readonly property var value: values[currentIndex].value
-                readonly property var values: [{
+                values: [{
                     text: qsTr('Default for this slot'),
                     value: 'DEFAULT',
                 }, {
