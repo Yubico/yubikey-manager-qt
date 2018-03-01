@@ -251,7 +251,7 @@ Python {
     function piv_generate_certificate(args) {
         // PyOtherSide doesn't seem to support passing through functions as arguments
         do_call('yubikey.controller.piv_generate_certificate',
-            [args.slotName, args.algorithm, args.subjectDn, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex],
+            [args.slotName, args.algorithm, args.subjectDn, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex, null, args.touchPolicy],
             function (result) {
                 if (!result.success && result.failure.pinRequired) {
                     args.pinCallback(function(pin) {
