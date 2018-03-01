@@ -90,9 +90,9 @@ Item {
                 }
                 Button {
                     Layout.alignment: Qt.AlignRight
-                    text: qsTr("Configure")
+                    text: qsTr("Configure...")
                     enabled: isEnabled('OTP')
-                    onClicked: slotDialog.start()
+                    onClicked: slotDialog.load()
                 }
                 Button {
                     Layout.alignment: Qt.AlignRight
@@ -136,7 +136,7 @@ Item {
                 }
                 Button {
                     Layout.alignment: Qt.AlignRight
-                    text: qsTr("Configure")
+                    text: qsTr("Configure...")
                     enabled: device.connections.length > 1
                     onClicked: connectionsDialog.show()
                 }

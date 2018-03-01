@@ -6,126 +6,130 @@ import QtQuick.Window 2.0
 import "slotutils.js" as SlotUtils
 
 ColumnLayout {
-
-    property var device
-    property var slotsEnabled: [false, false]
-    property int selectedSlot
-    signal configureSlot(int slot)
-    signal updateStatus
-    signal goToOverview
-    signal goToSelectType
-    signal goToSlotStatus
-    signal goToConfigureOTP
-    signal goToChallengeResponse
-    signal goToStaticPassword
-    signal goToOathHotp
-
+    width: 350
+    id: confColumn
     Label {
-        text: qsTr("Configure Yubico OTP for ") + SlotUtils.slotNameCapitalized(selectedSlot)
+        text: qsTr("Configure Yubico OTP for ") + SlotUtils.slotNameCapitalized(
+                  selectedSlot)
         font.bold: true
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        Layout.maximumWidth: confColumn.width
     }
 
     Label {
         text: qsTr("When triggered, the YubiKey will output a one time password.")
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        Layout.maximumWidth: confColumn.width
     }
-
-
     GroupBox {
         title: qsTr("Public ID")
         Layout.fillWidth: true
+        Layout.maximumWidth: confColumn.width
         ColumnLayout {
+            anchors.fill: parent
+            RowLayout {
+                Layout.fillWidth: true
+                TextField {
+                    id: publicIdInput
+                    Layout.fillWidth: true
+                    enabled: !useSerialCb.checked
+                    font.family: "Courier"
+                    validator: RegExpValidator {
+                        regExp: /[cbdefghijklnrtuv]{12}$/
+                    }
+                }
+                CheckBox {
+                    id: useSerialCb
+                    enabled: device.serial
+                    text: qsTr("Use encoded serial number")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    onCheckedChanged: useSerial()
+                }
+            }
 
-         RowLayout{
-             TextField {
-                 id: publicIdInput
-                 enabled: !useSerialCb.checked
-                 implicitWidth: 110
-                 font.family: "Courier"
-                 validator: RegExpValidator {
-                     regExp: /[cbdefghijklnrtuv]{12}$/
-                 }
-             }
-             CheckBox {
-                 id: useSerialCb
-                 anchors.margins: 5
-                 enabled: device.serial
-                 anchors.left: publicIdInput.right
-                 text: qsTr("Use encoded serial number")
-                 onCheckedChanged: useSerial()
-             }
-         }
-         RowLayout {
-             Label {
-                 text: qsTr("The Public ID can contain the following characters: cbdefghijklnrtuv.")
-             }
-         }
-
+            Label {
+                text: qsTr("The Public ID can contain the following characters: cbdefghijklnrtuv.")
+                Layout.fillWidth: true
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.maximumWidth: confColumn.width
+            }
         }
     }
 
     GroupBox {
         title: qsTr("Private ID")
         Layout.fillWidth: true
+        Layout.maximumWidth: confColumn.width
         ColumnLayout {
-
-             RowLayout{
-                 TextField {
-                     id: privateIdInput
-                     implicitWidth: 110
-                     font.family: "Courier"
-                     validator: RegExpValidator {
-                         regExp: /[0-9a-fA-F]{12}$/
-                     }
-                 }
-                 Button {
-                     anchors.margins: 5
-                     text: qsTr("Generate")
-                     anchors.left: privateIdInput.right
-                     onClicked: generatePrivateId()
-                 }
-             }
-             RowLayout {
-                 Label {
-                     text: qsTr("The Private ID contains 12 hexadecimal characters.")
-                 }
-             }
+            anchors.fill: parent
+            RowLayout {
+                Layout.fillWidth: true
+                TextField {
+                    id: privateIdInput
+                    Layout.fillWidth: true
+                    font.family: "Courier"
+                    validator: RegExpValidator {
+                        regExp: /[0-9a-fA-F]{12}$/
+                    }
+                }
+                Button {
+                    text: qsTr("Generate")
+                    Layout.fillWidth: false
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    onClicked: generatePrivateId()
+                }
+            }
+            Label {
+                text: qsTr("The Private ID contains 12 hexadecimal characters.")
+                Layout.fillWidth: true
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.maximumWidth: confColumn.width
+            }
         }
     }
 
     GroupBox {
-        title: qsTr("Secret key")
-        Layout.fillWidth: true
-        ColumnLayout {
 
-             RowLayout{
-                 TextField {
-                     id: secretKeyInput
-                     implicitWidth: 260
-                     font.family: "Courier"
-                     validator: RegExpValidator {
-                         regExp: /[0-9a-fA-F]{32}$/
-                     }
-                 }
-                 Button {
-                     anchors.margins: 5
-                     anchors.left: secretKeyInput.right
-                     text: qsTr("Generate")
-                     onClicked: generateKey()
-                 }
-             }
-             RowLayout {
-                 Label {
-                     text: qsTr("The Secret key contains 32 hexadecimal characters.")
-                 }
-             }
+        title: qsTr("Secret Key")
+        Layout.fillWidth: true
+        Layout.maximumWidth: confColumn.width
+        ColumnLayout {
+            anchors.fill: parent
+            RowLayout {
+                Layout.fillWidth: true
+                TextField {
+                    id: secretKeyInput
+                    Layout.fillWidth: true
+                    font.family: "Courier"
+                    validator: RegExpValidator {
+                        regExp: /[0-9a-fA-F]{32}$/
+                    }
+                }
+                Button {
+                    text: qsTr("Generate")
+                    Layout.fillWidth: false
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    onClicked: generateKey()
+                }
+            }
+            Label {
+                text: qsTr("The Secret key contains 32 hexadecimal characters.")
+                Layout.fillWidth: true
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.maximumWidth: confColumn.width
+            }
         }
     }
 
     RowLayout {
-        Layout.alignment: Qt.AlignRight
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         Button {
             text: qsTr("Back")
-            onClicked: goToSelectType()
+            onClicked: stack.pop({
+                                     immediate: true
+                                 })
         }
         Button {
             text: qsTr("Finish")
@@ -142,7 +146,7 @@ ColumnLayout {
     }
 
     function finish() {
-        if (slotsEnabled[selectedSlot - 1]) {
+        if (slotsConfigured[selectedSlot - 1]) {
             warning.open()
         } else {
             programOTP()
@@ -174,14 +178,12 @@ ColumnLayout {
                            privateIdInput.text, secretKeyInput.text,
                            function (error) {
                                if (!error) {
-                                   updateStatus()
                                    confirmConfigured.open()
                                } else {
                                    if (error === 3) {
-                                     writeError.open()
+                                       writeError.open()
                                    }
                                }
                            })
     }
-
 }

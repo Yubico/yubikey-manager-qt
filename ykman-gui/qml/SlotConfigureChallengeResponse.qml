@@ -6,37 +6,36 @@ import QtQuick.Window 2.0
 import "slotutils.js" as SlotUtils
 
 ColumnLayout {
-
-    property var device
-    property var slotsEnabled: [false, false]
-    property int selectedSlot
-    signal configureSlot(int slot)
-    signal updateStatus
-    signal goToOverview
-    signal goToSelectType
-    signal goToSlotStatus
-    signal goToConfigureOTP
-    signal goToChallengeResponse
-    signal goToStaticPassword
-    signal goToOathHotp
-    signal confirmed
+    width: 350
+    id: confColumn
 
     Label {
-        text: qsTr("Configure challenge-response for ") + SlotUtils.slotNameCapitalized(selectedSlot)
+        text: qsTr("Configure challenge-response for ") + SlotUtils.slotNameCapitalized(
+                  selectedSlot)
         font.bold: true
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        Layout.maximumWidth: confColumn.width
     }
 
     Label {
         text: qsTr("When queried, the YubiKey will respond to a challenge.")
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        Layout.maximumWidth: confColumn.width
     }
 
     GroupBox {
-        title: "Secret key"
+        title: "Secret Key"
         Layout.fillWidth: true
+        Layout.maximumWidth: confColumn.width
         ColumnLayout {
+            anchors.fill: parent
             RowLayout {
+                Layout.fillWidth: true
                 TextField {
                     id: secretKeyInput
+                    Layout.fillWidth: true
                     implicitWidth: 320
                     font.family: "Courier"
                     validator: RegExpValidator {
@@ -44,33 +43,32 @@ ColumnLayout {
                     }
                 }
                 Button {
-                    anchors.margins: 5
                     text: qsTr("Generate")
-                    anchors.left: secretKeyInput.right
                     onClicked: generateKey()
                 }
-
-            }
-            RowLayout {
-                Label {
-                    text: qsTr("The Secret key contains an even number of up to 40 hexadecimal characters.")
-                }
-            }
-            RowLayout{
-                CheckBox {
-                    id: requireTouch
-                    text: qsTr("Require touch")
-                }
             }
 
+            Label {
+                text: qsTr("The Secret key contains an even number of up to 40 hexadecimal characters.")
+                Layout.fillWidth: true
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.maximumWidth: confColumn.width
+            }
+
+            CheckBox {
+                id: requireTouch
+                text: qsTr("Require touch")
+            }
         }
     }
 
     RowLayout {
-        Layout.alignment: Qt.AlignRight
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         Button {
             text: qsTr("Back")
-            onClicked: goToSelectType()
+            onClicked: stack.pop({
+                                     immediate: true
+                                 })
         }
         Button {
             text: qsTr("Finish")
@@ -91,7 +89,7 @@ ColumnLayout {
     }
 
     function finish() {
-        if (slotsEnabled[selectedSlot - 1]) {
+        if (slotsConfigured[selectedSlot - 1]) {
             warning.open()
         } else {
             programChallengeResponse()
@@ -103,15 +101,12 @@ ColumnLayout {
                                           requireTouch.checked,
                                           function (error) {
                                               if (!error) {
-                                                  updateStatus()
                                                   confirmConfigured.open()
                                               } else {
                                                   if (error === 3) {
-                                                    writeError.open()
+                                                      writeError.open()
                                                   }
                                               }
                                           })
     }
-
-
 }
