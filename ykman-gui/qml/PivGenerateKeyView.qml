@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
+import "utils.js" as Utils
 
 ColumnLayout {
 
@@ -24,36 +25,28 @@ ColumnLayout {
             Label {
                 text: qsTr('Algorithm')
                 font.bold: true
-                Layout.fillWidth: true
             }
 
-            ExclusiveGroup {
+            ComboBox {
                 id: algorithmChoice
-            }
+                Layout.fillWidth: true
+                currentIndex: 0
+                model: Utils.pick(values, 'text')
 
-            RadioButton {
-                text: qsTr('RSA (1024 bits)')
-                exclusiveGroup: algorithmChoice
-                readonly property string value: 'RSA1024'
-            }
-
-            RadioButton {
-                text: qsTr('RSA (2048 bits)')
-                exclusiveGroup: algorithmChoice
-                readonly property string value: 'RSA2048'
-            }
-
-            RadioButton {
-                text: qsTr('ECC (P-256)')
-                exclusiveGroup: algorithmChoice
-                checked: true
-                readonly property string value: 'ECCP256'
-            }
-
-            RadioButton {
-                text: qsTr('ECC (P-384)')
-                exclusiveGroup: algorithmChoice
-                readonly property string value: 'ECCP384'
+                readonly property var value: values[currentIndex].value
+                readonly property var values: [{
+                    text: qsTr('ECC (P-256)'),
+                    value: 'ECCP256',
+                }, {
+                    text: qsTr('ECC (P-384)'),
+                    value: 'ECCP384',
+                }, {
+                    text: qsTr('RSA (1024 bits)'),
+                    value: 'RSA1024',
+                }, {
+                    text: qsTr('RSA (2048 bits)'),
+                    value: 'RSA2048',
+                }]
             }
         }
 
@@ -176,7 +169,7 @@ ColumnLayout {
             text: qsTr('Ok')
             onClicked: {
                 accepted(
-                    algorithmChoice.current.value,
+                    algorithmChoice.value,
                     selfSign,
                     selfSign ? null : csrFile,
                     subjectDn.text,
