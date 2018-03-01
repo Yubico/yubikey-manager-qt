@@ -103,7 +103,7 @@ ColumnLayout {
         TextField {
             id: subjectDn
             Layout.fillWidth: true
-            placeholderText: '/CN=alice'
+            placeholderText: 'Alice'
             validator: RegExpValidator {
                 regExp: /^.+$/
             }
