@@ -18,38 +18,109 @@ ColumnLayout {
         text: qsTr('A new private key will be generated and stored in the %1 slot.').arg(slotName)
     }
 
-    Label {
-        text: qsTr('Algorithm')
-        font.bold: true
+    RowLayout {
+
+        ColumnLayout {
+            Label {
+                text: qsTr('Algorithm')
+                font.bold: true
+                Layout.fillWidth: true
+            }
+
+            ExclusiveGroup {
+                id: algorithmChoice
+            }
+
+            RadioButton {
+                text: qsTr('RSA (1024 bits)')
+                exclusiveGroup: algorithmChoice
+                readonly property string value: 'RSA1024'
+            }
+
+            RadioButton {
+                text: qsTr('RSA (2048 bits)')
+                exclusiveGroup: algorithmChoice
+                readonly property string value: 'RSA2048'
+            }
+
+            RadioButton {
+                text: qsTr('ECC (P-256)')
+                exclusiveGroup: algorithmChoice
+                checked: true
+                readonly property string value: 'ECCP256'
+            }
+
+            RadioButton {
+                text: qsTr('ECC (P-384)')
+                exclusiveGroup: algorithmChoice
+                readonly property string value: 'ECCP384'
+            }
+        }
+
+        ColumnLayout {
+            Label {
+                text: qsTr('Touch policy:')
+                font.bold: true
+                Layout.fillWidth: true
+            }
+
+            ExclusiveGroup {
+                id: touchPolicyChoice
+            }
+
+            RadioButton {
+                text: qsTr('Default for this slot')
+                exclusiveGroup: touchPolicyChoice
+                readonly property string value: 'DEFAULT'
+                checked: true
+            }
+
+            RadioButton {
+                text: qsTr('Never')
+                exclusiveGroup: touchPolicyChoice
+                readonly property string value: 'NEVER'
+            }
+
+            RadioButton {
+                text: qsTr('Always')
+                exclusiveGroup: touchPolicyChoice
+                readonly property string value: 'ALWAYS'
+            }
+
+            RadioButton {
+                text: qsTr('Cached')
+                exclusiveGroup: touchPolicyChoice
+                readonly property string value: 'CACHED'
+            }
+        }
+
     }
 
-    ExclusiveGroup {
-        id: algorithmChoice
+    RowLayout {
+        Label {
+            text: qsTr('Subject:')
+        }
+        TextField {
+            id: subjectDn
+            Layout.fillWidth: true
+            placeholderText: 'Alice'
+            validator: RegExpValidator {
+                regExp: /^.+$/
+            }
+        }
     }
 
-    RadioButton {
-        text: qsTr('RSA (1024 bits)')
-        exclusiveGroup: algorithmChoice
-        readonly property string value: 'RSA1024'
-    }
-
-    RadioButton {
-        text: qsTr('RSA (2048 bits)')
-        exclusiveGroup: algorithmChoice
-        readonly property string value: 'RSA2048'
-    }
-
-    RadioButton {
-        text: qsTr('ECC (P-256)')
-        exclusiveGroup: algorithmChoice
-        checked: true
-        readonly property string value: 'ECCP256'
-    }
-
-    RadioButton {
-        text: qsTr('ECC (P-384)')
-        exclusiveGroup: algorithmChoice
-        readonly property string value: 'ECCP384'
+    RowLayout {
+        Label {
+            text: qsTr('Expiration date:')
+        }
+        TextField {
+            id: expirationDate
+            placeholderText: 'YYYY-MM-DD'
+            validator: RegExpValidator {
+                regExp: /^\d{4}-\d{2}-\d{2}$/
+            }
+        }
     }
 
     Label {
@@ -91,68 +162,6 @@ ColumnLayout {
             onClicked: csrFileDialog.open()
         }
 
-    }
-
-    RowLayout {
-        Label {
-            text: qsTr('Subject:')
-        }
-        TextField {
-            id: subjectDn
-            Layout.fillWidth: true
-            placeholderText: 'Alice'
-            validator: RegExpValidator {
-                regExp: /^.+$/
-            }
-        }
-    }
-
-    RowLayout {
-        Label {
-            text: qsTr('Expiration date:')
-        }
-        TextField {
-            id: expirationDate
-            placeholderText: 'YYYY-MM-DD'
-            validator: RegExpValidator {
-                regExp: /^\d{4}-\d{2}-\d{2}$/
-            }
-        }
-    }
-
-
-    Label {
-        text: qsTr('Touch policy:')
-        font.bold: true
-    }
-
-    ExclusiveGroup {
-        id: touchPolicyChoice
-    }
-
-    RadioButton {
-        text: qsTr('Default for this slot')
-        exclusiveGroup: touchPolicyChoice
-        readonly property string value: 'DEFAULT'
-        checked: true
-    }
-
-    RadioButton {
-        text: qsTr('Never')
-        exclusiveGroup: touchPolicyChoice
-        readonly property string value: 'NEVER'
-    }
-
-    RadioButton {
-        text: qsTr('Always')
-        exclusiveGroup: touchPolicyChoice
-        readonly property string value: 'ALWAYS'
-    }
-
-    RadioButton {
-        text: qsTr('Cached')
-        exclusiveGroup: touchPolicyChoice
-        readonly property string value: 'CACHED'
     }
 
 
