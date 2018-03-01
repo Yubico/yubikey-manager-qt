@@ -281,6 +281,43 @@ class Controller(object):
             except AttributeError:
                 return None
 
+    def _piv_ensure_authenticated(self, piv_controller, pin=None,
+                                  mgm_key_hex=None):
+        if piv_controller.has_protected_key:
+            if pin:
+                try:
+                    piv_controller.verify(pin)
+                except Exception as e:
+                    logger.error('PIN verification failed', exc_info=e)
+                    return {
+                        'success': False,
+                        'message': str(e),
+                        'failure': {'pinVerification': True}
+                    }
+            else:
+                return {
+                    'success': False,
+                    'failure': {'pinRequired': True},
+                }
+        else:
+            if mgm_key_hex:
+                try:
+                    piv_controller.authenticate(a2b_hex(mgm_key_hex))
+                except Exception as e:
+                    logger.error(
+                        'Management key authentication failed',
+                        exc_info=e)
+                    return {
+                        'success': False,
+                        'message': str(e),
+                        'failure': {'keyAuthentication': True}
+                    }
+            else:
+                return {
+                    'success': False,
+                    'failure': {'keyRequired': True},
+                }
+
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -421,40 +458,10 @@ class Controller(object):
 
         with self._open_piv() as piv_controller:
             try:
-                if piv_controller.has_protected_key:
-                    if pin:
-                        try:
-                            piv_controller.verify(pin)
-                        except Exception as e:
-                            logger.error('PIN verification failed', exc_info=e)
-                            return {
-                                'success': False,
-                                'message': str(e),
-                                'failure': {'pinVerification': True}
-                            }
-                    else:
-                        return {
-                            'success': False,
-                            'failure': {'pinRequired': True},
-                        }
-                else:
-                    if mgm_key_hex:
-                        try:
-                            piv_controller.authenticate(a2b_hex(mgm_key_hex))
-                        except Exception as e:
-                            logger.error(
-                                'Management key authentication failed',
-                                exc_info=e)
-                            return {
-                                'success': False,
-                                'message': str(e),
-                                'failure': {'keyAuthentication': True}
-                            }
-                    else:
-                        return {
-                            'success': False,
-                            'failure': {'keyRequired': True},
-                        }
+                auth_failed = self._piv_ensure_authenticated(
+                    piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+                if auth_failed:
+                    return auth_failed
 
                 piv_controller.delete_certificate(SLOT[slot_name])
                 return {'success': True}
