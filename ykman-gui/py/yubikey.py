@@ -281,24 +281,27 @@ class Controller(object):
             except AttributeError:
                 return None
 
+    def _piv_verify_pin(self, piv_controller, pin=None):
+        if pin:
+            try:
+                piv_controller.verify(pin)
+            except Exception as e:
+                logger.error('PIN verification failed', exc_info=e)
+                return {
+                    'success': False,
+                    'message': str(e),
+                    'failure': {'pinVerification': True}
+                }
+        else:
+            return {
+                'success': False,
+                'failure': {'pinRequired': True},
+            }
+
     def _piv_ensure_authenticated(self, piv_controller, pin=None,
                                   mgm_key_hex=None):
         if piv_controller.has_protected_key:
-            if pin:
-                try:
-                    piv_controller.verify(pin)
-                except Exception as e:
-                    logger.error('PIN verification failed', exc_info=e)
-                    return {
-                        'success': False,
-                        'message': str(e),
-                        'failure': {'pinVerification': True}
-                    }
-            else:
-                return {
-                    'success': False,
-                    'failure': {'pinRequired': True},
-                }
+            return self._piv_verify_pin(piv_controller, pin)
         else:
             if mgm_key_hex:
                 try:
