@@ -6,66 +6,64 @@ import QtQuick.Window 2.0
 import "slotutils.js" as SlotUtils
 
 ColumnLayout {
-
-    property var device
-    property var slotsEnabled: [false, false]
-    property int selectedSlot
-    signal configureSlot(int slot)
-    signal updateStatus
-    signal goToOverview
-    signal goToSelectType
-    signal goToSlotStatus
-    signal goToConfigureOTP
-    signal goToChallengeResponse
-    signal goToStaticPassword
-    signal goToOathHotp
-
+    width: 350
+    id: confColumn
     Label {
-        text: qsTr("Configure static password for ") + SlotUtils.slotNameCapitalized(selectedSlot)
+        text: qsTr("Configure static password for ") + SlotUtils.slotNameCapitalized(
+                  selectedSlot)
         font.bold: true
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        Layout.maximumWidth: confColumn.width
     }
 
     Label {
         text: qsTr("When triggered, the YubiKey will output a fixed password.")
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        Layout.maximumWidth: confColumn.width
     }
     GroupBox {
         title: "Password"
         Layout.fillWidth: true
+        Layout.maximumWidth: confColumn.width
         ColumnLayout {
+            anchors.fill: parent
             RowLayout {
+                Layout.fillWidth: true
                 TextField {
                     id: passwordInput
-                    implicitWidth: 310
+                    Layout.fillWidth: true
                     font.family: "Courier"
                     validator: RegExpValidator {
                         regExp: /[cbdefghijklnrtuvCBDEFGHIJKLMNRTUV]{1,38}$/
                     }
                 }
                 Button {
-                    anchors.margins: 5
                     text: qsTr("Generate")
-                    anchors.left: passwordInput.right
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     onClicked: generatePassword()
                 }
             }
-            Item {
-                width: minimumWidth - margins * 2
-                implicitHeight: desc.implicitHeight
-                Label {
-                    id: desc
-                    width: parent.width
-                    wrapMode: Text.Wrap
-                    text: qsTr("To avoid problems with different keyboard layouts, only the following characters are allowed: cbdefghijklnrtuv")
-                }
+
+            Label {
+                id: desc
+                width: parent.width
+                text: qsTr("To avoid problems with different keyboard layouts, only the following characters are allowed: cbdefghijklnrtuv")
+                Layout.fillWidth: true
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.maximumWidth: confColumn.width
             }
         }
     }
 
     RowLayout {
-        Layout.alignment: Qt.AlignRight
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         Button {
             text: qsTr("Back")
-            onClicked: goToSelectType()
+            onClicked: stack.pop({
+                                     immediate: true
+                                 })
         }
         Button {
             text: qsTr("Finish")
@@ -80,7 +78,7 @@ ColumnLayout {
     }
 
     function finish() {
-        if (slotsEnabled[selectedSlot - 1]) {
+        if (slotsConfigured[selectedSlot - 1]) {
             warning.open()
         } else {
             programStaticPassword()
@@ -97,14 +95,12 @@ ColumnLayout {
         device.program_static_password(selectedSlot, passwordInput.text,
                                        function (error) {
                                            if (!error) {
-                                               updateStatus()
                                                confirmConfigured.open()
                                            } else {
                                                if (error === 3) {
-                                                 writeError.open()
+                                                   writeError.open()
                                                }
                                            }
                                        })
     }
-
 }
