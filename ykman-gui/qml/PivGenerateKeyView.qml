@@ -48,7 +48,7 @@ ColumnLayout {
 
         ColumnLayout {
             Label {
-                text: qsTr('Touch policy:')
+                text: qsTr('Touch policy')
                 font.bold: true
             }
 
