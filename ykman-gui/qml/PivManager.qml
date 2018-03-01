@@ -142,7 +142,9 @@ DefaultDialog {
                     selfSign: selfSign,
                     subjectDn: subjectDn,
                     callback: function(result) {
-                        if (!result.success) {
+                        if (result.success) {
+                            pop()
+                        } else {
                             showMessage('Generate failed', 'Failed to generate certificate: ' + (result.message || 'unknown error.'))
                         }
                     },
