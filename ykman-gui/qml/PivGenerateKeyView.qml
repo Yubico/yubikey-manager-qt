@@ -86,6 +86,7 @@ ColumnLayout {
             enabled: csrChoice.checked
             readOnly: true
             text: csrFile || ''
+            placeholderText: qsTr('CSR file...')
         }
 
         Button {
