@@ -11,7 +11,7 @@ ColumnLayout {
     readonly property string hasSlotName: !!slotName
     property alias selfSign: selfSignedChoice.checked
 
-    signal accepted(string algorithm, bool selfSign, var csrFileUrl, string subjectDn, string expirationDate)
+    signal accepted(string algorithm, bool selfSign, var csrFileUrl, string subjectDn, string expirationDate, string touchPolicy)
     signal closed
 
     Label {
@@ -120,6 +120,42 @@ ColumnLayout {
         }
     }
 
+
+    Label {
+        text: qsTr('Touch policy:')
+        font.bold: true
+    }
+
+    ExclusiveGroup {
+        id: touchPolicyChoice
+    }
+
+    RadioButton {
+        text: qsTr('Default for this slot')
+        exclusiveGroup: touchPolicyChoice
+        readonly property string value: 'DEFAULT'
+        checked: true
+    }
+
+    RadioButton {
+        text: qsTr('Never')
+        exclusiveGroup: touchPolicyChoice
+        readonly property string value: 'NEVER'
+    }
+
+    RadioButton {
+        text: qsTr('Always')
+        exclusiveGroup: touchPolicyChoice
+        readonly property string value: 'ALWAYS'
+    }
+
+    RadioButton {
+        text: qsTr('Cached')
+        exclusiveGroup: touchPolicyChoice
+        readonly property string value: 'CACHED'
+    }
+
+
     RowLayout {
         Button {
             text: qsTr('Cancel')
@@ -135,7 +171,8 @@ ColumnLayout {
                     selfSign,
                     selfSign ? null : csrFile,
                     subjectDn.text,
-                    expirationDate.text
+                    expirationDate.text,
+                    touchPolicyChoice.current.value
                 )
             }
         }

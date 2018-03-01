@@ -141,6 +141,7 @@ DefaultDialog {
                     expirationDate: expirationDate,
                     selfSign: selfSign,
                     subjectDn: subjectDn,
+                    touchPolicy: touchPolicy,
                     callback: function(result) {
                         if (result.success) {
                             pop()

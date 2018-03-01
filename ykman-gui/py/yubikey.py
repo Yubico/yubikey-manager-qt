@@ -476,7 +476,7 @@ class Controller(object):
     def piv_generate_certificate(
             self, slot_name, algorithm, common_name, expiration_date,
             self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None,
-            pin_policy=PIN_POLICY.DEFAULT, touch_policy=TOUCH_POLICY.DEFAULT):
+            pin_policy=None, touch_policy=None):
 
         file_path = urllib.parse.urlparse(csr_file_url).path
 
@@ -503,8 +503,10 @@ class Controller(object):
                     }
 
                 public_key = piv_controller.generate_key(
-                    SLOT[slot_name], ALGO[algorithm], pin_policy=pin_policy,
-                    touch_policy=touch_policy)
+                    SLOT[slot_name], ALGO[algorithm],
+                    pin_policy=pin_policy or PIN_POLICY.DEFAULT,
+                    touch_policy=(TOUCH_POLICY.from_string(touch_policy)
+                                  if touch_policy else TOUCH_POLICY.DEFAULT))
 
                 if self_sign:
                     piv_controller.generate_self_signed_certificate(
