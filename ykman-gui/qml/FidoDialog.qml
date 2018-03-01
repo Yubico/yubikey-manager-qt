@@ -10,6 +10,7 @@ DefaultDialog {
     minimumWidth: 350
     height: calculated()
     width: 350
+    onVisibilityChanged: timer.running = !visible
 
     property var device
     property bool hasPin
