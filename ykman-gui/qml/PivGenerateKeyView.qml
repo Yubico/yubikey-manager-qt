@@ -54,36 +54,28 @@ ColumnLayout {
             Label {
                 text: qsTr('Touch policy:')
                 font.bold: true
-                Layout.fillWidth: true
             }
 
-            ExclusiveGroup {
+            ComboBox {
                 id: touchPolicyChoice
-            }
+                Layout.fillWidth: true
+                currentIndex: 0
+                model: Utils.pick(values, 'text')
 
-            RadioButton {
-                text: qsTr('Default for this slot')
-                exclusiveGroup: touchPolicyChoice
-                readonly property string value: 'DEFAULT'
-                checked: true
-            }
-
-            RadioButton {
-                text: qsTr('Never')
-                exclusiveGroup: touchPolicyChoice
-                readonly property string value: 'NEVER'
-            }
-
-            RadioButton {
-                text: qsTr('Always')
-                exclusiveGroup: touchPolicyChoice
-                readonly property string value: 'ALWAYS'
-            }
-
-            RadioButton {
-                text: qsTr('Cached')
-                exclusiveGroup: touchPolicyChoice
-                readonly property string value: 'CACHED'
+                readonly property var value: values[currentIndex].value
+                readonly property var values: [{
+                    text: qsTr('Default for this slot'),
+                    value: 'DEFAULT',
+                }, {
+                    text: qsTr('Never'),
+                    value: 'NEVER',
+                }, {
+                    text: qsTr('Always'),
+                    value: 'ALWAYS',
+                }, {
+                    text: qsTr('Cached'),
+                    value: 'CACHED',
+                }]
             }
         }
 
@@ -174,7 +166,7 @@ ColumnLayout {
                     selfSign ? null : csrFile,
                     subjectDn.text,
                     expirationDate.text,
-                    touchPolicyChoice.current.value
+                    touchPolicyChoice.value
                 )
             }
         }
