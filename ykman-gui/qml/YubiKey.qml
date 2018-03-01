@@ -249,15 +249,10 @@ Python {
     }
 
     function piv_generate_certificate(args) {
-        var touchPromptTimer = Utils.delay(args.touchCallback, 500)
-
         // PyOtherSide doesn't seem to support passing through functions as arguments
         do_call('yubikey.controller.piv_generate_certificate',
             [args.slotName, args.algorithm, args.subjectDn, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex],
             function (result) {
-                touchPromptTimer.stop()
-                touchYubiKeyPrompt.close()
-
                 if (!result.success && result.failure.pinRequired) {
                     args.pinCallback(function(pin) {
                         piv_generate_certificate(Utils.extend(args, { pin: pin }))
