@@ -8,6 +8,7 @@ DefaultDialog {
     property var device
     title: qsTr("Configure Connections")
     minimumWidth: 500
+    onVisibilityChanged: timer.running = !visible
     onAccepted: {
         var enabled = get_enabled()
         device.set_mode(enabled, function (error) {
@@ -95,7 +96,6 @@ DefaultDialog {
         text: qsTr('Failed to configure connections. Make sure the YubiKey does not have restricted access.')
         standardButtons: StandardButton.Ok
     }
-
 
     function get_enabled() {
         var enabled = []
