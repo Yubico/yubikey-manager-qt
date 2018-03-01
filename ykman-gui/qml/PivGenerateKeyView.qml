@@ -28,21 +28,18 @@ ColumnLayout {
     }
 
     RadioButton {
-        id: rsa1024Choice
         text: qsTr('RSA (1024 bits)')
         exclusiveGroup: algorithmChoice
         readonly property string value: 'RSA1024'
     }
 
     RadioButton {
-        id: rsa2048Choice
         text: qsTr('RSA (2048 bits)')
         exclusiveGroup: algorithmChoice
         readonly property string value: 'RSA2048'
     }
 
     RadioButton {
-        id: eccp256Choice
         text: qsTr('ECC (P-256)')
         exclusiveGroup: algorithmChoice
         checked: true
@@ -50,7 +47,6 @@ ColumnLayout {
     }
 
     RadioButton {
-        id: eccp384Choice
         text: qsTr('ECC (P-384)')
         exclusiveGroup: algorithmChoice
         readonly property string value: 'ECCP384'
