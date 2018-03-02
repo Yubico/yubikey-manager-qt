@@ -6,12 +6,13 @@ import "utils.js" as Utils
 
 ColumnLayout {
 
+    property var csrFile
     property string slotName: ''
 
-    readonly property bool acceptableInput: subjectDn.acceptableInput && expirationDate.acceptableInput
-    property var csrFile
-    readonly property string hasSlotName: !!slotName
     property alias selfSign: selfSignedChoice.checked
+
+    readonly property bool acceptableInput: subjectDn.acceptableInput && expirationDate.acceptableInput
+    readonly property string hasSlotName: !!slotName
 
     signal accepted(string algorithm, bool selfSign, var csrFileUrl, string subjectDn, string expirationDate, string touchPolicy)
     signal closed
