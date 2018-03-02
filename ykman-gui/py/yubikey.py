@@ -515,7 +515,7 @@ class Controller(object):
                         return {
                             'success': False,
                             'message': str(e),
-                            'failure': {'writeFile'},
+                            'failure': {'writeFile': True},
                         }
 
                 return {'success': True}
