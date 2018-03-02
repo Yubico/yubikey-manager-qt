@@ -262,15 +262,10 @@ DefaultDialog {
 
     PivPinPromptDialog {
         id: pinPromptDialog
-        message: 'Please enter the PIV PIN.'
-        title: 'PIV PIN required'
     }
 
-    PivPinPromptDialog {
+    PivManagementKeyPromptDialog {
         id: keyPromptDialog
-        hideInput: false
-        message: 'Please enter the PIV management key.'
-        title: 'PIV management key required'
     }
 
     function start() {

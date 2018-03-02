@@ -6,9 +6,10 @@ import QtQuick.Layouts 1.1
 Dialog {
 
     property var callback
+    property var defaultValue
     property string errorMessage: ''
     property bool hideInput: true
-    property string message
+    property string message: 'Please enter the PIV PIN.'
 
     function ask(cb, errMsg) {
         callback = cb
@@ -16,6 +17,8 @@ Dialog {
         reset()
         open()
     }
+
+    title: 'PIV PIN required'
 
     onAccepted: {
         if (callback) {
