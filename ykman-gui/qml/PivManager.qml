@@ -140,6 +140,8 @@ DefaultDialog {
                     callback: function(result) {
                         if (result.success) {
                             pop()
+                        } else if (result.failure.permissionDenied) {
+                            showError('Permission denied', 'Permission to write CSR to ' + csrFileUrl + ' was denied.')
                         } else {
                             showError('Generate failed', 'Failed to generate certificate: ' + (result.message || 'unknown error.'))
                         }
