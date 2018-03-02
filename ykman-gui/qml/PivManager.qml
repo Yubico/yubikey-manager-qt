@@ -141,7 +141,7 @@ DefaultDialog {
                     touchPolicy: touchPolicy,
                     callback: function(result) {
                         if (result.success) {
-                            pop()
+                            closed()
                         } else if (result.failure.permissionDenied) {
                             showError('Permission denied', 'Permission to write CSR to ' + csrFileUrl + ' was denied.')
                         } else {
