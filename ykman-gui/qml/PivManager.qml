@@ -171,12 +171,13 @@ DefaultDialog {
                     showMessage(qsTr('Success'), qsTr('PIN was successfully changed.'))
                 } else {
                     if (retries === null) {
-                        showPinError(
+                        showError(
                             qsTr('Error'),
-                            qsTr('PIN change failed. This is probably a bug, please report it to the developers.')
+                            qsTr('PIN change failed. This is probably a bug, please report it to the developers.'),
+                            startChangePin
                         )
                     } else {
-                        showPinError(qsTr('Error'), qsTr('PIN change failed. Tries left: %1').arg(retries))
+                        showError(qsTr('Error'), qsTr('PIN change failed. Tries left: %1').arg(retries), startChangePin)
                     }
                 }
             })
@@ -195,12 +196,13 @@ DefaultDialog {
                     showMessage(qsTr('Success'), qsTr('PUK was successfully changed.'))
                 } else {
                     if (retries === null) {
-                        showPukError(
+                        showError(
                             qsTr('Error'),
-                            qsTr('PUK change failed. This is probably a bug, please report it to the developers.')
+                            qsTr('PUK change failed. This is probably a bug, please report it to the developers.'),
+                            startChangePuk
                         )
                     } else {
-                        showPukError(qsTr('Error'), qsTr('PUK change failed. Tries left: %1').arg(retries))
+                        showError(qsTr('Error'), qsTr('PUK change failed. Tries left: %1').arg(retries), startChangePuk)
                     }
                 }
             })
@@ -222,16 +224,11 @@ DefaultDialog {
         device: yk
     }
 
-    function showPinError(title, text) {
-        pinErrorDialog.title = title
-        pinErrorDialog.text = text
-        pinErrorDialog.open()
-    }
-
-    function showPukError(title, text) {
-        pukErrorDialog.title = title
-        pukErrorDialog.text = text
-        pukErrorDialog.open()
+    function showError(title, text, callback) {
+        errorDialog.callback = callback
+        errorDialog.text = text
+        errorDialog.title = title
+        errorDialog.open()
     }
 
     function showMessage(title, text) {
@@ -241,19 +238,17 @@ DefaultDialog {
     }
 
     MessageDialog {
-        id: pinErrorDialog
+        id: errorDialog
         icon: StandardIcon.Critical
         standardButtons: StandardButton.Ok
 
-        onAccepted: startChangePin()
-    }
+        onAccepted: {
+            if (callback) {
+                callback()
+            }
+        }
 
-    MessageDialog {
-        id: pukErrorDialog
-        icon: StandardIcon.Critical
-        standardButtons: StandardButton.Ok
-
-        onAccepted: startChangePuk()
+        property var callback
     }
 
     MessageDialog {
