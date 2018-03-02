@@ -179,6 +179,49 @@ Python {
         do_call('yubikey.controller.openpgp_get_version', [], cb)
     }
 
+    function _piv_perform_authenticated_action(functionName, args, callback, pinCallback, keyCallback, touchCallback, retry, touchPrompt) {
+        if (touchPrompt !== false) {
+            touchPrompt = true
+        }
+        if (touchPrompt) {
+            var touchPromptTimer = Utils.delay(touchCallback, 500)
+        }
+
+        // PyOtherSide doesn't seem to support passing through functions as arguments
+        do_call(functionName, args, function (result) {
+            if (touchPrompt) {
+                touchPromptTimer.stop()
+                touchYubiKeyPrompt.close()
+            }
+
+            if (!result.success && result.failure.pinRequired) {
+                pinCallback(function(pin) {
+                    retry({ pin: pin })
+                })
+            } else if (!result.success && result.failure.pinVerification) {
+                pinCallback(
+                    function(pin) {
+                        retry({ pin: pin })
+                    },
+                    result.message
+                )
+            } else if (!result.success && result.failure.keyRequired) {
+                keyCallback(function(keyHex) {
+                    retry({ keyHex: keyHex })
+                })
+            } else if (!result.success && result.failure.keyAuthentication) {
+                keyCallback(
+                    function(keyHex) {
+                        retry({ keyHex: keyHex })
+                    },
+                    result.message
+                )
+            } else {
+                callback(result)
+            }
+        })
+    }
+
     function piv_change_pin(old_pin, new_pin, cb) {
         do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin], cb)
     }
@@ -210,77 +253,40 @@ Python {
     }
 
     function piv_delete_certificate(args) {
-        var touchPromptTimer = Utils.delay(args.touchCallback, 500)
-
-        // PyOtherSide doesn't seem to support passing through functions as arguments
-        do_call('yubikey.controller.piv_delete_certificate', [args.slotName, args.pin, args.keyHex],
-                function (result) {
-                    touchPromptTimer.stop()
-                    touchYubiKeyPrompt.close()
-
-                    if (!result.success && result.failure.pinRequired) {
-                        args.pinCallback(function(pin) {
-                            piv_delete_certificate(Utils.extend(args, { pin: pin }))
-                        })
-                    } else if (!result.success && result.failure.pinVerification) {
-                        args.pinCallback(
-                            function(pin) {
-                                piv_delete_certificate(Utils.extend(args, { pin: pin }))
-                            },
-                            result.message
-                        )
-                    } else if (!result.success && result.failure.keyRequired) {
-                        args.keyCallback(function(keyHex) {
-                            piv_delete_certificate(Utils.extend(args, { keyHex: keyHex }))
-                        })
-                    } else if (!result.success && result.failure.keyAuthentication) {
-                        args.keyCallback(
-                            function(keyHex) {
-                                piv_delete_certificate(Utils.extend(args, { keyHex: keyHex }))
-                            },
-                            result.message
-                        )
-                    } else {
-                        refresh(function() {
-                            args.callback(result)
-                        })
-                    }
+        _piv_perform_authenticated_action(
+            'yubikey.controller.piv_delete_certificate',
+            [args.slotName, args.pin, args.keyHex],
+            function(result) {
+                refresh(function() {
+                    args.callback(result)
                 })
+            },
+            args.pinCallback,
+            args.keyCallback,
+            args.touchCallback,
+            function(newArgs) {
+                piv_delete_certificate(Utils.extend(args, newArgs))
+            }
+        )
     }
 
     function piv_generate_certificate(args) {
-        // PyOtherSide doesn't seem to support passing through functions as arguments
-        do_call('yubikey.controller.piv_generate_certificate',
+        _piv_perform_authenticated_action(
+            'yubikey.controller.piv_generate_certificate',
             [args.slotName, args.algorithm, args.subjectDn, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex, null, args.touchPolicy],
-            function (result) {
-                if (!result.success && result.failure.pinRequired) {
-                    args.pinCallback(function(pin) {
-                        piv_generate_certificate(Utils.extend(args, { pin: pin }))
-                    })
-                } else if (!result.success && result.failure.pinVerification) {
-                    args.pinCallback(
-                        function(pin) {
-                            piv_generate_certificate(Utils.extend(args, { pin: pin }))
-                        },
-                        result.message
-                    )
-                } else if (!result.success && result.failure.keyRequired) {
-                    args.keyCallback(function(keyHex) {
-                        piv_generate_certificate(Utils.extend(args, { keyHex: keyHex }))
-                    })
-                } else if (!result.success && result.failure.keyAuthentication) {
-                    args.keyCallback(
-                        function(keyHex) {
-                            piv_generate_certificate(Utils.extend(args, { keyHex: keyHex }))
-                        },
-                        result.message
-                    )
-                } else {
-                    refresh(function() {
-                        args.callback(result)
-                    })
-                }
-            })
+            function(result) {
+                refresh(function() {
+                    args.callback(result)
+                })
+            },
+            args.pinCallback,
+            args.keyCallback,
+            args.touchCallback,
+            function(newArgs) {
+                piv_generate_certificate(Utils.extend(args, newArgs))
+            },
+            false
+        )
     }
 
     function piv_reset(cb) {
