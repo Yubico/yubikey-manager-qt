@@ -17,7 +17,7 @@ DefaultDialog {
     property bool hasDevice: (device && device.hasDevice && device.piv) || false
     readonly property var certificates: hasDevice && device.piv.certificates || {}
     readonly property int numCerts: Object.keys(certificates).length
-    property string generateKeySlotName: ''
+    property string selectedSlotName: ''
 
     function calculateHeight() {
         var stackItem = stack.currentItem
@@ -91,7 +91,7 @@ DefaultDialog {
                 }
 
                 onGenerateKey: {
-                    generateKeySlotName = slotName
+                    selectedSlotName = slotName
                     push(generateKeyView)
                 }
 
@@ -155,7 +155,7 @@ DefaultDialog {
         id: generateKeyView
 
         PivGenerateKeyView {
-            slotName: generateKeySlotName
+            slotName: selectedSlotName
             onAccepted: {
                 device.piv_generate_certificate({
                     slotName: slotName,
