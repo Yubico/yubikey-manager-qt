@@ -96,8 +96,8 @@ DefaultDialog {
                 }
 
                 onImportCertificate: {
-                    importFileDialog.slotName = slotName
-                    importFileDialog.open()
+                    selectedSlotName = slotName
+                    push(importView)
                 }
 
                 FileDialog {
@@ -115,32 +115,6 @@ DefaultDialog {
                     }
                 }
 
-                FileDialog {
-                    property string slotName
-
-                    id: importFileDialog
-                    title: 'Select file to import'
-                    selectExisting: true
-                    defaultSuffix: 'pem'
-                    nameFilters: [ 'Certificate/key files (*.pem)', 'All files (*)']
-
-                    onAccepted: {
-                        device.piv_import_certificate({
-                            slotName: slotName,
-                            fileUrl: fileUrls[0],
-                            callback: function(result) {
-                                if (!result.success) {
-                                    showError('Import failed', 'Failed to import certificate: ' + (result.message || 'unknown error.'))
-                                }
-                            },
-                            pinCallback: askPin,
-                            keyCallback: askManagementKey,
-                            touchCallback: function() {
-                                touchYubiKeyPrompt.open()
-                            },
-                        })
-                    }
-                }
             }
 
             Button {
@@ -187,6 +161,36 @@ DefaultDialog {
                 })
             }
             onClosed: pop()
+        }
+    }
+
+    Component {
+        id: importView
+
+        PivImportView {
+
+            function importCertificate(certificateFileUrl) {
+
+                device.piv_import_certificate({
+                    slotName: selectedSlotName,
+                    fileUrl: certificateFileUrl,
+                    callback: function(result) {
+                        if (result.success) {
+                            closed()
+                        } else {
+                            showError('Import failed', 'Failed to import certificate: ' + (result.message || 'unknown error.'))
+                        }
+                    },
+                    pinCallback: askPin,
+                    keyCallback: askManagementKey,
+                    touchCallback: function() {
+                        touchYubiKeyPrompt.open()
+                    },
+                })
+            }
+
+            onClosed: pop()
+            onImportCertificateAccepted: importCertificate(certificateFileUrl)
         }
     }
 
