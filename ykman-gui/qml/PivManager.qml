@@ -77,15 +77,11 @@ DefaultDialog {
                                 showError('Delete failed', 'Failed to delete certificate: ' + (result.message || 'unknown error.'))
                             }
                         },
-                        pinCallback: function(callback, message) {
-                            pinPromptDialog.ask(callback, message)
-                        },
-                        keyCallback: function(callback, message) {
-                            keyPromptDialog.ask(callback, message)
-                        },
+                        pinCallback: askPin,
+                        keyCallback: askManagementKey,
                         touchCallback: function() {
                             touchYubiKeyPrompt.open()
-                        }
+                        },
                     })
                 }
 
@@ -151,12 +147,8 @@ DefaultDialog {
                             showError('Generate failed', 'Failed to generate certificate: ' + (result.message || 'unknown error.'))
                         }
                     },
-                    pinCallback: function(callback, message) {
-                        pinPromptDialog.ask(callback, message)
-                    },
-                    keyCallback: function(callback, message) {
-                        keyPromptDialog.ask(callback, message)
-                    },
+                    pinCallback: askPin,
+                    keyCallback: askManagementKey,
                     touchCallback: function() {
                         touchYubiKeyPrompt.open()
                     },
@@ -266,6 +258,14 @@ DefaultDialog {
 
     PivManagementKeyPromptDialog {
         id: keyPromptDialog
+    }
+
+    function askPin(callback, message) {
+        pinPromptDialog.ask(callback, message)
+    }
+
+    function askManagementKey(callback, message) {
+        keyPromptDialog.ask(callback, message)
     }
 
     function start() {
