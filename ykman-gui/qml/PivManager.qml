@@ -74,7 +74,7 @@ DefaultDialog {
                         slotName: slotName,
                         callback: function(result) {
                             if (!result.success) {
-                                showMessage('Delete failed', 'Failed to delete certificate: ' + (result.message || 'unknown error.'))
+                                showError('Delete failed', 'Failed to delete certificate: ' + (result.message || 'unknown error.'))
                             }
                         },
                         pinCallback: function(callback, message) {
@@ -141,7 +141,7 @@ DefaultDialog {
                         if (result.success) {
                             pop()
                         } else {
-                            showMessage('Generate failed', 'Failed to generate certificate: ' + (result.message || 'unknown error.'))
+                            showError('Generate failed', 'Failed to generate certificate: ' + (result.message || 'unknown error.'))
                         }
                     },
                     pinCallback: function(callback, message) {
