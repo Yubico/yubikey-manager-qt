@@ -16,6 +16,7 @@ ColumnLayout {
     signal deleteCertificate
     signal exportCertificate
     signal generateKey
+    signal importCertificate
 
     Layout.fillWidth: true
 
@@ -87,6 +88,7 @@ ColumnLayout {
         Button {
             Layout.fillWidth: true
             text: qsTr("Import from file...")
+            onClicked: importCertificate()
         }
 
         Button {

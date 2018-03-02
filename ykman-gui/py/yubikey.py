@@ -24,7 +24,7 @@ from ykman.opgp import OpgpController, KEY_SLOT
 from ykman.piv import (ALGO, PIN_POLICY, PivController, SLOT, SW, TOUCH_POLICY)
 from ykman.util import (
     CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode,
-    generate_static_pw)
+    generate_static_pw, parse_certificate)
 
 logger = logging.getLogger(__name__)
 
@@ -424,6 +424,47 @@ class Controller(object):
                     encoding=serialization.Encoding.PEM))
 
             return {'success': True}
+
+    def piv_import_certificate(self, slot_name, file_url, pin=None,
+                               mgm_key_hex=None, password=None):
+        logger.debug('piv_import_certificate %s %s', slot_name, file_url)
+
+        file_path = urllib.parse.urlparse(file_url).path
+
+        with self._open_piv() as piv_controller:
+            with open(file_path, 'r+b') as certificate_file:
+                data = certificate_file.read()
+
+            if password is not None:
+                password = password.encode('utf-8')
+            try:
+                cert = parse_certificate(data, password)
+            except (ValueError, TypeError):
+                if password is None:
+                    return {
+                        'success': False,
+                        'failure': {'passwordRequired': True},
+                    }
+                else:
+                    return {
+                        'success': False,
+                        'failure': {'wrongPassword': True},
+                    }
+
+            auth_failed = self._piv_ensure_authenticated(
+                piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+            if auth_failed:
+                return auth_failed
+
+            try:
+                piv_controller.import_certificate(SLOT[slot_name], cert)
+                return {'success': True}
+            except Exception as e:
+                logger.error('Failed to import certificate', exc_info=e)
+                return {
+                    'success': False,
+                    'failure': {'import': True},
+                }
 
     def piv_delete_certificate(self, slot_name, pin=None, mgm_key_hex=None):
         logger.debug('piv_delete_certificate %s', slot_name)
