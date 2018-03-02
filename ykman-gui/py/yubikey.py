@@ -362,39 +362,17 @@ class Controller(object):
     def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
                            touch=False, store_on_device=False):
         with self._open_piv() as piv_controller:
+
             if piv_controller.has_protected_key or store_on_device:
-                try:
-                    piv_controller.verify(pin)
-                except ValueError as e:
-                    logger.debug('PIN verification failed', exc_info=e)
-                    return {
-                        'success': False,
-                        'message': str(e),
-                        'failure': {'pin': True},
-                    }
+                pin_failed = self._piv_verify_pin(
+                    piv_controller, pin=pin)
+                if pin_failed:
+                    return pin_failed
 
-            if not piv_controller.has_protected_key:
-                try:
-                    current_key = a2b_hex(current_key_hex)
-                except Exception as e:
-                    logger.debug('Failed to parse current management key',
-                                 exc_info=e)
-                    return {
-                        'success': False,
-                        'message': str(e),
-                        'failure': {'parseCurrentKey': True},
-                      }
-
-                try:
-                    piv_controller.authenticate(current_key)
-                except Exception as e:
-                    logger.debug('Management key authentication failed',
-                                 exc_info=e)
-                    return {
-                        'success': False,
-                        'message': str(e),
-                        'failure': {'authenticate': True},
-                    }
+            auth_failed = self._piv_ensure_authenticated(
+                piv_controller, pin=pin, mgm_key_hex=current_key_hex)
+            if auth_failed:
+                return auth_failed
 
             try:
                 new_key = a2b_hex(new_key_hex) if new_key_hex else None
