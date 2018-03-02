@@ -102,6 +102,28 @@ Python {
         })
     }
 
+    /**
+     * Transform a `callback` into one that will first call `refresh` and then
+     * itself when `refresh` is done.
+     *
+     * The arguments and `this` context of the call to the `callback` are
+     * preseved.
+     *
+     * @param callback a function
+     *
+     * @return a function which will call `refresh()` and delay the execution of
+     *          the `callback` until the `refresh()` is done.
+     */
+    function _refreshBefore(callback) {
+        return function(/* ...arguments */) {
+            var callbackThis = this
+            var callbackArguments = arguments
+            refresh(function() {
+                callback.apply(callbackThis, callbackArguments)
+            })
+        }
+    }
+
     function set_mode(connections, cb) {
         do_call('yubikey.controller.set_mode', [connections], cb)
     }
@@ -256,11 +278,7 @@ Python {
         _piv_perform_authenticated_action(
             'yubikey.controller.piv_delete_certificate',
             [args.slotName, args.pin, args.keyHex],
-            function(result) {
-                refresh(function() {
-                    args.callback(result)
-                })
-            },
+            _refreshBefore(args.callback),
             args.pinCallback,
             args.keyCallback,
             args.touchCallback,
@@ -274,11 +292,7 @@ Python {
         _piv_perform_authenticated_action(
             'yubikey.controller.piv_generate_certificate',
             [args.slotName, args.algorithm, args.subjectDn, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex, null, args.touchPolicy],
-            function(result) {
-                refresh(function() {
-                    args.callback(result)
-                })
-            },
+            _refreshBefore(args.callback),
             args.pinCallback,
             args.keyCallback,
             args.touchCallback,
@@ -290,11 +304,7 @@ Python {
     }
 
     function piv_reset(cb) {
-        do_call('yubikey.controller.piv_reset', [], function(result) {
-            refresh(function() {
-                cb(result)
-            })
-        })
+        do_call('yubikey.controller.piv_reset', [], _refreshBefore(cb))
     }
 
 }
