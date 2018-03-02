@@ -95,6 +95,11 @@ DefaultDialog {
                     push(generateKeyView)
                 }
 
+                onImportCertificate: {
+                    importFileDialog.slotName = slotName
+                    importFileDialog.open()
+                }
+
                 FileDialog {
                     property string slotName
 
@@ -106,6 +111,33 @@ DefaultDialog {
 
                     onAccepted: {
                         device.piv_export_certificate(slotName, fileUrls[0], function(result) {
+                        })
+                    }
+                }
+
+                FileDialog {
+                    property string slotName
+
+                    id: importFileDialog
+                    title: 'Select file to import'
+                    selectExisting: true
+                    defaultSuffix: 'pem'
+                    nameFilters: [ 'Certificate/key files (*.pem)', 'All files (*)']
+
+                    onAccepted: {
+                        device.piv_import_certificate({
+                            slotName: slotName,
+                            fileUrl: fileUrls[0],
+                            callback: function(result) {
+                                if (!result.success) {
+                                    showError('Import failed', 'Failed to import certificate: ' + (result.message || 'unknown error.'))
+                                }
+                            },
+                            pinCallback: askPin,
+                            keyCallback: askManagementKey,
+                            touchCallback: function() {
+                                touchYubiKeyPrompt.open()
+                            },
                         })
                     }
                 }
