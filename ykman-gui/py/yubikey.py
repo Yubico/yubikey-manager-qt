@@ -24,7 +24,7 @@ from ykman.opgp import OpgpController, KEY_SLOT
 from ykman.piv import (ALGO, PIN_POLICY, PivController, SLOT, SW, TOUCH_POLICY)
 from ykman.util import (
     CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode,
-    generate_static_pw, parse_certificate)
+    generate_static_pw, parse_certificate, parse_private_key)
 
 logger = logging.getLogger(__name__)
 
@@ -465,6 +465,75 @@ class Controller(object):
                     'success': False,
                     'failure': {'import': True},
                 }
+
+    def piv_import_key(self, slot_name, file_url, pin=None, mgm_key_hex=None,
+                       password=None, pin_policy=None, touch_policy=None):
+        logger.debug('piv_import_key %s %s', slot_name, file_url)
+
+        file_path = urllib.parse.urlparse(file_url).path
+
+        with self._open_piv() as piv_controller:
+            with open(file_path, 'r+b') as key_file:
+                data = key_file.read()
+
+            if password is not None:
+                password = password.encode('utf-8')
+            try:
+                private_key = parse_private_key(data, password)
+            except (ValueError, TypeError):
+                if password is None:
+                    return {
+                        'success': False,
+                        'failure': {'passwordRequired': True},
+                    }
+                else:
+                    return {
+                        'success': False,
+                        'failure': {'wrongPassword': True},
+                    }
+
+            auth_failed = self._piv_ensure_authenticated(
+                piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+            if auth_failed:
+                return auth_failed
+
+            if pin_policy and not (
+                    PIN_POLICY[pin_policy]
+                    in piv_controller.supported_pin_policies):
+                return {
+                    'success': False,
+                    'failure': {
+                        'supportedPinPolicies': [
+                            policy.name for policy in
+                            piv_controller.supported_pin_policies],
+                    }
+                }
+
+            if touch_policy and not (
+                    TOUCH_POLICY[touch_policy]
+                    in piv_controller.supported_touch_policies):
+                return {
+                    'success': False,
+                    'failure': {
+                        'supportedTouchPolicies': [
+                            policy.name for policy in
+                            piv_controller.supported_touch_policies],
+                    }
+                }
+
+            try:
+                piv_controller.import_key(SLOT[slot_name], private_key,
+                                          pin_policy, touch_policy)
+                return {'success': True}
+            except Exception as e:
+                logger.error('Failed to import certificate', exc_info=e)
+                return {
+                    'success': False,
+                    'message': str(e),
+                    'failure': {'import': True},
+                }
+
+            data = private_key.read()
 
     def piv_delete_certificate(self, slot_name, pin=None, mgm_key_hex=None):
         logger.debug('piv_delete_certificate %s', slot_name)

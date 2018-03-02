@@ -288,6 +288,21 @@ Python {
         )
     }
 
+    function piv_import_key(args) {
+        _piv_perform_authenticated_action(
+            'yubikey.controller.piv_import_key',
+            [args.slotName, args.fileUrl, args.pin, args.keyHex, null,
+             args.pinPolicy, args.touchPolicy],
+            _refreshBefore(args.callback),
+            args.pinCallback,
+            args.keyCallback,
+            args.touchCallback,
+            function(newArgs) {
+                piv_import_key(Utils.extend(args, newArgs))
+            }
+        )
+    }
+
     function piv_delete_certificate(args) {
         _piv_perform_authenticated_action(
             'yubikey.controller.piv_delete_certificate',

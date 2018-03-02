@@ -184,8 +184,48 @@ DefaultDialog {
                 })
             }
 
+            function importKey(keyFileUrl, pinPolicy, touchPolicy) {
+                device.piv_import_key({
+                    slotName: selectedSlotName,
+                    fileUrl: keyFileUrl,
+                    pinPolicy: pinPolicy,
+                    touchPolicy: touchPolicy,
+                    callback: function(result) {
+                        if (result.success) {
+                            closed()
+                        } else if (result.failure.supportedPinPolicies) {
+                            if (result.failure.supportedPinPolicies.length === 0) {
+                                showError('Import failed', 'Failed to import key. This YubiKey does not support PIN policies.')
+                            } else {
+                                showError(
+                                    'Import failed',
+                                    'Failed to import key. This YubiKey supports only the following PIN policies: ' + result.failure.supportedPinPolicies.join(', ')
+                                )
+                            }
+                        } else if (result.failure.supportedTouchPolicies) {
+                            if (result.failure.supportedTouchPolicies.length === 0) {
+                                showError('Import failed', 'Failed to import key. This YubiKey does not support touch policies.')
+                            } else {
+                                showError(
+                                    'Import failed',
+                                    'Failed to import key. This YubiKey supports only the following touch policies: ' + result.failure.supportedTouchPolicies.join(', ')
+                                )
+                            }
+                        } else {
+                            showError('Import failed', 'Failed to import key: ' + (result.message || 'unknown error.'))
+                        }
+                    },
+                    pinCallback: askPin,
+                    keyCallback: askManagementKey,
+                    touchCallback: function() {
+                        touchYubiKeyPrompt.show()
+                    },
+                })
+            }
+
             onClosed: pop()
             onImportCertificateAccepted: importCertificate(certificateFileUrl)
+            onImportKeyAccepted: importKey(keyFileUrl, pinPolicy, touchPolicy)
         }
     }
 
