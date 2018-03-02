@@ -85,14 +85,6 @@ function maxIn(arr) {
 }
 
 /**
- * @param arr an Array of numbers
- * @return the sum of the numbers in `arr`
- */
-function sum(arr) {
-    return arr.reduce(function(sum, next) { return sum + next }, 0)
-}
-
-/**
  * @param arr an Array or QML list of objects
  * @param name a String containing a property name
  * @return `arr.map(function(item) { return item[name] })`
@@ -103,4 +95,12 @@ function pick(arr, name) {
     } else {
         return pick(listToArray(arr), name)
     }
+}
+
+/**
+ * @param arr an Array of numbers
+ * @return the sum of the numbers in `arr`
+ */
+function sum(arr) {
+    return arr.reduce(function(sum, next) { return sum + next }, 0)
 }
