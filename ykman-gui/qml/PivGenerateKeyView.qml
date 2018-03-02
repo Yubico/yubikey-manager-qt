@@ -8,12 +8,24 @@ ColumnLayout {
 
     property string slotName: ''
 
+    readonly property bool acceptableInput: subjectDn.acceptableInput && expirationDate.acceptableInput
     property var csrFile
     readonly property string hasSlotName: !!slotName
     property alias selfSign: selfSignedChoice.checked
 
     signal accepted(string algorithm, bool selfSign, var csrFileUrl, string subjectDn, string expirationDate, string touchPolicy)
     signal closed
+
+    function submit() {
+        accepted(
+            algorithmChoice.value,
+            selfSign,
+            selfSign ? null : csrFile,
+            subjectDn.text,
+            expirationDate.text,
+            touchPolicyChoice.value
+        )
+    }
 
     Label {
         text: qsTr('A new private key will be generated and stored in the %1 slot.').arg(slotName)
@@ -149,18 +161,9 @@ ColumnLayout {
         }
 
         Button {
-            enabled: subjectDn.acceptableInput && expirationDate.acceptableInput
+            enabled: acceptableInput
             text: qsTr('Ok')
-            onClicked: {
-                accepted(
-                    algorithmChoice.value,
-                    selfSign,
-                    selfSign ? null : csrFile,
-                    subjectDn.text,
-                    expirationDate.text,
-                    touchPolicyChoice.value
-                )
-            }
+            onClicked: submit()
         }
     }
 
@@ -174,5 +177,16 @@ ColumnLayout {
         onAccepted: {
             csrFile = fileUrls[0]
         }
+    }
+
+    Shortcut {
+      sequence: 'Return'
+      enabled: acceptableInput
+      onActivated: submit()
+    }
+
+    Shortcut {
+      sequence: 'Esc'
+      onActivated: closed()
     }
 }
