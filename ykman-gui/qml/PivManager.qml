@@ -327,13 +327,19 @@ DefaultDialog {
         }
     }
 
-    DefaultDialog {
-        id: changePivManagementKeyDialog
+    Component {
+        id: changeManagementKeyView
 
         PivSetManagementKeyForm {
-            id: pivSetManagementKeyForm
             device: yk
-            onChangeSuccessful: changePivManagementKeyDialog.hide()
+            onCanceled: pop()
+            onChangeSuccessful: {
+                pop()
+                var message = pinAsKey ? 'Successfully set new management key protected by PIN.' : 'Successfully set new management key.';
+                var extra = requireTouch ? '\n\nTouch is required to use the new management key.' : '';
+                showMessage('Management key set', message + extra);
+            }
+
         }
     }
 
@@ -397,7 +403,8 @@ DefaultDialog {
     }
 
     function startChangeManagementKey() {
-        changePivManagementKeyDialog.show()
+        push(changeManagementKeyView)
+        start()
     }
 
     function startReset() {
