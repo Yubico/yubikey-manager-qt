@@ -264,8 +264,11 @@ DefaultDialog {
                                 qsTr('Error'),
                                 qsTr('PIN change failed. This is probably a bug, please report it to the developers.')
                             )
-                        } else {
+                        } else if (retries > 0) {
                             showError(qsTr('Error'), qsTr('PIN change failed. Tries left: %1').arg(result.tries_left))
+                        } else {
+                            showError(qsTr('Error'), qsTr('PIN change failed. PIN has been blocked.'))
+                            pop()
                         }
                     }
                 })
@@ -291,8 +294,11 @@ DefaultDialog {
                                 qsTr('Error'),
                                 qsTr('PUK change failed. This is probably a bug, please report it to the developers.')
                             )
-                        } else {
+                        } else if (retries > 0) {
                             showError(qsTr('Error'), qsTr('PUK change failed. Tries left: %1').arg(result.tries_left))
+                        } else {
+                            showError(qsTr('Error'), qsTr('PUK change failed. PUK has been blocked.'))
+                            pop()
                         }
                     }
                 })
