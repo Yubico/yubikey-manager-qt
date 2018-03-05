@@ -655,6 +655,20 @@ class Controller(object):
                 logger.error('Failed', exc_info=e)
                 return {'success': False}
 
+    def piv_unblock_pin(self, puk, new_pin):
+        with self._open_piv() as piv_controller:
+            try:
+                piv_controller.unblock_pin(puk, new_pin)
+                return {
+                    'success': True,
+                    'pin_tries': piv_controller.get_pin_tries(),
+                }
+            except ValueError as e:
+                return {
+                    'success': False,
+                    'message': str(e),
+                }
+
 
 def toDict(cert):
     return {

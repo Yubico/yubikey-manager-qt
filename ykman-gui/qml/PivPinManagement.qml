@@ -11,6 +11,7 @@ ColumnLayout {
     signal changePin
     signal changePuk
     signal closed
+    signal unblockPin
 
     Label {
         text: pinTries != null ? qsTr('PIN tries left: %1').arg(pinTries) : qsTr('PIN tries left: unknown')
@@ -19,6 +20,13 @@ ColumnLayout {
     Button {
         text: qsTr("Change PIN")
         onClicked: changePin()
+        visible: pinTries
+    }
+
+    Button {
+        text: qsTr("Unblock PIN")
+        onClicked: unblockPin()
+        visible: !pinTries
     }
 
     Button {
