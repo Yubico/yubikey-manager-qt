@@ -141,6 +141,7 @@ DefaultDialog {
                     algorithm: algorithm,
                     csrFileUrl: csrFileUrl,
                     expirationDate: expirationDate,
+                    pinPolicy: pinPolicy,
                     selfSign: selfSign,
                     subjectDn: subjectDn,
                     touchPolicy: touchPolicy,

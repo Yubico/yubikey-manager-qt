@@ -320,7 +320,7 @@ Python {
     function piv_generate_certificate(args) {
         _piv_perform_authenticated_action(
             'yubikey.controller.piv_generate_certificate',
-            [args.slotName, args.algorithm, args.subjectDn, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex, null, args.touchPolicy],
+            [args.slotName, args.algorithm, args.subjectDn, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex, args.pinPolicy, args.touchPolicy],
             _refreshBefore(args.callback),
             args.pinCallback,
             args.keyCallback,
