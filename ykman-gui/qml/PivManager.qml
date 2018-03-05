@@ -53,24 +53,24 @@ DefaultDialog {
 
         ColumnLayout {
 
-            Label {
-                text: (hasDevice
-                    ? qsTr("YubiKey present with applet version: %1").arg(device && device.piv && device.piv.version || '?')
-                    : qsTr("No YubiKey detected.")
-                )
-            }
-
             RowLayout {
                 Label {
-                    //: PIV certificates list heading
-                    text: qsTr("Certificates: %1").arg(numCerts)
+                    text: (hasDevice
+                        ? qsTr("YubiKey present with applet version: %1").arg(device && device.piv && device.piv.version || '?')
+                        : qsTr("No YubiKey detected.")
+                    )
                     Layout.fillWidth: true
                 }
 
                 Button {
-                    text: 'Manage PINs'
+                    text: 'Manage'
                     onClicked: push(pinManagementView)
                 }
+            }
+
+            Label {
+                //: PIV certificates list heading
+                text: qsTr("Certificates: %1").arg(numCerts)
             }
 
             PivCertificates {
