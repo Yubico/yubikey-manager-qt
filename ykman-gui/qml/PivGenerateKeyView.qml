@@ -14,7 +14,7 @@ ColumnLayout {
     readonly property bool acceptableInput: subjectDn.acceptableInput && expirationDate.acceptableInput
     readonly property string hasSlotName: !!slotName
 
-    signal accepted(string algorithm, bool selfSign, var csrFileUrl, string subjectDn, string expirationDate, string touchPolicy)
+    signal accepted(string algorithm, bool selfSign, var csrFileUrl, string subjectDn, string expirationDate, string pinPolicy, string touchPolicy)
     signal closed
 
     function submit() {
@@ -24,6 +24,7 @@ ColumnLayout {
             selfSign ? null : csrFile,
             subjectDn.text,
             expirationDate.text,
+            pinPolicyChoice.value,
             touchPolicyChoice.value
         )
     }
@@ -32,29 +33,50 @@ ColumnLayout {
         text: qsTr('A new private key will be generated and stored in the %1 slot.').arg(slotName)
     }
 
-    RowLayout {
+    Label {
+        text: qsTr('Algorithm')
+        font.bold: true
+    }
 
+    DropdownMenu {
+        id: algorithmChoice
+        values: [{
+            text: qsTr('ECC (P-256)'),
+            value: 'ECCP256',
+        }, {
+            text: qsTr('ECC (P-384)'),
+            value: 'ECCP384',
+        }, {
+            text: qsTr('RSA (1024 bits)'),
+            value: 'RSA1024',
+        }, {
+            text: qsTr('RSA (2048 bits)'),
+            value: 'RSA2048',
+        }]
+    }
+
+    RowLayout {
         ColumnLayout {
             Label {
-                text: qsTr('Algorithm')
+                text: qsTr('PIN policy')
                 font.bold: true
             }
 
             DropdownMenu {
-                id: algorithmChoice
+                id: pinPolicyChoice
                 Layout.fillWidth: true
                 values: [{
-                    text: qsTr('ECC (P-256)'),
-                    value: 'ECCP256',
+                    text: qsTr('Default for this slot'),
+                    value: null,
                 }, {
-                    text: qsTr('ECC (P-384)'),
-                    value: 'ECCP384',
+                    text: qsTr('Never'),
+                    value: 'NEVER',
                 }, {
-                    text: qsTr('RSA (1024 bits)'),
-                    value: 'RSA1024',
+                    text: qsTr('Once'),
+                    value: 'ONCE',
                 }, {
-                    text: qsTr('RSA (2048 bits)'),
-                    value: 'RSA2048',
+                    text: qsTr('Always'),
+                    value: 'ALWAYS',
                 }]
             }
         }
@@ -83,7 +105,6 @@ ColumnLayout {
                 }]
             }
         }
-
     }
 
     RowLayout {

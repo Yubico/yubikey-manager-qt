@@ -582,7 +582,8 @@ class Controller(object):
 
                 public_key = piv_controller.generate_key(
                     SLOT[slot_name], ALGO[algorithm],
-                    pin_policy=pin_policy or PIN_POLICY.DEFAULT,
+                    pin_policy=(PIN_POLICY.from_string(pin_policy)
+                                if pin_policy else PIN_POLICY.DEFAULT),
                     touch_policy=(TOUCH_POLICY.from_string(touch_policy)
                                   if touch_policy else TOUCH_POLICY.DEFAULT))
 
