@@ -242,6 +242,7 @@ DefaultDialog {
             onChangePin: startChangePin()
             onChangePuk: startChangePuk()
             onClosed: pop()
+            onReset: startReset()
             onUnblockPin: startUnblockPin()
         }
     }

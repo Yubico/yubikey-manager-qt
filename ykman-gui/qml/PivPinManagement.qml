@@ -11,6 +11,7 @@ ColumnLayout {
     signal changePin
     signal changePuk
     signal closed
+    signal reset
     signal unblockPin
 
     Label {
@@ -37,6 +38,11 @@ ColumnLayout {
     Button {
         text: qsTr("Change Management Key")
         onClicked: changeManagementKey()
+    }
+
+    Button {
+        text: qsTr('Reset PIV data to factory defaults')
+        onClicked: reset()
     }
 
     Button {
