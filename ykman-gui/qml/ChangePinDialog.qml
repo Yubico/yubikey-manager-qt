@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.1
 Dialog {
 
     property string codeName: 'PIN'
+    property string currentCodeLabel: qsTr('Current %1:').arg(codeName)
     property int maxLength: 8
     property int minLength: 6
 
@@ -69,7 +70,7 @@ Dialog {
 
         Label {
             //: Input field for the current value of the code (for example PIN) to be changed
-            text: qsTr('Current %1:').arg(codeName)
+            text: currentCodeLabel
         }
 
         TextField {
