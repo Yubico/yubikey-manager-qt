@@ -245,49 +245,57 @@ DefaultDialog {
         }
     }
 
-    ChangePinDialog {
-        id: changePivPin
-        codeName: 'PIN'
+    Component {
+        id: changePinView
 
-        onCodeChanged: {
-            device.piv_change_pin(currentCode, newCode, function(result) {
-                if (result.success) {
-                    showMessage(qsTr('Success'), qsTr('PIN was successfully changed.'))
-                } else {
-                    if (result.tries_left === null) {
-                        showError(
-                            qsTr('Error'),
-                            qsTr('PIN change failed. This is probably a bug, please report it to the developers.'),
-                            startChangePin
-                        )
+        ChangePin {
+            codeName: 'PIN'
+
+            onCanceled: pop()
+            onCodeChanged: {
+                device.piv_change_pin(currentCode, newCode, function(result) {
+                    if (result.success) {
+                        showMessage(qsTr('Success'), qsTr('PIN was successfully changed.'))
+                        pop()
                     } else {
-                        showError(qsTr('Error'), qsTr('PIN change failed. Tries left: %1').arg(result.tries_left), startChangePin)
+                        if (result.tries_left === null) {
+                            showError(
+                                qsTr('Error'),
+                                qsTr('PIN change failed. This is probably a bug, please report it to the developers.')
+                            )
+                        } else {
+                            showError(qsTr('Error'), qsTr('PIN change failed. Tries left: %1').arg(result.tries_left))
+                        }
                     }
-                }
-            })
+                })
+            }
         }
     }
 
-    ChangePinDialog {
-        id: changePivPuk
-        codeName: 'PUK'
+    Component {
+        id: changePukView
 
-        onCodeChanged: {
-            device.piv_change_puk(currentCode, newCode, function(result) {
-                if (result.success) {
-                    showMessage(qsTr('Success'), qsTr('PUK was successfully changed.'))
-                } else {
-                    if (result.tries_left === null) {
-                        showError(
-                            qsTr('Error'),
-                            qsTr('PUK change failed. This is probably a bug, please report it to the developers.'),
-                            startChangePuk
-                        )
+        ChangePin {
+            codeName: 'PUK'
+
+            onCanceled: pop()
+            onCodeChanged: {
+                device.piv_change_puk(currentCode, newCode, function(result) {
+                    if (result.success) {
+                        showMessage(qsTr('Success'), qsTr('PUK was successfully changed.'))
+                        pop()
                     } else {
-                        showError(qsTr('Error'), qsTr('PUK change failed. Tries left: %1').arg(result.tries_left), startChangePuk)
+                        if (result.tries_left === null) {
+                            showError(
+                                qsTr('Error'),
+                                qsTr('PUK change failed. This is probably a bug, please report it to the developers.')
+                            )
+                        } else {
+                            showError(qsTr('Error'), qsTr('PUK change failed. Tries left: %1').arg(result.tries_left))
+                        }
                     }
-                }
-            })
+                })
+            }
         }
     }
 
@@ -306,8 +314,7 @@ DefaultDialog {
         device: yk
     }
 
-    function showError(title, text, callback) {
-        errorDialog.callback = callback
+    function showError(title, text) {
         errorDialog.text = text
         errorDialog.title = title
         errorDialog.open()
@@ -323,14 +330,6 @@ DefaultDialog {
         id: errorDialog
         icon: StandardIcon.Critical
         standardButtons: StandardButton.Ok
-
-        onAccepted: {
-            if (callback) {
-                callback()
-            }
-        }
-
-        property var callback
     }
 
     MessageDialog {
@@ -360,11 +359,13 @@ DefaultDialog {
     }
 
     function startChangePin() {
-        changePivPin.open()
+        push(changePinView)
+        start()
     }
 
     function startChangePuk() {
-        changePivPuk.open()
+        push(changePukView)
+        start()
     }
 
     function startChangeManagementKey() {
