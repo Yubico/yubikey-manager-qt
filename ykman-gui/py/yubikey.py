@@ -611,10 +611,31 @@ class Controller(object):
                     touch_policy=(TOUCH_POLICY.from_string(touch_policy)
                                   if touch_policy else TOUCH_POLICY.DEFAULT))
 
+                if pin:
+                    pin_failed = self._piv_verify_pin(piv_controller, pin)
+                    if pin_failed:
+                        return pin_failed
+
                 if self_sign:
-                    piv_controller.generate_self_signed_certificate(
-                        SLOT[slot_name], public_key, common_name, now,
-                        valid_to)
+                    try:
+                        piv_controller.generate_self_signed_certificate(
+                            SLOT[slot_name], public_key, common_name, now,
+                            valid_to)
+                    except APDUError as e:
+                        if e.sw == SW.ACCESS_DENIED:
+                            return {
+                                'success': False,
+                                'failure': {'pinRequired': True}
+                            }
+                        else:
+                            logger.error(
+                                'Failed to generate self signed certificate',
+                                exc_info=e)
+                            return {
+                                'success': False,
+                                'message': str(e),
+                                'failure': {'unknown': True}
+                            }
                 else:
                     csr = piv_controller.generate_certificate_signing_request(
                         SLOT[slot_name], public_key, common_name)
