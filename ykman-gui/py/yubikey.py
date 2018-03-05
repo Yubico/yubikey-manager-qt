@@ -97,12 +97,13 @@ class Controller(object):
 
         with self._open_piv() as piv_controller:
             if self._dev_info:
-                piv_certificates = self._piv_list_certificates()
+                piv_certificates = self._piv_list_certificates(piv_controller)
 
                 self._dev_info['piv'] = {
-                    'version': '.'.join(str(x) for x in self._piv_version()),
+                    'version': '.'.join(
+                        str(x) for x in self._piv_version(piv_controller)),
                     'certificates': piv_certificates,
-                    'has_protected_key': piv_controller.has_protected_key
+                    'has_protected_key': piv_controller.has_protected_key,
                 }
 
         return self._dev_info
@@ -271,12 +272,11 @@ class Controller(object):
             logger.error('Failed to reset PIV applet', exc_info=e)
             return False
 
-    def _piv_version(self):
-        with self._open_piv() as piv_controller:
-            try:
-                return piv_controller.version
-            except AttributeError:
-                return None
+    def _piv_version(self, piv_controller):
+        try:
+            return piv_controller.version
+        except AttributeError:
+            return None
 
     def _piv_verify_pin(self, piv_controller, pin=None):
         if pin:
@@ -362,14 +362,13 @@ class Controller(object):
                 }
             }
 
-    def _piv_list_certificates(self):
-        with self._open_piv() as piv_controller:
-            certs = piv_controller.list_certificates()
-            logger.debug('Certificates: %s', certs)
-            certs = {
-                SLOT(slot).name: toDict(cert) for slot, cert in certs.items()}
-            logger.debug('Certificates: %s', certs)
-            return certs
+    def _piv_list_certificates(self, piv_controller):
+        certs = piv_controller.list_certificates()
+        logger.debug('Certificates: %s', certs)
+        certs = {
+            SLOT(slot).name: toDict(cert) for slot, cert in certs.items()}
+        logger.debug('Certificates: %s', certs)
+        return certs
 
     def piv_generate_random_mgm_key(self):
         return b2a_hex(ykman.piv.generate_random_management_key()).decode(
