@@ -139,6 +139,7 @@ ColumnLayout {
 
         TextField {
             id: pinInput
+            echoMode: TextInput.Password
         }
     }
 
