@@ -346,6 +346,32 @@ class Controller(object):
                 'tries_left': result.tries_left,
               }
 
+    def _piv_check_policies(self, piv_controller, pin_policy=None,
+                            touch_policy=None):
+        if pin_policy and not (
+                PIN_POLICY[pin_policy]
+                in piv_controller.supported_pin_policies):
+            return {
+                'success': False,
+                'failure': {
+                    'supportedPinPolicies': [
+                        policy.name for policy in
+                        piv_controller.supported_pin_policies],
+                }
+            }
+
+        if touch_policy and not (
+                TOUCH_POLICY[touch_policy]
+                in piv_controller.supported_touch_policies):
+            return {
+                'success': False,
+                'failure': {
+                    'supportedTouchPolicies': [
+                        policy.name for policy in
+                        piv_controller.supported_touch_policies],
+                }
+            }
+
     def _piv_list_certificates(self):
         with self._open_piv() as piv_controller:
             certs = piv_controller.list_certificates()
@@ -507,29 +533,11 @@ class Controller(object):
             if auth_failed:
                 return auth_failed
 
-            if pin_policy and not (
-                    PIN_POLICY[pin_policy]
-                    in piv_controller.supported_pin_policies):
-                return {
-                    'success': False,
-                    'failure': {
-                        'supportedPinPolicies': [
-                            policy.name for policy in
-                            piv_controller.supported_pin_policies],
-                    }
-                }
-
-            if touch_policy and not (
-                    TOUCH_POLICY[touch_policy]
-                    in piv_controller.supported_touch_policies):
-                return {
-                    'success': False,
-                    'failure': {
-                        'supportedTouchPolicies': [
-                            policy.name for policy in
-                            piv_controller.supported_touch_policies],
-                    }
-                }
+            unsupported_policy = self._piv_check_policies(
+                piv_controller, pin_policy=pin_policy,
+                touch_policy=touch_policy)
+            if unsupported_policy:
+                return unsupported_policy
 
             try:
                 piv_controller.import_key(SLOT[slot_name], private_key,
@@ -589,6 +597,12 @@ class Controller(object):
                         'message': 'Invalid date: ' + expiration_date,
                         'failure': {'invalidDate': True},
                     }
+
+                unsupported_policy = self._piv_check_policies(
+                    piv_controller, pin_policy=pin_policy,
+                    touch_policy=touch_policy)
+                if unsupported_policy:
+                    return unsupported_policy
 
                 public_key = piv_controller.generate_key(
                     SLOT[slot_name], ALGO[algorithm],
