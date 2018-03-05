@@ -60,10 +60,17 @@ DefaultDialog {
                 )
             }
 
-            Label {
-                //: PIV certificates list heading
-                text: qsTr("Certificates: %1").arg(numCerts)
-                Layout.fillWidth: true
+            RowLayout {
+                Label {
+                    //: PIV certificates list heading
+                    text: qsTr("Certificates: %1").arg(numCerts)
+                    Layout.fillWidth: true
+                }
+
+                Button {
+                    text: 'Manage PINs'
+                    onClicked: push(pinManagementView)
+                }
             }
 
             PivCertificates {
@@ -115,11 +122,6 @@ DefaultDialog {
                     }
                 }
 
-            }
-
-            Button {
-                text: qsTr("Change PIN")
-                onClicked: startChangePin()
             }
 
         }
@@ -227,6 +229,19 @@ DefaultDialog {
             onClosed: pop()
             onImportCertificateAccepted: importCertificate(certificateFileUrl)
             onImportKeyAccepted: importKey(keyFileUrl, pinPolicy, touchPolicy)
+        }
+    }
+
+    Component {
+        id: pinManagementView
+
+        PivPinManagement {
+            pinTries: hasDevice ? device.piv.pin_tries : null
+
+            onChangeManagementKey: startChangeManagementKey()
+            onChangePin: startChangePin()
+            onChangePuk: startChangePuk()
+            onClosed: pop()
         }
     }
 
