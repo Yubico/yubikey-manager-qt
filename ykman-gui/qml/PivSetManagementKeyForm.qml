@@ -17,7 +17,8 @@ ColumnLayout {
 
     property string newManagementKeyInputText
 
-    signal changeSuccessful
+    signal canceled
+    signal changeSuccessful(bool pinAsKey, bool requireTouch)
 
     Layout.minimumHeight: tabs.Layout.minimumHeight
     Layout.minimumWidth: tabs.Layout.minimumWidth
@@ -141,10 +142,15 @@ ColumnLayout {
         }
     }
 
+    CheckBox {
+        id: requireTouchCheckbox
+        text: qsTr("Require touch")
+    }
+
     RowLayout {
-        CheckBox {
-            id: requireTouchCheckbox
-            text: qsTr("Require touch")
+        Button {
+            text: qsTr("Cancel")
+            onClicked: canceled()
         }
 
         Item {
@@ -163,12 +169,6 @@ ColumnLayout {
         errorDialog.open()
     }
 
-    function showMessage(title, text) {
-        messageDialog.title = title
-        messageDialog.text = text
-        messageDialog.open()
-    }
-
     function setNewManagementKeyInput(value) {
         newManagementKeyInputText = value
     }
@@ -182,11 +182,7 @@ ColumnLayout {
 
             touchYubiKeyPrompt.close()
             if (result.success) {
-                var message = usePinAsKey ? 'Successfully set new management key protected by PIN.' : 'Successfully set new management key.';
-                var extra = requireTouch ? '\n\nTouch is required to use the new management key.' : '';
-                showMessage('Management key set', message + extra);
-
-                changeSuccessful()
+                changeSuccessful(usePinAsKey, requireTouch)
             } else if (result.failure.authenticate) {
                 showError('Failed to change management key', 'Incorrect current management key.')
             } else if (result.failure.parseCurrentKey) {
@@ -217,6 +213,11 @@ ColumnLayout {
         id: messageDialog
         icon: StandardIcon.Information
         standardButtons: StandardButton.Ok
+    }
+
+    Shortcut {
+      sequence: 'Return'
+      onActivated: submit()
     }
 
 }
