@@ -104,6 +104,7 @@ class Controller(object):
                         str(x) for x in self._piv_version(piv_controller)),
                     'certificates': piv_certificates,
                     'has_protected_key': piv_controller.has_protected_key,
+                    'pin_tries': piv_controller.get_pin_tries()
                 }
 
         return self._dev_info
