@@ -242,6 +242,7 @@ DefaultDialog {
             onChangePin: startChangePin()
             onChangePuk: startChangePuk()
             onClosed: pop()
+            onUnblockPin: startUnblockPin()
         }
     }
 
@@ -293,6 +294,27 @@ DefaultDialog {
                         } else {
                             showError(qsTr('Error'), qsTr('PUK change failed. Tries left: %1').arg(result.tries_left))
                         }
+                    }
+                })
+            }
+        }
+    }
+
+    Component {
+        id: unblockPinView
+
+        ChangePin {
+            codeName: 'PIN'
+            currentCodeLabel: qsTr('PUK:')
+
+            onCanceled: pop()
+            onCodeChanged: {
+                device.piv_unblock_pin(currentCode, newCode, function(result) {
+                    if (result.success) {
+                        showMessage(qsTr('PIN unblocked'), qsTr('PIN retries successfully reset to %1.').arg(result.pin_tries))
+                        pop()
+                    } else {
+                        showError(qsTr('PIN unblock failed'), qsTr('Failed to unblock PIN: ') + (result.message || qsTr('unknown error.')))
                     }
                 })
             }
@@ -374,6 +396,11 @@ DefaultDialog {
 
     function startReset() {
         pivResetDialog.open()
+    }
+
+    function startUnblockPin() {
+        push(unblockPinView)
+        start()
     }
 
 }

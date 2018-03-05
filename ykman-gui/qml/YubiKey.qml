@@ -336,4 +336,8 @@ Python {
         do_call('yubikey.controller.piv_reset', [], _refreshBefore(cb))
     }
 
+    function piv_unblock_pin(puk, newPin, cb) {
+        do_call('yubikey.controller.piv_unblock_pin', [puk, newPin], _refreshBefore(cb))
+    }
+
 }
