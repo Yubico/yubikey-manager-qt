@@ -133,6 +133,7 @@ DefaultDialog {
         PivGenerateKeyView {
             slotName: selectedSlotName
             onAccepted: {
+                push(generatingView)
                 device.piv_generate_certificate({
                     slotName: slotName,
                     algorithm: algorithm,
@@ -143,6 +144,8 @@ DefaultDialog {
                     subjectDn: subjectDn,
                     touchPolicy: touchPolicy,
                     callback: function(result) {
+                        pop(generateKeyView)
+
                         if (result.success) {
                             closed()
                         } else if (result.failure.permissionDenied) {
@@ -159,6 +162,20 @@ DefaultDialog {
                 })
             }
             onClosed: pop()
+        }
+    }
+
+    Component {
+        id: generatingView
+
+        ColumnLayout {
+            Label {
+                text: qsTr('Generating key, please wait...')
+            }
+
+            Label {
+                text: qsTr('Do not disconnect your YubiKey.')
+            }
         }
     }
 
