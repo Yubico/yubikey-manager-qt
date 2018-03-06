@@ -202,6 +202,13 @@ Python {
     }
 
     function _piv_perform_authenticated_action(functionName, args, callback, pinCallback, keyCallback, touchCallback, retry, touchPrompt) {
+        function cancel() {
+            callback({
+                success: false,
+                failure: { canceled: true },
+            })
+        }
+
         if (touchPrompt !== false) {
             touchPrompt = true
         }
@@ -218,23 +225,39 @@ Python {
 
             if (!result.success && result.failure.pinRequired) {
                 pinCallback(function(pin) {
-                    retry({ pin: pin })
+                    if (pin) {
+                        retry({ pin: pin })
+                    } else {
+                        cancel()
+                    }
                 })
             } else if (!result.success && result.failure.pinVerification) {
                 pinCallback(
                     function(pin) {
-                        retry({ pin: pin })
+                        if (pin) {
+                            retry({ pin: pin })
+                        } else {
+                            cancel()
+                        }
                     },
                     result.message
                 )
             } else if (!result.success && result.failure.keyRequired) {
                 keyCallback(function(keyHex) {
-                    retry({ keyHex: keyHex })
+                    if (keyHex) {
+                        retry({ keyHex: keyHex })
+                    } else {
+                        cancel()
+                    }
                 })
             } else if (!result.success && result.failure.keyAuthentication) {
                 keyCallback(
                     function(keyHex) {
-                        retry({ keyHex: keyHex })
+                        if (keyHex) {
+                            retry({ keyHex: keyHex })
+                        } else {
+                            cancel()
+                        }
                     },
                     result.message
                 )

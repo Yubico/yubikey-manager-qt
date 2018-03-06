@@ -80,7 +80,7 @@ DefaultDialog {
                     device.piv_delete_certificate({
                         slotName: slotName,
                         callback: function(result) {
-                            if (!result.success) {
+                            if (!result.success && !result.failure.canceled) {
                                 showError('Delete failed', 'Failed to delete certificate: ' + (result.message || 'unknown error.'))
                             }
                         },
@@ -147,7 +147,7 @@ DefaultDialog {
                             closed()
                         } else if (result.failure.permissionDenied) {
                             showError('Permission denied', 'Permission to write CSR to ' + csrFileUrl + ' was denied.')
-                        } else {
+                        } else if (!result.failure.canceled) {
                             showError('Generate failed', 'Failed to generate certificate: ' + (result.message || 'unknown error.'))
                         }
                     },
@@ -175,7 +175,7 @@ DefaultDialog {
                     callback: function(result) {
                         if (result.success) {
                             closed()
-                        } else {
+                        } else if (!result.failure.canceled) {
                             showError('Import failed', 'Failed to import certificate: ' + (result.message || 'unknown error.'))
                         }
                     },
@@ -214,7 +214,7 @@ DefaultDialog {
                                     'Failed to import key. This YubiKey supports only the following touch policies: ' + result.failure.supportedTouchPolicies.join(', ')
                                 )
                             }
-                        } else {
+                        } else if (!result.failure.canceled) {
                             showError('Import failed', 'Failed to import key: ' + (result.message || 'unknown error.'))
                         }
                     },
