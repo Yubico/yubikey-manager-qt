@@ -191,10 +191,12 @@ ColumnLayout {
             touchYubiKeyPrompt.close()
             if (result.success) {
                 changeSuccessful(usePinAsKey, requireTouch)
-            } else if (result.failure.authenticate) {
-                showError(qsTr('Failed to change management key'), qsTr('Incorrect current management key.'))
-            } else if (result.failure.parseCurrentKey) {
-                showError(qsTr('Bad input'), qsTr('Invalid current management key: %1').arg(result.message))
+            } else if (result.failure.keyRequired) {
+                showError(qsTr('Bad input'), qsTr('Current management key is missing.'))
+            } else if (result.failure.parseKey) {
+                showError(qsTr('Bad input'), qsTr('Current management key is invalid: %1').arg(result.message))
+            } else if (result.failure.keyAuthentication) {
+                showError(qsTr('Failed to change management key'), qsTr('Current management key is incorrect.'))
             } else if (result.failure.parseNewKey) {
                 showError(qsTr('Bad input'), qsTr('Invalid new management key: %1').arg(result.message))
             } else if (result.failure.newKeyLength) {
