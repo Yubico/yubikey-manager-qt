@@ -172,8 +172,8 @@ ColumnLayout {
     }
 
     function showError(title, text) {
-        errorDialog.title = title
-        errorDialog.text = text
+        errorDialog.title = title || qsTr('Error')
+        errorDialog.text = text || qsTr('(No description available. This may be a bug.)')
         errorDialog.open()
     }
 
