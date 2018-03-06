@@ -37,26 +37,26 @@ ColumnLayout {
 
         Tab {
             id: personalTab
-            title: "Personal"
+            title: qsTr("Personal")
             anchors.margins: margins
 
             ColumnLayout {
                 Label {
-                    text: "PIN will be used as management key."
+                    text: qsTr("PIN will be used as management key.")
                 }
             }
         }
 
         Tab {
             id: enterpriseTab
-            title: "Enterprise"
+            title: qsTr("Enterprise")
             anchors.margins: margins
 
             ColumnLayout {
                 id: foo
 
                 Label {
-                    text: "A management key separate from the PIN will be created."
+                    text: qsTr("A management key separate from the PIN will be created.")
                 }
 
                 Label {
@@ -124,7 +124,7 @@ ColumnLayout {
         }
 
         Button {
-            text: 'Default'
+            text: qsTr('Default')
             enabled: currentManagementKeyInput.enabled
             onClicked: currentManagementKeyInput.text = '010203040506070801020304050607080102030405060708'
         }
@@ -185,15 +185,15 @@ ColumnLayout {
             if (result.success) {
                 changeSuccessful(usePinAsKey, requireTouch)
             } else if (result.failure.authenticate) {
-                showError('Failed to change management key', 'Incorrect current management key.')
+                showError(qsTr('Failed to change management key'), qsTr('Incorrect current management key.'))
             } else if (result.failure.parseCurrentKey) {
-                showError('Bad input', 'Invalid current management key: ' + result.message)
+                showError(qsTr('Bad input'), qsTr('Invalid current management key: %1').arg(result.message))
             } else if (result.failure.parseNewKey) {
-                showError('Bad input', 'Invalid new management key: ' + result.message)
+                showError(qsTr('Bad input'), qsTr('Invalid new management key: %1').arg(result.message))
             } else if (result.failure.newKeyLength) {
-                showError('Bad input', 'New management key must be exactly 48 characters.')
+                showError(qsTr('Bad input'), qsTr('New management key must be exactly 48 characters.'))
             } else {
-                showError('Failed to change management key', result.message)
+                showError(qsTr('Failed to change management key'), result.message)
             }
         }
         function touchCallback() {

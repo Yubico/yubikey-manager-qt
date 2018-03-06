@@ -83,9 +83,9 @@ ColumnLayout {
         id: certifcateFileDialog
 
         defaultSuffix: 'pem'
-        nameFilters: [ 'Certificate files (*.pem)', 'All files (*)']
+        nameFilters: [qsTr('Certificate files (*.pem)'), qsTr('All files (*)')]
         selectExisting: true
-        title: 'Select file to import'
+        title: qsTr('Select file to import')
 
         onAccepted: importCertificateAccepted(fileUrls[0])
     }
@@ -94,9 +94,9 @@ ColumnLayout {
         id: keyFileDialog
 
         defaultSuffix: 'pem'
-        nameFilters: [ 'Private key files (*.pem)', 'All files (*)']
+        nameFilters: [qsTr('Private key files (*.pem)'), qsTr('All files (*)')]
         selectExisting: true
-        title: 'Select file to import'
+        title: qsTr('Select file to import')
 
         onAccepted: importKeyAccepted(fileUrls[0], pinPolicyChoice.value, touchPolicyChoice.value)
     }

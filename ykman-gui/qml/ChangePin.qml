@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 
 ColumnLayout {
 
-    property string codeName: 'PIN'
+    property string codeName: qsTr('PIN')
     property string currentCodeLabel: qsTr('Current %1:').arg(codeName)
     property int maxLength: 8
     property int minLength: 6
