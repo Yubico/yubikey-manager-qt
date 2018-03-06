@@ -63,7 +63,7 @@ DefaultDialog {
                 }
 
                 Button {
-                    text: 'Manage'
+                    text: qsTr('Manage')
                     onClicked: push(pinManagementView)
                 }
             }
@@ -81,7 +81,7 @@ DefaultDialog {
                         slotName: slotName,
                         callback: function(result) {
                             if (!result.success && !result.failure.canceled) {
-                                showError('Delete failed', 'Failed to delete certificate: ' + (result.message || 'unknown error.'))
+                                showError(qsTr('Delete failed'), qsTr('Failed to delete certificate: %1').arg(result.message || qsTr('unknown error.')))
                             }
                         },
                         pinCallback: askPin,
@@ -111,10 +111,10 @@ DefaultDialog {
                     property string slotName
 
                     id: exportFileDialog
-                    title: 'Select export destination file'
+                    title: qsTr('Select export destination file')
                     selectExisting: false
                     defaultSuffix: 'pem'
-                    nameFilters: [ 'Certificate files (*.pem)', 'All files (*)']
+                    nameFilters: [qsTr('Certificate files (*.pem)'), qsTr('All files (*)')]
 
                     onAccepted: {
                         device.piv_export_certificate(slotName, fileUrls[0], function(result) {
@@ -149,9 +149,9 @@ DefaultDialog {
                         if (result.success) {
                             closed()
                         } else if (result.failure.permissionDenied) {
-                            showError('Permission denied', 'Permission to write CSR to ' + csrFileUrl + ' was denied.')
+                            showError(qsTr('Permission denied'), qsTr('Permission to write CSR to %1 was denied.').arg(csrFileUrl))
                         } else if (!result.failure.canceled) {
-                            showError('Generate failed', 'Failed to generate certificate: ' + (result.message || 'unknown error.'))
+                            showError(qsTr('Generate failed'), qsTr('Failed to generate certificate: %1').arg(result.message || qsTr('unknown error.')))
                         }
                     },
                     pinCallback: askPin,
@@ -193,7 +193,7 @@ DefaultDialog {
                         if (result.success) {
                             closed()
                         } else if (!result.failure.canceled) {
-                            showError('Import failed', 'Failed to import certificate: ' + (result.message || 'unknown error.'))
+                            showError(qsTr('Import failed'), qsTr('Failed to import certificate: %1').arg(result.message || qsTr('unknown error.')))
                         }
                     },
                     pinCallback: askPin,
@@ -215,24 +215,24 @@ DefaultDialog {
                             closed()
                         } else if (result.failure.supportedPinPolicies) {
                             if (result.failure.supportedPinPolicies.length === 0) {
-                                showError('Import failed', 'Failed to import key. This YubiKey does not support PIN policies.')
+                                showError(qsTr('Import failed'), qsTr('Failed to import key. This YubiKey does not support PIN policies.'))
                             } else {
                                 showError(
-                                    'Import failed',
-                                    'Failed to import key. This YubiKey supports only the following PIN policies: ' + result.failure.supportedPinPolicies.join(', ')
+                                    qsTr('Import failed'),
+                                    qsTr('Failed to import key. This YubiKey supports only the following PIN policies: %1').arg(result.failure.supportedPinPolicies.join(', '))
                                 )
                             }
                         } else if (result.failure.supportedTouchPolicies) {
                             if (result.failure.supportedTouchPolicies.length === 0) {
-                                showError('Import failed', 'Failed to import key. This YubiKey does not support touch policies.')
+                                showError(qsTr('Import failed'), qsTr('Failed to import key. This YubiKey does not support touch policies.'))
                             } else {
                                 showError(
-                                    'Import failed',
-                                    'Failed to import key. This YubiKey supports only the following touch policies: ' + result.failure.supportedTouchPolicies.join(', ')
+                                    qsTr('Import failed'),
+                                    qsTr('Failed to import key. This YubiKey supports only the following touch policies: %1').arg(result.failure.supportedTouchPolicies.join(', '))
                                 )
                             }
                         } else if (!result.failure.canceled) {
-                            showError('Import failed', 'Failed to import key: ' + (result.message || 'unknown error.'))
+                            showError(qsTr('Import failed'), qsTr('Failed to import key: %1').arg(result.message || qsTr('unknown error.')))
                         }
                     },
                     pinCallback: askPin,
@@ -268,7 +268,7 @@ DefaultDialog {
         id: changePinView
 
         ChangePin {
-            codeName: 'PIN'
+            codeName: qsTr('PIN')
 
             onCanceled: pop()
             onCodeChanged: {
@@ -353,9 +353,9 @@ DefaultDialog {
             onCanceled: pop()
             onChangeSuccessful: {
                 pop()
-                var message = pinAsKey ? 'Successfully set new management key protected by PIN.' : 'Successfully set new management key.';
-                var extra = requireTouch ? '\n\nTouch is required to use the new management key.' : '';
-                showMessage('Management key set', message + extra);
+                var message = pinAsKey ? qsTr('Successfully set new management key protected by PIN.') : qsTr('Successfully set new management key.');
+                var extra = requireTouch ? ('\n\n' + qsTr('Touch is required to use the new management key.')) : '';
+                showMessage(qsTr('Management key set'), message + extra);
             }
 
         }

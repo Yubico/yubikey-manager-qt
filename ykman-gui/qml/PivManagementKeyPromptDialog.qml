@@ -2,6 +2,6 @@ import QtQuick 2.5
 
 PivPinPromptDialog {
     hideInput: false
-    message: 'Please enter the PIV management key.'
-    title: 'PIV management key required'
+    message: qsTr('Please enter the PIV management key.')
+    title: qsTr('PIV management key required')
 }
