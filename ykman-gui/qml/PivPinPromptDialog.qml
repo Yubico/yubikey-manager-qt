@@ -27,6 +27,12 @@ Dialog {
         reset()
     }
 
+    onRejected: {
+        if (callback) {
+            callback(false)
+        }
+    }
+
     onReset: input.text = ''
 
     onVisibleChanged: {
