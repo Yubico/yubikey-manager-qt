@@ -123,8 +123,12 @@ class Controller(object):
                 return str(e)
 
     def slots_status(self):
-        with self._open_device(TRANSPORT.OTP) as dev:
-            return dev.driver.slot_status
+        try:
+            with self._open_device(TRANSPORT.OTP) as dev:
+                dev = self._descriptor.open_device(TRANSPORT.OTP)
+                return dev.driver.slot_status
+        except Exception as e:
+            logger.error('Failed to read slot status', exc_info=e)
 
     def erase_slot(self, slot):
         try:

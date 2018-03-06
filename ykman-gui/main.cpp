@@ -4,9 +4,6 @@
 #include <stdlib.h>
 #include <QtGlobal>
 #include <QtWidgets>
-#ifndef Q_OS_DARWIN
-#include <QtSingleApplication>
-#endif
 
 int main(int argc, char *argv[])
 {
@@ -18,15 +15,7 @@ int main(int argc, char *argv[])
     // Don't write .pyc files.
     qputenv("PYTHONDONTWRITEBYTECODE", "1");
 
-    // Non Darwin platforms uses QSingleApplication to ensure only one running instance.
-    #ifndef Q_OS_DARWIN
-    QtSingleApplication app(argc, argv);
-    if (app.sendMessage("")) {
-        return 0;
-    }
-    #else
     QApplication app(argc, argv);
-    #endif
 
     QString app_dir = app.applicationDirPath();
     QString main_qml = "/qml/main.qml";
@@ -36,6 +25,17 @@ int main(int argc, char *argv[])
     app.setApplicationName("YubiKey Manager");
     app.setOrganizationName("Yubico");
     app.setOrganizationDomain("com.yubico");
+
+    // A lock file is used, to ensure only one running instance at the time.
+    QString tmpDir = QDir::tempPath();
+    QLockFile lockFile(tmpDir + "/ykman-gui.lock");
+    if(!lockFile.tryLock(100)) {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("YubiKey Manager is already running.");
+        msgBox.exec();
+        return 1;
+    }
 
     if (QFileInfo::exists(":" + main_qml)) {
         // Embedded resources
@@ -69,19 +69,6 @@ int main(int argc, char *argv[])
     } else {
         QMetaObject::invokeMethod(engine.rootObjects().first(), "disableLogging");
     }
-
-    #ifndef Q_OS_DARWIN
-    // Wake up the root window on a message from new instance.
-    for (auto object : engine.rootObjects()) {
-        if (QWindow *window = qobject_cast<QWindow*>(object)) {
-            QObject::connect(&app, &QtSingleApplication::messageReceived, [window]() {
-                window->show();
-                window->raise();
-                window->requestActivate();
-            });
-        }
-    }
-    #endif
 
     return app.exec();
 }

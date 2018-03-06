@@ -7,14 +7,8 @@ ApplicationWindow {
     id: root
     visible: true
     title: qsTr("YubiKey Manager")
-    flags: Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
-           | Qt.WindowMinimizeButtonHint | Qt.MSWindowsFixedSizeDialogHint
 
     menuBar: MainMenuBar {
-        enabledFeatures: yk.enabled
-        enableConnectionsDialog: yk.connections.length > 1
-        enablePgpTouch: supportsOpenPgpTouch()
-        enablePgpPinRetries: supportsOpenPgpPinRetries()
     }
 
     AboutPage {
@@ -44,7 +38,6 @@ ApplicationWindow {
     Loader {
         id: loader
         sourceComponent: yk.hasDevice ? deviceInfo : message
-
         anchors.fill: parent
         Layout.minimumWidth: item.Layout.minimumWidth
         Layout.minimumHeight: item.Layout.minimumHeight
@@ -89,11 +82,6 @@ ApplicationWindow {
         device: yk
     }
 
-    SwapSlotDialog {
-        id: swapSlotsDialog
-        device: yk
-    }
-
     OpenPgpResetDialog {
         id: openPgpResetDialog
         device: yk
@@ -125,13 +113,7 @@ ApplicationWindow {
         text: qsTr("All data has been cleared and default PINs are set.")
         standardButtons: StandardButton.Ok
     }
-    MessageDialog {
-        id: confirmSwapped
-        icon: StandardIcon.Information
-        title: qsTr("Slot credentials swapped")
-        text: qsTr("The credentials in the short press and the long press slot has now been swapped.")
-        standardButtons: StandardButton.Ok
-    }
+
     MessageDialog {
         id: openPgpTouchConfirm
         icon: StandardIcon.Information
