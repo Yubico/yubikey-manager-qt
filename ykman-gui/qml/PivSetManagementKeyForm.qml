@@ -7,6 +7,9 @@ import "utils.js" as Utils
 
 ColumnLayout {
     property var device
+
+    readonly property bool acceptableInput: acceptablePin
+    readonly property bool acceptablePin: !pinInput.enabled || pinInput.acceptableInput
     readonly property bool hasDevice: (device && device.hasDevice
                                        && device.piv) || false
     readonly property bool usePinAsKey: tabs.currentIndex == 0
@@ -140,6 +143,9 @@ ColumnLayout {
         TextField {
             id: pinInput
             echoMode: TextInput.Password
+            validator: RegExpValidator {
+                regExp: /.+/
+            }
         }
     }
 
@@ -160,6 +166,7 @@ ColumnLayout {
 
         Button {
             text: qsTr("Ok")
+            enabled: acceptableInput
             onClicked: submit()
         }
     }
@@ -218,6 +225,7 @@ ColumnLayout {
 
     Shortcut {
       sequence: 'Return'
+      enabled: acceptableInput
       onActivated: submit()
     }
 
