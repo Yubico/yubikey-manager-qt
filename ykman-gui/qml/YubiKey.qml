@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import io.thp.pyotherside 1.4
+import "utils.js" as Utils
 
 
 // @disable-check M300
@@ -49,7 +50,7 @@ Python {
     onYubikeyReadyChanged: runQueue()
 
     function isPythonReady(funcName) {
-        if (funcName.startsWith("yubikey.init")) {
+        if (Utils.startsWith(funcName, "yubikey.init")) {
             return yubikeyModuleLoaded
         } else {
             return yubikeyReady
