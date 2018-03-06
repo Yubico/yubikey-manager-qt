@@ -7,7 +7,7 @@ ApplicationWindow {
     id: root
 
     readonly property var featureFlags: ({
-        pivManager: true,
+        pivManager: false,
     })
 
     visible: true
