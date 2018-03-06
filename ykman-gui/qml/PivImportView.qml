@@ -101,6 +101,11 @@ ColumnLayout {
         onAccepted: importKeyAccepted(fileUrls[0], pinPolicyChoice.value, touchPolicyChoice.value)
     }
 
+    Button {
+        text: 'Cancel'
+        onClicked: closed()
+    }
+
     Shortcut {
       sequence: 'Esc'
       onActivated: closed()
