@@ -308,14 +308,17 @@ class Controller(object):
             if mgm_key_hex:
                 try:
                     piv_controller.authenticate(a2b_hex(mgm_key_hex))
+                except APDUError as e:
+                    return {
+                        'success': False,
+                        'failure': {'keyAuthentication': True}
+                    }
                 except Exception as e:
-                    logger.error(
-                        'Management key authentication failed',
-                        exc_info=e)
+                    logger.debug('Failed to parse management key', exc_info=e)
                     return {
                         'success': False,
                         'message': str(e),
-                        'failure': {'keyAuthentication': True}
+                        'failure': {'parseKey': True}
                     }
             else:
                 return {
