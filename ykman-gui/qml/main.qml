@@ -5,6 +5,11 @@ import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     id: root
+
+    readonly property var featureFlags: ({
+        pivManager: true,
+    })
+
     visible: true
     title: qsTr("YubiKey Manager")
 
