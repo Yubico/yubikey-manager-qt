@@ -193,7 +193,6 @@ ColumnLayout {
         id: csrFileDialog
         title: qsTr('Select CSR destination file')
         selectExisting: false
-        defaultSuffix: 'csr'
         nameFilters: [ qsTr('Certificate signing request (*.csr)'), qsTr('All files (*)')]
 
         onAccepted: {
