@@ -82,7 +82,6 @@ ColumnLayout {
     FileDialog {
         id: certifcateFileDialog
 
-        defaultSuffix: 'pem'
         nameFilters: [qsTr('Certificate files (*.pem)'), qsTr('All files (*)')]
         selectExisting: true
         title: qsTr('Select file to import')
@@ -93,7 +92,6 @@ ColumnLayout {
     FileDialog {
         id: keyFileDialog
 
-        defaultSuffix: 'pem'
         nameFilters: [qsTr('Private key files (*.pem)'), qsTr('All files (*)')]
         selectExisting: true
         title: qsTr('Select file to import')

@@ -113,7 +113,6 @@ DefaultDialog {
                     id: exportFileDialog
                     title: qsTr('Select export destination file')
                     selectExisting: false
-                    defaultSuffix: 'pem'
                     nameFilters: [qsTr('Certificate files (*.pem)'), qsTr('All files (*)')]
 
                     onAccepted: {
