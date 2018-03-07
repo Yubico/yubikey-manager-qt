@@ -11,26 +11,23 @@ ColumnLayout {
 
     property alias selfSign: selfSignedChoice.checked
 
-    readonly property bool acceptableInput: subjectDn.acceptableInput && expirationDate.acceptableInput
+    readonly property bool acceptableInput: subjectDn.acceptableInput
+                                            && expirationDate.acceptableInput
     readonly property string hasSlotName: !!slotName
 
     signal accepted(string algorithm, bool selfSign, var csrFileUrl, string subjectDn, string expirationDate, string pinPolicy, string touchPolicy)
     signal closed
 
     function submit() {
-        accepted(
-            algorithmChoice.value,
-            selfSign,
-            selfSign ? null : csrFile,
-            subjectDn.text,
-            expirationDate.text,
-            pinPolicyChoice.value,
-            touchPolicyChoice.value
-        )
+        accepted(algorithmChoice.value, selfSign,
+                 selfSign ? null : csrFile, subjectDn.text,
+                            expirationDate.text, pinPolicyChoice.value,
+                            touchPolicyChoice.value)
     }
 
     Label {
-        text: qsTr('A new private key will be generated and stored in the %1 slot.').arg(slotName)
+        text: qsTr('A new private key will be generated and stored in the %1 slot.').arg(
+                  slotName)
     }
 
     Label {
@@ -41,18 +38,18 @@ ColumnLayout {
     DropdownMenu {
         id: algorithmChoice
         values: [{
-            text: qsTr('ECC (P-256)'),
-            value: 'ECCP256',
-        }, {
-            text: qsTr('ECC (P-384)'),
-            value: 'ECCP384',
-        }, {
-            text: qsTr('RSA (1024 bits)'),
-            value: 'RSA1024',
-        }, {
-            text: qsTr('RSA (2048 bits)'),
-            value: 'RSA2048',
-        }]
+                text: qsTr('ECC (P-256)'),
+                value: 'ECCP256'
+            }, {
+                text: qsTr('ECC (P-384)'),
+                value: 'ECCP384'
+            }, {
+                text: qsTr('RSA (1024 bits)'),
+                value: 'RSA1024'
+            }, {
+                text: qsTr('RSA (2048 bits)'),
+                value: 'RSA2048'
+            }]
     }
 
     RowLayout {
@@ -66,18 +63,18 @@ ColumnLayout {
                 id: pinPolicyChoice
                 Layout.fillWidth: true
                 values: [{
-                    text: qsTr('Default for this slot'),
-                    value: null,
-                }, {
-                    text: qsTr('Never'),
-                    value: 'NEVER',
-                }, {
-                    text: qsTr('Once'),
-                    value: 'ONCE',
-                }, {
-                    text: qsTr('Always'),
-                    value: 'ALWAYS',
-                }]
+                        text: qsTr('Default for this slot'),
+                        value: null
+                    }, {
+                        text: qsTr('Never'),
+                        value: 'NEVER'
+                    }, {
+                        text: qsTr('Once'),
+                        value: 'ONCE'
+                    }, {
+                        text: qsTr('Always'),
+                        value: 'ALWAYS'
+                    }]
             }
         }
 
@@ -91,18 +88,18 @@ ColumnLayout {
                 id: touchPolicyChoice
                 Layout.fillWidth: true
                 values: [{
-                    text: qsTr('Default for this slot'),
-                    value: 'DEFAULT',
-                }, {
-                    text: qsTr('Never'),
-                    value: 'NEVER',
-                }, {
-                    text: qsTr('Always'),
-                    value: 'ALWAYS',
-                }, {
-                    text: qsTr('Cached'),
-                    value: 'CACHED',
-                }]
+                        text: qsTr('Default for this slot'),
+                        value: 'DEFAULT'
+                    }, {
+                        text: qsTr('Never'),
+                        value: 'NEVER'
+                    }, {
+                        text: qsTr('Always'),
+                        value: 'ALWAYS'
+                    }, {
+                        text: qsTr('Cached'),
+                        value: 'CACHED'
+                    }]
             }
         }
     }
@@ -172,9 +169,7 @@ ColumnLayout {
             text: qsTr('Browse...')
             onClicked: csrFileDialog.open()
         }
-
     }
-
 
     RowLayout {
         Button {
@@ -193,7 +188,8 @@ ColumnLayout {
         id: csrFileDialog
         title: qsTr('Select CSR destination file')
         selectExisting: false
-        nameFilters: [ qsTr('Certificate signing request (*.csr)'), qsTr('All files (*)')]
+        nameFilters: [qsTr('Certificate signing request (*.csr)'), qsTr(
+                'All files (*)')]
 
         onAccepted: {
             csrFile = fileUrls[0]
@@ -201,13 +197,13 @@ ColumnLayout {
     }
 
     Shortcut {
-      sequence: 'Return'
-      enabled: acceptableInput
-      onActivated: submit()
+        sequence: 'Return'
+        enabled: acceptableInput
+        onActivated: submit()
     }
 
     Shortcut {
-      sequence: 'Esc'
-      onActivated: closed()
+        sequence: 'Esc'
+        onActivated: closed()
     }
 }

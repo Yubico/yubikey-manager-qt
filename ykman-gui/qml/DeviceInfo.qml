@@ -55,20 +55,20 @@ Item {
                 property var features: [{
                         id: 'OTP',
                         label: qsTr('YubiKey Slots'),
-                        onConfigure: slotDialog.load,
+                        onConfigure: slotDialog.load
                     }, {
                         id: 'PIV',
                         label: qsTr('PIV'),
-                        onConfigure: featureFlags.pivManager ? pivManager.start : null,
+                        onConfigure: featureFlags.pivManager ? pivManager.start : null
                     }, {
                         id: 'OATH',
-                        label: qsTr('OATH'),
+                        label: qsTr('OATH')
                     }, {
                         id: 'OPGP',
-                        label: qsTr('OpenPGP'),
+                        label: qsTr('OpenPGP')
                     }, {
                         id: 'U2F',
-                        label: qsTr('U2F'),
+                        label: qsTr('U2F')
                     }]
 
                 Repeater {

@@ -31,18 +31,18 @@ ColumnLayout {
                 id: pinPolicyChoice
                 Layout.fillWidth: true
                 values: [{
-                    text: qsTr('Default for this slot'),
-                    value: null,
-                }, {
-                    text: qsTr('Never'),
-                    value: 'NEVER',
-                }, {
-                    text: qsTr('Once'),
-                    value: 'ONCE',
-                }, {
-                    text: qsTr('Always'),
-                    value: 'ALWAYS',
-                }]
+                        text: qsTr('Default for this slot'),
+                        value: null
+                    }, {
+                        text: qsTr('Never'),
+                        value: 'NEVER'
+                    }, {
+                        text: qsTr('Once'),
+                        value: 'ONCE'
+                    }, {
+                        text: qsTr('Always'),
+                        value: 'ALWAYS'
+                    }]
             }
         }
 
@@ -56,18 +56,18 @@ ColumnLayout {
                 id: touchPolicyChoice
                 Layout.fillWidth: true
                 values: [{
-                    text: qsTr('Default for this slot'),
-                    value: null,
-                }, {
-                    text: qsTr('Never'),
-                    value: 'NEVER',
-                }, {
-                    text: qsTr('Always'),
-                    value: 'ALWAYS',
-                }, {
-                    text: qsTr('Cached'),
-                    value: 'CACHED',
-                }]
+                        text: qsTr('Default for this slot'),
+                        value: null
+                    }, {
+                        text: qsTr('Never'),
+                        value: 'NEVER'
+                    }, {
+                        text: qsTr('Always'),
+                        value: 'ALWAYS'
+                    }, {
+                        text: qsTr('Cached'),
+                        value: 'CACHED'
+                    }]
             }
         }
     }
@@ -96,7 +96,8 @@ ColumnLayout {
         selectExisting: true
         title: qsTr('Select file to import')
 
-        onAccepted: importKeyAccepted(fileUrls[0], pinPolicyChoice.value, touchPolicyChoice.value)
+        onAccepted: importKeyAccepted(fileUrls[0], pinPolicyChoice.value,
+                                      touchPolicyChoice.value)
     }
 
     Button {
@@ -105,7 +106,7 @@ ColumnLayout {
     }
 
     Shortcut {
-      sequence: 'Esc'
-      onActivated: closed()
+        sequence: 'Esc'
+        onActivated: closed()
     }
 }

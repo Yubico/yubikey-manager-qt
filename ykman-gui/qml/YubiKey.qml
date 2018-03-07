@@ -115,10 +115,10 @@ Python {
      *          the `callback` until the `refresh()` is done.
      */
     function _refreshBefore(callback) {
-        return function(/* ...arguments */) {
+        return function (/* ...arguments */ ) {
             var callbackThis = this
             var callbackArguments = arguments
-            refresh(function() {
+            refresh(function () {
                 callback.apply(callbackThis, callbackArguments)
             })
         }
@@ -204,9 +204,11 @@ Python {
     function _piv_perform_authenticated_action(functionName, args, callback, pinCallback, keyCallback, touchCallback, retry, touchPrompt) {
         function cancel() {
             callback({
-                success: false,
-                failure: { canceled: true },
-            })
+                         success: false,
+                         failure: {
+                             canceled: true
+                         }
+                     })
         }
 
         if (touchPrompt !== false) {
@@ -224,43 +226,45 @@ Python {
             }
 
             if (!result.success && result.failure.pinRequired) {
-                pinCallback(function(pin) {
+                pinCallback(function (pin) {
                     if (pin) {
-                        retry({ pin: pin })
+                        retry({
+                                  pin: pin
+                              })
                     } else {
                         cancel()
                     }
                 })
             } else if (!result.success && result.failure.pinVerification) {
-                pinCallback(
-                    function(pin) {
-                        if (pin) {
-                            retry({ pin: pin })
-                        } else {
-                            cancel()
-                        }
-                    },
-                    result.message
-                )
+                pinCallback(function (pin) {
+                    if (pin) {
+                        retry({
+                                  pin: pin
+                              })
+                    } else {
+                        cancel()
+                    }
+                }, result.message)
             } else if (!result.success && result.failure.keyRequired) {
-                keyCallback(function(keyHex) {
+                keyCallback(function (keyHex) {
                     if (keyHex) {
-                        retry({ keyHex: keyHex })
+                        retry({
+                                  keyHex: keyHex
+                              })
                     } else {
                         cancel()
                     }
                 })
             } else if (!result.success && result.failure.keyAuthentication) {
-                keyCallback(
-                    function(keyHex) {
-                        if (keyHex) {
-                            retry({ keyHex: keyHex })
-                        } else {
-                            cancel()
-                        }
-                    },
-                    result.message
-                )
+                keyCallback(function (keyHex) {
+                    if (keyHex) {
+                        retry({
+                                  keyHex: keyHex
+                              })
+                    } else {
+                        cancel()
+                    }
+                }, result.message)
             } else {
                 callback(result)
             }
@@ -287,72 +291,55 @@ Python {
                 [pin, currentMgmKey, newKey, touch, storeOnDevice],
                 function (result) {
                     touchPromptTimer.stop()
-                    refresh(function() {
+                    refresh(function () {
                         cb(result)
                     })
                 })
     }
 
     function piv_export_certificate(slotName, fileUrl, cb) {
-        do_call('yubikey.controller.piv_export_certificate', [slotName, fileUrl], cb)
+        do_call('yubikey.controller.piv_export_certificate',
+                [slotName, fileUrl], cb)
     }
 
     function piv_import_certificate(args) {
         _piv_perform_authenticated_action(
-            'yubikey.controller.piv_import_certificate',
-            [args.slotName, args.fileUrl, args.pin, args.keyHex],
-            _refreshBefore(args.callback),
-            args.pinCallback,
-            args.keyCallback,
-            args.touchCallback,
-            function(newArgs) {
-                piv_import_certificate(Utils.extend(args, newArgs))
-            }
-        )
+                    'yubikey.controller.piv_import_certificate',
+                    [args.slotName, args.fileUrl, args.pin, args.keyHex],
+                    _refreshBefore(args.callback), args.pinCallback,
+                    args.keyCallback, args.touchCallback, function (newArgs) {
+                        piv_import_certificate(Utils.extend(args, newArgs))
+                    })
     }
 
     function piv_import_key(args) {
         _piv_perform_authenticated_action(
-            'yubikey.controller.piv_import_key',
-            [args.slotName, args.fileUrl, args.pin, args.keyHex, null,
-             args.pinPolicy, args.touchPolicy],
-            _refreshBefore(args.callback),
-            args.pinCallback,
-            args.keyCallback,
-            args.touchCallback,
-            function(newArgs) {
-                piv_import_key(Utils.extend(args, newArgs))
-            }
-        )
+                    'yubikey.controller.piv_import_key',
+                    [args.slotName, args.fileUrl, args.pin, args.keyHex, null, args.pinPolicy, args.touchPolicy],
+                    _refreshBefore(args.callback), args.pinCallback,
+                    args.keyCallback, args.touchCallback, function (newArgs) {
+                        piv_import_key(Utils.extend(args, newArgs))
+                    })
     }
 
     function piv_delete_certificate(args) {
         _piv_perform_authenticated_action(
-            'yubikey.controller.piv_delete_certificate',
-            [args.slotName, args.pin, args.keyHex],
-            _refreshBefore(args.callback),
-            args.pinCallback,
-            args.keyCallback,
-            args.touchCallback,
-            function(newArgs) {
-                piv_delete_certificate(Utils.extend(args, newArgs))
-            }
-        )
+                    'yubikey.controller.piv_delete_certificate',
+                    [args.slotName, args.pin, args.keyHex],
+                    _refreshBefore(args.callback), args.pinCallback,
+                    args.keyCallback, args.touchCallback, function (newArgs) {
+                        piv_delete_certificate(Utils.extend(args, newArgs))
+                    })
     }
 
     function piv_generate_certificate(args) {
         _piv_perform_authenticated_action(
-            'yubikey.controller.piv_generate_certificate',
-            [args.slotName, args.algorithm, args.subjectDn, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex, args.pinPolicy, args.touchPolicy],
-            _refreshBefore(args.callback),
-            args.pinCallback,
-            args.keyCallback,
-            args.touchCallback,
-            function(newArgs) {
-                piv_generate_certificate(Utils.extend(args, newArgs))
-            },
-            false
-        )
+                    'yubikey.controller.piv_generate_certificate',
+                    [args.slotName, args.algorithm, args.subjectDn, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex, args.pinPolicy, args.touchPolicy],
+                    _refreshBefore(args.callback), args.pinCallback,
+                    args.keyCallback, args.touchCallback, function (newArgs) {
+                        piv_generate_certificate(Utils.extend(args, newArgs))
+                    }, false)
     }
 
     function piv_reset(cb) {
@@ -360,6 +347,7 @@ Python {
     }
 
     function piv_unblock_pin(puk, newPin, cb) {
-        do_call('yubikey.controller.piv_unblock_pin', [puk, newPin], _refreshBefore(cb))
+        do_call('yubikey.controller.piv_unblock_pin', [puk, newPin],
+                _refreshBefore(cb))
     }
 }

@@ -7,8 +7,8 @@ ApplicationWindow {
     id: root
 
     readonly property var featureFlags: ({
-        pivManager: false,
-    })
+                                             pivManager: false
+                                         })
 
     visible: true
     title: qsTr("YubiKey Manager")

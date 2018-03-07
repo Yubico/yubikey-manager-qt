@@ -9,7 +9,8 @@ ColumnLayout {
     property var device
 
     readonly property bool acceptableInput: acceptablePin
-    readonly property bool acceptablePin: !pinInput.enabled || pinInput.acceptableInput
+    readonly property bool acceptablePin: !pinInput.enabled
+                                          || pinInput.acceptableInput
     readonly property bool hasDevice: (device && device.hasDevice
                                        && device.piv) || false
     readonly property bool usePinAsKey: tabs.currentIndex == 0
@@ -30,8 +31,10 @@ ColumnLayout {
         id: tabs
         Layout.fillWidth: true
 
-        Layout.minimumHeight: Utils.sum(Utils.pick(contentItem.children, 'implicitHeight'))
-        Layout.minimumWidth: Utils.sum(Utils.pick(contentItem.children, 'implicitWidth'))
+        Layout.minimumHeight: Utils.sum(Utils.pick(contentItem.children,
+                                                   'implicitHeight'))
+        Layout.minimumWidth: Utils.sum(Utils.pick(contentItem.children,
+                                                  'implicitWidth'))
 
         Component.onCompleted: {
             tabs.currentIndex = 1
@@ -72,7 +75,8 @@ ColumnLayout {
                     focus: true
                     Layout.fillWidth: true
 
-                    onTextChanged: setNewManagementKeyInput(text) // Root can't reference TabView children directly
+                    onTextChanged: setNewManagementKeyInput(
+                                       text) // Root can't reference TabView children directly
 
                     validator: RegExpValidator {
                         regExp: /[0-9a-f]{48}/
@@ -129,7 +133,8 @@ ColumnLayout {
         Button {
             text: qsTr('Default')
             enabled: currentManagementKeyInput.enabled
-            onClicked: currentManagementKeyInput.text = '010203040506070801020304050607080102030405060708'
+            onClicked: currentManagementKeyInput.text
+                       = '010203040506070801020304050607080102030405060708'
         }
     }
 
@@ -173,7 +178,8 @@ ColumnLayout {
 
     function showError(title, text) {
         errorDialog.title = title || qsTr('Error')
-        errorDialog.text = text || qsTr('(No description available. This may be a bug.)')
+        errorDialog.text = text || qsTr(
+                    '(No description available. This may be a bug.)')
         errorDialog.open()
     }
 
@@ -192,17 +198,25 @@ ColumnLayout {
             if (result.success) {
                 changeSuccessful(usePinAsKey, requireTouch)
             } else if (result.failure.keyRequired) {
-                showError(qsTr('Bad input'), qsTr('Current management key is missing.'))
+                showError(qsTr('Bad input'),
+                          qsTr('Current management key is missing.'))
             } else if (result.failure.parseKey) {
-                showError(qsTr('Bad input'), qsTr('Current management key is invalid: %1').arg(result.message))
+                showError(qsTr('Bad input'),
+                          qsTr('Current management key is invalid: %1').arg(
+                              result.message))
             } else if (result.failure.keyAuthentication) {
-                showError(qsTr('Failed to change management key'), qsTr('Current management key is incorrect.'))
+                showError(qsTr('Failed to change management key'),
+                          qsTr('Current management key is incorrect.'))
             } else if (result.failure.parseNewKey) {
-                showError(qsTr('Bad input'), qsTr('Invalid new management key: %1').arg(result.message))
+                showError(qsTr('Bad input'),
+                          qsTr('Invalid new management key: %1').arg(
+                              result.message))
             } else if (result.failure.newKeyLength) {
-                showError(qsTr('Bad input'), qsTr('New management key must be exactly 48 characters.'))
+                showError(qsTr('Bad input'), qsTr(
+                              'New management key must be exactly 48 characters.'))
             } else {
-                showError(qsTr('Failed to change management key'), result.message)
+                showError(qsTr('Failed to change management key'),
+                          result.message)
             }
         }
         function touchCallback() {
@@ -226,9 +240,8 @@ ColumnLayout {
     }
 
     Shortcut {
-      sequence: 'Return'
-      enabled: acceptableInput
-      onActivated: submit()
+        sequence: 'Return'
+        enabled: acceptableInput
+        onActivated: submit()
     }
-
 }
