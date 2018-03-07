@@ -646,14 +646,6 @@ class Controller(object):
                         with open(file_path, 'w+b') as csr_file:
                             csr_file.write(csr.public_bytes(
                                 encoding=serialization.Encoding.PEM))
-                    except PermissionError as e:
-                        logger.debug('Cannot write CSR file to %s',
-                                     csr_file_url, exc_info=e)
-                        return {
-                            'success': False,
-                            'message': str(e),
-                            'failure': {'permissionDenied': True},
-                        }
                     except Exception as e:
                         logger.error('Failed to write CSR file to %s',
                                      csr_file_url, exc_info=e)
