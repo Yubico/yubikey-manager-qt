@@ -2,7 +2,6 @@ import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 
-
 ColumnLayout {
     property var certificate
     property string description
@@ -10,8 +9,10 @@ ColumnLayout {
     readonly property bool hasCertificate: !!certificate
     readonly property string subjectName: hasCertificate ? certificate.subject.commonName : ''
     readonly property string issuerName: hasCertificate ? certificate.subject.commonName : ''
-    readonly property string validFrom: hasCertificate ? new Date(certificate.validity.from).toLocaleString() : ''
-    readonly property string validTo: hasCertificate ? new Date(certificate.validity.to).toLocaleString() : ''
+    readonly property string validFrom: hasCertificate ? new Date(certificate.validity.from).toLocaleString(
+                                                             ) : ''
+    readonly property string validTo: hasCertificate ? new Date(certificate.validity.to).toLocaleString(
+                                                           ) : ''
 
     signal deleteCertificate
     signal exportCertificate
@@ -97,5 +98,4 @@ ColumnLayout {
             onClicked: generateKey()
         }
     }
-
 }

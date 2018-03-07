@@ -15,7 +15,10 @@ DefaultDialog {
     property var device
     readonly property var yk: device // Needed so that we can pass `device: yk` to subcomponents
     property bool hasDevice: (device && device.hasDevice && device.piv) || false
-    readonly property var certificates: hasDevice && device.piv.certificates || {}
+    readonly property var certificates: hasDevice
+                                        && device.piv.certificates || {
+
+                                        }
     readonly property int numCerts: Object.keys(certificates).length
     property string selectedSlotName: ''
 
@@ -33,13 +36,15 @@ DefaultDialog {
 
     function push(item) {
         stack.push({
-            item: item,
-            immediate: true,
-        })
+                       item: item,
+                       immediate: true
+                   })
     }
 
     function pop() {
-        stack.pop({ immediate: true })
+        stack.pop({
+                      immediate: true
+                  })
     }
 
     StackView {
@@ -55,10 +60,10 @@ DefaultDialog {
 
             RowLayout {
                 Label {
-                    text: (hasDevice
-                        ? qsTr("YubiKey present with applet version: %1").arg(device && device.piv && device.piv.version || '?')
-                        : qsTr("No YubiKey detected.")
-                    )
+                    text: (hasDevice ? qsTr("YubiKey present with applet version: %1").arg(
+                                           device && device.piv
+                                           && device.piv.version || '?') : qsTr(
+                                           "No YubiKey detected."))
                     Layout.fillWidth: true
                 }
 
@@ -74,22 +79,26 @@ DefaultDialog {
             }
 
             PivCertificates {
-                certificates: hasDevice ? device.piv.certificates : {}
+                certificates: hasDevice ? device.piv.certificates : {
+
+                                          }
 
                 onDeleteCertificate: {
                     device.piv_delete_certificate({
-                        slotName: slotName,
-                        callback: function(result) {
-                            if (!result.success && !result.failure.canceled) {
-                                showError(qsTr('Delete failed'), qsTr('Failed to delete certificate: %1').arg(result.message || qsTr('unknown error.')))
-                            }
-                        },
-                        pinCallback: askPin,
-                        keyCallback: askManagementKey,
-                        touchCallback: function() {
-                            touchYubiKeyPrompt.open()
-                        },
-                    })
+                                                      slotName: slotName,
+                                                      callback: function (result) {
+                                                          if (!result.success
+                                                                  && !result.failure.canceled) {
+                                                              showError(qsTr('Delete failed'),
+                                                                        qsTr('Failed to delete certificate: %1').arg(result.message || qsTr('unknown error.')))
+                                                          }
+                                                      },
+                                                      pinCallback: askPin,
+                                                      keyCallback: askManagementKey,
+                                                      touchCallback: function () {
+                                                          touchYubiKeyPrompt.open()
+                                                      }
+                                                  })
                 }
 
                 onExportCertificate: {
@@ -113,16 +122,15 @@ DefaultDialog {
                     id: exportFileDialog
                     title: qsTr('Select export destination file')
                     selectExisting: false
-                    nameFilters: [qsTr('Certificate files (*.pem)'), qsTr('All files (*)')]
+                    nameFilters: [qsTr('Certificate files (*.pem)'), qsTr(
+                            'All files (*)')]
 
                     onAccepted: {
-                        device.piv_export_certificate(slotName, fileUrls[0], function(result) {
-                        })
+                        device.piv_export_certificate(slotName, fileUrls[0],
+                                                      function (result) {})
                     }
                 }
-
             }
-
         }
     }
 
@@ -134,31 +142,38 @@ DefaultDialog {
             onAccepted: {
                 push(generatingView)
                 device.piv_generate_certificate({
-                    slotName: slotName,
-                    algorithm: algorithm,
-                    csrFileUrl: csrFileUrl,
-                    expirationDate: expirationDate,
-                    pinPolicy: pinPolicy,
-                    selfSign: selfSign,
-                    subjectDn: subjectDn,
-                    touchPolicy: touchPolicy,
-                    callback: function(result) {
-                        pop(generateKeyView)
+                                                    slotName: slotName,
+                                                    algorithm: algorithm,
+                                                    csrFileUrl: csrFileUrl,
+                                                    expirationDate: expirationDate,
+                                                    pinPolicy: pinPolicy,
+                                                    selfSign: selfSign,
+                                                    subjectDn: subjectDn,
+                                                    touchPolicy: touchPolicy,
+                                                    callback: function (result) {
+                                                        pop(generateKeyView)
 
-                        if (result.success) {
-                            closed()
-                        } else if (result.failure.permissionDenied) {
-                            showError(qsTr('Permission denied'), qsTr('Permission to write CSR to %1 was denied.').arg(csrFileUrl))
-                        } else if (!result.failure.canceled) {
-                            showError(qsTr('Generate failed'), qsTr('Failed to generate certificate: %1').arg(result.message || qsTr('unknown error.')))
-                        }
-                    },
-                    pinCallback: askPin,
-                    keyCallback: askManagementKey,
-                    touchCallback: function() {
-                        touchYubiKeyPrompt.open()
-                    },
-                })
+                                                        if (result.success) {
+                                                            closed()
+                                                        } else if (result.failure.permissionDenied) {
+                                                            showError(qsTr('Permission denied'),
+                                                                      qsTr('Permission to write CSR to %1 was denied.').arg(
+                                                                          csrFileUrl))
+                                                        } else if (!result.failure.canceled) {
+                                                            showError(qsTr('Generate failed'),
+                                                                      qsTr('Failed to generate certificate: %1').arg(
+                                                                          result.message
+                                                                          || qsTr(
+                                                                              'unknown error.')))
+                                                        }
+                                                    },
+                                                    pinCallback: askPin,
+                                                    keyCallback: askManagementKey,
+                                                    touchCallback: function () {
+                                                        touchYubiKeyPrompt.open(
+                                                                    )
+                                                    }
+                                                })
             }
             onClosed: pop()
         }
@@ -186,60 +201,68 @@ DefaultDialog {
             function importCertificate(certificateFileUrl) {
 
                 device.piv_import_certificate({
-                    slotName: selectedSlotName,
-                    fileUrl: certificateFileUrl,
-                    callback: function(result) {
-                        if (result.success) {
-                            closed()
-                        } else if (!result.failure.canceled) {
-                            showError(qsTr('Import failed'), qsTr('Failed to import certificate: %1').arg(result.message || qsTr('unknown error.')))
-                        }
-                    },
-                    pinCallback: askPin,
-                    keyCallback: askManagementKey,
-                    touchCallback: function() {
-                        touchYubiKeyPrompt.open()
-                    },
-                })
+                                                  slotName: selectedSlotName,
+                                                  fileUrl: certificateFileUrl,
+                                                  callback: function (result) {
+                                                      if (result.success) {
+                                                          closed()
+                                                      } else if (!result.failure.canceled) {
+                                                          showError(qsTr('Import failed'),
+                                                                    qsTr('Failed to import certificate: %1').arg(
+                                                                        result.message
+                                                                        || qsTr(
+                                                                            'unknown error.')))
+                                                      }
+                                                  },
+                                                  pinCallback: askPin,
+                                                  keyCallback: askManagementKey,
+                                                  touchCallback: function () {
+                                                      touchYubiKeyPrompt.open()
+                                                  }
+                                              })
             }
 
             function importKey(keyFileUrl, pinPolicy, touchPolicy) {
                 device.piv_import_key({
-                    slotName: selectedSlotName,
-                    fileUrl: keyFileUrl,
-                    pinPolicy: pinPolicy,
-                    touchPolicy: touchPolicy,
-                    callback: function(result) {
-                        if (result.success) {
-                            closed()
-                        } else if (result.failure.supportedPinPolicies) {
-                            if (result.failure.supportedPinPolicies.length === 0) {
-                                showError(qsTr('Import failed'), qsTr('Failed to import key. This YubiKey does not support PIN policies.'))
-                            } else {
-                                showError(
-                                    qsTr('Import failed'),
-                                    qsTr('Failed to import key. This YubiKey supports only the following PIN policies: %1').arg(result.failure.supportedPinPolicies.join(', '))
-                                )
-                            }
-                        } else if (result.failure.supportedTouchPolicies) {
-                            if (result.failure.supportedTouchPolicies.length === 0) {
-                                showError(qsTr('Import failed'), qsTr('Failed to import key. This YubiKey does not support touch policies.'))
-                            } else {
-                                showError(
-                                    qsTr('Import failed'),
-                                    qsTr('Failed to import key. This YubiKey supports only the following touch policies: %1').arg(result.failure.supportedTouchPolicies.join(', '))
-                                )
-                            }
-                        } else if (!result.failure.canceled) {
-                            showError(qsTr('Import failed'), qsTr('Failed to import key: %1').arg(result.message || qsTr('unknown error.')))
-                        }
-                    },
-                    pinCallback: askPin,
-                    keyCallback: askManagementKey,
-                    touchCallback: function() {
-                        touchYubiKeyPrompt.open()
-                    },
-                })
+                                          slotName: selectedSlotName,
+                                          fileUrl: keyFileUrl,
+                                          pinPolicy: pinPolicy,
+                                          touchPolicy: touchPolicy,
+                                          callback: function (result) {
+                                              if (result.success) {
+                                                  closed()
+                                              } else if (result.failure.supportedPinPolicies) {
+                                                  if (result.failure.supportedPinPolicies.length
+                                                          === 0) {
+                                                      showError(qsTr('Import failed'),
+                                                                qsTr('Failed to import key. This YubiKey does not support PIN policies.'))
+                                                  } else {
+                                                      showError(qsTr('Import failed'),
+                                                                qsTr('Failed to import key. This YubiKey supports only the following PIN policies: %1').arg(result.failure.supportedPinPolicies.join(', ')))
+                                                  }
+                                              } else if (result.failure.supportedTouchPolicies) {
+                                                  if (result.failure.supportedTouchPolicies.length
+                                                          === 0) {
+                                                      showError(qsTr('Import failed'),
+                                                                qsTr('Failed to import key. This YubiKey does not support touch policies.'))
+                                                  } else {
+                                                      showError(qsTr('Import failed'),
+                                                                qsTr('Failed to import key. This YubiKey supports only the following touch policies: %1').arg(result.failure.supportedTouchPolicies.join(', ')))
+                                                  }
+                                              } else if (!result.failure.canceled) {
+                                                  showError(qsTr('Import failed'),
+                                                            qsTr('Failed to import key: %1').arg(
+                                                                result.message
+                                                                || qsTr(
+                                                                    'unknown error.')))
+                                              }
+                                          },
+                                          pinCallback: askPin,
+                                          keyCallback: askManagementKey,
+                                          touchCallback: function () {
+                                              touchYubiKeyPrompt.open()
+                                          }
+                                      })
             }
 
             onClosed: pop()
@@ -271,20 +294,22 @@ DefaultDialog {
 
             onCanceled: pop()
             onCodeChanged: {
-                device.piv_change_pin(currentCode, newCode, function(result) {
+                device.piv_change_pin(currentCode, newCode, function (result) {
                     if (result.success) {
-                        showMessage(qsTr('Success'), qsTr('PIN was successfully changed.'))
+                        showMessage(qsTr('Success'),
+                                    qsTr('PIN was successfully changed.'))
                         pop()
                     } else {
                         if (result.tries_left === null) {
-                            showError(
-                                qsTr('Error'),
-                                qsTr('PIN change failed. This is probably a bug, please report it to the developers.')
-                            )
+                            showError(qsTr('Error'), qsTr(
+                                          'PIN change failed. This is probably a bug, please report it to the developers.'))
                         } else if (retries > 0) {
-                            showError(qsTr('Error'), qsTr('PIN change failed. Tries left: %1').arg(result.tries_left))
+                            showError(qsTr('Error'), qsTr(
+                                          'PIN change failed. Tries left: %1').arg(
+                                          result.tries_left))
                         } else {
-                            showError(qsTr('Error'), qsTr('PIN change failed. PIN has been blocked.'))
+                            showError(qsTr('Error'), qsTr(
+                                          'PIN change failed. PIN has been blocked.'))
                             pop()
                         }
                     }
@@ -301,20 +326,22 @@ DefaultDialog {
 
             onCanceled: pop()
             onCodeChanged: {
-                device.piv_change_puk(currentCode, newCode, function(result) {
+                device.piv_change_puk(currentCode, newCode, function (result) {
                     if (result.success) {
-                        showMessage(qsTr('Success'), qsTr('PUK was successfully changed.'))
+                        showMessage(qsTr('Success'),
+                                    qsTr('PUK was successfully changed.'))
                         pop()
                     } else {
                         if (result.tries_left === null) {
-                            showError(
-                                qsTr('Error'),
-                                qsTr('PUK change failed. This is probably a bug, please report it to the developers.')
-                            )
+                            showError(qsTr('Error'), qsTr(
+                                          'PUK change failed. This is probably a bug, please report it to the developers.'))
                         } else if (retries > 0) {
-                            showError(qsTr('Error'), qsTr('PUK change failed. Tries left: %1').arg(result.tries_left))
+                            showError(qsTr('Error'), qsTr(
+                                          'PUK change failed. Tries left: %1').arg(
+                                          result.tries_left))
                         } else {
-                            showError(qsTr('Error'), qsTr('PUK change failed. PUK has been blocked.'))
+                            showError(qsTr('Error'), qsTr(
+                                          'PUK change failed. PUK has been blocked.'))
                             pop()
                         }
                     }
@@ -332,12 +359,17 @@ DefaultDialog {
 
             onCanceled: pop()
             onCodeChanged: {
-                device.piv_unblock_pin(currentCode, newCode, function(result) {
+                device.piv_unblock_pin(currentCode, newCode, function (result) {
                     if (result.success) {
-                        showMessage(qsTr('PIN unblocked'), qsTr('PIN retries successfully reset to %1.').arg(result.pin_tries))
+                        showMessage(qsTr('PIN unblocked'), qsTr(
+                                        'PIN retries successfully reset to %1.').arg(
+                                        result.pin_tries))
                         pop()
                     } else {
-                        showError(qsTr('PIN unblock failed'), qsTr('Failed to unblock PIN: ') + (result.message || qsTr('unknown error.')))
+                        showError(qsTr('PIN unblock failed'), qsTr(
+                                      'Failed to unblock PIN: ') + (result.message
+                                                                    || qsTr(
+                                                                        'unknown error.')))
                     }
                 })
             }
@@ -352,11 +384,12 @@ DefaultDialog {
             onCanceled: pop()
             onChangeSuccessful: {
                 pop()
-                var message = pinAsKey ? qsTr('Successfully set new management key protected by PIN.') : qsTr('Successfully set new management key.');
-                var extra = requireTouch ? ('\n\n' + qsTr('Touch is required to use the new management key.')) : '';
-                showMessage(qsTr('Management key set'), message + extra);
+                var message = pinAsKey ? qsTr('Successfully set new management key protected by PIN.') : qsTr(
+                                             'Successfully set new management key.')
+                var extra = requireTouch ? ('\n\n' + qsTr(
+                                                'Touch is required to use the new management key.')) : ''
+                showMessage(qsTr('Management key set'), message + extra)
             }
-
         }
     }
 
@@ -432,5 +465,4 @@ DefaultDialog {
         push(unblockPinView)
         start()
     }
-
 }

@@ -24,7 +24,6 @@ Item {
             })
         }
         onNo: close()
-
     }
 
     MessageDialog {
@@ -54,5 +53,4 @@ Item {
     function open() {
         return entry.open()
     }
-
 }

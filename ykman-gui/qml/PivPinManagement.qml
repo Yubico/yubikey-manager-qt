@@ -15,7 +15,8 @@ ColumnLayout {
     signal unblockPin
 
     Label {
-        text: pinTries != null ? qsTr('PIN tries left: %1').arg(pinTries) : qsTr('PIN tries left: unknown')
+        text: pinTries != null ? qsTr('PIN tries left: %1').arg(
+                                     pinTries) : qsTr('PIN tries left: unknown')
     }
 
     Button {
@@ -51,8 +52,7 @@ ColumnLayout {
     }
 
     Shortcut {
-      sequence: 'Esc'
-      onActivated: closed()
+        sequence: 'Esc'
+        onActivated: closed()
     }
-
 }
