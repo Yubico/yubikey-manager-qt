@@ -8,6 +8,8 @@ ColumnLayout {
 
     property var csrFile
     property string slotName: ''
+    property var supportedTouchPolicies
+    property bool supportsPinPolicies
 
     property alias selfSign: selfSignedChoice.checked
 
@@ -21,8 +23,10 @@ ColumnLayout {
     function submit() {
         accepted(algorithmChoice.value, selfSign,
                  selfSign ? null : csrFile, subjectDn.text,
-                            expirationDate.text, pinPolicyChoice.value,
-                            touchPolicyChoice.value)
+                            expirationDate.text,
+                            supportsPinPolicies ? pinPolicyChoice.value : null,
+                                                  supportedTouchPolicies.length
+                                                  > 0 ? touchPolicyChoice.value : null)
     }
 
     Label {
@@ -59,6 +63,12 @@ ColumnLayout {
                 font.bold: true
             }
 
+            Label {
+                text: qsTr('Not supported on this YubiKey.')
+                font.italic: true
+                visible: !pinPolicyChoice.visible
+            }
+
             DropdownMenu {
                 id: pinPolicyChoice
                 Layout.fillWidth: true
@@ -75,6 +85,7 @@ ColumnLayout {
                         text: qsTr('Always'),
                         value: 'ALWAYS'
                     }]
+                visible: supportsPinPolicies
             }
         }
 
@@ -82,6 +93,12 @@ ColumnLayout {
             Label {
                 text: qsTr('Touch policy')
                 font.bold: true
+            }
+
+            Label {
+                text: qsTr('Not supported on this YubiKey.')
+                font.italic: true
+                visible: !touchPolicyChoice.visible
             }
 
             DropdownMenu {
@@ -99,7 +116,10 @@ ColumnLayout {
                     }, {
                         text: qsTr('Cached'),
                         value: 'CACHED'
-                    }]
+                    }].filter(function(value) {
+                        return Utils.includes(supportedTouchPolicies, value.value)
+                    })
+                visible: supportedTouchPolicies.length > 0
             }
         }
     }

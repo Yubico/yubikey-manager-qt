@@ -165,6 +165,8 @@ DefaultDialog {
 
         PivGenerateKeyView {
             slotName: selectedSlotName
+            supportedTouchPolicies: hasDevice ? device.piv.supported_touch_policies : []
+            supportsPinPolicies: hasDevice ? device.piv.supports_pin_policies : false
             onAccepted: {
                 push(generatingView)
                 device.piv_generate_certificate({
