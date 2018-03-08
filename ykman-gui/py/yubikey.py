@@ -346,16 +346,10 @@ class Controller(object):
 
     def _piv_check_policies(self, piv_controller, pin_policy=None,
                             touch_policy=None):
-        if pin_policy and not (
-                PIN_POLICY[pin_policy]
-                in piv_controller.supported_pin_policies):
+        if pin_policy and not piv_controller.supports_pin_policies:
             return {
                 'success': False,
-                'failure': {
-                    'supportedPinPolicies': [
-                        policy.name for policy in
-                        piv_controller.supported_pin_policies],
-                }
+                'failure': {'supportedPinPolicies': []}
             }
 
         if touch_policy and not (
