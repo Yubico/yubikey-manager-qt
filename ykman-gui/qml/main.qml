@@ -36,7 +36,7 @@ ApplicationWindow {
         triggeredOnStart: true
         interval: 500
         repeat: true
-        running: true
+        running: !pivManager.visible
         onTriggered: yk.refresh()
     }
 
