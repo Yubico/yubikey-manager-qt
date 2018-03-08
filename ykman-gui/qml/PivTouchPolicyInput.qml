@@ -3,7 +3,6 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import "utils.js" as Utils
 
-
 ColumnLayout {
     property var supportedPolicies
 
@@ -37,7 +36,7 @@ ColumnLayout {
             }, {
                 text: qsTr('Cached'),
                 value: 'CACHED'
-            }].filter(function(value) {
+            }].filter(function (value) {
                 return Utils.includes(supportedPolicies, value.value)
             })
         visible: supportedPolicies.length > 0
