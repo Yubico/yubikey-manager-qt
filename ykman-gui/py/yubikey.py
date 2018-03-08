@@ -568,6 +568,11 @@ class Controller(object):
             self, slot_name, algorithm, common_name, expiration_date,
             self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None,
             pin_policy=None, touch_policy=None):
+        logger.debug('slot_name=%s algorithm=%s common_name=%s '
+                     'expiration_date=%s self_sign=%s csr_file_url=%s '
+                     'pin_policy=%s touch_policy=%s',
+                     slot_name, algorithm, common_name, expiration_date,
+                     self_sign, csr_file_url, pin_policy, touch_policy)
 
         file_path = urllib.parse.urlparse(csr_file_url).path
 
