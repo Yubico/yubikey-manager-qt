@@ -6,6 +6,8 @@ import QtQuick.Layouts 1.1
 ColumnLayout {
 
     property string slotName: ''
+    property var supportedTouchPolicies
+    property bool supportsPinPolicies
 
     readonly property string hasSlotName: !!slotName
 
@@ -21,54 +23,14 @@ ColumnLayout {
     }
 
     RowLayout {
-        ColumnLayout {
-            Label {
-                text: qsTr('PIN policy')
-                font.bold: true
-            }
-
-            DropdownMenu {
-                id: pinPolicyChoice
-                Layout.fillWidth: true
-                values: [{
-                        text: qsTr('Default for this slot'),
-                        value: null
-                    }, {
-                        text: qsTr('Never'),
-                        value: 'NEVER'
-                    }, {
-                        text: qsTr('Once'),
-                        value: 'ONCE'
-                    }, {
-                        text: qsTr('Always'),
-                        value: 'ALWAYS'
-                    }]
-            }
+        PivPinPolicyInput {
+            id: pinPolicyChoice
+            isSupported: supportsPinPolicies
         }
 
-        ColumnLayout {
-            Label {
-                text: qsTr('Touch policy')
-                font.bold: true
-            }
-
-            DropdownMenu {
-                id: touchPolicyChoice
-                Layout.fillWidth: true
-                values: [{
-                        text: qsTr('Default for this slot'),
-                        value: null
-                    }, {
-                        text: qsTr('Never'),
-                        value: 'NEVER'
-                    }, {
-                        text: qsTr('Always'),
-                        value: 'ALWAYS'
-                    }, {
-                        text: qsTr('Cached'),
-                        value: 'CACHED'
-                    }]
-            }
+        PivTouchPolicyInput {
+            id: touchPolicyChoice
+            supportedPolicies: supportedTouchPolicies
         }
     }
 
