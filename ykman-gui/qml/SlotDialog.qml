@@ -15,7 +15,6 @@ DefaultDialog {
     minimumWidth: 350
     width: 350
     height: calculated()
-    onVisibilityChanged: timer.running = !visible
 
     function load() {
         selectedSlot = 0

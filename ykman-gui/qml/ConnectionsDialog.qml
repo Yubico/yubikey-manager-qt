@@ -8,7 +8,6 @@ DefaultDialog {
     property var device
     title: qsTr("Configure Connections")
     minimumWidth: 500
-    onVisibilityChanged: timer.running = !visible
     onAccepted: {
         var enabled = get_enabled()
         device.set_mode(enabled, function (error) {
