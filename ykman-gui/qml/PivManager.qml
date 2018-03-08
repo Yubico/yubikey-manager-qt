@@ -186,6 +186,7 @@ DefaultDialog {
                                                         } else if (showUnsupportedPolicyFeedback(
                                                                        result)) {
 
+
                                                             // Do nothing
                                                         } else if (result.failure.permissionDenied) {
                                                             showError(qsTr('Permission denied'),
@@ -265,6 +266,7 @@ DefaultDialog {
                                                   closed()
                                               } else if (showUnsupportedPolicyFeedback(
                                                              result)) {
+
 
                                                   // Do nothing
                                               } else if (!result.failure.canceled) {

@@ -23,8 +23,7 @@ ColumnLayout {
     function submit() {
         accepted(algorithmChoice.value, selfSign,
                  selfSign ? null : csrFile, subjectDn.text,
-                            expirationDate.text,
-                            pinPolicyChoice.value,
+                            expirationDate.text, pinPolicyChoice.value,
                             touchPolicyChoice.value)
     }
 
