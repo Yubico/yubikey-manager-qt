@@ -535,8 +535,12 @@ class Controller(object):
                 return unsupported_policy
 
             try:
-                piv_controller.import_key(SLOT[slot_name], private_key,
-                                          pin_policy, touch_policy)
+                piv_controller.import_key(
+                    SLOT[slot_name], private_key,
+                    pin_policy=(PIN_POLICY.from_string(pin_policy)
+                                if pin_policy else PIN_POLICY.DEFAULT),
+                    touch_policy=(TOUCH_POLICY.from_string(touch_policy)
+                                  if touch_policy else TOUCH_POLICY.DEFAULT))
                 return {'success': True}
             except Exception as e:
                 logger.error('Failed to import certificate', exc_info=e)
