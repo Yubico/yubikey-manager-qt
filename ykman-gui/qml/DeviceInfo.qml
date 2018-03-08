@@ -54,10 +54,12 @@ Item {
 
                 property var features: [{
                         id: 'OTP',
-                        label: qsTr('YubiKey Slots')
+                        label: qsTr('YubiKey Slots'),
+                        onConfigure: slotDialog.load
                     }, {
                         id: 'PIV',
-                        label: qsTr('PIV')
+                        label: qsTr('PIV'),
+                        onConfigure: featureFlags.pivManager ? pivManager.start : null
                     }, {
                         id: 'OATH',
                         label: qsTr('OATH')
@@ -72,6 +74,8 @@ Item {
                 Repeater {
                     model: parent.features
                     Label {
+                        Layout.column: 0
+                        Layout.row: index
                         text: modelData.label + ':'
                     }
                 }
@@ -79,6 +83,8 @@ Item {
                 Repeater {
                     model: parent.features
                     Label {
+                        Layout.column: 1
+                        Layout.row: index
                         text: (isCapable(
                                    modelData.id) ? isEnabled(
                                                        modelData.id) ? qsTr("Enabled") : qsTr(
@@ -86,11 +92,18 @@ Item {
                                                                            "Not available"))
                     }
                 }
-                Button {
-                    Layout.alignment: Qt.AlignRight
-                    text: qsTr("Configure...")
-                    enabled: isEnabled('OTP')
-                    onClicked: slotDialog.load()
+
+                Repeater {
+                    model: parent.features
+                    Button {
+                        Layout.column: 2
+                        Layout.row: index
+                        Layout.alignment: Qt.AlignRight
+                        text: qsTr("Configure...")
+                        enabled: isEnabled(modelData.id)
+                        visible: !!parent.features[index].onConfigure
+                        onClicked: parent.features[index].onConfigure()
+                    }
                 }
             }
         }
