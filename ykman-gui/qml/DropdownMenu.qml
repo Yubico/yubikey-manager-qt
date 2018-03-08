@@ -5,7 +5,7 @@ import "utils.js" as Utils
 ComboBox {
     property var values
 
-    readonly property var value: values[currentIndex].value
+    readonly property var value: values.length > 0 ? values[currentIndex].value : null
 
     currentIndex: 0
     model: Utils.pick(values, 'text')
