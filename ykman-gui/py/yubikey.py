@@ -291,6 +291,7 @@ class Controller(object):
                     'YubiKey is inserted.'
         except Exception as e:
             logger.error('Reset throwed an exception', exc_info=e)
+            return 'An error occured.'
 
 
 controller = None

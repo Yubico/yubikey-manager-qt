@@ -13,7 +13,7 @@ ColumnLayout {
 
     function handleReset(err) {
         if (!err) {
-            fidoResetTouch.open()
+            fidoResetSuccess.open()
         } else {
             fidoResetError.text = err
             fidoResetError.open()
@@ -61,11 +61,18 @@ ColumnLayout {
     }
 
     MessageDialog {
+        id: fidoResetSuccess
+        icon: StandardIcon.Information
+        title: qsTr("Success!")
+        text: qsTr("The FIDO credentials are now cleared, and no PIN is set.")
+        standardButtons: StandardButton.Ok
+        onAccepted: fidoDialog.load()
+    }
+
+    MessageDialog {
         id: fidoResetTouch
         icon: StandardIcon.Information
         title: qsTr("Touch your YubiKey!")
         text: qsTr("Touch your YubiKey to confirm the reset.")
-        standardButtons: StandardButton.Ok
-        onAccepted: fidoDialog.load()
     }
 }
