@@ -47,6 +47,32 @@ DefaultDialog {
                   })
     }
 
+    function showUnsupportedPolicyFeedback(result) {
+        if (result.failure.supportedPinPolicies) {
+            if (result.failure.supportedPinPolicies.length === 0) {
+                showError(qsTr('Import failed'), qsTr(
+                              'Failed to import key. This YubiKey does not support PIN policies.'))
+            } else {
+                showError(qsTr('Import failed'), qsTr(
+                              'Failed to import key. This YubiKey supports only the following PIN policies: %1').arg(
+                              result.failure.supportedPinPolicies.join(', ')))
+            }
+            return true
+        } else if (result.failure.supportedTouchPolicies) {
+            if (result.failure.supportedTouchPolicies.length === 0) {
+                showError(qsTr('Import failed'), qsTr(
+                              'Failed to import key. This YubiKey does not support touch policies.'))
+            } else {
+                showError(qsTr('Import failed'), qsTr(
+                              'Failed to import key. This YubiKey supports only the following touch policies: %1').arg(
+                              result.failure.supportedTouchPolicies.join(', ')))
+            }
+            return true
+        } else {
+            return false
+        }
+    }
+
     StackView {
         id: stack
         anchors.fill: parent
@@ -155,6 +181,10 @@ DefaultDialog {
 
                                                         if (result.success) {
                                                             closed()
+                                                        } else if (showUnsupportedPolicyFeedback(
+                                                                       result)) {
+
+                                                            // Do nothing
                                                         } else if (result.failure.permissionDenied) {
                                                             showError(qsTr('Permission denied'),
                                                                       qsTr('Permission to write CSR to %1 was denied.').arg(
@@ -231,24 +261,10 @@ DefaultDialog {
                                           callback: function (result) {
                                               if (result.success) {
                                                   closed()
-                                              } else if (result.failure.supportedPinPolicies) {
-                                                  if (result.failure.supportedPinPolicies.length
-                                                          === 0) {
-                                                      showError(qsTr('Import failed'),
-                                                                qsTr('Failed to import key. This YubiKey does not support PIN policies.'))
-                                                  } else {
-                                                      showError(qsTr('Import failed'),
-                                                                qsTr('Failed to import key. This YubiKey supports only the following PIN policies: %1').arg(result.failure.supportedPinPolicies.join(', ')))
-                                                  }
-                                              } else if (result.failure.supportedTouchPolicies) {
-                                                  if (result.failure.supportedTouchPolicies.length
-                                                          === 0) {
-                                                      showError(qsTr('Import failed'),
-                                                                qsTr('Failed to import key. This YubiKey does not support touch policies.'))
-                                                  } else {
-                                                      showError(qsTr('Import failed'),
-                                                                qsTr('Failed to import key. This YubiKey supports only the following touch policies: %1').arg(result.failure.supportedTouchPolicies.join(', ')))
-                                                  }
+                                              } else if (showUnsupportedPolicyFeedback(
+                                                             result)) {
+
+                                                  // Do nothing
                                               } else if (!result.failure.canceled) {
                                                   showError(qsTr('Import failed'),
                                                             qsTr('Failed to import key: %1').arg(
