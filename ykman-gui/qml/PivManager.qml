@@ -283,6 +283,9 @@ DefaultDialog {
                                       })
             }
 
+            supportedTouchPolicies: hasDevice ? device.piv.supported_touch_policies : []
+            supportsPinPolicies: hasDevice ? device.piv.supports_pin_policies : false
+
             onClosed: pop()
             onImportCertificateAccepted: importCertificate(certificateFileUrl)
             onImportKeyAccepted: importKey(keyFileUrl, pinPolicy, touchPolicy)
