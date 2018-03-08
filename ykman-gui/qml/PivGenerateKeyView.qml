@@ -24,9 +24,8 @@ ColumnLayout {
         accepted(algorithmChoice.value, selfSign,
                  selfSign ? null : csrFile, subjectDn.text,
                             expirationDate.text,
-                            supportsPinPolicies ? pinPolicyChoice.value : null,
-                                                  supportedTouchPolicies.length
-                                                  > 0 ? touchPolicyChoice.value : null)
+                            pinPolicyChoice.value,
+                            touchPolicyChoice.value)
     }
 
     Label {
@@ -57,70 +56,14 @@ ColumnLayout {
     }
 
     RowLayout {
-        ColumnLayout {
-            Label {
-                text: qsTr('PIN policy')
-                font.bold: true
-            }
-
-            Label {
-                text: qsTr('Not supported on this YubiKey.')
-                font.italic: true
-                visible: !pinPolicyChoice.visible
-            }
-
-            DropdownMenu {
-                id: pinPolicyChoice
-                Layout.fillWidth: true
-                values: [{
-                        text: qsTr('Default for this slot'),
-                        value: null
-                    }, {
-                        text: qsTr('Never'),
-                        value: 'NEVER'
-                    }, {
-                        text: qsTr('Once'),
-                        value: 'ONCE'
-                    }, {
-                        text: qsTr('Always'),
-                        value: 'ALWAYS'
-                    }]
-                visible: supportsPinPolicies
-            }
+        PivPinPolicyInput {
+            id: pinPolicyChoice
+            isSupported: supportsPinPolicies
         }
 
-        ColumnLayout {
-            Label {
-                text: qsTr('Touch policy')
-                font.bold: true
-            }
-
-            Label {
-                text: qsTr('Not supported on this YubiKey.')
-                font.italic: true
-                visible: !touchPolicyChoice.visible
-            }
-
-            DropdownMenu {
-                id: touchPolicyChoice
-                Layout.fillWidth: true
-                values: [{
-                        text: qsTr('Default for this slot'),
-                        value: 'DEFAULT'
-                    }, {
-                        text: qsTr('Never'),
-                        value: 'NEVER'
-                    }, {
-                        text: qsTr('Always'),
-                        value: 'ALWAYS'
-                    }, {
-                        text: qsTr('Cached'),
-                        value: 'CACHED'
-                    }].filter(function(value) {
-                        return Utils.includes(supportedTouchPolicies, value.value)
-                    })
-                visible: supportedTouchPolicies.length > 0
-            }
+        PivTouchPolicyInput {
+            id: touchPolicyChoice
+            supportedPolicies: supportedTouchPolicies
         }
     }
 
