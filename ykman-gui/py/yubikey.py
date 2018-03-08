@@ -105,7 +105,11 @@ class Controller(object):
                         str(x) for x in self._piv_version(piv_controller)),
                     'certificates': piv_certificates,
                     'has_protected_key': piv_controller.has_protected_key,
-                    'pin_tries': piv_controller.get_pin_tries()
+                    'pin_tries': piv_controller.get_pin_tries(),
+                    'supported_touch_policies': [
+                        policy.name for policy in
+                        piv_controller.supported_touch_policies],
+                    'supports_pin_policies': piv_controller.supports_pin_policies,  # noqa: E501
                 }
 
         return self._dev_info
