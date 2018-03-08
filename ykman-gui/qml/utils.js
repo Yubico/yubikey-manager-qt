@@ -2,6 +2,10 @@ function Timer() {
     return Qt.createQmlObject("import QtQuick 2.0; Timer {}", root)
 }
 
+function includes(arr, value) {
+    return arr.indexOf(value) >= 0;
+}
+
 /**
  * Wait for `delayMillis` milliseconds, then call `callback`.
  *
