@@ -549,7 +549,7 @@ class Controller(object):
                                   if touch_policy else TOUCH_POLICY.DEFAULT))
                 return {'success': True}
             except Exception as e:
-                logger.error('Failed to import certificate', exc_info=e)
+                logger.error('Failed to import key', exc_info=e)
                 return {
                     'success': False,
                     'message': str(e),
