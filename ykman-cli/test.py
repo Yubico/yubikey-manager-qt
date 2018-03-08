@@ -10,7 +10,6 @@ def main():
     print(out.decode('utf8'))
 
     assert re.search(br'libykpers\s+(1\.\d+\.\d+)', out)
-    assert re.search(br'libu2f-host0?\s+(1\.\d+\.\d+)', out)
     assert re.search(br'libusb', out)
 
 
