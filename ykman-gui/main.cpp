@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("com.yubico");
 
     QCommandLineParser cliParser;
-    cliParser.setApplicationDescription("Cross-platform application for YubiKey configuration");
+    cliParser.setApplicationDescription("Configure your YubiKey using a graphical application.");
     cliParser.addHelpOption();
     cliParser.addVersionOption();
     cliParser.addOptions({
