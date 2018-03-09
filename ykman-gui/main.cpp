@@ -27,6 +27,17 @@ int main(int argc, char *argv[])
     app.setOrganizationName("Yubico");
     app.setOrganizationDomain("com.yubico");
 
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Cross-platform application for YubiKey configuration");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addOptions({
+        {"log-level", QCoreApplication::translate("main", "Set log level to <LEVEL>"), QCoreApplication::translate("main", "LEVEL")},
+        {"log-file", QCoreApplication::translate("main", "Print logs to <FILE> instead of standard output; ignored without --log-level"), QCoreApplication::translate("main", "FILE")},
+    });
+
+    parser.process(app);
+
     // A lock file is used, to ensure only one running instance at the time.
     QString tmpDir = QDir::tempPath();
     QLockFile lockFile(tmpDir + "/ykman-gui.lock");
@@ -60,17 +71,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("appVersion", APP_VERSION);
 
     engine.load(QUrl(url_prefix + main_qml));
-
-    QCommandLineParser parser;
-    parser.setApplicationDescription("Cross-platform application for YubiKey configuration");
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addOptions({
-        {"log-level", QCoreApplication::translate("main", "Set log level to <LEVEL>"), QCoreApplication::translate("main", "LEVEL")},
-        {"log-file", QCoreApplication::translate("main", "Print logs to <FILE> instead of standard output; ignored without --log-level"), QCoreApplication::translate("main", "FILE")},
-    });
-
-    parser.process(app);
 
     if (parser.isSet("log-level")) {
         if (parser.isSet("log-file")) {
