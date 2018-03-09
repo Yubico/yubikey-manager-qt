@@ -96,7 +96,6 @@ DefaultDialog {
         standardButtons: StandardButton.Ok
     }
 
-
     function get_enabled() {
         var enabled = []
         for (var i = 0; i < device.connections.length; i++) {

@@ -30,7 +30,7 @@ ApplicationWindow {
         triggeredOnStart: true
         interval: 500
         repeat: true
-        running: true
+        running: !slotDialog.visible && !connectionsDialog.visible
         onTriggered: yk.refresh()
     }
 
