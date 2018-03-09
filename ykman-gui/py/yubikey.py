@@ -31,10 +31,31 @@ def as_json(f):
     return wrapped
 
 
+class DeviceContextManager:
+    def __init__(self, dev):
+        self._dev = dev
+
+    def __enter__(self):
+        return self._dev
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._dev.close()
+
+
+class PivContextManager:
+    def __init__(self, dev):
+        self._dev = dev
+
+    def __enter__(self):
+        return PivController(self._dev.driver)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._dev.close()
+
+
 class Controller(object):
     _descriptor = None
     _dev_info = None
-    _piv_controller = None
 
     def __init__(self):
         # Wrap all return values as JSON.
@@ -47,6 +68,14 @@ class Controller(object):
     def count_devices(self):
         return len(list(get_descriptors()))
 
+    def _open_device(self, transports=sum(TRANSPORT)):
+        return DeviceContextManager(
+                self._descriptor.open_device(transports=transports))
+
+    def _open_piv(self):
+        return PivContextManager(
+                self._descriptor.open_device(transports=TRANSPORT.CCID))
+
     def refresh(self):
         descriptors = list(get_descriptors())
         if len(descriptors) != 1:
@@ -56,75 +85,74 @@ class Controller(object):
         desc = descriptors[0]
         if desc.fingerprint != (
                 self._descriptor.fingerprint if self._descriptor else None):
-            dev = desc.open_device()
-            if not dev:
-                return
             self._descriptor = desc
 
-            if self._piv_controller is None:
-                self._piv_controller = PivController(dev.driver)
+            with self._open_device() as dev:
+                if not dev:
+                    return
 
-            self._dev_info = {
-                'name': dev.device_name,
-                'version': '.'.join(str(x) for x in dev.version),
-                'serial': dev.serial or '',
-                'enabled': [c.name for c in CAPABILITY if c & dev.enabled],
-                'capabilities': [
-                    c.name for c in CAPABILITY if c & dev.capabilities],
-                'connections': [
-                    t.name for t in TRANSPORT if t & dev.capabilities
-                ],
-                'piv': {},
-            }
+                self._dev_info = {
+                    'name': dev.device_name,
+                    'version': '.'.join(str(x) for x in dev.version),
+                    'serial': dev.serial or '',
+                    'enabled': [c.name for c in CAPABILITY if c & dev.enabled],
+                    'capabilities': [
+                        c.name for c in CAPABILITY if c & dev.capabilities],
+                    'connections': [
+                        t.name for t in TRANSPORT if t & dev.capabilities
+                    ],
+                    'piv': {},
+                }
 
-        if self._dev_info and self._piv_controller:
-            piv_certificates = self._piv_list_certificates()
+        with self._open_piv() as piv_controller:
+            if self._dev_info:
+                piv_certificates = self._piv_list_certificates()
 
-            self._dev_info['piv'] = {
-                'version': '.'.join(str(x) for x in self._piv_version()),
-                'certificates': piv_certificates,
-                'has_protected_key': self._piv_controller.has_protected_key,
-            }
+                self._dev_info['piv'] = {
+                    'version': '.'.join(str(x) for x in self._piv_version()),
+                    'certificates': piv_certificates,
+                    'has_protected_key': piv_controller.has_protected_key,
+                }
 
         return self._dev_info
 
     def set_mode(self, connections):
         logger.debug('connections: %s', connections)
 
-        dev = self._descriptor.open_device()
-        logger.debug('dev: %s', dev)
+        with self._open_device() as dev:
+            logger.debug('dev: %s', dev)
 
-        try:
-            transports = sum([TRANSPORT[c] for c in connections])
-            dev.mode = Mode(transports & TRANSPORT.usb_transports())
-        except ModeSwitchError as e:
-            logger.error('Failed to set modes', exc_info=e)
-            return str(e)
+            try:
+                transports = sum([TRANSPORT[c] for c in connections])
+                dev.mode = Mode(transports & TRANSPORT.usb_transports())
+            except ModeSwitchError as e:
+                logger.error('Failed to set modes', exc_info=e)
+                return str(e)
 
     def slots_status(self):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.OTP)
-            return dev.driver.slot_status
+            with self._open_device(TRANSPORT.OTP) as dev:
+                return dev.driver.slot_status
         except Exception as e:
             logger.error('Failed to read slot status', exc_info=e)
 
     def erase_slot(self, slot):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.OTP)
-            dev.driver.zap_slot(slot)
+            with self._open_device(TRANSPORT.OTP) as dev:
+                dev.driver.zap_slot(slot)
         except YkpersError as e:
             return e.errno
 
     def swap_slots(self):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.OTP)
-            dev.driver.swap_slots()
+            with self._open_device(TRANSPORT.OTP) as dev:
+                dev.driver.swap_slots()
         except YkpersError as e:
             return e.errno
 
     def serial_modhex(self):
-        dev = self._descriptor.open_device(TRANSPORT.OTP)
-        return modhex_encode(b'\xff\x00' + struct.pack(b'>I', dev.serial))
+        with self._open_device(TRANSPORT.OTP) as dev:
+            return modhex_encode(b'\xff\x00' + struct.pack(b'>I', dev.serial))
 
     def generate_static_pw(self):
         return generate_static_pw(38).decode('utf-8')
@@ -140,23 +168,23 @@ class Controller(object):
             key = a2b_hex(key)
             public_id = modhex_decode(public_id)
             private_id = a2b_hex(private_id)
-            dev = self._descriptor.open_device(TRANSPORT.OTP)
-            dev.driver.program_otp(slot, key, public_id, private_id)
+            with self._open_device(TRANSPORT.OTP) as dev:
+                dev.driver.program_otp(slot, key, public_id, private_id)
         except YkpersError as e:
             return e.errno
 
     def program_challenge_response(self, slot, key, touch):
         try:
             key = a2b_hex(key)
-            dev = self._descriptor.open_device(TRANSPORT.OTP)
-            dev.driver.program_chalresp(slot, key, touch)
+            with self._open_device(TRANSPORT.OTP) as dev:
+                dev.driver.program_chalresp(slot, key, touch)
         except YkpersError as e:
             return e.errno
 
     def program_static_password(self, slot, key):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.OTP)
-            dev.driver.program_static(slot, key)
+            with self._open_device(TRANSPORT.OTP) as dev:
+                dev.driver.program_static(slot, key)
         except YkpersError as e:
             return e.errno
 
@@ -164,8 +192,8 @@ class Controller(object):
         try:
             unpadded = key.upper().rstrip('=').replace(' ', '')
             key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
-            dev = self._descriptor.open_device(TRANSPORT.OTP)
-            dev.driver.program_hotp(slot, key, hotp8=(digits == 8))
+            with self._open_device(TRANSPORT.OTP) as dev:
+                dev.driver.program_hotp(slot, key, hotp8=(digits == 8))
         except Error as e:
             return str(e)
         except YkpersError as e:
@@ -173,40 +201,40 @@ class Controller(object):
 
     def openpgp_reset(self):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.CCID)
-            controller = OpgpController(dev.driver)
-            controller.reset()
-            return True
+            with self._open_device(TRANSPORT.CCID) as dev:
+                controller = OpgpController(dev.driver)
+                controller.reset()
+                return True
         except Exception as e:
             logger.error('Failed to reset OpenPGP applet', exc_info=e)
             return False
 
     def openpgp_get_touch(self):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.CCID)
-            controller = OpgpController(dev.driver)
-            auth = controller.get_touch(KEY_SLOT.AUTHENTICATE)
-            enc = controller.get_touch(KEY_SLOT.ENCRYPT)
-            sig = controller.get_touch(KEY_SLOT.SIGN)
-            return [auth, enc, sig]
+            with self._open_device(TRANSPORT.CCID) as dev:
+                controller = OpgpController(dev.driver)
+                auth = controller.get_touch(KEY_SLOT.AUTHENTICATE)
+                enc = controller.get_touch(KEY_SLOT.ENCRYPT)
+                sig = controller.get_touch(KEY_SLOT.SIGN)
+                return [auth, enc, sig]
         except Exception as e:
             logger.error('Failed to get OpenPGP touch policy', exc_info=e)
             return None
 
     def openpgp_set_touch(self, admin_pin, auth, enc, sig):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.CCID)
-            controller = OpgpController(dev.driver)
-            if auth >= 0:
-                controller.set_touch(
-                    KEY_SLOT.AUTHENTICATE, int(auth), admin_pin.encode())
-            if enc >= 0:
-                controller.set_touch(
-                    KEY_SLOT.ENCRYPT, int(enc), admin_pin.encode())
-            if sig >= 0:
-                controller.set_touch(
-                    KEY_SLOT.SIGN, int(sig), admin_pin.encode())
-            return True
+            with self._open_device(TRANSPORT.CCID) as dev:
+                controller = OpgpController(dev.driver)
+                if auth >= 0:
+                    controller.set_touch(
+                        KEY_SLOT.AUTHENTICATE, int(auth), admin_pin.encode())
+                if enc >= 0:
+                    controller.set_touch(
+                        KEY_SLOT.ENCRYPT, int(enc), admin_pin.encode())
+                if sig >= 0:
+                    controller.set_touch(
+                        KEY_SLOT.SIGN, int(sig), admin_pin.encode())
+                return True
         except Exception as e:
             logger.error('Failed to set OpenPGP touch policy', exc_info=e)
             return False
@@ -215,30 +243,30 @@ class Controller(object):
             self, admin_pin, pin_retries, reset_code_retries,
             admin_pin_retries):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.CCID)
-            controller = OpgpController(dev.driver)
-            controller.set_pin_retries(
-                int(pin_retries), int(reset_code_retries),
-                int(admin_pin_retries), admin_pin.encode())
-            return True
+            with self._open_device(TRANSPORT.CCID) as dev:
+                controller = OpgpController(dev.driver)
+                controller.set_pin_retries(
+                    int(pin_retries), int(reset_code_retries),
+                    int(admin_pin_retries), admin_pin.encode())
+                return True
         except Exception as e:
             logger.error('Failed to set OpenPGP PIN retries', exc_info=e)
             return False
 
     def openpgp_get_version(self):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.CCID)
-            controller = OpgpController(dev.driver)
-            return controller.version
+            with self._open_device(TRANSPORT.CCID) as dev:
+                controller = OpgpController(dev.driver)
+                return controller.version
         except Exception as e:
             logger.error('Failed to get OpenPGP applet version', exc_info=e)
             return None
 
     def openpgp_get_remaining_pin_retries(self):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.CCID)
-            controller = OpgpController(dev.driver)
-            return controller.get_remaining_pin_tries()
+            with self._open_device(TRANSPORT.CCID) as dev:
+                controller = OpgpController(dev.driver)
+                return controller.get_remaining_pin_tries()
         except Exception as e:
             logger.error('Failed to get remaining OpenPGP PIN retries',
                          exc_info=e)
@@ -246,64 +274,53 @@ class Controller(object):
 
     def piv_reset(self):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.CCID)
-            controller = PivController(dev.driver)
-            controller.reset()
-            return True
+            with self._open_device(TRANSPORT.CCID) as dev:
+                controller = PivController(dev.driver)
+                controller.reset()
+                return True
 
         except Exception as e:
             logger.error('Failed to reset PIV applet', exc_info=e)
             return False
 
     def _piv_version(self):
-        if self._piv_controller:
+        with self._open_piv() as piv_controller:
             try:
-                return self._piv_controller.version
+                return piv_controller.version
             except AttributeError:
                 return None
-        else:
-            return None
 
     def piv_change_pin(self, old_pin, new_pin):
-        if self._piv_controller:
+        with self._open_piv() as piv_controller:
             try:
-                self._piv_controller.change_pin(old_pin, new_pin)
+                piv_controller.change_pin(old_pin, new_pin)
                 logger.debug('PIN change successful!')
                 return {'success': True}
             except Exception as e:
-                tries_left = self._piv_controller.get_pin_tries()
+                tries_left = piv_controller.get_pin_tries()
                 logger.debug('PIN change failed. %s tries left.',
                              tries_left, exc_info=e)
                 return {
                     'success': False,
                     'tries_left': tries_left,
                 }
-        else:
-            logger.error('PIV controller not available.')
-            return {'success': False}
 
     def piv_change_puk(self, old_puk, new_puk):
-        if self._piv_controller:
-            result = self._piv_controller.change_puk(old_puk, new_puk)
+        with self._open_piv() as piv_controller:
+            result = piv_controller.change_puk(old_puk, new_puk)
             logger.debug('PUK change result: %s', result)
             return {
                 'success': result.success,
                 'tries_left': result.tries_left,
               }
-        else:
-            logger.error('PIV controller not available.')
-            return {'success': False}
 
     def _piv_list_certificates(self):
-        if self._piv_controller:
-            certs = self._piv_controller.list_certificates()
+        with self._open_piv() as piv_controller:
+            certs = piv_controller.list_certificates()
             logger.debug('Certificates: %s', certs)
             certs = {slot: toDict(cert) for slot, cert in certs.items()}
             logger.debug('Certificates: %s', certs)
             return certs
-        else:
-            logger.error('PIV controller not available.')
-            return None
 
     def piv_generate_random_mgm_key(self):
         return b2a_hex(ykman.piv.generate_random_management_key()).decode(
@@ -311,22 +328,16 @@ class Controller(object):
 
     def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
                            touch=False, store_on_device=False):
+        with self._open_piv() as piv_controller:
+            if piv_controller.has_protected_key or store_on_device:
+                piv_controller.verify(pin)
 
-        if self._piv_controller:
-            ctrl = self._piv_controller
-
-            if ctrl.has_protected_key or store_on_device:
-                ctrl.verify(pin)
-
-            if not ctrl.has_protected_key:
+            if not piv_controller.has_protected_key:
                 current_key = a2b_hex(current_key_hex)
-                ctrl.authenticate(current_key)
+                piv_controller.authenticate(current_key)
 
             new_key = a2b_hex(new_key_hex) if new_key_hex else None
-            return ctrl.set_mgm_key(new_key, touch, store_on_device)
-        else:
-            logger.error('PIV controller not available.')
-            return None
+            return piv_controller.set_mgm_key(new_key, touch, store_on_device)
 
 
 def toDict(cert):
