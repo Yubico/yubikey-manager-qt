@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     cliParser.addHelpOption();
     cliParser.addVersionOption();
     cliParser.addOptions({
-        {"log-level", QCoreApplication::translate("main", "Set log level to <LEVEL>"), QCoreApplication::translate("main", "LEVEL")},
+        {"log-level", QCoreApplication::translate("main", "Enable logging at verbosity <LEVEL>: DEBUG, INFO, WARNING, ERROR, CRITICAL"), QCoreApplication::translate("main", "LEVEL")},
         {"log-file", QCoreApplication::translate("main", "Print logs to <FILE> instead of standard output; ignored without --log-level"), QCoreApplication::translate("main", "FILE")},
     });
 
