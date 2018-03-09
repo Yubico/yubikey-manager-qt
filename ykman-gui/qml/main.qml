@@ -72,6 +72,11 @@ ApplicationWindow {
         device: yk
     }
 
+    PivManager {
+        id: pivManager
+        device: yk
+    }
+
     ConnectionsDialog {
         id: connectionsDialog
         device: yk

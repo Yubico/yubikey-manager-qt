@@ -18,6 +18,7 @@ Python {
     property bool yubikeyModuleLoaded: false
     property bool yubikeyReady: false
     property var queue: []
+    property var piv: {}
 
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
@@ -89,6 +90,7 @@ Python {
                     capabilities = dev ? dev.capabilities : []
                     enabled = dev ? dev.enabled : []
                     connections = dev ? dev.connections : []
+                    piv = dev ? dev.piv : {}
                 })
             } else if (hasDevice) {
                 hasDevice = false
