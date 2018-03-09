@@ -100,7 +100,7 @@ Item {
                         Layout.alignment: Qt.AlignRight
                         text: qsTr("Configure...")
                         enabled: isEnabled(modelData.id)
-                        visible: !!parent.features[index].onConfigure
+                        visible: parent.features[index].onConfigure !== undefined
                         onClicked: parent.features[index].onConfigure()
                     }
                 }
