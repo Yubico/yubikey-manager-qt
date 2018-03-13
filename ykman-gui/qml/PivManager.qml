@@ -312,7 +312,7 @@ DefaultDialog {
     Component {
         id: changePinView
 
-        ChangePin {
+        ChangeCode {
             codeName: qsTr('PIN')
 
             onCanceled: pop()
@@ -344,7 +344,7 @@ DefaultDialog {
     Component {
         id: changePukView
 
-        ChangePin {
+        ChangeCode {
             codeName: 'PUK'
 
             onCanceled: pop()
@@ -376,7 +376,7 @@ DefaultDialog {
     Component {
         id: unblockPinView
 
-        ChangePin {
+        ChangeCode {
             codeName: 'PIN'
             currentCodeLabel: qsTr('PUK:')
 
