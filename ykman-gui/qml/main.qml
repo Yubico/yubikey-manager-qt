@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
+    id: root
     visible: true
     title: qsTr("YubiKey Manager")
 
@@ -30,7 +31,7 @@ ApplicationWindow {
         triggeredOnStart: true
         interval: 500
         repeat: true
-        running: true
+        running: !slotDialog.visible && !connectionsDialog.visible
         onTriggered: yk.refresh()
     }
 
@@ -99,6 +100,10 @@ ApplicationWindow {
     FidoDialog {
         id: fidoDialog
         device: yk
+    }
+
+    TouchYubiKey {
+        id: touchYubiKeyPrompt
     }
 
     MessageDialog {

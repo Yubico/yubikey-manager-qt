@@ -3,11 +3,26 @@ set -e
 
 PY_VERSION="3.6.2"
 export MACOSX_DEPLOYMENT_TARGET=10.9
+PYOTHERSIDE_VERSION="1.5.3"
+
+
+install_pyotherside() {
+  wget https://github.com/thp/pyotherside/archive/$PYOTHERSIDE_VERSION.tar.gz -P ./lib
+  cd lib
+  tar -xzvf $PYOTHERSIDE_VERSION.tar.gz
+  # Patch PyOtherSide to not be built with debug output
+  echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> pyotherside-$PYOTHERSIDE_VERSION/src/src.pro
+  cd pyotherside-$PYOTHERSIDE_VERSION
+  qmake
+  make
+  sudo make install
+  cd ../../
+}
+
 
 brew update
-# Patch PyOtherSide to not be built with debug output
-echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> vendor/pyotherside/src/src.pro
-pip3 install --upgrade pip
+
+install_pyotherside
 
 git clone https://github.com/aurelien-rainone/macdeployqtfix.git
 brew install qt5 swig ykpers libyubikey hidapi libu2f-host libusb pyenv

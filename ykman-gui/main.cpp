@@ -23,8 +23,20 @@ int main(int argc, char *argv[])
     QString url_prefix;
 
     app.setApplicationName("YubiKey Manager");
+    app.setApplicationVersion(APP_VERSION);
     app.setOrganizationName("Yubico");
     app.setOrganizationDomain("com.yubico");
+
+    QCommandLineParser cliParser;
+    cliParser.setApplicationDescription("Configure your YubiKey using a graphical application.");
+    cliParser.addHelpOption();
+    cliParser.addVersionOption();
+    cliParser.addOptions({
+        {"log-level", QCoreApplication::translate("main", "Enable logging at verbosity <LEVEL>: DEBUG, INFO, WARNING, ERROR, CRITICAL"), QCoreApplication::translate("main", "LEVEL")},
+        {"log-file", QCoreApplication::translate("main", "Print logs to <FILE> instead of standard output; ignored without --log-level"), QCoreApplication::translate("main", "FILE")},
+    });
+
+    cliParser.process(app);
 
     // A lock file is used, to ensure only one running instance at the time.
     QString tmpDir = QDir::tempPath();
@@ -60,11 +72,11 @@ int main(int argc, char *argv[])
 
     engine.load(QUrl(url_prefix + main_qml));
 
-    if (argc > 2 && strcmp(argv[1], "--log-level") == 0) {
-        if (argc > 4 && strcmp(argv[3], "--log-file") == 0) {
-            QMetaObject::invokeMethod(engine.rootObjects().first(), "enableLoggingToFile", Q_ARG(QVariant, argv[2]), Q_ARG(QVariant, argv[4]));
+    if (cliParser.isSet("log-level")) {
+        if (cliParser.isSet("log-file")) {
+            QMetaObject::invokeMethod(engine.rootObjects().first(), "enableLoggingToFile", Q_ARG(QVariant, cliParser.value("log-level")), Q_ARG(QVariant, cliParser.value("log-file")));
         } else {
-            QMetaObject::invokeMethod(engine.rootObjects().first(), "enableLogging", Q_ARG(QVariant, argv[2]));
+            QMetaObject::invokeMethod(engine.rootObjects().first(), "enableLogging", Q_ARG(QVariant, cliParser.value("log-level")));
         }
     } else {
         QMetaObject::invokeMethod(engine.rootObjects().first(), "disableLogging");
