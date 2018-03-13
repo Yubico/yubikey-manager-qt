@@ -58,7 +58,8 @@ Item {
                         onConfigure: slotDialog.load
                     }, {
                         id: 'PIV',
-                        label: qsTr('PIV')
+                        label: qsTr('PIV'),
+                        onConfigure: featureFlag_pivManager ? pivManager.start : undefined
                     }, {
                         id: 'OATH',
                         label: qsTr('OATH')

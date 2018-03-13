@@ -2,6 +2,10 @@ function Timer() {
     return Qt.createQmlObject("import QtQuick 2.0; Timer {}", root)
 }
 
+function includes(arr, value) {
+    return arr.indexOf(value) >= 0;
+}
+
 /**
  * Wait for `delayMillis` milliseconds, then call `callback`.
  *
@@ -38,6 +42,33 @@ function delay(callback, delayMillis) {
 }
 
 /**
+ * Add `objB` into a copy of `objA`.
+ *
+ * @param objA an object
+ * @param objB an object
+ *
+ * @return a new object containing all key-value pairs in `objA` and `objB`. If
+ * a key exists in both `objA` and `objB`, the corresponding value from `objB`
+ * is used.
+ */
+function extend(objA, objB) {
+    var copyOfA = Object.keys(objA).reduce(
+        function(result, key) {
+            result[key] = objA[key];
+            return result;
+        },
+        {}
+    );
+    return Object.keys(objB).reduce(
+        function(result, key) {
+            result[key] = objB[key];
+            return result;
+        },
+        copyOfA
+    );
+}
+
+/**
  * @param lst a QML basic type `list` value
  * @return the `lst` converted to a JavaScript Array value
  */
@@ -47,6 +78,14 @@ function listToArray(lst) {
         result.push(lst[i])
     }
     return result
+}
+
+/**
+ * @param arr an array of numbers
+ * @return the greatest value in `arr`
+ */
+function maxIn(arr) {
+    return arr.reduce(function(max, next) { return Math.max(max, next) })
 }
 
 /**
