@@ -272,11 +272,11 @@ Python {
     }
 
     function piv_change_pin(old_pin, new_pin, cb) {
-        do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin], cb)
+        do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin], _refreshBefore(cb))
     }
 
     function piv_change_puk(old_puk, new_puk, cb) {
-        do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk], cb)
+        do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk], _refreshBefore(cb))
     }
 
     function piv_generate_random_mgm_key(cb) {
