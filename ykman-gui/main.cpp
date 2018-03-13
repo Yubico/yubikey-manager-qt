@@ -5,6 +5,12 @@
 #include <QtGlobal>
 #include <QtWidgets>
 
+QCommandLineOption hiddenOption(const QString &name) {
+    QCommandLineOption option(name);
+    option.setFlags(option.flags() | QCommandLineOption::HiddenFromHelp);
+    return option;
+}
+
 int main(int argc, char *argv[])
 {
     // Global menubar is broken for qt5 apps in Ubuntu Unity, see:
@@ -34,6 +40,7 @@ int main(int argc, char *argv[])
     cliParser.addOptions({
         {"log-level", QCoreApplication::translate("main", "Enable logging at verbosity <LEVEL>: DEBUG, INFO, WARNING, ERROR, CRITICAL"), QCoreApplication::translate("main", "LEVEL")},
         {"log-file", QCoreApplication::translate("main", "Print logs to <FILE> instead of standard output; ignored without --log-level"), QCoreApplication::translate("main", "FILE")},
+        hiddenOption("enable-piv-manager"),
     });
 
     cliParser.process(app);
@@ -69,6 +76,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("appDir", app_dir);
     engine.rootContext()->setContextProperty("urlPrefix", url_prefix);
     engine.rootContext()->setContextProperty("appVersion", APP_VERSION);
+    engine.rootContext()->setContextProperty("featureFlag_pivManager", cliParser.isSet("enable-piv-manager"));
 
     engine.load(QUrl(url_prefix + main_qml));
 

@@ -59,7 +59,7 @@ Item {
                     }, {
                         id: 'PIV',
                         label: qsTr('PIV'),
-                        onConfigure: featureFlags.pivManager ? pivManager.start : undefined
+                        onConfigure: featureFlag_pivManager ? pivManager.start : undefined
                     }, {
                         id: 'OATH',
                         label: qsTr('OATH')
