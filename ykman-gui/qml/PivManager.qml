@@ -10,7 +10,7 @@ DefaultDialog {
     minimumHeight: calculateHeight()
     minimumWidth: calculateWidth()
     width: minimumWidth
-    title: qsTr("PIV Manager")
+    title: qsTr("PIV Configuration")
 
     property var device
     readonly property var yk: device // Needed so that we can pass `device: yk` to subcomponents
