@@ -8,7 +8,19 @@ import "slotutils.js" as SlotUtils
 ColumnLayout {
     width: 350
     id: confColumn
+
+    RegExpValidator {
+        id: modHexValidator
+        regExp: /[cbdefghijklnrtuvCBDEFGHIJKLMNRTUV]{1,38}$/
+    }
+
+    RegExpValidator {
+        id: usLayoutValidator
+        regExp: /[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\]\^\_\{\}\|\~]{1,38}$/
+    }
+
     Label {
+
         text: qsTr("Configure static password for ") + SlotUtils.slotNameCapitalized(
                   selectedSlot)
         font.bold: true
@@ -19,6 +31,13 @@ ColumnLayout {
 
     Label {
         text: qsTr("When triggered, the YubiKey will output a fixed password.")
+        Layout.fillWidth: true
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        Layout.maximumWidth: confColumn.width
+    }
+    Label {
+        id: desc
+        text: qsTr("To avoid problems with different keyboard layouts, only the following characters are allowed by default: cbdefghijklnrtuv")
         Layout.fillWidth: true
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         Layout.maximumWidth: confColumn.width
@@ -35,9 +54,7 @@ ColumnLayout {
                     id: passwordInput
                     Layout.fillWidth: true
                     font.family: "Courier"
-                    validator: RegExpValidator {
-                        regExp: /[cbdefghijklnrtuvCBDEFGHIJKLMNRTUV]{1,38}$/
-                    }
+                    validator: allowNonModhex.checked ? usLayoutValidator : modHexValidator
                 }
                 Button {
                     text: qsTr("Generate")
@@ -46,13 +63,11 @@ ColumnLayout {
                 }
             }
 
-            Label {
-                id: desc
-                width: parent.width
-                text: qsTr("To avoid problems with different keyboard layouts, only the following characters are allowed: cbdefghijklnrtuv")
-                Layout.fillWidth: true
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.maximumWidth: confColumn.width
+            CheckBox {
+                id: allowNonModhex
+                text: qsTr("Allow any character.")
+                checked: false
+                onCheckedChanged: passwordInput.text = ""
             }
         }
     }
