@@ -16,7 +16,7 @@ ColumnLayout {
 
     RegExpValidator {
         id: usLayoutValidator
-        regExp: /[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\]\^\_\{\}\|\~]{1,38}$/
+        regExp: /[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#\$%&'\(\)\*\+,-\.\/:;<=>\?@\[\]\^_{}\|~]{1,38}$/
     }
 
     Label {
@@ -62,7 +62,6 @@ ColumnLayout {
                     onClicked: generatePassword()
                 }
             }
-
             CheckBox {
                 id: allowNonModhex
                 text: qsTr("Allow any character.")
