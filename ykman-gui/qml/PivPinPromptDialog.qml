@@ -9,7 +9,7 @@ Dialog {
     property var defaultValue
     property string errorMessage: ''
     property bool hideInput: true
-    property string message: qsTr('Please enter the PIV PIN.')
+    property string message: qsTr('Please enter the PIN.')
 
     function ask(cb, errMsg) {
         callback = cb
@@ -18,7 +18,7 @@ Dialog {
         open()
     }
 
-    title: qsTr('PIV PIN required')
+    title: qsTr('PIN required')
 
     onAccepted: {
         if (callback) {
