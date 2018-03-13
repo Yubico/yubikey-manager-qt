@@ -326,7 +326,7 @@ DefaultDialog {
                         if (result.tries_left === null) {
                             showError(qsTr('Error'), qsTr(
                                           'PIN change failed. This is probably a bug, please report it to the developers.'))
-                        } else if (retries > 0) {
+                        } else if (result.tries_left > 0) {
                             showError(qsTr('Error'), qsTr(
                                           'PIN change failed. Tries left: %1').arg(
                                           result.tries_left))
@@ -358,7 +358,7 @@ DefaultDialog {
                         if (result.tries_left === null) {
                             showError(qsTr('Error'), qsTr(
                                           'PUK change failed. This is probably a bug, please report it to the developers.'))
-                        } else if (retries > 0) {
+                        } else if (result.tries_left > 0) {
                             showError(qsTr('Error'), qsTr(
                                           'PUK change failed. Tries left: %1').arg(
                                           result.tries_left))
