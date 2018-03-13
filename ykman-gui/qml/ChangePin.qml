@@ -25,6 +25,7 @@ ColumnLayout {
             state.attemptMade = true
         }
     }
+    onCanceled: reset()
 
     Component.onCompleted: reset()
 
