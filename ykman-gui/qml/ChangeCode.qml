@@ -98,8 +98,10 @@ ColumnLayout {
         }
 
         Button {
+            id: submitButton
             text: qsTr('Ok')
             onClicked: accepted()
+            enabled: valid(currentInput.text, newInput.text, repeatInput.text)
         }
     }
 
@@ -140,5 +142,6 @@ ColumnLayout {
     Shortcut {
         sequence: 'Return'
         onActivated: accepted()
+        enabled: submitButton.enabled
     }
 }
