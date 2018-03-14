@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     id: root
+
     visible: true
     title: qsTr("YubiKey Manager")
 
@@ -31,7 +32,7 @@ ApplicationWindow {
         triggeredOnStart: true
         interval: 500
         repeat: true
-        running: !slotDialog.visible && !connectionsDialog.visible
+        running: !slotDialog.visible && !connectionsDialog.visible && !pivManager.visible
         onTriggered: yk.refresh()
     }
 
@@ -69,6 +70,11 @@ ApplicationWindow {
 
     SlotDialog {
         id: slotDialog
+        device: yk
+    }
+
+    PivManager {
+        id: pivManager
         device: yk
     }
 
@@ -127,6 +133,14 @@ ApplicationWindow {
         title: qsTr("Pin retries for OpenPGP")
         text: qsTr("New pin retries for OpenPGP has been set.")
         standardButtons: StandardButton.Ok
+    }
+
+    ClipBoard {
+        id: clipboard
+    }
+
+    function copyToClipboard(value) {
+        clipboard.setClipboard(value)
     }
 
     function supportsOpenPgpTouch() {

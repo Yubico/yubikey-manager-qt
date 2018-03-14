@@ -69,6 +69,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("appDir", app_dir);
     engine.rootContext()->setContextProperty("urlPrefix", url_prefix);
     engine.rootContext()->setContextProperty("appVersion", APP_VERSION);
+    engine.rootContext()->setContextProperty("featureFlag_pivManager", cliParser.positionalArguments().contains("feature:piv-manager"));
 
     engine.load(QUrl(url_prefix + main_qml));
 

@@ -57,7 +57,12 @@ Item {
                         onConfigure: slotDialog.load
                     }, {
                         id: 'FIDO2',
-                        label: qsTr('FIDO 2')
+                        label: qsTr('FIDO 2'),
+                        onConfigure: fidoDialog.load()
+                    }, {
+                        id: 'PIV',
+                        label: qsTr('PIV'),
+                        onConfigure: featureFlag_pivManager ? pivManager.start : undefined
                     }, {
                         id: 'OATH',
                         label: qsTr('OATH')
@@ -105,13 +110,6 @@ Item {
                         visible: parent.features[index].onConfigure !== undefined
                         onClicked: parent.features[index].onConfigure()
                     }
-                }
-                Button {
-                    Layout.alignment: Qt.AlignRight
-                    text: qsTr("Configure...")
-                    enabled: isEnabled('FIDO2')
-                    visible: isEnabled('FIDO2')
-                    onClicked: fidoDialog.load()
                 }
             }
         }

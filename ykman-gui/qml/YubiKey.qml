@@ -18,6 +18,9 @@ Python {
     property bool yubikeyModuleLoaded: false
     property bool yubikeyReady: false
     property var queue: []
+    property var piv: ({
+
+                       })
 
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
@@ -77,7 +80,7 @@ Python {
         }
     }
 
-    function refresh() {
+    function refresh(doneCallback) {
         do_call('yubikey.controller.count_devices', [], function (n) {
             nDevices = n
             if (nDevices == 1) {
@@ -89,11 +92,38 @@ Python {
                     capabilities = dev ? dev.capabilities : []
                     enabled = dev ? dev.enabled : []
                     connections = dev ? dev.connections : []
+                    piv = dev && dev.piv
                 })
             } else if (hasDevice) {
                 hasDevice = false
             }
+
+            if (doneCallback) {
+                doneCallback()
+            }
         })
+    }
+
+    /**
+     * Transform a `callback` into one that will first call `refresh` and then
+     * itself when `refresh` is done.
+     *
+     * The arguments and `this` context of the call to the `callback` are
+     * preseved.
+     *
+     * @param callback a function
+     *
+     * @return a function which will call `refresh()` and delay the execution of
+     *          the `callback` until the `refresh()` is done.
+     */
+    function _refreshBefore(callback) {
+        return function (/* ...arguments */ ) {
+            var callbackThis = this
+            var callbackArguments = arguments
+            refresh(function () {
+                callback.apply(callbackThis, callbackArguments)
+            })
+        }
     }
 
     function set_mode(connections, cb) {
@@ -191,5 +221,157 @@ Python {
 
     function fido_pin_retries(cb) {
         do_call('yubikey.controller.fido_pin_retries', [], cb)
+    }
+
+    function _piv_perform_authenticated_action(functionName, args, callback, pinCallback, keyCallback, touchCallback, retry, touchPrompt) {
+        function cancel() {
+            callback({
+                         success: false,
+                         failure: {
+                             canceled: true
+                         }
+                     })
+        }
+
+        if (touchPrompt !== false) {
+            touchPrompt = true
+        }
+        if (touchPrompt) {
+            var touchPromptTimer = Utils.delay(touchCallback, 500)
+        }
+
+        // PyOtherSide doesn't seem to support passing through functions as arguments
+        do_call(functionName, args, function (result) {
+            if (touchPrompt) {
+                touchPromptTimer.stop()
+                touchYubiKeyPrompt.close()
+            }
+
+            if (!result.success && result.failure.pinRequired) {
+                pinCallback(function (pin) {
+                    if (pin) {
+                        retry({
+                                  pin: pin
+                              })
+                    } else {
+                        cancel()
+                    }
+                })
+            } else if (!result.success && result.failure.pinVerification) {
+                pinCallback(function (pin) {
+                    if (pin) {
+                        retry({
+                                  pin: pin
+                              })
+                    } else {
+                        cancel()
+                    }
+                }, result.message)
+            } else if (!result.success && result.failure.keyRequired) {
+                keyCallback(function (keyHex) {
+                    if (keyHex) {
+                        retry({
+                                  keyHex: keyHex
+                              })
+                    } else {
+                        cancel()
+                    }
+                })
+            } else if (!result.success && result.failure.keyAuthentication) {
+                keyCallback(function (keyHex) {
+                    if (keyHex) {
+                        retry({
+                                  keyHex: keyHex
+                              })
+                    } else {
+                        cancel()
+                    }
+                }, result.message)
+            } else {
+                callback(result)
+            }
+        })
+    }
+
+    function piv_change_pin(old_pin, new_pin, cb) {
+        do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin],
+                _refreshBefore(cb))
+    }
+
+    function piv_change_puk(old_puk, new_puk, cb) {
+        do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk],
+                _refreshBefore(cb))
+    }
+
+    function piv_generate_random_mgm_key(cb) {
+        do_call('yubikey.controller.piv_generate_random_mgm_key', [], cb)
+    }
+
+    function piv_change_mgm_key(cb, pin, currentMgmKey, newKey, touch, touchCallback, storeOnDevice) {
+        var touchPromptTimer = Utils.delay(touchCallback, 500)
+
+        // PyOtherSide doesn't seem to support passing through functions as arguments
+        do_call('yubikey.controller.piv_change_mgm_key',
+                [pin, currentMgmKey, newKey, touch, storeOnDevice],
+                function (result) {
+                    touchPromptTimer.stop()
+                    refresh(function () {
+                        cb(result)
+                    })
+                })
+    }
+
+    function piv_export_certificate(slotName, fileUrl, cb) {
+        do_call('yubikey.controller.piv_export_certificate',
+                [slotName, fileUrl], cb)
+    }
+
+    function piv_import_certificate(args) {
+        _piv_perform_authenticated_action(
+                    'yubikey.controller.piv_import_certificate',
+                    [args.slotName, args.fileUrl, args.pin, args.keyHex],
+                    _refreshBefore(args.callback), args.pinCallback,
+                    args.keyCallback, args.touchCallback, function (newArgs) {
+                        piv_import_certificate(Utils.extend(args, newArgs))
+                    })
+    }
+
+    function piv_import_key(args) {
+        _piv_perform_authenticated_action(
+                    'yubikey.controller.piv_import_key',
+                    [args.slotName, args.fileUrl, args.pin, args.keyHex, null, args.pinPolicy, args.touchPolicy],
+                    _refreshBefore(args.callback), args.pinCallback,
+                    args.keyCallback, args.touchCallback, function (newArgs) {
+                        piv_import_key(Utils.extend(args, newArgs))
+                    })
+    }
+
+    function piv_delete_certificate(args) {
+        _piv_perform_authenticated_action(
+                    'yubikey.controller.piv_delete_certificate',
+                    [args.slotName, args.pin, args.keyHex],
+                    _refreshBefore(args.callback), args.pinCallback,
+                    args.keyCallback, args.touchCallback, function (newArgs) {
+                        piv_delete_certificate(Utils.extend(args, newArgs))
+                    })
+    }
+
+    function piv_generate_certificate(args) {
+        _piv_perform_authenticated_action(
+                    'yubikey.controller.piv_generate_certificate',
+                    [args.slotName, args.algorithm, args.subjectDn, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex, args.pinPolicy, args.touchPolicy],
+                    _refreshBefore(args.callback), args.pinCallback,
+                    args.keyCallback, args.touchCallback, function (newArgs) {
+                        piv_generate_certificate(Utils.extend(args, newArgs))
+                    }, false)
+    }
+
+    function piv_reset(cb) {
+        do_call('yubikey.controller.piv_reset', [], _refreshBefore(cb))
+    }
+
+    function piv_unblock_pin(puk, newPin, cb) {
+        do_call('yubikey.controller.piv_unblock_pin', [puk, newPin],
+                _refreshBefore(cb))
     }
 }
