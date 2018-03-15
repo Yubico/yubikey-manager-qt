@@ -135,6 +135,7 @@ DefaultDialog {
                     Button {
                         text: qsTr("Swap...")
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                        enabled: slotsConfigured[0] || slotsConfigured[1]
                         onClicked: swapSlotsDialog.open()
                     }
                 }
