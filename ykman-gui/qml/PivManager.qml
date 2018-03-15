@@ -462,7 +462,7 @@ DefaultDialog {
     }
 
     function start() {
-        show()
+        device.refreshPiv(show)
     }
 
     function startChangePin() {
