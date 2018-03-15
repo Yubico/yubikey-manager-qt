@@ -58,7 +58,7 @@ Item {
                     }, {
                         id: 'FIDO2',
                         label: qsTr('FIDO 2'),
-                        onConfigure: fidoDialog.load()
+                        onConfigure: fidoDialog.load
                     }, {
                         id: 'PIV',
                         label: qsTr('PIV'),
