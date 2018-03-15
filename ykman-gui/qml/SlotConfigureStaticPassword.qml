@@ -9,6 +9,8 @@ ColumnLayout {
     width: 350
     id: confColumn
 
+    property string keyboardLayout: allowNonModhex.checked ? 'US' : 'MODHEX'
+
     RegExpValidator {
         id: modHexValidator
         regExp: /[cbdefghijklnrtuvCBDEFGHIJKLMNRTUV]{1,38}$/
@@ -100,14 +102,14 @@ ColumnLayout {
     }
 
     function generatePassword() {
-        device.generate_static_pw(function (res) {
+        device.generate_static_pw(keyboardLayout, function (res) {
             passwordInput.text = res
         })
     }
 
     function programStaticPassword() {
         device.program_static_password(selectedSlot, passwordInput.text,
-                                       function (error) {
+                                       keyboardLayout, function (error) {
                                            if (!error) {
                                                confirmConfigured.open()
                                            } else {

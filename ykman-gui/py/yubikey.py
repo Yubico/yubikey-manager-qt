@@ -23,6 +23,7 @@ from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
 from ykman.fido import Fido2Controller, CTAP2Error, CTAP2_ERR
 from ykman.piv import (ALGO, PIN_POLICY, PivController, SLOT, SW, TOUCH_POLICY)
+from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode,
     generate_static_pw, parse_certificate, parse_private_key)
@@ -153,8 +154,9 @@ class Controller(object):
         with self._open_device(TRANSPORT.OTP) as dev:
             return modhex_encode(b'\xff\x00' + struct.pack(b'>I', dev.serial))
 
-    def generate_static_pw(self):
-        return generate_static_pw(38).decode('utf-8')
+    def generate_static_pw(self, keyboard_layout):
+        return generate_static_pw(
+            38, KEYBOARD_LAYOUT[keyboard_layout]).decode('utf-8')
 
     def random_uid(self):
         return b2a_hex(os.urandom(6)).decode('ascii')
@@ -180,10 +182,12 @@ class Controller(object):
         except YkpersError as e:
             return e.errno
 
-    def program_static_password(self, slot, key):
+    def program_static_password(self, slot, key, keyboard_layout):
         try:
             with self._open_device(TRANSPORT.OTP) as dev:
-                dev.driver.program_static(slot, key)
+                dev.driver.program_static(
+                    slot, key,
+                    keyboard_layout=KEYBOARD_LAYOUT[keyboard_layout])
         except YkpersError as e:
             return e.errno
 

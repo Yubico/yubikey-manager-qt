@@ -164,8 +164,8 @@ Python {
         do_call('yubikey.controller.random_key', [bytes], cb)
     }
 
-    function generate_static_pw(cb) {
-        do_call('yubikey.controller.generate_static_pw', [], cb)
+    function generate_static_pw(keyboard_layout, cb) {
+        do_call('yubikey.controller.generate_static_pw', [keyboard_layout], cb)
     }
 
     function program_otp(slot, public_id, private_id, key, cb) {
@@ -178,9 +178,9 @@ Python {
                 [slot, key, touch], cb)
     }
 
-    function program_static_password(slot, password, cb) {
+    function program_static_password(slot, password, keyboard_layout, cb) {
         do_call('yubikey.controller.program_static_password',
-                [slot, password], cb)
+                [slot, password, keyboard_layout], cb)
     }
 
     function program_oath_hotp(slot, key, digits, cb) {
