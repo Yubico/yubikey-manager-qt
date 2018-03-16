@@ -1,2 +1,2 @@
-https://github.com/Yubico/python-fido-host
+git+https://github.com/Yubico/python-fido-host.git
 git+https://github.com/Yubico/yubikey-manager.git@ctap2-python-fido
