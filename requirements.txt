@@ -1,2 +1,2 @@
-https://github.com/Yubico/yubikey-manager/blob/ctap2-python-fido/fido-host-0.0.0.tar.gz?raw=true
+https://github.com/Yubico/python-fido-host
 git+https://github.com/Yubico/yubikey-manager.git@ctap2-python-fido
