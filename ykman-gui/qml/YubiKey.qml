@@ -18,7 +18,7 @@ Python {
     property bool yubikeyModuleLoaded: false
     property bool yubikeyReady: false
     property var queue: []
-    property var piv: {}
+    property var piv
 
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
