@@ -15,13 +15,14 @@ from base64 import b32decode
 from binascii import b2a_hex, a2b_hex, Error
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
+from fido_host.hid import CtapError
 
 from ykman.descriptor import get_descriptors
 from ykman.driver import ModeSwitchError
 from ykman.driver_ccid import APDUError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
-from ykman.fido import Fido2Controller, CTAP2Error, CTAP2_ERR
+from ykman.fido import Fido2Controller
 from ykman.piv import (ALGO, PIN_POLICY, PivController, SLOT, SW, TOUCH_POLICY)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
@@ -288,13 +289,13 @@ class Controller(object):
             dev = self._descriptor.open_device(TRANSPORT.U2F)
             controller = Fido2Controller(dev.driver)
             return {'retries': controller.get_pin_retries(), 'error': None}
-        except CTAP2Error as e:
-            if e.code == CTAP2_ERR.PIN_AUTH_BLOCKED:
+        except CtapError as e:
+            if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
                 return {
                     'retries': None,
                     'error': 'PIN authentication is currently blocked. '
                              'Remove and re-insert the YubiKey.'}
-            if e.code == CTAP2_ERR.PIN_BLOCKED:
+            if e.code == CtapError.ERR.PIN_BLOCKED:
                 return {'retries': None, 'error': 'PIN is blocked.'}
         except Exception as e:
             logger.error('Failed to read PIN retries', exc_info=e)
@@ -317,13 +318,13 @@ class Controller(object):
             controller = Fido2Controller(dev.driver)
             controller.change_pin(old_pin=current_pin, new_pin=new_pin)
             return None
-        except CTAP2Error as e:
-            if e.code == CTAP2_ERR.PIN_INVALID:
+        except CtapError as e:
+            if e.code == CtapError.ERR.PIN_INVALID:
                 return 'The current PIN is wrong.'
-            if e.code == CTAP2_ERR.PIN_AUTH_BLOCKED:
+            if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
                 return 'PIN authentication is currently blocked. ' \
                     'Remove and re-insert the YubiKey.'
-            if e.code == CTAP2_ERR.PIN_BLOCKED:
+            if e.code == CtapError.ERR.PIN_BLOCKED:
                 return 'PIN is blocked.'
 
     def fido_reset(self):
@@ -332,8 +333,8 @@ class Controller(object):
             controller = Fido2Controller(dev.driver)
             controller.reset()
             return None
-        except CTAP2Error as e:
-            if e.code == CTAP2_ERR.NOT_ALLOWED:
+        except CtapError as e:
+            if e.code == CtapError.ERR.NOT_ALLOWED:
                 return 'Failed to reset the YubiKey. The reset command' \
                     ' must be triggered immediately after the ' \
                     'YubiKey is inserted.'
