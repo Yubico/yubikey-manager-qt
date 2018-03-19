@@ -8,6 +8,7 @@ ApplicationWindow {
 
     visible: true
     title: qsTr("YubiKey Manager")
+    property int minimumWidth: 370
 
     menuBar: MainMenuBar {
     }
@@ -48,7 +49,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             sourceComponent: yk.hasDevice ? deviceInfo : message
-            Layout.minimumWidth: item.Layout.minimumWidth
+            Layout.minimumWidth: root.minimumWidth
             Layout.minimumHeight: item.Layout.minimumHeight
         }
     }
@@ -63,7 +64,7 @@ ApplicationWindow {
                   } else {
                       qsTr("Multiple YubiKeys detected!")
                   }
-            Layout.minimumWidth: 370
+            Layout.minimumWidth: root.minimumWidth
             Layout.minimumHeight: 360
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter

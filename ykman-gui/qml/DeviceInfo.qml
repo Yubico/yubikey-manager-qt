@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 ColumnLayout {
     id: deviceInfo
     property var device
-
+    Layout.minimumWidth: root.minimumWidth
     ColumnLayout {
         Layout.margins: 12
         GroupBox {
