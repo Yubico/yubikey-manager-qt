@@ -6,13 +6,12 @@ import QtQuick.Dialogs 1.2
 ColumnLayout {
     id: header
     spacing: 0
-    height: 63
-    Layout.maximumHeight: 63
-    Layout.minimumHeight: 63
+    height: 48
+    Layout.maximumHeight: 48
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
     Rectangle {
         id: background
-        Layout.minimumHeight: 60
+        Layout.minimumHeight: 45
         Layout.fillWidth: true
         Layout.fillHeight: true
         color: "#ffffff"

@@ -1,6 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.2
 import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
@@ -45,6 +45,8 @@ ApplicationWindow {
         }
         Loader {
             id: loader
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             sourceComponent: yk.hasDevice ? deviceInfo : message
             Layout.minimumWidth: item.Layout.minimumWidth
             Layout.minimumHeight: item.Layout.minimumHeight

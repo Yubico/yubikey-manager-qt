@@ -1,40 +1,26 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.2
 
-Item {
-    anchors.fill: parent
-
+ColumnLayout {
+    id: deviceInfo
     property var device
-    property int margin: Layout.minimumWidth / 30
 
-    Layout.minimumWidth: 370
-    Layout.minimumHeight: deviceBox.implicitHeight + featureBox.implicitHeight
-                          + connectionsBox.implicitHeight + margin * 4
     ColumnLayout {
-        anchors.fill: parent
-        anchors.leftMargin: margin
-        anchors.rightMargin: margin
-        anchors.bottomMargin: margin
-
+        Layout.margins: 12
         GroupBox {
             id: deviceBox
             title: qsTr("Device")
             Layout.fillWidth: true
-            anchors.topMargin: margin
-            anchors.top: parent.top
+            Layout.fillHeight: true
             GridLayout {
-                anchors.fill: parent
                 columns: 1
-
                 Label {
                     text: device.name
                 }
-
                 Label {
                     text: qsTr("Firmware: ") + device.version
                 }
-
                 Label {
                     text: qsTr("Serial: ") + (device.serial ? device.serial : 'Unknown')
                 }
@@ -43,16 +29,14 @@ Item {
 
         GroupBox {
             id: featureBox
-            anchors.top: deviceBox.bottom
-            anchors.topMargin: margin
             title: qsTr("Features")
             Layout.fillWidth: true
-
+            Layout.fillHeight: true
             GridLayout {
-                anchors.fill: parent
                 flow: GridLayout.TopToBottom
                 rows: features.length
-
+                anchors.right: parent.right
+                anchors.left: parent.left
                 property var features: [{
                         id: 'OTP',
                         label: qsTr('YubiKey Slots'),
@@ -120,14 +104,11 @@ Item {
             id: connectionsBox
             title: qsTr("Connections")
             Layout.fillWidth: true
-            anchors.top: featureBox.bottom
-            anchors.topMargin: margin
-            anchors.bottomMargin: margin
-
+            Layout.fillHeight: true
             GridLayout {
-                anchors.fill: parent
+                anchors.right: parent.right
+                anchors.left: parent.left
                 columns: 3
-
                 Label {
                     text: qsTr("Supported:")
                 }
@@ -147,15 +128,14 @@ Item {
                     }))
                 }
                 Button {
-                    Layout.alignment: Qt.AlignRight
                     text: qsTr("Configure...")
+                    Layout.alignment: Qt.AlignRight
                     enabled: device.connections.length > 1
                     onClicked: connectionsDialog.show()
                 }
             }
         }
     }
-
     function isEnabled(feature) {
         return device.enabled.indexOf(feature) !== -1
     }
