@@ -3,6 +3,8 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 
 Item {
+    anchors.fill: parent
+
     property var device
     property int margin: Layout.minimumWidth / 30
 

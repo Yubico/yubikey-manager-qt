@@ -32,16 +32,23 @@ ApplicationWindow {
         triggeredOnStart: true
         interval: 500
         repeat: true
-        running: !slotDialog.visible && !connectionsDialog.visible && !pivManager.visible
+        running: !slotDialog.visible && !connectionsDialog.visible
+                 && !pivManager.visible
         onTriggered: yk.refresh()
     }
 
-    Loader {
-        id: loader
-        sourceComponent: yk.hasDevice ? deviceInfo : message
+    ColumnLayout {
+        spacing: 0
         anchors.fill: parent
-        Layout.minimumWidth: item.Layout.minimumWidth
-        Layout.minimumHeight: item.Layout.minimumHeight
+        Layout.fillWidth: true
+        Header {
+        }
+        Loader {
+            id: loader
+            sourceComponent: yk.hasDevice ? deviceInfo : message
+            Layout.minimumWidth: item.Layout.minimumWidth
+            Layout.minimumHeight: item.Layout.minimumHeight
+        }
     }
 
     Component {
