@@ -6,6 +6,7 @@ import QtQuick.Dialogs 1.2
 ColumnLayout {
     id: header
     spacing: 0
+    height: 63
     Layout.maximumHeight: 63
     Layout.minimumHeight: 63
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
