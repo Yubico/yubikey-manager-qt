@@ -6,7 +6,9 @@ import QtQuick.Dialogs 1.2
 ColumnLayout {
     id: header
     spacing: 0
-    height: 63
+    Layout.maximumHeight: 63
+    Layout.minimumHeight: 63
+    Layout.alignment: Qt.AlignLeft | Qt.AlignTop
     Rectangle {
         id: background
         Layout.minimumHeight: 60
@@ -18,7 +20,7 @@ ColumnLayout {
             width: 100
             height: 28
             anchors.left: parent.left
-            anchors.leftMargin: 5
+            anchors.leftMargin: 12
             anchors.bottomMargin: 5
             anchors.bottom: parent.bottom
             source: "../images/logo-header.png"
