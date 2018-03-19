@@ -1,6 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.3
 import QtQuick.Window 2.2
 
 ApplicationWindow {
@@ -9,7 +9,8 @@ ApplicationWindow {
         id: palette
     }
 
-    flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint | Qt.MSWindowsFixedSizeDialogHint
+    flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint
+           | Qt.WindowCloseButtonHint | Qt.MSWindowsFixedSizeDialogHint
     modality: Qt.ApplicationModal
     color: palette.window
 
@@ -38,5 +39,4 @@ ApplicationWindow {
             id: destruction_parent
         }
     }
-
 }
