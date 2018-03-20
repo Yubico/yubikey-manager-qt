@@ -19,11 +19,12 @@ ColumnLayout {
             id: logo
             width: 100
             height: 28
+            fillMode: Image.PreserveAspectCrop
             anchors.left: parent.left
             anchors.leftMargin: 12
             anchors.bottomMargin: 5
             anchors.bottom: parent.bottom
-            source: "../images/logo-header.png"
+            source: "../images/yubico-logo.svg"
         }
     }
     Rectangle {
