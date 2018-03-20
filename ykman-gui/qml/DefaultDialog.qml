@@ -9,8 +9,7 @@ ApplicationWindow {
         id: palette
     }
 
-    flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint
-           | Qt.WindowCloseButtonHint | Qt.MSWindowsFixedSizeDialogHint
+    flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     modality: Qt.ApplicationModal
     color: palette.window
 
