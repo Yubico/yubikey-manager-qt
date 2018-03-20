@@ -14,6 +14,7 @@ DefaultDialog {
     property int selectedSlot
     minimumWidth: 350
     width: 350
+    minimumHeight: calculated()
     height: calculated()
 
     function load() {
