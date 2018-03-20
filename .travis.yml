@@ -57,7 +57,7 @@ install:
     fi
   - pip install --upgrade pip
   # Install linting tools
-  - sudo pip install pre-commit flake8
+  - pip install pre-commit flake8
 
 before_script:
   - |
