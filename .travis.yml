@@ -56,7 +56,8 @@ install:
       qmake
     fi
   # Install linting tools
-  - pip install pre-commit flake8
+  - sudo pip install --upgrade pip
+  - sudo pip install pre-commit flake8
 
 before_script:
   - |
