@@ -26,6 +26,20 @@ ColumnLayout {
             anchors.bottom: parent.bottom
             source: "../images/yubico-logo.svg"
         }
+        Label {
+            text: qsTr("<a href='https://www.yubico.com/kb' style='color:#284c61;text-decoration:none'>help</a>")
+            textFormat: Text.RichText
+            anchors.right: parent.right
+            anchors.rightMargin: 12
+            anchors.bottomMargin: 5
+            anchors.bottom: parent.bottom
+            onLinkActivated: Qt.openUrlExternally(link)
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+            }
+        }
     }
     Rectangle {
         id: headerBorder
