@@ -189,7 +189,7 @@ DefaultDialog {
         id: confirmSwapped
         icon: StandardIcon.Information
         title: qsTr("Slot credentials swapped")
-        text: qsTr("The credentials in the short press and the long press slot has now been swapped.")
+        text: qsTr("The credentials in the short press and the long press slot have now been swapped.")
         standardButtons: StandardButton.Ok
         onAccepted: slotDialog.load()
     }

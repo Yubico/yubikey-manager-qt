@@ -7,6 +7,12 @@ ColumnLayout {
 
     property bool validNewPin: newPin.text.length >= 4
                                && newPin.text == confirmPin.text
+
+    Label {
+        text: hasPin ? qsTr("Change PIN") : qsTr("Set a PIN")
+        font.bold: true
+    }
+
     GridLayout {
         columns: 2
         Label {
@@ -70,7 +76,7 @@ ColumnLayout {
         id: fidoPinConfirmation
         icon: StandardIcon.Information
         title: qsTr("A new PIN has been set!")
-        text: qsTr("A new PIN has been set for the FIDO 2 functionality.")
+        text: qsTr("Setting a PIN for the FIDO 2 Module was successful.")
         standardButtons: StandardButton.Ok
         onAccepted: fidoDialog.load()
     }

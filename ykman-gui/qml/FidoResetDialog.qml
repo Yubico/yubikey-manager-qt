@@ -12,20 +12,24 @@ ColumnLayout {
     }
 
     function handleReset(err) {
+        //TODO: Show touch prompt
         if (!err) {
             fidoResetSuccess.open()
         } else {
-            fidoResetError.text = err
             fidoResetError.open()
         }
     }
 
     Label {
-        text: "Reset FIDO 2 credentials"
+        text: "Reset FIDO Module"
         font.bold: true
     }
     Label {
-        text: qsTr("A reset deletes all FIDO 2 credentials on the device, including FIDO U2F credentials, and removes the PIN. The reset must triggered immediately after the YubiKey is inserted, and requires a touch on the YubiKey.")
+        text: qsTr("Resetting FIDO permanently erases all FIDO credentials on the device - U2F (FIDO 1) & FIDO 2.
+
+The FIDO PIN is also cleared.
+
+The reset must be performed within 5 seconds after the YubiKey is inserted, and requires a touch on the YubiKey.")
         Layout.fillWidth: true
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
@@ -48,7 +52,11 @@ ColumnLayout {
         id: resetWarning
         icon: StandardIcon.Warning
         title: qsTr("Reset FIDO 2?")
-        text: qsTr("Are you sure you want to reset the FIDO 2 functionality? This will delete all credentials, including FIDO U2F credentials. This action cannot be undone.")
+        text: qsTr("Are you sure you want to reset the FIDO 2 functionality?
+
+This will delete all FIDO credentials, including FIDO U2F credentials.
+
+This action cannot be undone!")
         standardButtons: StandardButton.Ok | StandardButton.Cancel
         onAccepted: resetDialog.reset()
     }
@@ -56,7 +64,10 @@ ColumnLayout {
     MessageDialog {
         id: fidoResetError
         icon: StandardIcon.Critical
-        title: qsTr("FIDO 2 reset failed.")
+        title: qsTr("Error!")
+        text: qsTr("Resetting the FIDO Module failed.
+
+The reset must be performed within 5 seconds after the YubiKey is inserted in the USB port.")
         standardButtons: StandardButton.Ok
     }
 
@@ -64,7 +75,9 @@ ColumnLayout {
         id: fidoResetSuccess
         icon: StandardIcon.Information
         title: qsTr("Success!")
-        text: qsTr("The FIDO credentials are now cleared, and no PIN is set.")
+        text: qsTr("The FIDO Module reset was successful.
+
+All FIDO credentials and the FIDO PIN were permanently deleted.")
         standardButtons: StandardButton.Ok
         onAccepted: fidoDialog.load()
     }

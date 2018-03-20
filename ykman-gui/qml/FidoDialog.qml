@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.2
 
 DefaultDialog {
 
-    title: qsTr("Configure FIDO 2")
+    title: qsTr("Configure FIDO")
     minimumHeight: calculated()
     minimumWidth: 350
     height: calculated()
@@ -65,7 +65,7 @@ DefaultDialog {
         ColumnLayout {
             GroupBox {
                 Layout.fillWidth: true
-                title: qsTr("PIN Management")
+                title: qsTr("FIDO 2 PIN Management")
                 RowLayout {
                     anchors.fill: parent
                     Label {
@@ -86,12 +86,13 @@ DefaultDialog {
 
             GroupBox {
                 Layout.fillWidth: true
-                title: qsTr("Reset FIDO 2")
+                title: qsTr("Reset FIDO Module")
                 ColumnLayout {
                     anchors.fill: parent
                     Label {
-                        text: qsTr(
-                                  "Delete all FIDO credentials and remove PIN.")
+                        text: qsTr("• Delete all FIDO U2F Credentials.
+• Delete all FIDO 2 Credentials.
+• Delete FIDO 2 PIN.")
                     }
                     Button {
                         text: qsTr("Reset...")
