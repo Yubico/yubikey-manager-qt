@@ -20,7 +20,7 @@ DefaultDialog {
     function load() {
         selectedSlot = 0
         stack.push({
-                       item: initial,
+                       item: slotOverview,
                        immediate: true,
                        replace: true
                    })
@@ -51,103 +51,17 @@ DefaultDialog {
     StackView {
         id: stack
         anchors.fill: parent
-        initialItem: initial
+        initialItem: slotOverview
+        onCurrentItemChanged: {
+            if (currentItem) {
+                currentItem.forceActiveFocus()
+            }
+        }
     }
 
     Component {
-        id: initial
-        ColumnLayout {
-            GroupBox {
-                Layout.fillWidth: true
-                title: qsTr("Short Press (Slot 1)")
-                ColumnLayout {
-                    anchors.fill: parent
-                    Label {
-                        text: qsTr("The Short Press slot is currently ")
-                              + (slotsConfigured[0] ? qsTr(
-                                                          "configured.") : qsTr(
-                                                          "empty."))
-                    }
-                    RowLayout {
-                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                        Button {
-                            text: qsTr("Delete...")
-                            enabled: slotsConfigured[0]
-                            onClicked: {
-                                selectedSlot = 1
-                                deleteSlotDialog.open()
-                            }
-                        }
-                        Button {
-                            text: qsTr("Configure...")
-                            onClicked: {
-                                selectedSlot = 1
-                                stack.push({
-                                               item: slotSelectType,
-                                               immediate: true
-                                           })
-                            }
-                        }
-                    }
-                }
-            }
-            GroupBox {
-                Layout.fillWidth: true
-                title: qsTr("Long Press (Slot 2)")
-                ColumnLayout {
-                    anchors.fill: parent
-                    Label {
-                        text: qsTr("The Long Press slot is currently ")
-                              + (slotsConfigured[1] ? qsTr(
-                                                          "configured.") : qsTr(
-                                                          "empty."))
-                    }
-                    RowLayout {
-                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                        Button {
-                            enabled: slotsConfigured[1]
-                            text: qsTr("Delete...")
-                            onClicked: {
-                                selectedSlot = 2
-                                deleteSlotDialog.open()
-                            }
-                        }
-                        Button {
-                            text: qsTr("Configure...")
-                            onClicked: {
-                                selectedSlot = 2
-                                stack.push({
-                                               item: slotSelectType,
-                                               immediate: true
-                                           })
-                            }
-                        }
-                    }
-                }
-            }
-            GroupBox {
-                Layout.fillWidth: true
-                title: qsTr("Swap slots")
-                RowLayout {
-                    anchors.fill: parent
-                    Label {
-                        text: qsTr("Swap configuration between slots.")
-                    }
-                    Button {
-                        text: qsTr("Swap...")
-                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                        enabled: slotsConfigured[0] || slotsConfigured[1]
-                        onClicked: swapSlotsDialog.open()
-                    }
-                }
-            }
-            RowLayout {
-                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                Button {
-                    text: qsTr("Cancel")
-                    onClicked: close()
-                }
-            }
+        id: slotOverview
+        SlotOverview {
         }
     }
 

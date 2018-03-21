@@ -99,7 +99,7 @@ ColumnLayout {
                         visible: parent.features[index].onConfigure !== undefined
                         focus: true
                         Keys.onTabPressed: {
-                            if (btnRepeater.itemAt(index + 1).visible) {
+                            if (btnRepeater.itemAt(index + 1).enabled) {
                                 btnRepeater.itemAt(index + 1).forceActiveFocus()
                             } else {
                                 connectionsBtn.forceActiveFocus()
