@@ -51,6 +51,7 @@ ApplicationWindow {
             sourceComponent: yk.hasDevice ? deviceInfo : message
             Layout.minimumWidth: root.minimumWidth
             Layout.minimumHeight: item.Layout.minimumHeight
+            onItemChanged: item.forceActiveFocus()
         }
     }
 

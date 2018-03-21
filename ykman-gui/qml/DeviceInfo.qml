@@ -6,6 +6,8 @@ ColumnLayout {
     id: deviceInfo
     property var device
     Layout.minimumWidth: root.minimumWidth
+    Keys.onTabPressed: btnRepeater.itemAt(0).forceActiveFocus()
+    Keys.onEscapePressed: deviceInfo.forceActiveFocus()
     ColumnLayout {
         Layout.margins: 12
         GroupBox {
@@ -86,6 +88,7 @@ ColumnLayout {
                 }
 
                 Repeater {
+                    id: btnRepeater
                     model: parent.features
                     Button {
                         Layout.column: 2
@@ -94,6 +97,14 @@ ColumnLayout {
                         text: qsTr("Configure...")
                         enabled: isEnabled(modelData.id)
                         visible: parent.features[index].onConfigure !== undefined
+                        focus: true
+                        Keys.onTabPressed: {
+                            if (btnRepeater.itemAt(index + 1).visible) {
+                                btnRepeater.itemAt(index + 1).forceActiveFocus()
+                            } else {
+                                connectionsBtn.forceActiveFocus()
+                            }
+                        }
                         onClicked: parent.features[index].onConfigure()
                     }
                 }
@@ -128,6 +139,7 @@ ColumnLayout {
                     }))
                 }
                 Button {
+                    id: connectionsBtn
                     text: qsTr("Configure...")
                     Layout.alignment: Qt.AlignRight
                     enabled: device.connections.length > 1
