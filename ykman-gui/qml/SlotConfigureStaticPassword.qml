@@ -6,6 +6,8 @@ import QtQuick.Window 2.0
 import "slotutils.js" as SlotUtils
 
 ColumnLayout {
+    Keys.onTabPressed: passwordInput.forceActiveFocus()
+    Keys.onEscapePressed: close()
     width: 350
     id: confColumn
 
@@ -54,11 +56,14 @@ ColumnLayout {
                 Layout.fillWidth: true
                 TextField {
                     id: passwordInput
+                    KeyNavigation.tab: generatePasswordBtn
                     Layout.fillWidth: true
                     font.family: "Courier"
                     validator: allowNonModhex.checked ? usLayoutValidator : modHexValidator
                 }
                 Button {
+                    id: generatePasswordBtn
+                    KeyNavigation.tab: allowNonModhex
                     text: qsTr("Generate")
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     onClicked: generatePassword()
@@ -66,6 +71,7 @@ ColumnLayout {
             }
             CheckBox {
                 id: allowNonModhex
+                KeyNavigation.tab: backBtn
                 text: qsTr("Allow any character.")
                 checked: false
                 onCheckedChanged: passwordInput.text = ""
@@ -76,12 +82,16 @@ ColumnLayout {
     RowLayout {
         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         Button {
+            id: backBtn
+            KeyNavigation.tab: finishBtn
             text: qsTr("Back")
             onClicked: stack.pop({
                                      immediate: true
                                  })
         }
         Button {
+            id: finishBtn
+            KeyNavigation.tab: passwordInput
             text: qsTr("Finish")
             enabled: passwordInput.acceptableInput
             onClicked: finish()
@@ -90,7 +100,7 @@ ColumnLayout {
 
     SlotOverwriteWarning {
         id: warning
-        onAccepted: programStaticPassword()
+        onYes: programStaticPassword()
     }
 
     function finish() {

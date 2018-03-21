@@ -5,6 +5,8 @@ import QtQuick.Dialogs 1.2
 import "slotutils.js" as SlotUtils
 
 ColumnLayout {
+    Keys.onTabPressed: otpBtn.forceActiveFocus()
+    Keys.onEscapePressed: close()
 
     function pushConfigView(viewOption) {
         switch (viewOption) {
@@ -50,26 +52,34 @@ ColumnLayout {
             id: configViewOptions
         }
         RadioButton {
+            id: otpBtn
             text: qsTr("Yubico OTP")
+            KeyNavigation.tab: chalRespBtn
             exclusiveGroup: configViewOptions
             checked: true
             property string name: "otp"
             property string desc: qsTr("Programs a one-time password credential using the Yubico OTP protocol.")
         }
         RadioButton {
+            id: chalRespBtn
             text: qsTr("Challenge-response")
+            KeyNavigation.tab: staticBtn
             exclusiveGroup: configViewOptions
             property string name: "challengeResponse"
             property string desc: qsTr("Programs a HMAC-SHA1 credential, that can be used for local authentication or encryption.")
         }
         RadioButton {
+            id: staticBtn
             text: qsTr("Static password")
+            KeyNavigation.tab: oathHotpBtn
             exclusiveGroup: configViewOptions
             property string name: "staticPassword"
             property string desc: qsTr("Stores a fixed password, which will be output each time you touch the button.")
         }
         RadioButton {
+            id: oathHotpBtn
             text: qsTr("OATH-HOTP")
+            KeyNavigation.tab: backBtn
             exclusiveGroup: configViewOptions
             property string name: "oathHotp"
             property string desc: qsTr("Stores a numeric one-time password using the OATH-HOTP standard.")
@@ -92,12 +102,16 @@ ColumnLayout {
     RowLayout {
         Layout.alignment: Qt.AlignRight
         Button {
+            id: backBtn
+            KeyNavigation.tab: nextBtn
             text: qsTr("Back")
             onClicked: stack.pop({
                                      immediate: true
                                  })
         }
         Button {
+            id: nextBtn
+            KeyNavigation.tab: otpBtn
             text: qsTr("Next")
             onClicked: pushConfigView(configViewOptions.current.name)
         }

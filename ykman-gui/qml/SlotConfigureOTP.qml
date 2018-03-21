@@ -6,6 +6,8 @@ import QtQuick.Window 2.0
 import "slotutils.js" as SlotUtils
 
 ColumnLayout {
+    Keys.onTabPressed: publicIdInput.forceActiveFocus()
+    Keys.onEscapePressed: close()
     width: 350
     id: confColumn
     Label {
@@ -33,6 +35,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 TextField {
                     id: publicIdInput
+                    KeyNavigation.tab: useSerialCb
                     Layout.fillWidth: true
                     enabled: !useSerialCb.checked
                     font.family: "Courier"
@@ -42,6 +45,7 @@ ColumnLayout {
                 }
                 CheckBox {
                     id: useSerialCb
+                    KeyNavigation.tab: privateIdInput
                     enabled: device.serial
                     text: qsTr("Use encoded serial number")
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -68,6 +72,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 TextField {
                     id: privateIdInput
+                    KeyNavigation.tab: generatePrivateIdBtn
                     Layout.fillWidth: true
                     font.family: "Courier"
                     validator: RegExpValidator {
@@ -75,6 +80,8 @@ ColumnLayout {
                     }
                 }
                 Button {
+                    id: generatePrivateIdBtn
+                    KeyNavigation.tab: secretKeyInput
                     text: qsTr("Generate")
                     Layout.fillWidth: false
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -101,6 +108,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 TextField {
                     id: secretKeyInput
+                    KeyNavigation.tab: generateSecretKeyBtn
                     Layout.fillWidth: true
                     font.family: "Courier"
                     validator: RegExpValidator {
@@ -108,7 +116,9 @@ ColumnLayout {
                     }
                 }
                 Button {
+                    id: generateSecretKeyBtn
                     text: qsTr("Generate")
+                    KeyNavigation.tab: backBtn
                     Layout.fillWidth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     onClicked: generateKey()
@@ -126,12 +136,16 @@ ColumnLayout {
     RowLayout {
         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         Button {
+            id: backBtn
+            KeyNavigation.tab: finishBtn
             text: qsTr("Back")
             onClicked: stack.pop({
                                      immediate: true
                                  })
         }
         Button {
+            id: finishBtn
+            KeyNavigation.tab: publicIdInput
             text: qsTr("Finish")
             enabled: publicIdInput.acceptableInput
                      && privateIdInput.acceptableInput
@@ -142,7 +156,7 @@ ColumnLayout {
 
     SlotOverwriteWarning {
         id: warning
-        onAccepted: programOTP()
+        onYes: programOTP()
     }
 
     function finish() {

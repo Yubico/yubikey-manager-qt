@@ -8,6 +8,8 @@ import "slotutils.js" as SlotUtils
 ColumnLayout {
     width: 350
     id: confColumn
+    Keys.onTabPressed: secretKeyInput.forceActiveFocus()
+    Keys.onEscapePressed: close()
 
     Label {
         text: qsTr("Configure challenge-response for ") + SlotUtils.slotNameCapitalized(
@@ -35,6 +37,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 TextField {
                     id: secretKeyInput
+                    KeyNavigation.tab: generateBtn
                     Layout.fillWidth: true
                     implicitWidth: 320
                     font.family: "Courier"
@@ -43,6 +46,8 @@ ColumnLayout {
                     }
                 }
                 Button {
+                    id: generateBtn
+                    KeyNavigation.tab: requireTouch
                     text: qsTr("Generate")
                     onClicked: generateKey()
                 }
@@ -57,6 +62,7 @@ ColumnLayout {
 
             CheckBox {
                 id: requireTouch
+                KeyNavigation.tab: backBtn
                 text: qsTr("Require touch")
             }
         }
@@ -65,12 +71,16 @@ ColumnLayout {
     RowLayout {
         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         Button {
+            id: backBtn
+            KeyNavigation.tab: finishBtn
             text: qsTr("Back")
             onClicked: stack.pop({
                                      immediate: true
                                  })
         }
         Button {
+            id: finishBtn
+            KeyNavigation.tab: secretKeyInput
             text: qsTr("Finish")
             enabled: secretKeyInput.acceptableInput
             onClicked: finish()
@@ -79,7 +89,7 @@ ColumnLayout {
 
     SlotOverwriteWarning {
         id: warning
-        onAccepted: programChallengeResponse()
+        onYes: programChallengeResponse()
     }
 
     function generateKey() {

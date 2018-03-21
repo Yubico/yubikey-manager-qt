@@ -6,6 +6,8 @@ import QtQuick.Window 2.0
 import "slotutils.js" as SlotUtils
 
 ColumnLayout {
+    Keys.onTabPressed: secretKeyInput.forceActiveFocus()
+    Keys.onEscapePressed: close()
     width: 350
     id: confColumn
 
@@ -34,6 +36,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 TextField {
                     id: secretKeyInput
+                    KeyNavigation.tab: digits
                     Layout.fillWidth: true
                     font.family: "Courier"
                     validator: RegExpValidator {
@@ -57,6 +60,7 @@ ColumnLayout {
                 ComboBox {
                     id: digits
                     model: [6, 8]
+                    KeyNavigation.tab: backBtn
                 }
             }
         }
@@ -65,13 +69,17 @@ ColumnLayout {
     RowLayout {
         Layout.alignment: Qt.AlignRight
         Button {
+            id: backBtn
+            KeyNavigation.tab: finishBtn
             text: qsTr("Back")
             onClicked: stack.pop({
                                      immediate: true
                                  })
         }
         Button {
+            id: finishBtn
             text: qsTr("Finish")
+            KeyNavigation.tab: secretKeyInput
             enabled: secretKeyInput.acceptableInput
             onClicked: finish()
         }
@@ -79,7 +87,7 @@ ColumnLayout {
 
     SlotOverwriteWarning {
         id: warning
-        onAccepted: programOathHotp()
+        onYes: programOathHotp()
     }
 
     MessageDialog {
