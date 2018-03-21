@@ -5,7 +5,8 @@ import QtQuick.Dialogs 1.2
 
 ColumnLayout {
     id: resetDialog
-    width: 350
+    Keys.onTabPressed: cancelBtn.forceActiveFocus()
+    Keys.onEscapePressed: close()
 
     function reset() {
         device.fido_reset(handleReset)
@@ -37,12 +38,17 @@ The reset must be performed within 5 seconds after the YubiKey is inserted, and 
     RowLayout {
         Layout.alignment: Qt.AlignRight | Qt.AlignBottom
         Button {
+            id: cancelBtn
+            KeyNavigation.tab: resetBtn
             text: qsTr("Cancel")
+            isDefault: true
             onClicked: stack.pop({
                                      immediate: true
                                  })
         }
         Button {
+            id: resetBtn
+            KeyNavigation.tab: cancelBtn
             text: qsTr("Reset")
             onClicked: resetWarning.open()
         }
@@ -57,7 +63,7 @@ The reset must be performed within 5 seconds after the YubiKey is inserted, and 
 This will delete all FIDO credentials, including FIDO U2F credentials.
 
 This action cannot be undone!")
-        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        standardButtons: StandardButton.Yes | StandardButton.No
         onAccepted: resetDialog.reset()
     }
 

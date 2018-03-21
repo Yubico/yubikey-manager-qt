@@ -8,6 +8,8 @@ ColumnLayout {
     property bool validNewPin: newPin.text.length >= 4
                                && newPin.text == confirmPin.text
 
+    Keys.onEscapePressed: close()
+
     Label {
         text: hasPin ? qsTr("Change PIN") : qsTr("Set a PIN")
         font.bold: true
@@ -47,17 +49,21 @@ ColumnLayout {
             id: confirmPin
             echoMode: TextInput.Password
             Layout.fillWidth: true
+            KeyNavigation.tab: cancelBtn
         }
     }
     RowLayout {
         Layout.alignment: Qt.AlignRight
         Button {
+            id: cancelBtn
             text: qsTr("Cancel")
             onClicked: stack.pop({
                                      immediate: true
                                  })
         }
         Button {
+            id: setPinBtn
+            KeyNavigation.tab: hasPin ? currentPin : newPin
             text: qsTr("Set PIN")
             enabled: validNewPin
             onClicked: updatePin()
