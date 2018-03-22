@@ -28,16 +28,6 @@ ApplicationWindow {
                                            + (margins * 2)) : 0
     }
 
-    function handleDeviceChange(hasDevice) {
-        if (hasDevice) {
-            mainStack.clear()
-            mainStack.push(deviceInfo)
-        } else {
-            mainStack.clear()
-            mainStack.push(message)
-        }
-    }
-
     menuBar: MainMenuBar {
     }
 
@@ -54,7 +44,7 @@ ApplicationWindow {
     YubiKey {
         id: yk
         onError: console.log(traceback)
-        onHasDeviceChanged: handleDeviceChange(hasDevice)
+        onHasDeviceChanged: mainStack.handleDeviceChange()
     }
 
     Timer {
@@ -62,8 +52,7 @@ ApplicationWindow {
         triggeredOnStart: true
         interval: 500
         repeat: true
-        running: !slotDialog.visible && !connectionsDialog.visible
-                 && !pivManager.visible
+        running: true
         onTriggered: yk.refresh()
     }
     ColumnLayout {
@@ -75,12 +64,21 @@ ApplicationWindow {
         }
         StackView {
             id: mainStack
+            property bool frozen: fidoDialog.visible || slotDialog.visible
+                                  || pivManager.visible
+                                  || connectionsDialog.visible
             Layout.fillWidth: true
             Layout.fillHeight: true
             initialItem: message
             onCurrentItemChanged: {
                 if (currentItem) {
                     currentItem.forceActiveFocus()
+                }
+            }
+            function handleDeviceChange() {
+                if (!frozen) {
+                    clear()
+                    push(yk.hasDevice ? deviceInfo : message)
                 }
             }
         }

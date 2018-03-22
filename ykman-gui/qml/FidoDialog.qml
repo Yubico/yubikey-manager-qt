@@ -10,8 +10,6 @@ DefaultDialog {
     minimumWidth: calcWidth()
     width: minimumWidth
 
-    onVisibilityChanged: timer.running = !visible
-
     property var device
     property bool hasPin
     property int pinRetries

@@ -7,12 +7,9 @@ ColumnLayout {
     id: resetDialog
     Keys.onTabPressed: cancelBtn.forceActiveFocus()
     Keys.onEscapePressed: close()
-    function reset() {
-        device.fido_reset(handleReset)
-    }
 
-    function handleReset(err) {
-        //TODO: Show touch prompt
+    function handleResetResponse(err) {
+        fidoResetTouch.close()
         if (!err) {
             fidoResetSuccess.open()
         } else {
@@ -26,7 +23,7 @@ ColumnLayout {
     }
 
     Label {
-        text: qsTr("Resetting FIDO permanently erases all FIDO credentials on the device - U2F (FIDO 1) & FIDO 2.
+        text: qsTr("Resetting FIDO permanently erases all FIDO credentials on the device - U2F & FIDO 2.
 
 The FIDO PIN is also cleared.
 
@@ -65,7 +62,7 @@ This will delete all FIDO credentials, including FIDO U2F credentials.
 
 This action cannot be undone!")
         standardButtons: StandardButton.Yes | StandardButton.No
-        onYes: resetDialog.reset()
+        onYes: reInsertPrompt.open()
     }
 
     MessageDialog {
@@ -85,8 +82,31 @@ The reset must be performed within 5 seconds after the YubiKey is inserted in th
         text: qsTr("The FIDO Module reset was successful.
 
 All FIDO credentials and the FIDO PIN were permanently deleted.")
-        standardButtons: StandardButton.Ok
+
         onAccepted: fidoDialog.load()
+    }
+
+    MessageDialog {
+        id: reInsertPrompt
+        readonly property bool hasDevice: device.hasDevice
+        property bool loadedReset
+        icon: StandardIcon.Information
+        title: qsTr("Remove and re-insert your YubiKey!")
+        text: qsTr("Remove and re-insert your YubiKey to perform the reset.")
+        standardButtons: StandardButton.NoButton
+        onHasDeviceChanged: resetOnReInsert()
+        function resetOnReInsert() {
+            if (!hasDevice) {
+                loadedReset = true
+            } else {
+                if (loadedReset) {
+                    loadedReset = false
+                    device.fido_reset(handleResetResponse)
+                    reInsertPrompt.close()
+                    fidoResetTouch.open()
+                }
+            }
+        }
     }
 
     MessageDialog {
@@ -94,5 +114,6 @@ All FIDO credentials and the FIDO PIN were permanently deleted.")
         icon: StandardIcon.Information
         title: qsTr("Touch your YubiKey!")
         text: qsTr("Touch your YubiKey to confirm the reset.")
+        standardButtons: StandardButton.NoButton
     }
 }

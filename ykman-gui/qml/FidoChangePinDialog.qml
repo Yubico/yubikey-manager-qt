@@ -11,7 +11,7 @@ ColumnLayout {
     Keys.onEscapePressed: close()
 
     Label {
-        text: hasPin ? qsTr("Change PIN") : qsTr("Set a PIN")
+        text: hasPin ? qsTr("Change FIDO 2 PIN") : qsTr("Set a FIDO 2 PIN")
         font.bold: true
     }
 
