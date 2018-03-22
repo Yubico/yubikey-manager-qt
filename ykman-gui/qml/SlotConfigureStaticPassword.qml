@@ -8,7 +8,6 @@ import "slotutils.js" as SlotUtils
 ColumnLayout {
     Keys.onTabPressed: passwordInput.forceActiveFocus()
     Keys.onEscapePressed: close()
-    width: 350
     id: confColumn
 
     property string keyboardLayout: allowNonModhex.checked ? 'US' : 'MODHEX'

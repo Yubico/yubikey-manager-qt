@@ -6,16 +6,24 @@ import QtQuick.Window 2.0
 import "slotutils.js" as SlotUtils
 
 DefaultDialog {
-
     title: qsTr("Configure YubiKey Slots")
+    minimumHeight: calcHeight()
+    height: minimumHeight
+    minimumWidth: calcWidth()
+    width: minimumWidth
     property var device
-
     property var slotsConfigured: [false, false]
     property int selectedSlot
-    minimumWidth: 350
-    width: 350
-    minimumHeight: calculated()
-    height: calculated()
+
+    function calcWidth() {
+        return stack.currentItem ? Math.max(
+                                       350,
+                                       stack.currentItem.implicitWidth + (margins * 2)) : 0
+    }
+
+    function calcHeight() {
+        return stack.currentItem ? stack.currentItem.implicitHeight + (margins * 2) : 0
+    }
 
     function load() {
         selectedSlot = 0
@@ -28,12 +36,6 @@ DefaultDialog {
             slotsConfigured = res
             show()
         })
-    }
-
-    function calculated() {
-        var stackItem = stack.currentItem
-        var doubleMargins = margins * 2
-        return stackItem ? stackItem.implicitHeight + doubleMargins : 0
     }
 
     function deleteSlot() {

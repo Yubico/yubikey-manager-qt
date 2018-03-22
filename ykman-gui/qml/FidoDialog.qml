@@ -5,10 +5,11 @@ import QtQuick.Dialogs 1.2
 
 DefaultDialog {
     title: qsTr("Configure FIDO")
-    minimumHeight: calculated()
-    minimumWidth: 350
-    height: calculated()
-    width: 350
+    minimumHeight: calcHeight()
+    height: minimumHeight
+    minimumWidth: calcWidth()
+    width: minimumWidth
+
     onVisibilityChanged: timer.running = !visible
 
     property var device
@@ -17,10 +18,14 @@ DefaultDialog {
     property string pinMessage
     property bool pinBlocked
 
-    function calculated() {
-        var stackItem = stack.currentItem
-        var doubleMargins = margins * 2
-        return stackItem ? stackItem.implicitHeight + doubleMargins : 0
+    function calcWidth() {
+        return stack.currentItem ? Math.max(
+                                       350,
+                                       stack.currentItem.implicitWidth + (margins * 2)) : 0
+    }
+
+    function calcHeight() {
+        return stack.currentItem ? stack.currentItem.implicitHeight + (margins * 2) : 0
     }
 
     function load() {

@@ -6,7 +6,6 @@ import QtQuick.Window 2.0
 import "slotutils.js" as SlotUtils
 
 ColumnLayout {
-    width: 350
     id: confColumn
     Keys.onTabPressed: secretKeyInput.forceActiveFocus()
     Keys.onEscapePressed: close()

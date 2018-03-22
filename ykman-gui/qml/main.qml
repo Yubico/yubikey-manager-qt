@@ -4,11 +4,39 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
-    id: root
-
-    visible: true
+    id: app
     title: qsTr("YubiKey Manager")
-    property int minimumWidth: 370
+    visible: true
+
+    minimumHeight: calcHeight()
+    height: minimumHeight
+    minimumWidth: calcWidth()
+    width: minimumWidth
+
+    property int margins: 12
+
+    function calcWidth() {
+        return mainStack.currentItem ? Math.max(
+                                           350,
+                                           mainStack.currentItem.implicitWidth + (margins * 2)) : 0
+    }
+
+    function calcHeight() {
+        return mainStack.currentItem ? Math.max(
+                                           360,
+                                           header.height + mainStack.currentItem.implicitHeight
+                                           + (margins * 2)) : 0
+    }
+
+    function handleDeviceChange(hasDevice) {
+        if (hasDevice) {
+            mainStack.clear()
+            mainStack.push(deviceInfo)
+        } else {
+            mainStack.clear()
+            mainStack.push(message)
+        }
+    }
 
     menuBar: MainMenuBar {
     }
@@ -26,6 +54,7 @@ ApplicationWindow {
     YubiKey {
         id: yk
         onError: console.log(traceback)
+        onHasDeviceChanged: handleDeviceChange(hasDevice)
     }
 
     Timer {
@@ -37,38 +66,45 @@ ApplicationWindow {
                  && !pivManager.visible
         onTriggered: yk.refresh()
     }
-
     ColumnLayout {
         spacing: 0
         anchors.fill: parent
         Layout.fillWidth: true
         Header {
+            id: header
         }
-        Loader {
-            id: loader
+        StackView {
+            id: mainStack
             Layout.fillWidth: true
             Layout.fillHeight: true
-            sourceComponent: yk.hasDevice ? deviceInfo : message
-            Layout.minimumWidth: root.minimumWidth
-            Layout.minimumHeight: item.Layout.minimumHeight
-            onItemChanged: item.forceActiveFocus()
+            initialItem: message
+            onCurrentItemChanged: {
+                if (currentItem) {
+                    currentItem.forceActiveFocus()
+                }
+            }
         }
     }
 
     Component {
         id: message
-        Text {
-            text: if (yk.nDevices == 0) {
-                      qsTr("No YubiKey detected.")
-                  } else if (yk.nDevices == 1) {
-                      qsTr("Connecting to YubiKey...")
-                  } else {
-                      qsTr("Multiple YubiKeys detected!")
-                  }
-            Layout.minimumWidth: root.minimumWidth
-            Layout.minimumHeight: 360
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+        ColumnLayout {
+            anchors.fill: parent
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Label {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                text: if (yk.nDevices == 0) {
+                          qsTr("No YubiKey detected.")
+                      } else if (yk.nDevices == 1) {
+                          qsTr("Connecting to YubiKey...")
+                      } else {
+                          qsTr("Multiple YubiKeys detected!")
+                      }
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
         }
     }
 

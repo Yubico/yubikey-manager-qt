@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 ColumnLayout {
     id: deviceInfo
     property var device
-    Layout.minimumWidth: root.minimumWidth
+    Layout.minimumWidth: app.minimumWidth
     Keys.onTabPressed: btnRepeater.itemAt(0).forceActiveFocus()
     Keys.onEscapePressed: deviceInfo.forceActiveFocus()
     ColumnLayout {

@@ -8,7 +8,6 @@ import "slotutils.js" as SlotUtils
 ColumnLayout {
     Keys.onTabPressed: secretKeyInput.forceActiveFocus()
     Keys.onEscapePressed: close()
-    width: 350
     id: confColumn
 
     Label {

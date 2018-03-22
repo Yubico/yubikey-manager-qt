@@ -8,7 +8,6 @@ import "slotutils.js" as SlotUtils
 ColumnLayout {
     Keys.onTabPressed: publicIdInput.forceActiveFocus()
     Keys.onEscapePressed: close()
-    width: 350
     id: confColumn
     Label {
         text: qsTr("Configure Yubico OTP for ") + SlotUtils.slotNameCapitalized(

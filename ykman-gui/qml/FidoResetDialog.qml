@@ -7,7 +7,6 @@ ColumnLayout {
     id: resetDialog
     Keys.onTabPressed: cancelBtn.forceActiveFocus()
     Keys.onEscapePressed: close()
-
     function reset() {
         device.fido_reset(handleReset)
     }
@@ -25,6 +24,7 @@ ColumnLayout {
         text: "Reset FIDO Module"
         font.bold: true
     }
+
     Label {
         text: qsTr("Resetting FIDO permanently erases all FIDO credentials on the device - U2F (FIDO 1) & FIDO 2.
 
@@ -32,6 +32,7 @@ The FIDO PIN is also cleared.
 
 The reset must be performed within 5 seconds after the YubiKey is inserted, and requires a touch on the YubiKey.")
         Layout.fillWidth: true
+        Layout.maximumWidth: resetDialog.width
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
 
@@ -64,7 +65,7 @@ This will delete all FIDO credentials, including FIDO U2F credentials.
 
 This action cannot be undone!")
         standardButtons: StandardButton.Yes | StandardButton.No
-        onAccepted: resetDialog.reset()
+        onYes: resetDialog.reset()
     }
 
     MessageDialog {

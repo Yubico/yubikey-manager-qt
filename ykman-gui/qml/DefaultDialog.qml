@@ -16,7 +16,6 @@ ApplicationWindow {
     default property alias content: inner_content.data
     signal accepted
     signal rejected
-    property int margins: 12
 
     ColumnLayout {
         id: outer_content
