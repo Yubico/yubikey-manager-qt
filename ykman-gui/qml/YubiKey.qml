@@ -211,6 +211,10 @@ Python {
         do_call('yubikey.controller.openpgp_get_version', [], cb)
     }
 
+    function fido_support_ctap(cb) {
+        do_call('yubikey.controller.fido_support_ctap', [], cb)
+    }
+
     function fido_has_pin(cb) {
         do_call('yubikey.controller.fido_has_pin', [], cb)
     }

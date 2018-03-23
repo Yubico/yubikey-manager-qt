@@ -44,7 +44,7 @@ ColumnLayout {
                         label: qsTr('YubiKey Slots'),
                         onConfigure: slotDialog.load
                     }, {
-                        id: 'FIDO2',
+                        id: 'U2F',
                         label: qsTr('FIDO 2'),
                         onConfigure: fidoDialog.load
                     }, {
