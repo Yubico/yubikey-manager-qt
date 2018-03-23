@@ -83,7 +83,11 @@ DefaultDialog {
 
     Component {
         id: fidoChangePinDialog
+
         FidoChangePinDialog {
+            onCanceled: stack.pop({
+                                      immediate: true
+                                  })
         }
     }
 
