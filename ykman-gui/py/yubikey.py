@@ -320,7 +320,7 @@ class Controller(object):
             return None
         except Exception as e:
             logger.error('Failed to set PIN', exc_info=e)
-            return e
+            return str(e)
 
     def fido_change_pin(self, current_pin, new_pin):
         try:
