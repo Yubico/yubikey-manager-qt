@@ -34,12 +34,14 @@ DefaultDialog {
                    })
 
         function handlePinResp(resp) {
-            hasPin = resp
-            if (hasPin) {
-                device.fido_pin_retries(handleRetriesResp)
-            } else {
-                pinMessage = qsTr("No PIN is set.")
-                show()
+            if (!resp.error) {
+                hasPin = resp.hasPin
+                if (hasPin) {
+                    device.fido_pin_retries(handleRetriesResp)
+                } else {
+                    pinMessage = qsTr("No PIN is set.")
+                    show()
+                }
             }
         }
         function handleRetriesResp(resp) {

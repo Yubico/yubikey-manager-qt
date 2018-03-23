@@ -289,9 +289,10 @@ class Controller(object):
         try:
             dev = self._descriptor.open_device(TRANSPORT.U2F)
             controller = Fido2Controller(dev.driver)
-            return controller.has_pin
+            return {'hasPin': controller.has_pin, 'error': None}
         except Exception as e:
             logger.error('Failed to read if PIN is set', exc_info=e)
+            return {'hasPin': None, 'error': str(e)}
 
     def fido_pin_retries(self):
         try:
