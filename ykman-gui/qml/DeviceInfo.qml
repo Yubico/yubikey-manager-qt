@@ -60,9 +60,6 @@ ColumnLayout {
                     }, {
                         id: 'U2F',
                         label: qsTr('U2F')
-                    }, {
-                        id: 'PIV',
-                        label: qsTr('PIV')
                     }]
 
                 Repeater {
