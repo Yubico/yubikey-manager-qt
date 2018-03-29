@@ -27,6 +27,7 @@ Depends: ${misc:Depends},
          python3-yubikey-manager (>= 0.6.0~dev),
          python3-yubikey-manager (< 0.7),
          qml-module-io-thp-pyotherside,
+         qml-module-qt-labs-folderlistmodel,
          qml-module-qtquick-controls,
          qml-module-qtquick-dialogs,
          pcscd
