@@ -24,7 +24,7 @@ environment:
       VCVARSALL: x86
 
     - platform: x64
-      QT_VERSION: 5.10\msvc2015_64
+      QT_VERSION: 5.9\msvc2015_64
       PYTHON: C:\Python36-x64
       PY_ARCH: amd64
       WIN_ARCH: win64
