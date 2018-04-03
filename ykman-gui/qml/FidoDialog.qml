@@ -55,13 +55,7 @@ DefaultDialog {
             }
             show()
         }
-        device.fido_support_ctap(function (resp) {
-            if (resp) {
-                device.fido_has_pin(handlePinResp)
-            } else {
-                fido2NotSupported.open()
-            }
-        })
+        device.fido_has_pin(handlePinResp)
     }
 
     StackView {
@@ -95,13 +89,5 @@ DefaultDialog {
         id: fidoResetDialog
         FidoResetDialog {
         }
-    }
-
-    MessageDialog {
-        id: fido2NotSupported
-        icon: StandardIcon.Critical
-        title: qsTr("Not supported!")
-        text: qsTr("FIDO 2 is not supported on this YubiKey.")
-        standardButtons: StandardButton.Ok
     }
 }

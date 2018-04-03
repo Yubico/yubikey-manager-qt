@@ -276,15 +276,6 @@ class Controller(object):
                          exc_info=e)
             return None
 
-    def fido_support_ctap(self):
-        try:
-            dev = self._descriptor.open_device(TRANSPORT.U2F)
-            Fido2Controller(dev.driver)
-            return True
-        except Exception as e:
-            logger.debug('Failed to create Fido2Controller', exc_info=e)
-            return False
-
     def fido_has_pin(self):
         try:
             dev = self._descriptor.open_device(TRANSPORT.U2F)
