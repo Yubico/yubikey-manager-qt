@@ -27,7 +27,7 @@ ColumnLayout {
             source: "../images/yubico-logo.svg"
         }
         Label {
-            text: qsTr("<a href='https://www.yubico.com/kb' style='color:#284c61;text-decoration:underline'>help</a>")
+            text: qsTr("<a href='https://www.yubico.com/kb' style='color:#284c61'>help</a>")
             textFormat: Text.RichText
             anchors.right: parent.right
             anchors.rightMargin: 12
