@@ -18,7 +18,7 @@ ColumnLayout {
     }
 
     Label {
-        text: "Reset FIDO Module"
+        text: "Reset FIDO Applications"
         font.bold: true
     }
 
@@ -56,7 +56,7 @@ The reset must be performed within 5 seconds after the YubiKey is inserted, and 
         id: resetWarning
         icon: StandardIcon.Warning
         title: qsTr("Reset FIDO 2?")
-        text: qsTr("Are you sure you want to reset the FIDO 2 functionality?
+        text: qsTr("Are you sure you want to reset the FIDO Applications?
 
 This will delete all FIDO credentials, including FIDO U2F credentials.
 
@@ -79,7 +79,7 @@ The reset must be performed within 5 seconds after the YubiKey is inserted in th
         id: fidoResetSuccess
         icon: StandardIcon.Information
         title: qsTr("Success!")
-        text: qsTr("The FIDO Module reset was successful.
+        text: qsTr("The reset of the FIDO Applications was successful.
 
 All FIDO credentials and the FIDO PIN were permanently deleted.")
 

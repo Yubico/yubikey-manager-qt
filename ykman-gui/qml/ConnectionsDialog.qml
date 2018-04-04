@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.2
 DefaultDialog {
 
     property var device
-    title: qsTr("Configure Connections")
+    title: qsTr("Configure USB Interfaces")
     minimumWidth: 500
     onAccepted: {
         var enabled = get_enabled()
@@ -25,7 +25,7 @@ DefaultDialog {
     ColumnLayout {
         anchors.fill: parent
         Label {
-            text: "Configure enabled connection protocols"
+            text: "Configure enabled USB interfaces"
             font.bold: true
         }
 
@@ -35,7 +35,7 @@ DefaultDialog {
 
             Label {
                 id: infoText
-                text: qsTr("Select the connections you want to enable for your YubiKey. After saving you need to remove and re-insert your YubiKey for the settings to take effect.")
+                text: qsTr("Select the USB interfaces you want to enable for your YubiKey. After saving you need to remove and re-insert your YubiKey for the settings to take effect.")
                 wrapMode: Text.Wrap
                 width: parent.width
             }
@@ -68,7 +68,7 @@ DefaultDialog {
             Button {
                 id: button_confirm
                 enabled: check_acceptable()
-                text: qsTr("Save connections")
+                text: qsTr("Save")
                 onClicked: {
                     accepted()
                 }
@@ -78,9 +78,9 @@ DefaultDialog {
 
     MessageDialog {
         id: ejectNow
-        title: qsTr('Connections configured')
+        title: qsTr('USB Interfaces Configured')
         icon: StandardIcon.Information
-        text: qsTr('Connections are now configured. Remove and re-insert your YubiKey.')
+        text: qsTr('USB interfaces are now configured. Remove and re-insert your YubiKey.')
         standardButtons: StandardButton.NoButton
 
         readonly property bool hasDevice: device.hasDevice
@@ -90,9 +90,9 @@ DefaultDialog {
 
     MessageDialog {
         id: modeSwitchError
-        title: qsTr('Error configuring connections')
+        title: qsTr('Error configuring USB interfaces')
         icon: StandardIcon.Critical
-        text: qsTr('Failed to configure connections. Make sure the YubiKey does not have restricted access.')
+        text: qsTr('Failed to configure USB interfaces. Make sure the YubiKey does not have restricted access.')
         standardButtons: StandardButton.Ok
     }
 

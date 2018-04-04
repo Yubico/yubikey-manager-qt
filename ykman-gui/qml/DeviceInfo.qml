@@ -31,7 +31,7 @@ ColumnLayout {
 
         GroupBox {
             id: featureBox
-            title: qsTr("Features")
+            title: qsTr("Applications")
             Layout.fillWidth: true
             Layout.fillHeight: true
             GridLayout {
@@ -111,7 +111,7 @@ ColumnLayout {
 
         GroupBox {
             id: connectionsBox
-            title: qsTr("Connections")
+            title: qsTr("USB Interfaces")
             Layout.fillWidth: true
             Layout.fillHeight: true
             GridLayout {

@@ -31,7 +31,7 @@ ColumnLayout {
 
     GroupBox {
         Layout.fillWidth: true
-        title: qsTr("Reset FIDO Module")
+        title: qsTr("Reset FIDO Applications")
         ColumnLayout {
             anchors.fill: parent
             Label {

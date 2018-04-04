@@ -42,7 +42,7 @@ ChangeCode {
         id: fidoPinConfirmation
         icon: StandardIcon.Information
         title: qsTr("A new PIN has been set!")
-        text: qsTr("Setting a PIN for the FIDO 2 Module was successful.")
+        text: qsTr("Setting a PIN for the FIDO 2 Application was successful.")
         standardButtons: StandardButton.Ok
         onAccepted: fidoDialog.load()
     }
