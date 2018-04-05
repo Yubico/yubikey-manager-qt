@@ -2,6 +2,8 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.2
 import QtQuick.Dialogs 1.2
+import QtQuick.Window 2.2
+import Qt.labs.settings 1.0
 
 ApplicationWindow {
     id: app
@@ -12,7 +14,8 @@ ApplicationWindow {
     height: minimumHeight
     minimumWidth: calcWidth()
     width: minimumWidth
-
+    Component.onDestruction: saveScreenLayout()
+    Component.onCompleted: ensureValidWindowPosition()
     property int margins: 12
 
     function calcWidth() {
@@ -26,6 +29,31 @@ ApplicationWindow {
                                            360,
                                            header.height + mainStack.currentItem.implicitHeight
                                            + (margins * 2)) : 0
+    }
+
+    function ensureValidWindowPosition() {
+        // If we have the same desktop dimensions as last time, use the saved position.
+        // If not, put the window in the middle of the screen.
+        var savedScreenLayout = (settings.desktopAvailableWidth === Screen.desktopAvailableWidth)
+                && (settings.desktopAvailableHeight === Screen.desktopAvailableHeight)
+        app.x = (savedScreenLayout) ? settings.x : Screen.width / 2 - app.width / 2
+        app.y = (savedScreenLayout) ? settings.y : Screen.height / 2 - app.height / 2
+    }
+
+    function saveScreenLayout() {
+        settings.desktopAvailableWidth = Screen.desktopAvailableWidth
+        settings.desktopAvailableHeight = Screen.desktopAvailableHeight
+    }
+
+    Settings {
+        id: settings
+        // Keep track of window and desktop dimensions.
+        property alias width: app.width
+        property alias height: app.height
+        property alias x: app.x
+        property alias y: app.y
+        property var desktopAvailableWidth
+        property var desktopAvailableHeight
     }
 
     menuBar: MainMenuBar {
