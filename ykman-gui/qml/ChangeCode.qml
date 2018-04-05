@@ -104,7 +104,7 @@ ColumnLayout {
     }
 
     function valid(currentPin, newPin, repeatPin) {
-        return (hasPin ? validPinLength(currentPin.length) : true)
+        return (hasCode ? validPinLength(currentPin.length) : true)
                 && validPinLength(newPin.length) && validPinRepetition(
                     newPin, repeatPin)
     }
