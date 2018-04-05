@@ -19,7 +19,7 @@ ColumnLayout {
     signal codeChanged(string currentCode, string newCode)
 
     onAccepted: {
-        if (valid(newInput.text, repeatInput.text)) {
+        if (valid(currentInput.text, newInput.text, repeatInput.text)) {
             codeChanged(currentInput.text, newInput.text)
             reset()
         }
@@ -54,7 +54,6 @@ ColumnLayout {
             Layout.fillWidth: true
             visible: hasCode
             echoMode: TextInput.Password
-            maximumLength: maxLength
             focus: true
         }
 
@@ -72,7 +71,6 @@ ColumnLayout {
             id: newInput
             Layout.fillWidth: true
             echoMode: TextInput.Password
-            maximumLength: maxLength
         }
 
         Label {
@@ -86,7 +84,6 @@ ColumnLayout {
             id: repeatInput
             Layout.fillWidth: true
             echoMode: TextInput.Password
-            maximumLength: maxLength
             KeyNavigation.tab: cancelBtn
         }
     }
@@ -104,20 +101,22 @@ ColumnLayout {
             KeyNavigation.tab: hasCode ? currentInput : newInput
             text: acceptBtnName
             onClicked: accepted()
-            enabled: valid(newInput.text, repeatInput.text)
+            enabled: valid(currentInput.text, newInput.text, repeatInput.text)
         }
     }
 
-    function validPinLength(newPin) {
-        return newPin.length >= minLength && newPin.length <= maxLength
+    function validPinLength(pinLength) {
+        return pinLength >= minLength && pinLength <= maxLength
     }
 
     function validPinRepetition(newPin, repeatPin) {
         return newPin === repeatPin
     }
 
-    function valid(newPin, repeatPin) {
-        return validPinLength(newPin) && validPinRepetition(newPin, repeatPin)
+    function valid(currentPin, newPin, repeatPin) {
+        return (hasPin ? validPinLength(currentPin.length) : true)
+                && validPinLength(newPin.length) && validPinRepetition(
+                    newPin, repeatPin)
     }
 
     Shortcut {
