@@ -21,17 +21,7 @@ ColumnLayout {
     onAccepted: {
         if (valid(currentInput.text, newInput.text, repeatInput.text)) {
             codeChanged(currentInput.text, newInput.text)
-            reset()
         }
-    }
-    onCanceled: reset()
-    Component.onCompleted: reset()
-
-    function reset() {
-        currentInput.focus = true
-        currentInput.text = ''
-        newInput.text = ''
-        repeatInput.text = ''
     }
 
     Label {
