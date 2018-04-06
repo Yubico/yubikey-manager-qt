@@ -66,7 +66,6 @@ ApplicationWindow {
             id: mainStack
             property bool frozen: fidoDialog.visible || slotDialog.visible
                                   || pivManager.visible
-                                  || connectionsDialog.visible
             Layout.fillWidth: true
             Layout.fillHeight: true
             initialItem: message
@@ -76,6 +75,7 @@ ApplicationWindow {
                 }
             }
             function handleDeviceChange() {
+                connectionsDialog.close()
                 if (!frozen) {
                     clear()
                     push(yk.hasDevice ? deviceInfo : message)
