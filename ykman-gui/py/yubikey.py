@@ -15,7 +15,7 @@ from base64 import b32decode
 from binascii import b2a_hex, a2b_hex, Error
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
-from fido_host.hid import CtapError
+from fido2.ctap import CtapError
 
 from ykman.descriptor import get_descriptors
 from ykman.driver import ModeSwitchError
