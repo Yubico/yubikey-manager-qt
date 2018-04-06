@@ -48,6 +48,9 @@ ColumnLayout {
                         label: qsTr('FIDO 2'),
                         onConfigure: fidoDialog.load
                     }, {
+                        id: 'U2F',
+                        label: qsTr('FIDO U2F')
+                    }, {
                         id: 'PIV',
                         label: qsTr('PIV'),
                         onConfigure: featureFlag_pivManager ? pivManager.start : undefined
@@ -57,9 +60,6 @@ ColumnLayout {
                     }, {
                         id: 'OPGP',
                         label: qsTr('OpenPGP')
-                    }, {
-                        id: 'U2F',
-                        label: qsTr('U2F')
                     }]
 
                 Repeater {
