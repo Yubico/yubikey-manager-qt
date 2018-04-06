@@ -39,6 +39,7 @@ DefaultDialog {
                 if (hasPin) {
                     device.fido_pin_retries(handleRetriesResp)
                 } else {
+                    pinBlocked = false
                     pinMessage = qsTr("No PIN is set.")
                     show()
                 }
