@@ -20,7 +20,7 @@ environment:
       PY_ARCH: win32
       WIN_ARCH: win32
       LIBUSB_DLL_FOLDER: MS32
-      VCVARSALLPATH: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+      VCVARSALLPATH: C:\"Program Files (x86)\Microsoft Visual Studio 14.0"\VC\vcvarsall.bat
       VCVARSALL: x86
 
     - platform: x64
@@ -30,7 +30,7 @@ environment:
       PY_ARCH: amd64
       WIN_ARCH: win64
       LIBUSB_DLL_FOLDER: MS64
-      VCVARSALLPATH: "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
+      VCVARSALLPATH: C:\"Program Files (x86)\Microsoft Visual Studio"\2017\Community\VC\Auxiliary\Build\vcvarsall.bat
       VCVARSALL: x64
 
 init:
