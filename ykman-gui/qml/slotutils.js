@@ -1,15 +1,15 @@
 function slotName(slotNumber) {
     if (slotNumber === 1)
-        return "short press"
+        return "short touch"
     if (slotNumber === 2)
-        return "long press"
+        return "long touch"
 }
 
-function slotNameCapitalized(slotNumber){
+function slotNameCapitalized(slotNumber) {
     if (slotNumber === 1)
-        return "Short Press (Slot 1)"
+        return "Short Touch (Slot 1)"
     if (slotNumber === 2)
-        return "Long Press (Slot 2)"
+        return "Long Touch (Slot 2)"
 }
 
 function configuredTxt(configured) {
@@ -17,5 +17,5 @@ function configuredTxt(configured) {
 }
 
 function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    return string.charAt(0).toUpperCase() + string.slice(1)
 }

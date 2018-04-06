@@ -41,7 +41,7 @@ ColumnLayout {
                 anchors.left: parent.left
                 property var features: [{
                         id: 'OTP',
-                        label: qsTr('YubiKey Slots'),
+                        label: qsTr('OTP'),
                         onConfigure: slotDialog.load
                     }, {
                         id: 'FIDO2',

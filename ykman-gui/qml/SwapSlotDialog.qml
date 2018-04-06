@@ -4,7 +4,7 @@ import QtQuick.Dialogs 1.2
 MessageDialog {
     icon: StandardIcon.Warning
     title: qsTr("Swap credentials between slots")
-    text: qsTr("Do you want to swap the credentials between the short press and the long press slot?")
+    text: qsTr("Do you want to swap the credentials between Short Touch (Slot 1) and Long Touch (Slot 2)?")
     standardButtons: StandardButton.Yes | StandardButton.No
     onYes: {
         device.swap_slots(function (error) {

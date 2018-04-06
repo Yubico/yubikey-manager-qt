@@ -6,7 +6,7 @@ import QtQuick.Window 2.0
 import "slotutils.js" as SlotUtils
 
 DefaultDialog {
-    title: qsTr("Configure YubiKey Slots")
+    title: qsTr("Configure OTP Application")
     minimumHeight: calcHeight()
     height: minimumHeight
     minimumWidth: calcWidth()
@@ -105,7 +105,7 @@ DefaultDialog {
         id: confirmSwapped
         icon: StandardIcon.Information
         title: qsTr("Slot credentials swapped")
-        text: qsTr("The credentials in the short press and the long press slot have now been swapped.")
+        text: qsTr("The credentials in the Short Touch (Slot 1) and Long Touch (Slot 2) have now been swapped.")
         standardButtons: StandardButton.Ok
         onAccepted: slotDialog.load()
     }

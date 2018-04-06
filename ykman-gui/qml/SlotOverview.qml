@@ -9,11 +9,11 @@ ColumnLayout {
     Keys.onEscapePressed: close()
     GroupBox {
         Layout.fillWidth: true
-        title: qsTr("Short Press (Slot 1)")
+        title: qsTr("Short Touch (Slot 1)")
         ColumnLayout {
             anchors.fill: parent
             Label {
-                text: qsTr("The Short Press slot is currently ")
+                text: qsTr("The Short Touch slot is currently ")
                       + (slotsConfigured[0] ? qsTr("configured.") : qsTr(
                                                   "empty."))
             }
@@ -49,11 +49,11 @@ ColumnLayout {
     }
     GroupBox {
         Layout.fillWidth: true
-        title: qsTr("Long Press (Slot 2)")
+        title: qsTr("Long Touch (Slot 2)")
         ColumnLayout {
             anchors.fill: parent
             Label {
-                text: qsTr("The Long Press slot is currently ")
+                text: qsTr("The Long Touch slot is currently ")
                       + (slotsConfigured[1] ? qsTr("configured.") : qsTr(
                                                   "empty."))
             }
