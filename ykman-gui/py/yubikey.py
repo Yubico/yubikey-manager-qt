@@ -278,7 +278,7 @@ class Controller(object):
 
     def fido_has_pin(self):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.U2F)
+            dev = self._descriptor.open_device(TRANSPORT.FIDO)
             controller = Fido2Controller(dev.driver)
             return {'hasPin': controller.has_pin, 'error': None}
         except Exception as e:
@@ -287,7 +287,7 @@ class Controller(object):
 
     def fido_pin_retries(self):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.U2F)
+            dev = self._descriptor.open_device(TRANSPORT.FIDO)
             controller = Fido2Controller(dev.driver)
             return {'retries': controller.get_pin_retries(), 'error': None}
         except CtapError as e:
@@ -305,7 +305,7 @@ class Controller(object):
     def fido_set_pin(self, new_pin):
         try:
             logger.debug(self._descriptor)
-            dev = self._descriptor.open_device(TRANSPORT.U2F)
+            dev = self._descriptor.open_device(TRANSPORT.FIDO)
             controller = Fido2Controller(dev.driver)
             controller.set_pin(new_pin)
             return None
@@ -315,7 +315,7 @@ class Controller(object):
 
     def fido_change_pin(self, current_pin, new_pin):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.U2F)
+            dev = self._descriptor.open_device(TRANSPORT.FIDO)
             controller = Fido2Controller(dev.driver)
             controller.change_pin(old_pin=current_pin, new_pin=new_pin)
             return None
@@ -330,7 +330,7 @@ class Controller(object):
 
     def fido_reset(self):
         try:
-            dev = self._descriptor.open_device(TRANSPORT.U2F)
+            dev = self._descriptor.open_device(TRANSPORT.FIDO)
             controller = Fido2Controller(dev.driver)
             controller.reset()
             return None
