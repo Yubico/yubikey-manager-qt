@@ -132,8 +132,9 @@ ColumnLayout {
                 }
 
                 Label {
-                    text: readable_list(device.enabled.filter(function (e) {
-                        return device.connections.indexOf(e) >= 0
+                    text: readable_list(device.connections.filter(function (c) {
+                        return device.enabled.indexOf(c) >= 0 || c === 'FIDO'
+                                && device.enabled.indexOf('U2F') >= 0
                     }))
                 }
                 Button {

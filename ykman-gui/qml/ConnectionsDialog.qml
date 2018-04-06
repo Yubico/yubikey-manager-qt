@@ -52,6 +52,8 @@ DefaultDialog {
                     Layout.fillWidth: true
                     text: modelData
                     checked: device.enabled.indexOf(modelData) >= 0
+                             || modelData === 'FIDO' && device.enabled.indexOf(
+                                 'U2F') >= 0
                 }
             }
         }
