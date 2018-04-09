@@ -8,9 +8,9 @@ ColumnLayout {
     Keys.onTabPressed: cancelBtn.forceActiveFocus()
     Keys.onEscapePressed: close()
 
-    function handleResetResponse(err) {
+    function handleResetResponse(resp) {
         fidoResetTouch.close()
-        if (!err) {
+        if (resp.success) {
             fidoResetSuccess.open()
         } else {
             fidoResetError.open()
@@ -69,9 +69,9 @@ This action cannot be undone!")
         id: fidoResetError
         icon: StandardIcon.Critical
         title: qsTr("Error!")
-        text: qsTr("Resetting the FIDO Module failed.
+        text: qsTr("Resetting the FIDO Applications failed.
 
-The reset must be performed within 5 seconds after the YubiKey is inserted in the USB port.")
+You must confirm the reset by touching your YubiKey.")
         standardButtons: StandardButton.Ok
     }
 
@@ -82,7 +82,6 @@ The reset must be performed within 5 seconds after the YubiKey is inserted in th
         text: qsTr("The reset of the FIDO Applications was successful.
 
 All FIDO credentials and the FIDO PIN were permanently deleted.")
-
         onAccepted: fidoDialog.load()
     }
 

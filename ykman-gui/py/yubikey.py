@@ -333,15 +333,18 @@ class Controller(object):
             dev = self._descriptor.open_device(TRANSPORT.FIDO)
             controller = Fido2Controller(dev.driver)
             controller.reset()
-            return None
+            return {'success': True, 'error': None}
         except CtapError as e:
             if e.code == CtapError.ERR.NOT_ALLOWED:
-                return 'Failed to reset the YubiKey. The reset command' \
-                    ' must be triggered immediately after the ' \
-                    'YubiKey is inserted.'
+                return {'success': False, 'error': 'Not allowed'}
+            if e.code == CtapError.ERR.ACTION_TIMEOUT:
+                return {'success': False, 'error': 'Touch timeout'}
+            else:
+                logger.error('Reset throwed an exception', exc_info=e)
+                return {'success': False, 'error': str(e)}
         except Exception as e:
             logger.error('Reset throwed an exception', exc_info=e)
-            return 'An error occured.'
+            return {'success': False, 'error': str(e)}
 
     def piv_reset(self):
         try:
