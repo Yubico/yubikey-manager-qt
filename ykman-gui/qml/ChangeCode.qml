@@ -24,6 +24,10 @@ ColumnLayout {
         }
     }
 
+    onActiveFocusChanged: {
+        hasCode ? currentInput.forceActiveFocus() : newInput.forceActiveFocus()
+    }
+
     Label {
         visible: headerText !== ''
         text: headerText
@@ -44,7 +48,6 @@ ColumnLayout {
             Layout.fillWidth: true
             visible: hasCode
             echoMode: TextInput.Password
-            focus: true
         }
 
         Label {
