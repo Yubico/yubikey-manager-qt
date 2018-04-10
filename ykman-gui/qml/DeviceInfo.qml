@@ -24,7 +24,8 @@ ColumnLayout {
                     text: qsTr("Firmware: ") + device.version
                 }
                 Label {
-                    text: qsTr("Serial: ") + (device.serial ? device.serial : 'Unknown')
+                    visible: device.serial
+                    text: qsTr("Serial: ") + device.serial
                 }
             }
         }
