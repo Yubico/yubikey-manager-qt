@@ -72,7 +72,7 @@ ApplicationWindow {
     YubiKey {
         id: yk
         onError: console.log(traceback)
-        onHasDeviceChanged: mainStack.handleDeviceChange()
+        onHasDeviceChanged: mainStack.update()
     }
 
     Timer {
@@ -102,7 +102,13 @@ ApplicationWindow {
                     currentItem.forceActiveFocus()
                 }
             }
-            function handleDeviceChange() {
+            onFrozenChanged: {
+                if (!frozen) {
+                    update()
+                }
+            }
+
+            function update() {
                 connectionsDialog.close()
                 if (!frozen) {
                     clear()
