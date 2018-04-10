@@ -6,7 +6,7 @@ NOTE: This project is in BETA. Any part of the application may change before
 the next release, and some functionality and documentation is missing at this
 point.
 
-Cross-platform application for configuring any YubiKey over all USB transports.
+Cross-platform application for configuring any YubiKey over all USB interfaces.
 
 image::screenshot.png[]
 
@@ -16,10 +16,12 @@ This application provides an easy way to perform the most common configuration t
 The current version can:
 
 * Display the serial number and firmware version of a YubiKey.
-* Configure YubiKey Slots. A YubiKey have two slots (short press and long press), which may both be configured for different functionality. 
+* Configure a FIDO2 PIN.
+* Reset FIDO Applications.
+* Configure OTP Application. A YubiKey have two slots (Short Touch and Long Touch), which may both be configured for different functionality.
 This tool can configure a https://developers.yubico.com/OTP/[Yubico OTP] credential, a static password, a challenge-response credential or an https://developers.yubico.com/OATH/[OATH] HOTP credential in both of these slots.
-* Swap the functionality between two configured YubiKey slots.
-* Enable or disable the different USB connections (USB modes).
+* Swap the credentials between two configured slots.
+* Enable or disable the different USB interfaces.
 
 === Installation
 

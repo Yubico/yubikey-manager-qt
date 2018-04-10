@@ -1,4 +1,12 @@
-* Version 0.4.0
+* Version 0.5.0 (unreleased)
+ ** Support for configuring YubiKeys with FIDO2.
+ ** OTP: Configuring HOTP now correctly supports 8 or 6 characters.
+ ** Static password: Any character can now be used in a static password.
+ ** UI: New header with help-link added.
+ ** New icon.
+ ** Windows: 64-bit version added.
+
+* Version 0.4.0 (released 2017-12-15)
  ** Update CLI version to ykman 0.5.0
  ** Now requires ykman version >= 0.5.0
  ** Features:
