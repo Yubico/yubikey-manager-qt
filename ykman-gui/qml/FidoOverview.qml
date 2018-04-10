@@ -9,7 +9,7 @@ ColumnLayout {
     Keys.onEscapePressed: close()
     GroupBox {
         Layout.fillWidth: true
-        title: qsTr("FIDO 2 PIN Management")
+        title: qsTr("FIDO2 PIN Management")
         RowLayout {
             anchors.fill: parent
             Label {
@@ -36,8 +36,8 @@ ColumnLayout {
             anchors.fill: parent
             Label {
                 text: qsTr("• Delete all FIDO U2F Credentials.
-• Delete all FIDO 2 Credentials.
-• Delete FIDO 2 PIN.")
+• Delete all FIDO2 Credentials.
+• Delete FIDO2 PIN.")
             }
             Button {
                 id: resetBtn

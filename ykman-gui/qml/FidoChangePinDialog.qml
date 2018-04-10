@@ -9,7 +9,7 @@ ChangeCode {
     maxLength: 255
     showRequirements: false
     acceptBtnName: qsTr('Set PIN')
-    headerText: hasPin ? qsTr("Change FIDO 2 PIN") : qsTr("Set a FIDO 2 PIN")
+    headerText: hasPin ? qsTr("Change FIDO2 PIN") : qsTr("Set a FIDO2 PIN")
     Keys.onEscapePressed: close()
     onCodeChanged: {
         var _currentPin = currentCode || null
@@ -42,7 +42,7 @@ ChangeCode {
         id: fidoPinConfirmation
         icon: StandardIcon.Information
         title: qsTr("A new PIN has been set!")
-        text: qsTr("Setting a PIN for the FIDO 2 Application was successful.")
+        text: qsTr("Setting a PIN for the FIDO2 Application was successful.")
         standardButtons: StandardButton.Ok
         onAccepted: fidoDialog.load()
     }

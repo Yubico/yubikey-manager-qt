@@ -23,7 +23,7 @@ ColumnLayout {
     }
 
     Label {
-        text: qsTr("Resetting FIDO permanently erases all FIDO credentials on the device - U2F & FIDO 2.
+        text: qsTr("Resetting FIDO permanently erases all FIDO credentials on the device - U2F & FIDO2.
 
 The FIDO PIN is also cleared.
 
@@ -55,7 +55,7 @@ The reset must be performed within 5 seconds after the YubiKey is inserted, and 
     MessageDialog {
         id: resetWarning
         icon: StandardIcon.Warning
-        title: qsTr("Reset FIDO 2?")
+        title: qsTr("Reset FIDO2?")
         text: qsTr("Are you sure you want to reset the FIDO Applications?
 
 This will delete all FIDO credentials, including FIDO U2F credentials.

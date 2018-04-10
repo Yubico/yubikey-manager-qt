@@ -13,7 +13,6 @@ ColumnLayout {
     property int minLength: 6
     property bool hasCode: true
     property string headerText: ''
-
     signal accepted
     signal canceled
     signal codeChanged(string currentCode, string newCode)

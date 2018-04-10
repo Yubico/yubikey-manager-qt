@@ -46,7 +46,7 @@ ColumnLayout {
                         onConfigure: slotDialog.load
                     }, {
                         id: 'FIDO2',
-                        label: qsTr('FIDO 2'),
+                        label: qsTr('FIDO2'),
                         onConfigure: fidoDialog.load
                     }, {
                         id: 'U2F',
