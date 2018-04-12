@@ -344,8 +344,6 @@ class Controller(object):
             else:
                 logger.error('Reset throwed an exception', exc_info=e)
                 return {'success': False, 'error': str(e)}
-        except OSError as e:
-            return {'success': False, 'error': 'YubiKey removed'}
         except Exception as e:
             logger.error('Reset throwed an exception', exc_info=e)
             return {'success': False, 'error': str(e)}
