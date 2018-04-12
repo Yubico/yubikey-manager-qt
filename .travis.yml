@@ -121,8 +121,8 @@ after_success:
       # Rename app bundle
       mv ykman-gui/ykman-gui.app ykman-gui/YubiKey\ Manager.app
       # Copy .app to deploy dir
-      tar -czf yubikey-manager-qt-$TRAVIS_BRANCH.app.tar ykman-gui/YubiKey\ Manager.app
-      mv yubikey-manager-qt-$TRAVIS_BRANCH.app.tar deploy
+      tar -czf yubikey-manager-qt-$TRAVIS_BRANCH.app.tar.gz -C ykman-gui YubiKey\ Manager.app
+      mv yubikey-manager-qt-$TRAVIS_BRANCH.app.tar.gz deploy
       # Test ykman-cli in .app bundle
       cp ykman-cli/test.py ykman-gui/ykman-gui.app/Contents/MacOS/
       (cd ykman-gui/ykman-gui.app/Contents/MacOS && ./test.py)
