@@ -95,7 +95,7 @@ All FIDO credentials and the FIDO PIN were permanently deleted.")
         standardButtons: StandardButton.NoButton
         onHasDeviceChanged: resetOnReInsert()
         function resetOnReInsert() {
-            if (!hasDevice) {
+            if (!hasDevice && reInsertPrompt.visible) {
                 loadedReset = true
             } else {
                 if (loadedReset) {
