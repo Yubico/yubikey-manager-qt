@@ -1,4 +1,4 @@
-* Version 0.5.0 (unreleased)
+* Version 0.5.0 (released 2018-04-12)
  ** Support for configuring YubiKeys with FIDO2.
  ** OTP: Configuring HOTP now correctly supports 8 or 6 characters.
  ** Static password: Any character can now be used in a static password.
