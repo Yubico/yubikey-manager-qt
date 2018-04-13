@@ -310,25 +310,41 @@ class Controller(object):
                 dev = self._descriptor.open_device(TRANSPORT.FIDO)
                 controller = Fido2Controller(dev.driver)
                 controller.set_pin(new_pin)
-                return None
+                return {'success': True, 'error': None}
+        except CtapError as e:
+            if e.code == CtapError.ERR.INVALID_LENGTH:
+                return {'success': False,
+                        'error': 'Too long PIN, maximum size is 128 bytes.'}
+            logger.error('Failed to set PIN', exc_info=e)
+            return {'success': False, 'error': str(e)}
         except Exception as e:
             logger.error('Failed to set PIN', exc_info=e)
-            return str(e)
+            return {'success': False, 'error': str(e)}
 
     def fido_change_pin(self, current_pin, new_pin):
         try:
             with self._open_device(TRANSPORT.FIDO) as dev:
                 controller = Fido2Controller(dev.driver)
                 controller.change_pin(old_pin=current_pin, new_pin=new_pin)
-                return None
+                return {'success': True, 'error': None}
         except CtapError as e:
+            if e.code == CtapError.ERR.INVALID_LENGTH:
+                return {'success': False,
+                        'error': 'Too long PIN, maximum size is 128 bytes.'}
             if e.code == CtapError.ERR.PIN_INVALID:
-                return 'The current PIN is wrong.'
+                return {'success': False,
+                        'error': 'The current PIN is wrong.'}
             if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
-                return 'PIN authentication is currently blocked. ' \
-                    'Remove and re-insert the YubiKey.'
+                return {'success': False,
+                        'error': 'PIN authentication is currently blocked. '
+                        'Remove and re-insert the YubiKey.'}
             if e.code == CtapError.ERR.PIN_BLOCKED:
-                return 'PIN is blocked.'
+                return {'success': False, 'error': 'PIN is blocked.'}
+            logger.error('Failed to set PIN', exc_info=e)
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            logger.error('Failed to set PIN', exc_info=e)
+            return {'success': False, 'error': str(e)}
 
     def fido_reset(self):
         try:

@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.2
 ChangeCode {
     hasCode: hasPin
     minLength: 4
-    maxLength: 255
+    maxLength: 128
     showRequirements: false
     acceptBtnName: qsTr('Set PIN')
     headerText: hasPin ? qsTr("Change FIDO2 PIN") : qsTr("Set a FIDO2 PIN")
@@ -21,11 +21,11 @@ ChangeCode {
         }
     }
 
-    function handleChangePin(err) {
-        if (!err) {
+    function handleChangePin(resp) {
+        if (resp.success) {
             fidoPinConfirmation.open()
         } else {
-            fidoSetPinError.text = err
+            fidoSetPinError.text = resp.error
             fidoSetPinError.open()
         }
     }
