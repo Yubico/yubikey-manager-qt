@@ -32,6 +32,7 @@ Depends: ${misc:Depends},
          qml-module-qtquick-controls,
          qml-module-qtquick-dialogs,
          qml-module-qt-labs-settings,
+         libqt5svg5,
          pcscd
 Recommends: yubikey-manager
 Description: Graphical application for configuring a YubiKey

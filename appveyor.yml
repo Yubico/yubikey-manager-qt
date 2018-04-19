@@ -38,7 +38,6 @@ init:
   - call %VCVARSALLPATH% %VCVARSALL%
   # Add python and Qt to PATH
   - set PATH=%PYTHON%;%PYTHON%\Scripts;C:\Qt\%QT_VERSION%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
-  - python --version
 
 install:
   - choco install swig -y
