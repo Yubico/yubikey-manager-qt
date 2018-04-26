@@ -20,6 +20,7 @@ from fido2.ctap import CtapError
 from ykman.descriptor import get_descriptors
 from ykman.driver_ccid import APDUError
 from ykman.driver_otp import YkpersError
+from ykman.otp import OtpController
 from ykman.opgp import OpgpController, KEY_SLOT
 from ykman.fido import Fido2Controller
 from ykman.piv import (ALGO, PIN_POLICY, PivController, SLOT, SW, TOUCH_POLICY)
@@ -102,8 +103,6 @@ class Controller(object):
                     'can_write_config': dev.can_write_config,
                     'piv': {},
                 }
-
-        logger.debug(self._dev_info)
         return self._dev_info
 
     def refresh_piv(self):
@@ -134,21 +133,24 @@ class Controller(object):
     def slots_status(self):
         try:
             with self._open_device(TRANSPORT.OTP) as dev:
-                return dev.driver.slot_status
+                controller = OtpController(dev.driver)
+                return controller.slot_status
         except Exception as e:
             logger.error('Failed to read slot status', exc_info=e)
 
     def erase_slot(self, slot):
         try:
             with self._open_device(TRANSPORT.OTP) as dev:
-                dev.driver.zap_slot(slot)
+                controller = OtpController(dev.driver)
+                controller.zap_slot(slot)
         except YkpersError as e:
             return e.errno
 
     def swap_slots(self):
         try:
             with self._open_device(TRANSPORT.OTP) as dev:
-                dev.driver.swap_slots()
+                controller = OtpController(dev.driver)
+                controller.swap_slots()
         except YkpersError as e:
             return e.errno
 
@@ -172,7 +174,8 @@ class Controller(object):
             public_id = modhex_decode(public_id)
             private_id = a2b_hex(private_id)
             with self._open_device(TRANSPORT.OTP) as dev:
-                dev.driver.program_otp(slot, key, public_id, private_id)
+                controller = OtpController(dev.driver)
+                controller.program_otp(slot, key, public_id, private_id)
         except YkpersError as e:
             return e.errno
 
@@ -180,14 +183,16 @@ class Controller(object):
         try:
             key = a2b_hex(key)
             with self._open_device(TRANSPORT.OTP) as dev:
-                dev.driver.program_chalresp(slot, key, touch)
+                controller = OtpController(dev.driver)
+                controller.program_chalresp(slot, key, touch)
         except YkpersError as e:
             return e.errno
 
     def program_static_password(self, slot, key, keyboard_layout):
         try:
             with self._open_device(TRANSPORT.OTP) as dev:
-                dev.driver.program_static(
+                controller = OtpController(dev.driver)
+                controller.program_static(
                     slot, key,
                     keyboard_layout=KEYBOARD_LAYOUT[keyboard_layout])
         except YkpersError as e:
@@ -198,7 +203,8 @@ class Controller(object):
             unpadded = key.upper().rstrip('=').replace(' ', '')
             key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
             with self._open_device(TRANSPORT.OTP) as dev:
-                dev.driver.program_hotp(slot, key, hotp8=(digits == 8))
+                controller = OtpController(dev.driver)
+                controller.program_hotp(slot, key, hotp8=(digits == 8))
         except Error as e:
             return str(e)
         except YkpersError as e:
