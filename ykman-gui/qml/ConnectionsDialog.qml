@@ -17,7 +17,9 @@ DefaultDialog {
                 }
             } else {
                 close()
-                ejectNow.open()
+                if (!device.canWriteConfig) {
+                    ejectNow.open()
+                }
             }
         })
     }

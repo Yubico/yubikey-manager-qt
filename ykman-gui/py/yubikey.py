@@ -100,6 +100,7 @@ class Controller(object):
                         t.name for t in TRANSPORT
                         if t & dev.config.usb_supported],
                     'usb_interfaces_enabled': str(dev.mode).split('+'),
+                    'can_write_config': dev.can_write_config,
                     'piv': {},
                 }
 

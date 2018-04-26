@@ -12,6 +12,7 @@ Python {
     property string name
     property string version
     property string serial
+    property bool canWriteConfig
     property var supportedUsbInterfaces: []
     property var enabledUsbInterfaces: []
     property var supportedUsbApplications: []
@@ -92,6 +93,7 @@ Python {
                     enabledUsbApplications = dev ? dev.usb_enabled : []
                     supportedUsbInterfaces = dev ? dev.usb_interfaces_supported : []
                     enabledUsbInterfaces = dev ? dev.usb_interfaces_enabled : []
+                    canWriteConfig = dev ? dev.can_write_config : []
                 })
             } else if (hasDevice) {
                 hasDevice = false
