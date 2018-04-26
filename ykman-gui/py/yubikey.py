@@ -26,7 +26,7 @@ from ykman.fido import Fido2Controller
 from ykman.piv import (ALGO, PIN_POLICY, PivController, SLOT, SW, TOUCH_POLICY)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
-    CAPABILITY, TRANSPORT, Mode, modhex_encode, modhex_decode,
+    APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
     generate_static_pw, parse_certificate, parse_private_key)
 
 logger = logging.getLogger(__name__)
@@ -90,15 +90,20 @@ class Controller(object):
                     'name': dev.device_name,
                     'version': '.'.join(str(x) for x in dev.version),
                     'serial': dev.serial or '',
-                    'enabled': [c.name for c in CAPABILITY if c & dev.enabled],
-                    'capabilities': [
-                        c.name for c in CAPABILITY if c & dev.capabilities],
-                    'connections': [
-                        t.name for t in TRANSPORT if t & dev.capabilities
-                    ],
+                    'usb_enabled': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.usb_enabled],
+                    'usb_supported': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.usb_supported],
+                    'usb_interfaces_supported': [
+                        t.name for t in TRANSPORT
+                        if t & dev.config.usb_supported],
+                    'usb_interfaces_enabled': str(dev.mode).split('+'),
                     'piv': {},
                 }
 
+        logger.debug(self._dev_info)
         return self._dev_info
 
     def refresh_piv(self):

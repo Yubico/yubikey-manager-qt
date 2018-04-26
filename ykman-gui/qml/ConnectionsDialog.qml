@@ -9,7 +9,7 @@ DefaultDialog {
     title: qsTr("Configure USB Interfaces")
     minimumWidth: 500
     onAccepted: {
-        var enabled = get_enabled()
+        var enabled = getEnabled()
         device.set_mode(enabled, function (error) {
             if (error) {
                 if (error === 'Failed to switch mode.') {
@@ -45,15 +45,13 @@ DefaultDialog {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
             Repeater {
-                id: connections
-                model: device.connections
+                id: checkBoxes
+                model: device.supportedUsbInterfaces
 
                 CheckBox {
                     Layout.fillWidth: true
                     text: modelData
-                    checked: device.enabled.indexOf(modelData) >= 0
-                             || modelData === 'FIDO' && device.enabled.indexOf(
-                                 'U2F') >= 0
+                    checked: device.enabledUsbInterfaces.indexOf(modelData) >= 0
                 }
             }
         }
@@ -68,8 +66,7 @@ DefaultDialog {
                 }
             }
             Button {
-                id: button_confirm
-                enabled: check_acceptable()
+                enabled: isAcceptable()
                 text: qsTr("Save")
                 onClicked: {
                     accepted()
@@ -98,20 +95,20 @@ DefaultDialog {
         standardButtons: StandardButton.Ok
     }
 
-    function get_enabled() {
+    function getEnabled() {
         var enabled = []
-        for (var i = 0; i < device.connections.length; i++) {
-            var connection_checkbox = connections.itemAt(i)
-            if (connection_checkbox.checked) {
-                enabled.push(connection_checkbox.text)
+        for (var i = 0; i < device.supportedUsbInterfaces.length; i++) {
+            var checkBox = checkBoxes.itemAt(i)
+            if (checkBox.checked) {
+                enabled.push(checkBox.text)
             }
         }
         return enabled
     }
 
-    function check_acceptable() {
-        for (var i = 0; i < connections.count; i++) {
-            var item = connections.itemAt(i)
+    function isAcceptable() {
+        for (var i = 0; i < checkBoxes.count; i++) {
+            var item = checkBoxes.itemAt(i)
             if (item) {
                 if (item.checked) {
                     return true

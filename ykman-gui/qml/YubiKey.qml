@@ -12,9 +12,10 @@ Python {
     property string name
     property string version
     property string serial
-    property var connections: []
-    property var capabilities: []
-    property var enabled: []
+    property var supportedUsbInterfaces: []
+    property var enabledUsbInterfaces: []
+    property var supportedUsbApplications: []
+    property var enabledUsbApplications: []
     property bool yubikeyModuleLoaded: false
     property bool yubikeyReady: false
     property var queue: []
@@ -87,9 +88,10 @@ Python {
                     name = dev ? dev.name : ''
                     version = dev ? dev.version : ''
                     serial = dev ? dev.serial : ''
-                    capabilities = dev ? dev.capabilities : []
-                    enabled = dev ? dev.enabled : []
-                    connections = dev ? dev.connections : []
+                    supportedUsbApplications = dev ? dev.usb_supported : []
+                    enabledUsbApplications = dev ? dev.usb_enabled : []
+                    supportedUsbInterfaces = dev ? dev.usb_interfaces_supported : []
+                    enabledUsbInterfaces = dev ? dev.usb_interfaces_enabled : []
                 })
             } else if (hasDevice) {
                 hasDevice = false

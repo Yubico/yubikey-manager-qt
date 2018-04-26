@@ -77,8 +77,8 @@ ColumnLayout {
                     Label {
                         Layout.column: 1
                         Layout.row: index
-                        text: (isCapable(
-                                   modelData.id) ? isEnabled(
+                        text: (isApplicationSupported(
+                                   modelData.id) ? isApplicationEnabled(
                                                        modelData.id) ? qsTr("Enabled") : qsTr(
                                                                            "Disabled") : qsTr(
                                                                            "Not available"))
@@ -93,7 +93,7 @@ ColumnLayout {
                         Layout.row: index
                         Layout.alignment: Qt.AlignRight
                         text: qsTr("Configure...")
-                        enabled: isEnabled(modelData.id)
+                        enabled: isApplicationEnabled(modelData.id)
                         visible: parent.features[index].onConfigure !== undefined
                         focus: true
                         Keys.onTabPressed: {
@@ -124,7 +124,7 @@ ColumnLayout {
                 }
 
                 Label {
-                    text: readable_list(device.connections)
+                    text: readable_list(device.supportedUsbInterfaces)
                     Layout.columnSpan: 2
                 }
 
@@ -133,27 +133,24 @@ ColumnLayout {
                 }
 
                 Label {
-                    text: readable_list(device.connections.filter(function (c) {
-                        return device.enabled.indexOf(c) >= 0 || c === 'FIDO'
-                                && device.enabled.indexOf('U2F') >= 0
-                    }))
+                    text: readable_list(device.enabledUsbInterfaces)
                 }
                 Button {
                     id: connectionsBtn
                     text: qsTr("Configure...")
                     Layout.alignment: Qt.AlignRight
-                    enabled: device.connections.length > 1
+                    enabled: device.supportedUsbInterfaces.length > 1
                     onClicked: connectionsDialog.show()
                 }
             }
         }
     }
-    function isEnabled(feature) {
-        return device.enabled.indexOf(feature) !== -1
+    function isApplicationEnabled(feature) {
+        return device.enabledUsbApplications.indexOf(feature) !== -1
     }
 
-    function isCapable(feature) {
-        return device.capabilities.indexOf(feature) !== -1
+    function isApplicationSupported(feature) {
+        return device.supportedUsbApplications.indexOf(feature) !== -1
     }
 
     function readable_list(args) {
