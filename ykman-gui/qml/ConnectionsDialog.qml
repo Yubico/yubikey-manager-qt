@@ -12,7 +12,7 @@ DefaultDialog {
         var enabled = getEnabled()
         device.set_mode(enabled, function (error) {
             if (error) {
-                if (error === 'Failed to switch mode.') {
+                if (error) {
                     modeSwitchError.open()
                 }
             } else {
@@ -37,7 +37,8 @@ DefaultDialog {
 
             Label {
                 id: infoText
-                text: qsTr("Select the USB interfaces you want to enable for your YubiKey. After saving you need to remove and re-insert your YubiKey for the settings to take effect.")
+                text: qsTr("Select the USB interfaces you want to enable for your YubiKey.")
+                      + (!device.canWriteConfig ? " After saving you need to remove and re-insert your YubiKey for the settings to take effect." : "")
                 wrapMode: Text.Wrap
                 width: parent.width
             }

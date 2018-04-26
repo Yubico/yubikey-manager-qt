@@ -18,7 +18,6 @@ from cryptography.hazmat.primitives import serialization
 from fido2.ctap import CtapError
 
 from ykman.descriptor import get_descriptors
-from ykman.driver import ModeSwitchError
 from ykman.driver_ccid import APDUError
 from ykman.driver_otp import YkpersError
 from ykman.opgp import OpgpController, KEY_SLOT
@@ -123,17 +122,13 @@ class Controller(object):
                 'supports_pin_policies': piv_controller.supports_pin_policies,  # noqa: E501
             }
 
-    def set_mode(self, connections):
-        logger.debug('connections: %s', connections)
-
+    def set_mode(self, interfaces):
         with self._open_device() as dev:
-            logger.debug('dev: %s', dev)
-
             try:
-                transports = sum([TRANSPORT[c] for c in connections])
+                transports = sum([TRANSPORT[i] for i in interfaces])
                 dev.mode = Mode(transports & TRANSPORT.usb_transports())
-            except ModeSwitchError as e:
-                logger.error('Failed to set modes', exc_info=e)
+            except Exception as e:
+                logger.error('Failed to set mode', exc_info=e)
                 return str(e)
 
     def slots_status(self):
