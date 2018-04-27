@@ -31,8 +31,6 @@ DefaultDialog {
                 close()
                 if (!device.canWriteConfig) {
                     ejectNow.open()
-                } else {
-                    success.open()
                 }
             }
         })
@@ -130,14 +128,6 @@ DefaultDialog {
         title: qsTr('Error configuring USB interfaces')
         icon: StandardIcon.Critical
         text: qsTr('Failed to configure USB interfaces. Make sure the YubiKey does not have restricted access.')
-        standardButtons: StandardButton.Ok
-    }
-
-    MessageDialog {
-        id: success
-        title: qsTr('USB Interfaces Configured')
-        icon: StandardIcon.Information
-        text: qsTr('USB interfaces are now configured.')
         standardButtons: StandardButton.Ok
     }
 }

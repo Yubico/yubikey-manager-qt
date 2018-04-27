@@ -94,6 +94,7 @@ ApplicationWindow {
             id: mainStack
             property bool frozen: fidoDialog.visible || slotDialog.visible
                                   || pivManager.visible
+
             Layout.fillWidth: true
             Layout.fillHeight: true
             initialItem: message
