@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.2
+import "utils.js" as Utils
 
 ColumnLayout {
     id: deviceInfo
@@ -146,11 +147,11 @@ ColumnLayout {
         }
     }
     function isApplicationEnabled(feature) {
-        return device.enabledUsbApplications.indexOf(feature) !== -1
+        return Utils.includes(device.enabledUsbApplications, feature)
     }
 
     function isApplicationSupported(feature) {
-        return device.supportedUsbApplications.indexOf(feature) !== -1
+        return Utils.includes(device.supportedUsbApplications, feature)
     }
 
     function readable_list(args) {
