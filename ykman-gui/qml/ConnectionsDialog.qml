@@ -2,19 +2,31 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.2
 import QtQuick.Dialogs 1.2
+import "utils.js" as Utils
 
 DefaultDialog {
 
     property var device
     title: qsTr("Configure USB Interfaces")
     minimumWidth: 500
-    onAccepted: {
-        var enabled = getEnabled()
-        device.set_mode(enabled, function (error) {
+    onAccepted: changeConnections()
+
+    function load() {
+        updateCheckBoxValues()
+        show()
+    }
+
+    function updateCheckBoxValues() {
+        for (var i = 0; i < checkBoxes.model.length; i++) {
+            checkBoxes.itemAt(i).checked = Utils.includes(
+                        device.enabledUsbInterfaces, checkBoxes.model[i])
+        }
+    }
+
+    function changeConnections() {
+        device.set_mode(getEnabledInterfaces(), function (error) {
             if (error) {
-                if (error) {
-                    modeSwitchError.open()
-                }
+                modeSwitchError.open()
             } else {
                 close()
                 if (!device.canWriteConfig) {
@@ -24,6 +36,28 @@ DefaultDialog {
                 }
             }
         })
+    }
+
+    function getEnabledInterfaces() {
+        var enabled = []
+        for (var i = 0; i < device.supportedUsbInterfaces.length; i++) {
+            if (checkBoxes.itemAt(i).checked) {
+                enabled.push(checkBoxes.itemAt(i).text)
+            }
+        }
+        return enabled
+    }
+
+    function isAnyInterfaceSelected() {
+        for (var i = 0; i < checkBoxes.count; i++) {
+            var item = checkBoxes.itemAt(i)
+            if (item) {
+                if (item.checked) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     ColumnLayout {
@@ -52,11 +86,11 @@ DefaultDialog {
             Repeater {
                 id: checkBoxes
                 model: device.supportedUsbInterfaces
-
                 CheckBox {
                     Layout.fillWidth: true
                     text: modelData
-                    checked: device.enabledUsbInterfaces.indexOf(modelData) >= 0
+                    checked: Utils.includes(device.enabledUsbInterfaces,
+                                            modelData)
                 }
             }
         }
@@ -71,11 +105,9 @@ DefaultDialog {
                 }
             }
             Button {
-                enabled: isAcceptable()
+                enabled: isAnyInterfaceSelected()
                 text: qsTr("Save")
-                onClicked: {
-                    accepted()
-                }
+                onClicked: accepted()
             }
         }
     }
@@ -88,8 +120,9 @@ DefaultDialog {
         standardButtons: StandardButton.NoButton
 
         readonly property bool hasDevice: device.hasDevice
-        onHasDeviceChanged: if (!hasDevice)
+        onHasDeviceChanged: if (!hasDevice) {
                                 ejectNow.close()
+                            }
     }
 
     MessageDialog {
@@ -106,28 +139,5 @@ DefaultDialog {
         icon: StandardIcon.Information
         text: qsTr('USB interfaces are now configured.')
         standardButtons: StandardButton.Ok
-    }
-
-    function getEnabled() {
-        var enabled = []
-        for (var i = 0; i < device.supportedUsbInterfaces.length; i++) {
-            var checkBox = checkBoxes.itemAt(i)
-            if (checkBox.checked) {
-                enabled.push(checkBox.text)
-            }
-        }
-        return enabled
-    }
-
-    function isAcceptable() {
-        for (var i = 0; i < checkBoxes.count; i++) {
-            var item = checkBoxes.itemAt(i)
-            if (item) {
-                if (item.checked) {
-                    return true
-                }
-            }
-        }
-        return false
     }
 }

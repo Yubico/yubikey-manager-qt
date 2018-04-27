@@ -140,7 +140,7 @@ ColumnLayout {
                     text: qsTr("Configure...")
                     Layout.alignment: Qt.AlignRight
                     enabled: device.supportedUsbInterfaces.length > 1
-                    onClicked: connectionsDialog.show()
+                    onClicked: connectionsDialog.load()
                 }
             }
         }
