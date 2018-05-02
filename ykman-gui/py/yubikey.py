@@ -12,7 +12,7 @@ import urllib.parse
 import ykman.logging_setup
 
 from base64 import b32decode
-from binascii import b2a_hex, a2b_hex, Error
+from binascii import b2a_hex, a2b_hex
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
 from fido2.ctap import CtapError
@@ -205,10 +205,13 @@ class Controller(object):
             with self._open_device(TRANSPORT.OTP) as dev:
                 controller = OtpController(dev.driver)
                 controller.program_hotp(slot, key, hotp8=(digits == 8))
-        except Error as e:
-            return str(e)
+            return {'success': True, 'error': None}
         except YkpersError as e:
-            return e.errno
+            if e.errno == 3:
+                return {'success': False, 'error': 'write error'}
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     def openpgp_reset(self):
         try:

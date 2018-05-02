@@ -10,6 +10,31 @@ ColumnLayout {
     Keys.onEscapePressed: close()
     id: confColumn
 
+    function finish() {
+        if (slotsConfigured[selectedSlot - 1]) {
+            warning.open()
+        } else {
+            programOathHotp()
+        }
+    }
+
+    function programOathHotp() {
+        device.program_oath_hotp(selectedSlot, secretKeyInput.text,
+                                 digits.currentText, handleResponse)
+    }
+
+    function handleResponse(resp) {
+        if (resp.success) {
+            confirmConfigured.open()
+        } else if (resp.error === 'Incorrect padding') {
+            paddingError.open()
+        } else if (resp.error === 'write error') {
+            writeError.open()
+        } else if (resp.error === 'key lengths >20 bytes not supported') {
+            toLongKeyError.open()
+        }
+    }
+
     Label {
         text: qsTr("Configure HOTP credential for ") + SlotUtils.slotNameCapitalized(
                   selectedSlot)
@@ -97,27 +122,11 @@ ColumnLayout {
         standardButtons: StandardButton.Ok
     }
 
-    function finish() {
-        if (slotsConfigured[selectedSlot - 1]) {
-            warning.open()
-        } else {
-            programOathHotp()
-        }
-    }
-
-    function programOathHotp() {
-        device.program_oath_hotp(selectedSlot, secretKeyInput.text,
-                                 digits.currentText, function (error) {
-                                     if (!error) {
-                                         confirmConfigured.open()
-                                     } else {
-                                         if (error === 'Incorrect padding') {
-                                             paddingError.open()
-                                         }
-                                         if (error === 3) {
-                                             writeError.open()
-                                         }
-                                     }
-                                 })
+    MessageDialog {
+        id: toLongKeyError
+        icon: StandardIcon.Critical
+        title: qsTr("Secret Key is too long")
+        text: qsTr("Secret key is too long.")
+        standardButtons: StandardButton.Ok
     }
 }
