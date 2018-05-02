@@ -35,3 +35,4 @@ RUN cd yubikey-manager-qt && qmake -qt=qt5 && make
 RUN cd yubikey-manager-qt && debuild -us -uc
 RUN mkdir /deb && mv /yubikey-manager-qt_* /deb
 RUN cd / && tar czf yubikey-manager-qt-debian-packages.tar.gz deb
+CMD /bin/true
