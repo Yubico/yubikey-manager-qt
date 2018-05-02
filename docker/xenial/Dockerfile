@@ -35,8 +35,3 @@ RUN cd yubikey-manager-qt && qmake -qt=qt5 && make
 RUN cd yubikey-manager-qt && debuild -us -uc
 RUN mkdir /deb && mv /yubikey-manager-qt_* /deb
 RUN cd / && tar czf yubikey-manager-qt-debian-packages.tar.gz deb
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-CMD (cd yubikey-manager-qt/ykman-cli && ./test.py)
