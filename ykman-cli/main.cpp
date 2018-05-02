@@ -5,10 +5,11 @@
 
 int main(int argc, char *argv[])
 {
+
     QCoreApplication app(argc, argv);
 
     QString app_dir = app.applicationDirPath();
-    QString main_qml = "/qml/Main.qml";
+    QString main_qml = "/qml/main.qml";
     QString path_prefix;
     QString url_prefix;
 
