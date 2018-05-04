@@ -25,8 +25,8 @@ Package: yubikey-manager-qt
 Architecture: any
 Depends: ${misc:Depends},
          ${shlibs:Depends},
-         python3-yubikey-manager (>= 0.6.0~dev),
-         python3-yubikey-manager (< 0.7),
+         python3-yubikey-manager (>= 0.7.0~dev),
+         python3-yubikey-manager (< 0.8),
          qml-module-io-thp-pyotherside,
          qml-module-qt-labs-folderlistmodel,
          qml-module-qtquick-controls,
