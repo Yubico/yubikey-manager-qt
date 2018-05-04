@@ -2,37 +2,16 @@ FROM ubuntu:xenial
 RUN apt-get update -qq
 RUN apt-get install -qq software-properties-common
 RUN add-apt-repository -y ppa:yubico/stable
-RUN apt-get update -qq && apt-get -qq upgrade
-RUN apt-get install -qq \
-    git \
-    swig \
-    python \
-    libpcsclite-dev \
-    libssl-dev \
-    libffi-dev \
-    libykpers-1-1 \
-    libu2f-host0 \
-    qtbase5-dev \
-    qtdeclarative5-dev \
-    libqt5svg5-dev \
-    python3-dev \
-    python3-pip \
-    python3-pyscard \
-    devscripts \
-    debhelper \
-    qt5-default \
-    qml-module-qtquick-controls \
-    qml-module-qtquick-dialogs \
-    qml-module-io-thp-pyotherside \
-    qml-module-qt-labs-settings \
-    python3-pip \
-    python3-dev \
-    locales
-RUN pip3 install --upgrade pip
+RUN apt-get -qq update && apt-get -qq upgrade && apt-get install -y git devscripts equivs python3-dev python3-pip wget fuse qtcreator qt5-default desktop-file-utils libglib2.0-bin
 COPY . yubikey-manager-qt
-RUN pip3 install -r yubikey-manager-qt/requirements.txt
-RUN cd yubikey-manager-qt && qmake -qt=qt5 && make
+RUN yes | mk-build-deps -i /yubikey-manager-qt/debian/control
+#RUN cd yubikey-manager-qt && qmake -qt=qt5 && make
 RUN cd yubikey-manager-qt && debuild -us -uc
 RUN mkdir /deb && mv /yubikey-manager-qt_* /deb
 RUN cd / && tar czf yubikey-manager-qt-debian-packages.tar.gz deb
-CMD /bin/true
+RUN git clone https://github.com/Yubico/yubikey-manager
+RUN yes | mk-build-deps -i /yubikey-manager/debian/control
+RUN cd yubikey-manager && debuild -us -uc
+RUN mv /yubikey-manager_* /python3-yubikey-manager_* /python-yubikey-manager_* /deb
+RUN git clone https://github.com/AppImage/AppImages
+CMD cd yubikey-manager-qt && /AppImages/pkg2appimage resources/appimage.yml
