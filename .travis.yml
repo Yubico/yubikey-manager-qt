@@ -69,7 +69,8 @@ script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      docker build -t ykman-qt-xenial -f docker/xenial/Dockerfile .
+      docker build -t bionic-deb -f docker/bionic-deb/Dockerfile .
+      docker build -t xenial-appimage -f docker/xenial-appimage/Dockerfile .
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
@@ -128,10 +129,12 @@ after_success:
   - | 
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      id=$(docker create --privileged ykman-qt-xenial)
-      docker start --attach $id 
+      id=$(docker create bionic-deb)
+      docker start --attach $id
       docker cp $id:/yubikey-manager-qt-debian-packages.tar.gz deploy/yubikey-manager-qt-$TRAVIS_BRANCH-deb.tar.gz
-      docker cp $id:/yubikey-manager-qt/out/YubiKey_Manager-.glibc2.17-x86_64.AppImage deploy/yubikey-manager-qt-$TRAVIS_BRANCH.AppImage
+      id=$(docker create --privileged xenial-appimage)
+      docker start --attach $id
+      docker cp $id:/yubikey-manager-qt/YubiKey_Manager-x86_64.AppImage deploy/yubikey-manager-qt-$TRAVIS_BRANCH.AppImage
     fi
 
 deploy:
