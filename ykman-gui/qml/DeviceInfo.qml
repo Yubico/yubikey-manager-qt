@@ -54,8 +54,7 @@ ColumnLayout {
                         label: qsTr('FIDO U2F')
                     }, {
                         id: 'PIV',
-                        label: qsTr('PIV'),
-                        onConfigure: featureFlag_pivManager ? pivManager.start : undefined
+                        label: qsTr('PIV')
                     }, {
                         id: 'OATH',
                         label: qsTr('OATH')
