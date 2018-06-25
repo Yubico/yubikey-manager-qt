@@ -90,12 +90,12 @@ after_success:
     then
       macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/
       # Copy needed dylibs
-      find /usr/local/Cellar/json-c/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      find /usr/local/Cellar/ykpers/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      find /usr/local/Cellar/libyubikey/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      find /usr/local/Cellar/hidapi/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      find /usr/local/Cellar/libusb/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      find /usr/local/Cellar/openssl/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
+      find /usr/local/Cellar/json-c/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
+      find /usr/local/Cellar/ykpers/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
+      find /usr/local/Cellar/libyubikey/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
+      find /usr/local/Cellar/hidapi/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
+      find /usr/local/Cellar/libusb/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
+      find /usr/local/Cellar/openssl/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       # Copy Python framework
       cp -a ~/.pyenv/versions/$PY_VERSION/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
       sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '*.pyc' -delete
