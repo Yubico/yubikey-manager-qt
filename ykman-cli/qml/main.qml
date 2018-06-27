@@ -20,7 +20,7 @@ Python {
         })
     }
     function handleErrors(traceback) {
-        if (Utils.includes(traceback, 'KeyboardInterrupt')) {
+        if (traceback.indexOf('KeyboardInterrupt') >= 0) {
             Qt.quit()
         } else {
             console.log(traceback)
