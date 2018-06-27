@@ -51,6 +51,16 @@ Python {
     onYubikeyModuleLoadedChanged: runQueue()
     onYubikeyReadyChanged: runQueue()
 
+    onError: handleErrors(traceback)
+
+    function handleErrors(traceback) {
+        if (Utils.includes(traceback, 'KeyboardInterrupt')) {
+            Qt.quit()
+        } else {
+            console.log(traceback)
+        }
+    }
+
     function isPythonReady(funcName) {
         if (Utils.startsWith(funcName, "yubikey.init")) {
             return yubikeyModuleLoaded

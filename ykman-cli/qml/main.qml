@@ -1,10 +1,11 @@
 import QtQml 2.2
 import io.thp.pyotherside 1.4
 
+
+// @disable-check M300
 Python {
-    onError: {
-        console.log('Python error: ' + traceback)
-    }
+
+    onError: handleErrors(traceback)
 
     Component.onCompleted: {
         importModule('site', function () {
@@ -17,5 +18,12 @@ Python {
                 })
             })
         })
+    }
+    function handleErrors(traceback) {
+        if (Utils.includes(traceback, 'KeyboardInterrupt')) {
+            Qt.quit()
+        } else {
+            console.log(traceback)
+        }
     }
 }

@@ -71,7 +71,7 @@ ApplicationWindow {
     // @disable-check M301
     YubiKey {
         id: yk
-        onError: console.log(traceback)
+
         onHasDeviceChanged: mainStack.update()
     }
 
