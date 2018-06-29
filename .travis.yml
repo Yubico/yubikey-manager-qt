@@ -39,9 +39,8 @@ install:
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
       git clone https://github.com/aurelien-rainone/macdeployqtfix.git
-      brew install qt@5.5 swig
+      brew install qt swig
       brew link qt -f
-      export PATH="/usr/local/opt/qt@5.5/bin:$PATH"
       brew install ykpers libyubikey hidapi libusb
       # Build Python 3 with --enable-framework, to be able to distribute it in a .app bundle
       brew upgrade pyenv
