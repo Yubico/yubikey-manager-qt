@@ -1,3 +1,6 @@
+Version 0.5.2 (unreleased)
+  ** Support for YubiKey FIPS.
+
 * Version 0.5.1 (released 2018-05-07)
   ** Support changing USB interfaces for YubiKey Preview.
   ** OATH-HOTP: Show correct error message on too long secret keys.
