@@ -52,8 +52,9 @@ DefaultDialog {
 
     StackView {
         id: stack
-        anchors.fill: parent
         initialItem: slotOverview
+        Layout.fillWidth: true
+        Layout.fillHeight: true
         onCurrentItemChanged: {
             if (currentItem) {
                 currentItem.forceActiveFocus()

@@ -61,7 +61,8 @@ DefaultDialog {
 
     StackView {
         id: stack
-        anchors.fill: parent
+        Layout.fillWidth: true
+        Layout.fillHeight: true
         initialItem: fidoOverview
         onCurrentItemChanged: {
             if (currentItem) {

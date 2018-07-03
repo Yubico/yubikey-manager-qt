@@ -59,7 +59,8 @@ DefaultDialog {
     }
 
     ColumnLayout {
-        anchors.fill: parent
+        Layout.fillWidth: true
+        Layout.fillHeight: true
         Label {
             text: "Configure enabled USB interfaces"
             font.bold: true
