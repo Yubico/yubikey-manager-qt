@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:xenial
 RUN apt-get update -qq
 RUN apt-get install -qq software-properties-common
 RUN add-apt-repository -y ppa:yubico/stable
