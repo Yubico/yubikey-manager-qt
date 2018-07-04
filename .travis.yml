@@ -39,7 +39,9 @@ install:
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
       git clone https://github.com/aurelien-rainone/macdeployqtfix.git
-      brew install qt swig
+      brew install swig
+      # Qt 5.10.1
+      brew install -v https://raw.githubusercontent.com/Homebrew/homebrew-core/8d4d48f0bb552b7b107119aeef59f141ce1f72c3/Formula/qt.rb
       brew link qt -f
       brew install ykpers libyubikey hidapi libusb
       # Build Python 3 with --enable-framework, to be able to distribute it in a .app bundle
