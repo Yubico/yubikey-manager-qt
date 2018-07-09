@@ -1,5 +1,5 @@
-yubikey-manager-qt (0.5.2~dev) xenial; urgency=low
+yubikey-manager-qt (0.5.2) xenial; urgency=low
 
   * Build for ppa
 
- -- Dag Heyman <dag@yubico.com>  Mon, 07 May 2018 15:36:55 +0100
+ -- Dag Heyman <dag@yubico.com>  Mon, 09 Jul 2018 08:36:55 +0100
