@@ -23,9 +23,15 @@ RowLayout {
         return "../images/yk4.png" //default for now
     }
 
-    ColumnLayout {
+    RowLayout {
+        Layout.fillHeight: true
+        Layout.fillWidth: true
         Layout.margins: 20
+        Layout.preferredHeight: app.height
+        Layout.preferredWidth: app.width
         ColumnLayout {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.fillWidth: true
             Label {
                 text: yubiKey.name
                 font.pointSize: constants.h2
@@ -44,12 +50,13 @@ RowLayout {
                 text: qsTr("Serial: ") + yubiKey.serial
             }
         }
-    }
-    ColumnLayout {
-        Image {
-            antialiasing: false
-            fillMode: Image.PreserveAspectFit
-            source: getYubiKeyImageSource()
+        ColumnLayout {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.fillWidth: true
+            Image {
+                fillMode: Image.PreserveAspectFit
+                source: getYubiKeyImageSource()
+            }
         }
     }
 }
