@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <QtGlobal>
 #include <QtWidgets>
+#include <QQuickStyle>
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
     qputenv("PYTHONDONTWRITEBYTECODE", "1");
 
     QApplication app(argc, argv);
+    QQuickStyle::setStyle("Material");
 
     QString app_dir = app.applicationDirPath();
     QString main_qml = "/qml/main.qml";
