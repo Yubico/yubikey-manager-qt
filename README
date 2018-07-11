@@ -30,5 +30,8 @@ Installers are available https://developers.yubico.com/yubikey-manager-qt/Releas
     $ sudo apt update
     $ sudo apt install yubikey-manager-qt
 
+==== Source
+To install from source, see the https://github.com/Yubico/yubikey-manager-qt/blob/master/doc/development.adoc[development] instructions.
+
 === Command line version
 This project also bundles the https://developers.yubico.com/yubikey-manager/[command line version].
