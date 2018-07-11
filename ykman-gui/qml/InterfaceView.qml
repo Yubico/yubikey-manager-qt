@@ -104,6 +104,8 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.margins: 20
+        Layout.preferredHeight: app.height
+
         Label {
             text: qsTr("Interfaces")
             color: yubicoBlue
@@ -217,7 +219,7 @@ ColumnLayout {
         RowLayout {
             Layout.fillWidth: true
 
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
             Button {
                 text: qsTr("Cancel")

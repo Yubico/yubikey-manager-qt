@@ -67,7 +67,9 @@ ColumnLayout {
     ColumnLayout {
         visible: !isBusy
         Layout.fillWidth: true
+        Layout.fillHeight: true
         Layout.margins: 20
+        Layout.preferredHeight: app.height
 
         Label {
             Layout.fillWidth: true

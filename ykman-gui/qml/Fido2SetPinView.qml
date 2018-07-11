@@ -42,6 +42,7 @@ ColumnLayout {
     ColumnLayout {
         Layout.fillWidth: true
         Layout.margins: 20
+        Layout.preferredHeight: app.height
 
         Label {
             Layout.fillWidth: true
@@ -73,7 +74,7 @@ ColumnLayout {
             echoMode: TextInput.Password
         }
         RowLayout {
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
             Button {
                 text: qsTr("Cancel")

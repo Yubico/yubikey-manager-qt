@@ -59,6 +59,7 @@ ColumnLayout {
 
     ColumnLayout {
         Layout.margins: 20
+        Layout.preferredHeight: app.height
 
         Label {
             text: heading()
@@ -94,7 +95,7 @@ ColumnLayout {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
             Button {
                 id: backBtn

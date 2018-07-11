@@ -58,6 +58,7 @@ ColumnLayout {
     ColumnLayout {
         Layout.fillWidth: true
         Layout.margins: 20
+        Layout.preferredHeight: app.height
 
         Label {
             Layout.fillWidth: true
@@ -78,7 +79,7 @@ A reset requires a re-insertion and a touch on the YubiKey.")
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
             Button {
                 text: qsTr("Cancel")

@@ -6,7 +6,6 @@ import "utils.js" as Utils
 ColumnLayout {
     objectName: "interfaces"
     Component.onCompleted: load()
-
     function load() {
         otp.checked = Utils.includes(yubiKey.enabledUsbInterfaces, 'OTP')
         fido.checked = Utils.includes(yubiKey.enabledUsbInterfaces, 'FIDO')
@@ -49,8 +48,11 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.margins: 20
+        Layout.preferredHeight: app.height
+
         Label {
             text: qsTr("Configure USB Interfaces")
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             color: yubicoBlue
             font.pointSize: 36
             Layout.fillWidth: true
@@ -80,7 +82,7 @@ ColumnLayout {
         RowLayout {
             Layout.fillWidth: true
 
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Button {
                 text: qsTr("Cancel")
                 onClicked: views.pop()
