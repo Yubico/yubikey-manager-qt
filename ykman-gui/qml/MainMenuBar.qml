@@ -1,5 +1,5 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+import Qt.labs.platform 1.0
 
 MenuBar {
 
@@ -16,7 +16,7 @@ MenuBar {
         title: qsTr("\&Help")
         MenuItem {
             text: qsTr("\&About YubiKey Manager")
-            onTriggered: aboutPage.show()
+            onTriggered: views.home()
         }
     }
 }
