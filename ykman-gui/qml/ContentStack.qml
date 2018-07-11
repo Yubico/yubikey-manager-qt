@@ -218,7 +218,7 @@ StackView {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             color: yubicoBlue
-            font.pointSize: 24
+            font.pointSize: constants.h2
         }
     }
 
@@ -229,7 +229,7 @@ StackView {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             color: yubicoBlue
-            font.pointSize: 24
+            font.pointSize: constants.h2
         }
     }
 

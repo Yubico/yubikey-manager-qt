@@ -67,12 +67,12 @@ ColumnLayout {
             text: heading()
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.fillWidth: true
-            font.pointSize: 36
+            font.pointSize: constants.h1
             color: yubicoBlue
         }
         Label {
             text: qsTr("Public ID")
-            font.pointSize: 18
+            font.pointSize: constants.h3
             color: yubicoBlue
         }
         RowLayout {
@@ -95,7 +95,7 @@ ColumnLayout {
         }
         Label {
             text: qsTr("Private ID")
-            font.pointSize: 18
+            font.pointSize: constants.h3
             color: yubicoBlue
         }
         RowLayout {
@@ -117,7 +117,7 @@ ColumnLayout {
         }
         Label {
             text: qsTr("Secret key")
-            font.pointSize: 18
+            font.pointSize: constants.h3
             color: yubicoBlue
         }
         RowLayout {

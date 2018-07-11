@@ -54,7 +54,7 @@ ColumnLayout {
             text: qsTr("Configure USB Interfaces")
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             color: yubicoBlue
-            font.pointSize: 36
+            font.pointSize: constants.h1
             Layout.fillWidth: true
         }
         RowLayout {

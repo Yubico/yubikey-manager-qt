@@ -62,7 +62,7 @@ ColumnLayout {
             color: yubicoBlue
             text: qsTr("FIDO2")
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            font.pointSize: 36
+            font.pointSize: constants.h1
         }
 
         RowLayout {

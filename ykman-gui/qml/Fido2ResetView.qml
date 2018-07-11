@@ -64,7 +64,7 @@ ColumnLayout {
             Layout.fillWidth: true
             color: yubicoBlue
             text: qsTr("Reset FIDO")
-            font.pointSize: 36
+            font.pointSize: constants.h1
         }
 
         Label {
@@ -75,7 +75,7 @@ A reset requires a re-insertion and a touch on the YubiKey.")
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width
             wrapMode: Text.WordWrap
-            font.pointSize: 18
+            font.pointSize: constants.h3
         }
 
         RowLayout {

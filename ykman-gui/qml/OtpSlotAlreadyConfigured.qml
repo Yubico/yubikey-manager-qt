@@ -16,7 +16,7 @@ Dialog {
 Do you want to overwrite the existing configuration?")
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             color: yubicoBlue
-            font.pointSize: 24
+            font.pointSize: constants.h2
         }
     }
     standardButtons: Dialog.No | Dialog.Yes

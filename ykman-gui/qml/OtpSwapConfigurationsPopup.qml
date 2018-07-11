@@ -13,7 +13,7 @@ Dialog {
             text: qsTr("Do you want to swap the credentials between Short Touch (Slot 1) and Long Touch (Slot 2)?")
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             color: yubicoBlue
-            font.pointSize: 24
+            font.pointSize: constants.h2
             wrapMode: Text.WordWrap
             Layout.maximumWidth: parent.width
         }

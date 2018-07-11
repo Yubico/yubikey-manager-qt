@@ -76,7 +76,7 @@ ColumnLayout {
             color: yubicoBlue
             text: qsTr("OTP")
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            font.pointSize: 36
+            font.pointSize: constants.h1
         }
 
         GridLayout {
@@ -90,7 +90,7 @@ ColumnLayout {
                 Label {
                     text: qsTr("Short Touch (Slot 1)")
                     Layout.fillWidth: true
-                    font.pointSize: 24
+                    font.pointSize: constants.h2
                     color: slot1Configured ? yubicoBlue : "grey"
                 }
                 Label {
@@ -124,7 +124,7 @@ ColumnLayout {
                 Label {
                     text: qsTr("Long Touch (Slot 2)")
                     Layout.fillWidth: true
-                    font.pointSize: 24
+                    font.pointSize: constants.h2
                     color: views.slot2Configured ? yubicoBlue : "grey"
                 }
                 Label {

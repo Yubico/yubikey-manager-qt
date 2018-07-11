@@ -18,7 +18,7 @@ ColumnLayout {
 
         Label {
             text: heading()
-            font.pointSize: 36
+            font.pointSize: constants.h1
             color: yubicoBlue
             Layout.fillWidth: true
         }

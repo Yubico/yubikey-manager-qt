@@ -28,19 +28,19 @@ RowLayout {
         ColumnLayout {
             Label {
                 text: yubiKey.name
-                font.pointSize: 24
+                font.pointSize: constants.h2
                 color: yubicoBlue
             }
             Label {
                 visible: yubiKey.version
                 color: yubicoBlue
-                font.pointSize: 24
+                font.pointSize: constants.h2
                 text: qsTr("Firmware: ") + yubiKey.version
             }
             Label {
                 visible: yubiKey.serial
                 color: yubicoBlue
-                font.pointSize: 24
+                font.pointSize: constants.h2
                 text: qsTr("Serial: ") + yubiKey.serial
             }
         }

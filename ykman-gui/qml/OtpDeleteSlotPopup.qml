@@ -16,7 +16,7 @@ Dialog {
 This permanently deletes the configuration in the slot.")
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             color: yubicoBlue
-            font.pointSize: 24
+            font.pointSize: constants.h2
             wrapMode: Text.WordWrap
             Layout.maximumWidth: parent.width
         }

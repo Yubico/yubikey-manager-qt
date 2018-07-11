@@ -48,12 +48,12 @@ ColumnLayout {
             Layout.fillWidth: true
             color: yubicoBlue
             text: qsTr("Set PIN")
-            font.pointSize: 36
+            font.pointSize: constants.h1
         }
 
         Label {
             text: qsTr("New PIN")
-            font.pointSize: 18
+            font.pointSize: constants.h3
             color: yubicoBlue
         }
 
@@ -65,7 +65,7 @@ ColumnLayout {
 
         Label {
             text: qsTr("Confirm PIN")
-            font.pointSize: 18
+            font.pointSize: constants.h3
             color: yubicoBlue
         }
         TextField {
