@@ -1,34 +1,45 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
-import QtQuick.Dialogs 1.2
-import QtQuick.Window 2.2
 import Qt.labs.settings 1.0
+import Qt.labs.platform 1.0
+import QtQuick.Controls.Material 2.4
+import QtQuick.Window 2.2
 
 ApplicationWindow {
     id: app
     title: qsTr("YubiKey Manager")
     visible: true
+    height: 360
+    width: 500
 
-    minimumHeight: calcHeight()
-    height: minimumHeight
-    minimumWidth: calcWidth()
-    width: minimumWidth
+    readonly property int margins: 12
+    readonly property string yubicoGreen: "#9aca3c"
+    readonly property string yubicoBlue: "#284c61"
     Component.onDestruction: saveScreenLayout()
-    Component.onCompleted: ensureValidWindowPosition()
-    property int margins: 12
 
-    function calcWidth() {
-        return mainStack.currentItem ? Math.max(
-                                           350,
-                                           mainStack.currentItem.implicitWidth + (margins * 2)) : 0
+    Component.onCompleted: ensureValidWindowPosition()
+    Material.primary: yubicoGreen
+    Material.accent: yubicoBlue
+
+    header: Header {
+        id: header
     }
 
-    function calcHeight() {
-        return mainStack.currentItem ? Math.max(
-                                           360,
-                                           header.height + mainStack.currentItem.implicitHeight
-                                           + (margins * 2)) : 0
+    function copyToClipboard(value) {
+        clipboard.setClipboard(value)
+    }
+
+    function enableLogging(logLevel) {
+        yubiKey.enableLogging(logLevel, null)
+    }
+
+    function enableLoggingToFile(logLevel, logFile) {
+        yubiKey.enableLogging(logLevel, logFile)
+    }
+
+    function disableLogging() {
+        yubiKey.disableLogging()
     }
 
     function ensureValidWindowPosition() {
@@ -45,6 +56,27 @@ ApplicationWindow {
         settings.desktopAvailableHeight = Screen.desktopAvailableHeight
     }
 
+    function yubiKeyInserted() {
+        if (reInsertYubiKey.visible) {
+            reInsertYubiKey.close()
+            if (views.isConfiguringInterfaces) {
+                views.home()
+            }
+        } else {
+            views.home()
+        }
+    }
+
+    function yubiKeyRemoved() {
+        if (!reInsertYubiKey.visible && !views.locked) {
+            views.home()
+        }
+    }
+
+    Constants {
+        id: constants
+    }
+
     Settings {
         id: settings
         // Keep track of window and desktop dimensions.
@@ -56,131 +88,43 @@ ApplicationWindow {
         property var desktopAvailableHeight
     }
 
-    menuBar: MainMenuBar {
-    }
-
-    AboutPage {
-        id: aboutPage
-    }
-
     Shortcut {
         sequence: StandardKey.Close
         onActivated: close()
-    }
-
-    // @disable-check M301
-    YubiKey {
-        id: yk
-
-        onHasDeviceChanged: mainStack.update()
-    }
-
-    Timer {
-        id: timer
-        triggeredOnStart: true
-        interval: 500
-        repeat: true
-        running: true
-        onTriggered: yk.refresh()
-    }
-    ColumnLayout {
-        spacing: 0
-        anchors.fill: parent
-        Layout.fillWidth: true
-        Header {
-            id: header
-        }
-        StackView {
-            id: mainStack
-            property bool frozen: fidoDialog.visible || slotDialog.visible
-
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            initialItem: message
-            onCurrentItemChanged: {
-                if (currentItem) {
-                    currentItem.forceActiveFocus()
-                }
-            }
-            onFrozenChanged: {
-                if (!frozen) {
-                    update()
-                }
-            }
-
-            function update() {
-                connectionsDialog.close()
-                if (!frozen) {
-                    clear()
-                    push(yk.hasDevice ? deviceInfo : message)
-                }
-            }
-        }
-    }
-
-    Component {
-        id: message
-        ColumnLayout {
-            anchors.fill: parent
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Label {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                text: if (yk.nDevices == 0) {
-                          qsTr("No YubiKey detected.")
-                      } else if (yk.nDevices == 1) {
-                          qsTr("Connecting to YubiKey...")
-                      } else {
-                          qsTr("Multiple YubiKeys detected!")
-                      }
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
-        }
-    }
-
-    Component {
-        id: deviceInfo
-        DeviceInfo {
-            device: yk
-        }
-    }
-
-    SlotDialog {
-        id: slotDialog
-        device: yk
-    }
-
-    ConnectionsDialog {
-        id: connectionsDialog
-        device: yk
-    }
-
-    FidoDialog {
-        id: fidoDialog
-        device: yk
-    }
-
-    TouchYubiKey {
-        id: touchYubiKeyPrompt
     }
 
     ClipBoard {
         id: clipboard
     }
 
-    function copyToClipboard(value) {
-        clipboard.setClipboard(value)
+    MainMenuBar {
     }
 
-    function enableLogging(logLevel) {
-        yk.enableLogging(logLevel, null)
+    // @disable-check M301
+    YubiKey {
+        id: yubiKey
+        onError: console.log(traceback)
+        onHasDeviceChanged: hasDevice ? yubiKeyInserted() : yubiKeyRemoved()
     }
-    function enableLoggingToFile(logLevel, logFile) {
-        yk.enableLogging(logLevel, logFile)
+
+    Timer {
+        id: poller
+        triggeredOnStart: true
+        interval: 500
+        repeat: true
+        running: true
+        onTriggered: yubiKey.refresh()
     }
-    function disableLogging() {
-        yk.disableLogging()
+
+    ContentStack {
+        id: views
+    }
+
+    ReInsertYubiKeyPopup {
+        id: reInsertYubiKey
+    }
+
+    TouchYubiKeyPopup {
+        id: touchYubiKey
     }
 }

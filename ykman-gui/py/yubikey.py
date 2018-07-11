@@ -15,6 +15,7 @@ from fido2.ctap import CtapError
 
 from ykman.descriptor import get_descriptors
 from ykman.driver_otp import YkpersError
+from ykman.device import device_config
 from ykman.otp import OtpController
 from ykman.fido import Fido2Controller
 from ykman.scancodes import KEYBOARD_LAYOUT
@@ -78,11 +79,41 @@ class Controller(object):
                     'usb_interfaces_supported': [
                         t.name for t in TRANSPORT
                         if t & dev.config.usb_supported],
+                    'nfc_enabled': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.nfc_enabled],
+                    'nfc_supported': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.nfc_supported],
                     'usb_interfaces_enabled': str(dev.mode).split('+'),
                     'can_write_config': dev.can_write_config,
+                    'configuration_locked': dev.config.configuration_locked
                 }
 
         return self._dev_info
+
+    def write_config(self, usb_applications, nfc_applications, lock_code):
+        if lock_code:
+            lock_code = lock_code.encode()
+        usb_enabled = 0x00
+        nfc_enabled = 0x00
+        for app in usb_applications:
+            usb_enabled |= APPLICATION[app]
+        for app in nfc_applications:
+            nfc_enabled |= APPLICATION[app]
+        with self._open_device() as dev:
+            try:
+                dev.write_config(
+                    device_config(
+                        usb_enabled=usb_enabled,
+                        nfc_enabled=nfc_enabled,
+                        ),
+                    reboot=True,
+                    lock_key=lock_code)
+                return {'success': True, 'error': None}
+            except Exception as e:
+                logger.error('Failed to write config', exc_info=e)
+                return {'success': False, 'error': str(e)}
 
     def set_mode(self, interfaces):
         with self._open_device() as dev:
@@ -106,16 +137,26 @@ class Controller(object):
             with self._open_device(TRANSPORT.OTP) as dev:
                 controller = OtpController(dev.driver)
                 controller.zap_slot(slot)
+            return {'success': True, 'error': None}
         except YkpersError as e:
-            return e.errno
+            if e.errno == 3:
+                return {'success': False, 'error': 'write error'}
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     def swap_slots(self):
         try:
             with self._open_device(TRANSPORT.OTP) as dev:
                 controller = OtpController(dev.driver)
                 controller.swap_slots()
+            return {'success': True, 'error': None}
         except YkpersError as e:
-            return e.errno
+            if e.errno == 3:
+                return {'success': False, 'error': 'write error'}
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     def serial_modhex(self):
         with self._open_device(TRANSPORT.OTP) as dev:
@@ -139,8 +180,13 @@ class Controller(object):
             with self._open_device(TRANSPORT.OTP) as dev:
                 controller = OtpController(dev.driver)
                 controller.program_otp(slot, key, public_id, private_id)
+            return {'success': True, 'error': None}
         except YkpersError as e:
-            return e.errno
+            if e.errno == 3:
+                return {'success': False, 'error': 'write error'}
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     def program_challenge_response(self, slot, key, touch):
         try:
@@ -148,8 +194,13 @@ class Controller(object):
             with self._open_device(TRANSPORT.OTP) as dev:
                 controller = OtpController(dev.driver)
                 controller.program_chalresp(slot, key, touch)
+            return {'success': True, 'error': None}
         except YkpersError as e:
-            return e.errno
+            if e.errno == 3:
+                return {'success': False, 'error': 'write error'}
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     def program_static_password(self, slot, key, keyboard_layout):
         try:
@@ -158,8 +209,13 @@ class Controller(object):
                 controller.program_static(
                     slot, key,
                     keyboard_layout=KEYBOARD_LAYOUT[keyboard_layout])
+            return {'success': True, 'error': None}
         except YkpersError as e:
-            return e.errno
+            if e.errno == 3:
+                return {'success': False, 'error': 'write error'}
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     def program_oath_hotp(self, slot, key, digits):
         try:
@@ -213,8 +269,7 @@ class Controller(object):
                 return {'success': True, 'error': None}
         except CtapError as e:
             if e.code == CtapError.ERR.INVALID_LENGTH:
-                return {'success': False,
-                        'error': 'Too long PIN, maximum size is 128 bytes.'}
+                return {'success': False, 'error': 'too long'}
             logger.error('Failed to set PIN', exc_info=e)
             return {'success': False, 'error': str(e)}
         except Exception as e:
@@ -230,16 +285,15 @@ class Controller(object):
         except CtapError as e:
             if e.code == CtapError.ERR.INVALID_LENGTH:
                 return {'success': False,
-                        'error': 'Too long PIN, maximum size is 128 bytes.'}
+                        'error': 'too long'}
             if e.code == CtapError.ERR.PIN_INVALID:
                 return {'success': False,
-                        'error': 'The current PIN is wrong.'}
+                        'error': 'wrong pin'}
             if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
                 return {'success': False,
-                        'error': 'PIN authentication is currently blocked. '
-                        'Remove and re-insert the YubiKey.'}
+                        'error': 'currently blocked'}
             if e.code == CtapError.ERR.PIN_BLOCKED:
-                return {'success': False, 'error': 'PIN is blocked.'}
+                return {'success': False, 'error': 'blocked.'}
             logger.error('Failed to set PIN', exc_info=e)
             return {'success': False, 'error': str(e)}
         except Exception as e:
@@ -254,9 +308,9 @@ class Controller(object):
                 return {'success': True, 'error': None}
         except CtapError as e:
             if e.code == CtapError.ERR.NOT_ALLOWED:
-                return {'success': False, 'error': 'Not allowed'}
+                return {'success': False, 'error': 'not allowed'}
             if e.code == CtapError.ERR.ACTION_TIMEOUT:
-                return {'success': False, 'error': 'Touch timeout'}
+                return {'success': False, 'error': 'touch timeout'}
             else:
                 logger.error('Reset throwed an exception', exc_info=e)
                 return {'success': False, 'error': str(e)}

@@ -1,11 +1,10 @@
-import QtQuick 2.0
+import QtQuick 2.5
 import io.thp.pyotherside 1.4
 import "utils.js" as Utils
 
 
 // @disable-check M300
 Python {
-    id: py
 
     property int nDevices
     property bool hasDevice
@@ -13,10 +12,13 @@ Python {
     property string version
     property string serial
     property bool canWriteConfig
+    property bool configurationLocked
     property var supportedUsbInterfaces: []
     property var enabledUsbInterfaces: []
     property var supportedUsbApplications: []
     property var enabledUsbApplications: []
+    property var supportedNfcApplications: []
+    property var enabledNfcApplications: []
     property bool yubikeyModuleLoaded: false
     property bool yubikeyReady: false
     property var queue: []
@@ -51,14 +53,18 @@ Python {
     onYubikeyModuleLoadedChanged: runQueue()
     onYubikeyReadyChanged: runQueue()
 
-    onError: handleErrors(traceback)
-
-    function handleErrors(traceback) {
-        if (Utils.includes(traceback, 'KeyboardInterrupt')) {
-            Qt.quit()
-        } else {
-            console.log(traceback)
-        }
+    function clearYubiKey() {
+        hasDevice = false
+        name = ''
+        version = ''
+        serial = ''
+        configurationLocked = false
+        supportedUsbInterfaces = []
+        enabledUsbInterfaces = []
+        supportedUsbApplications = []
+        enabledUsbApplications = []
+        supportedNfcApplications = []
+        enabledNfcApplications = []
     }
 
     function isPythonReady(funcName) {
@@ -89,6 +95,58 @@ Python {
         }
     }
 
+    function isNEO() {
+        return name === 'YubiKey NEO'
+    }
+
+    function isYubiKey4() {
+        return name === 'YubiKey 4'
+    }
+
+    function isSecurityKeyByYubico() {
+        return name === 'Security Key by Yubico'
+    }
+
+    function isFidoU2fSecurityKey() {
+        return name === 'FIDO U2F Security Key'
+    }
+
+    function isYubiKeyStandard() {
+        return name === 'YubiKey Standard'
+    }
+
+    function isYubiKeyPreview() {
+        return name === 'YubiKey Preview'
+    }
+
+    function supportsNewInterfaces() {
+        return isYubiKeyPreview()
+    }
+
+    function canChangeInterfaces() {
+        return supportedUsbInterfaces.length > 1
+    }
+
+    function otpEnabled() {
+        return Utils.includes(enabledUsbApplications, 'OTP')
+    }
+
+    function fido2Enabled() {
+        return Utils.includes(enabledUsbApplications, 'FIDO2')
+    }
+
+    function otpInterfaceSupported() {
+        return Utils.includes(supportedUsbInterfaces, 'OTP')
+    }
+
+    function fidoInterfaceSupported() {
+        return Utils.includes(supportedUsbInterfaces, 'FIDO')
+    }
+
+    function ccidInterfaceSupported() {
+        return Utils.includes(supportedUsbInterfaces, 'CCID')
+    }
+
     function refresh(doneCallback) {
         do_call('yubikey.controller.count_devices', [], function (n) {
             nDevices = n
@@ -98,20 +156,28 @@ Python {
                     name = dev ? dev.name : ''
                     version = dev ? dev.version : ''
                     serial = dev ? dev.serial : ''
+                    configurationLocked = dev ? dev.configuration_locked : false
                     supportedUsbApplications = dev ? dev.usb_supported : []
                     enabledUsbApplications = dev ? dev.usb_enabled : []
+                    supportedNfcApplications = dev ? dev.nfc_supported : []
+                    enabledNfcApplications = dev ? dev.nfc_enabled : []
                     supportedUsbInterfaces = dev ? dev.usb_interfaces_supported : []
                     enabledUsbInterfaces = dev ? dev.usb_interfaces_enabled : []
                     canWriteConfig = dev ? dev.can_write_config : []
                 })
             } else if (hasDevice) {
-                hasDevice = false
+                clearYubiKey()
             }
 
             if (doneCallback) {
                 doneCallback()
             }
         })
+    }
+
+    function write_config(usbApplications, nfcApplications, lockCode, cb) {
+        do_call('yubikey.controller.write_config',
+                [usbApplications, nfcApplications, lockCode], cb)
     }
 
     function set_mode(connections, cb) {
