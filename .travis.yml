@@ -40,7 +40,7 @@ install:
     then
       git clone https://github.com/aurelien-rainone/macdeployqtfix.git
       brew install swig
-      brwe install qt
+      brew install qt
       brew link qt --force
       brew install ykpers libyubikey libusb
       # Build Python 3 with --enable-framework, to be able to distribute it in a .app bundle
