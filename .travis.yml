@@ -43,7 +43,7 @@ install:
       # Qt 5.10.1
       brew install -v https://raw.githubusercontent.com/Homebrew/homebrew-core/8d4d48f0bb552b7b107119aeef59f141ce1f72c3/Formula/qt.rb
       brew link qt -f
-      brew install ykpers libyubikey hidapi libusb
+      brew install ykpers libyubikey libusb
       # Build Python 3 with --enable-framework, to be able to distribute it in a .app bundle
       brew upgrade pyenv
       eval "$(pyenv init -)"
@@ -94,7 +94,6 @@ after_success:
       find /usr/local/Cellar/json-c/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/ykpers/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/libyubikey/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      find /usr/local/Cellar/hidapi/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/libusb/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/openssl/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       # Copy Python framework
