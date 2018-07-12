@@ -101,6 +101,7 @@ ColumnLayout {
     }
 
     ColumnLayout {
+        spacing: 10
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.margins: 20
@@ -114,115 +115,101 @@ ColumnLayout {
         }
 
         RowLayout {
+            spacing: 20
             Layout.fillWidth: true
-            GridLayout {
-                flow: GridLayout.LeftToRight
-                columnSpacing: 20
-                Layout.fillWidth: true
-                //rowSpacing: -10
-                columns: 7
-                Label {
-                }
-                Label {
-                    text: "OTP"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    color: yubicoBlue
-                    font.pointSize: constants.h3
-                }
-                Label {
-                    text: "FIDO2"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.pointSize: constants.h3
-                    color: yubicoBlue
-                }
-                Label {
-                    text: "FIDO U2F"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    color: yubicoBlue
-                    font.pointSize: constants.h3
-                }
-                Label {
-                    text: "OpenPGP"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.pointSize: constants.h3
-                    color: yubicoBlue
-                }
-                Label {
-                    text: "PIV"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.pointSize: constants.h3
-                    color: yubicoBlue
-                }
-                Label {
-                    text: "OATH"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.pointSize: constants.h3
-                    color: yubicoBlue
-                }
-                Label {
+            GroupBox {
+                id: usbGroupBox
+
+                label: Label {
                     text: "USB"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.pointSize: constants.h3
+                    lineHeight: 0.5
+                    font.pointSize: constants.h2
+                    color: yubicoBlue
+                }
+                background: Rectangle {
+                    border.color: "transparent"
+                    color: app.color
+                }
+                GridLayout {
+                    columnSpacing: 0
+                    rowSpacing: 0
+                    anchors.leftMargin: -10
+                    anchors.left: parent.left
+                    columns: 3
+                    CheckBox {
+                        text: "OTP"
+                        id: otpUsb
+                    }
+                    CheckBox {
+                        text: "FIDO2"
+                        id: fido2Usb
+                    }
+                    CheckBox {
+                        text: "FIDO U2F"
+                        id: u2fUsb
+                    }
+                    CheckBox {
+                        text: "OpenPGP"
+                        id: pgpUsb
+                    }
+                    CheckBox {
+                        text: "PIV"
+                        id: pivUsb
+                    }
+                    CheckBox {
+                        text: "OATH"
+                        id: oathUsb
+                    }
+                }
+            }
+            GroupBox {
+                id: nfcGroupBox
+                label: Label {
+                    text: "NFC"
+                    lineHeight: 0.5
+                    font.pointSize: constants.h2
                     color: yubicoBlue
                 }
 
-                CheckBox {
-                    id: otpUsb
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                background: Rectangle {
+                    border.color: "transparent"
+                    color: app.color
                 }
-                CheckBox {
-                    id: fido2Usb
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                CheckBox {
-                    id: u2fUsb
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                CheckBox {
-                    id: pgpUsb
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                CheckBox {
-                    id: pivUsb
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                CheckBox {
-                    id: oathUsb
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                Label {
-                    text: "NFC"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    Layout.fillWidth: false
-                    font.pointSize: constants.h3
-                    color: yubicoBlue
-                }
-                CheckBox {
-                    id: otpNfc
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                CheckBox {
-                    id: fido2Nfc
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                CheckBox {
-                    id: u2fNfc
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                CheckBox {
-                    id: pgpNfc
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                CheckBox {
-                    id: pivNfc
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                CheckBox {
-                    id: oathNfc
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                GridLayout {
+                    anchors.leftMargin: -10
+                    anchors.left: parent.left
+                    columns: 3
+                    columnSpacing: 0
+                    rowSpacing: 0
+                    CheckBox {
+                        id: otpNfc
+                        text: "OTP"
+                    }
+                    CheckBox {
+                        id: fido2Nfc
+                        text: "FIDO2"
+                    }
+                    CheckBox {
+                        id: u2fNfc
+                        text: "FIDO U2F"
+                    }
+                    CheckBox {
+                        id: pgpNfc
+                        text: "OpenPGP"
+                    }
+                    CheckBox {
+                        id: pivNfc
+                        text: "PIV"
+                    }
+                    CheckBox {
+                        id: oathNfc
+                        text: "OATH"
+                    }
                 }
             }
         }
+
         Label {
             text: 'Lock Code'
             visible: configurationLocked
