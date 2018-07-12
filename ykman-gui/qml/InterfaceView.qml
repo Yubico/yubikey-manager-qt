@@ -116,17 +116,79 @@ ColumnLayout {
         RowLayout {
             Layout.fillWidth: true
             GridLayout {
-                columnSpacing: 5
+                flow: GridLayout.LeftToRight
+                columnSpacing: 20
                 Layout.fillWidth: true
-                rowSpacing: -10
-                columns: 3
+                //rowSpacing: -10
+                columns: 7
                 Label {
+                }
+                Label {
+                    text: "OTP"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    color: yubicoBlue
+                    font.pointSize: constants.h3
+                }
+                Label {
+                    text: "FIDO2"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.pointSize: constants.h3
+                    color: yubicoBlue
+                }
+                Label {
+                    text: "FIDO U2F"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    color: yubicoBlue
+                    font.pointSize: constants.h3
+                }
+                Label {
+                    text: "OpenPGP"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.pointSize: constants.h3
+                    color: yubicoBlue
+                }
+                Label {
+                    text: "PIV"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.pointSize: constants.h3
+                    color: yubicoBlue
+                }
+                Label {
+                    text: "OATH"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.pointSize: constants.h3
+                    color: yubicoBlue
                 }
                 Label {
                     text: "USB"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.pointSize: constants.h3
                     color: yubicoBlue
+                }
+
+                CheckBox {
+                    id: otpUsb
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                CheckBox {
+                    id: fido2Usb
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                CheckBox {
+                    id: u2fUsb
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                CheckBox {
+                    id: pgpUsb
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                CheckBox {
+                    id: pivUsb
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                CheckBox {
+                    id: oathUsb
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 Label {
                     text: "NFC"
@@ -135,71 +197,29 @@ ColumnLayout {
                     font.pointSize: constants.h3
                     color: yubicoBlue
                 }
-                Label {
-                    text: "OTP"
-                    color: yubicoBlue
-                    font.pointSize: constants.h3
-                }
-                CheckBox {
-                    id: otpUsb
-                }
                 CheckBox {
                     id: otpNfc
-                }
-                Label {
-                    text: "FIDO2"
-                    font.pointSize: constants.h3
-                    color: yubicoBlue
-                }
-                CheckBox {
-                    id: fido2Usb
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CheckBox {
                     id: fido2Nfc
-                }
-                Label {
-                    text: "FIDO U2F"
-                    color: yubicoBlue
-                    font.pointSize: constants.h3
-                }
-                CheckBox {
-                    id: u2fUsb
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CheckBox {
                     id: u2fNfc
-                }
-                Label {
-                    text: "PIV"
-                    font.pointSize: constants.h3
-                    color: yubicoBlue
-                }
-                CheckBox {
-                    id: pivUsb
-                }
-                CheckBox {
-                    id: pivNfc
-                }
-                Label {
-                    text: "OpenPGP"
-                    font.pointSize: constants.h3
-                    color: yubicoBlue
-                }
-                CheckBox {
-                    id: pgpUsb
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CheckBox {
                     id: pgpNfc
-                }
-                Label {
-                    text: "OATH"
-                    font.pointSize: constants.h3
-                    color: yubicoBlue
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CheckBox {
-                    id: oathUsb
+                    id: pivNfc
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CheckBox {
                     id: oathNfc
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
         }
