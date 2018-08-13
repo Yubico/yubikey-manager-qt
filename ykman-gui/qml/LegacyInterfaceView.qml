@@ -57,6 +57,25 @@ ColumnLayout {
             font.pointSize: constants.h1
             Layout.fillWidth: true
         }
+
+        RowLayout {
+
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: yubicoGrey
+            }
+
+            Label {
+                text: qsTr("Interfaces")
+                color: yubicoGrey
+            }
+        }
+
         RowLayout {
             Layout.fillWidth: true
 

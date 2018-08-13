@@ -115,6 +115,24 @@ ColumnLayout {
         }
 
         RowLayout {
+
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: yubicoGrey
+            }
+
+            Label {
+                text: qsTr("Interfaces")
+                color: yubicoGrey
+            }
+        }
+
+        RowLayout {
             spacing: 20
             Layout.fillWidth: true
             GroupBox {
