@@ -66,6 +66,24 @@ ColumnLayout {
         }
 
         RowLayout {
+
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: qsTr("FIDO2")
+                color: "grey"
+            }
+        }
+
+        RowLayout {
             Layout.alignment: Qt.AlignRight
             Label {
                 text: getPinMessage()

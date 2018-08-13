@@ -51,6 +51,31 @@ ColumnLayout {
             font.pointSize: constants.h1
         }
 
+        RowLayout {
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("FIDO2")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("Set PIN")
+                color: "grey"
+            }
+        }
+
         Label {
             text: qsTr("New PIN")
             font.pointSize: constants.h3

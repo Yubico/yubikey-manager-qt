@@ -67,6 +67,31 @@ ColumnLayout {
             font.pointSize: constants.h1
         }
 
+        RowLayout {
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("FIDO2")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("Reset FIDO")
+                color: "grey"
+            }
+        }
+
         Label {
             color: yubicoBlue
             text: qsTr("This action permanently deletes all FIDO credentials on the device (U2F & FIDO2), and removes the FIDO2 PIN.

@@ -5,11 +5,6 @@ import "slotutils.js" as SlotUtils
 
 ColumnLayout {
 
-    function heading() {
-        return qsTr("Configure ") + SlotUtils.slotNameCapitalized(
-                    views.selectedSlot)
-    }
-
     function useSerial() {
         if (useSerialCb.checked) {
             yubiKey.serial_modhex(function (res) {
@@ -64,11 +59,53 @@ ColumnLayout {
         Layout.preferredHeight: app.height
 
         Label {
-            text: heading()
+            text: qsTr("Yubico OTP")
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.fillWidth: true
             font.pointSize: constants.h1
             color: yubicoBlue
+        }
+
+        RowLayout {
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("OTP")
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: SlotUtils.slotNameCapitalized(views.selectedSlot)
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: qsTr("Select Credential Type")
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("Yubico OTP")
+                color: "grey"
+            }
         }
         Label {
             text: qsTr("Public ID")

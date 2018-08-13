@@ -5,10 +5,6 @@ import "slotutils.js" as SlotUtils
 
 ColumnLayout {
 
-    function heading() {
-        return qsTr("Configure ") + SlotUtils.slotNameCapitalized(
-                    views.selectedSlot)
-    }
     function finish() {
         if (views.selectedSlotConfigured()) {
             otpSlotAlreadyConfigured.open()
@@ -42,12 +38,56 @@ ColumnLayout {
         Layout.preferredHeight: app.height
 
         Label {
-            text: heading()
+            text: qsTr("OATH-HOTP")
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.fillWidth: true
             font.pointSize: constants.h1
             color: yubicoBlue
         }
+
+        RowLayout {
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("OTP")
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: SlotUtils.slotNameCapitalized(views.selectedSlot)
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: qsTr("Select Credential Type")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("OATH-HOTP")
+                color: "grey"
+            }
+        }
+
         Label {
             text: qsTr("Secret key")
             font.pointSize: constants.h3

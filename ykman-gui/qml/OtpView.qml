@@ -54,6 +54,7 @@ ColumnLayout {
             }
         })
     }
+
     OtpSwapConfigurationsPopup {
         id: otpSwapConfigurationsPopup
         onAccepted: swapConfigurations()
@@ -77,6 +78,24 @@ ColumnLayout {
             text: qsTr("OTP")
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             font.pointSize: constants.h1
+        }
+
+        RowLayout {
+
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: qsTr("OTP")
+                color: "grey"
+            }
         }
 
         GridLayout {

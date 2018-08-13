@@ -5,11 +5,6 @@ import "slotutils.js" as SlotUtils
 
 ColumnLayout {
 
-    function heading() {
-        return qsTr("Configure ") + SlotUtils.slotNameCapitalized(
-                    views.selectedSlot)
-    }
-
     ColumnLayout {
         Layout.margins: 20
         Layout.fillWidth: true
@@ -17,10 +12,44 @@ ColumnLayout {
         Layout.preferredHeight: app.height
 
         Label {
-            text: heading()
+            text: qsTr("Select Credential Type")
             font.pointSize: constants.h1
             color: yubicoBlue
             Layout.fillWidth: true
+        }
+
+        RowLayout {
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("OTP")
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: SlotUtils.slotNameCapitalized(views.selectedSlot)
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: qsTr("Select Credential Type")
+                color: "grey"
+            }
         }
 
         ButtonGroup {

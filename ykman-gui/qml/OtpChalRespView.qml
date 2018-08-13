@@ -5,11 +5,6 @@ import "slotutils.js" as SlotUtils
 
 ColumnLayout {
 
-    function heading() {
-        return qsTr("Configurein ") + SlotUtils.slotNameCapitalized(
-                    views.selectedSlot)
-    }
-
     function generateKey() {
         yubiKey.random_key(20, function (res) {
             secretKeyInput.text = res
@@ -52,12 +47,56 @@ ColumnLayout {
         Layout.preferredHeight: app.height
 
         Label {
-            text: heading()
+            text: qsTr("Challenge-response")
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.fillWidth: true
             font.pointSize: constants.h1
             color: yubicoBlue
         }
+
+        RowLayout {
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("OTP")
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: SlotUtils.slotNameCapitalized(views.selectedSlot)
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: qsTr("Select Credential Type")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("Challenge-response")
+                color: "grey"
+            }
+        }
+
         Label {
             text: qsTr("Secret key")
             font.pointSize: constants.h3

@@ -7,11 +7,6 @@ ColumnLayout {
 
     property string keyboardLayout: allowNonModhex.checked ? 'US' : 'MODHEX'
 
-    function heading() {
-        return qsTr("Configure ") + SlotUtils.slotNameCapitalized(
-                    views.selectedSlot)
-    }
-
     function finish() {
         if (views.selectedSlotConfigured()) {
             otpSlotAlreadyConfigured.open()
@@ -62,11 +57,54 @@ ColumnLayout {
         Layout.preferredHeight: app.height
 
         Label {
-            text: heading()
+            text: qsTr("Static Password")
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.fillWidth: true
             font.pointSize: constants.h1
             color: yubicoBlue
+        }
+
+        RowLayout {
+            Label {
+                text: qsTr("Home")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("OTP")
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: SlotUtils.slotNameCapitalized(views.selectedSlot)
+                color: yubicoGreen
+            }
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+
+            Label {
+                text: qsTr("Select Credential Type")
+                color: yubicoGreen
+            }
+
+            Label {
+                text: '/ '
+                color: "grey"
+            }
+            Label {
+                text: qsTr("Static Password")
+                color: "grey"
+            }
         }
 
         Label {
