@@ -229,10 +229,6 @@ ColumnLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
             Button {
-                text: qsTr("Cancel")
-                onClicked: views.pop()
-            }
-            Button {
                 enabled: validCombination() && lockCodeProvidedIfNeeded()
                 text: qsTr("Save Configuration")
                 highlighted: true

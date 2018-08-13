@@ -64,11 +64,8 @@ StackView {
     function configureInterfaces() {
         var interfaceComponent = yubiKey.supportsNewInterfaces(
                     ) ? interfaces : legacyInterfaces
-        if (isConfiguringInterfaces) {
-            replace(interfaceComponent, StackView.Immediate)
-        } else {
-            push(interfaceComponent)
-        }
+        clear()
+        push(interfaceComponent)
     }
 
     function fido2() {
