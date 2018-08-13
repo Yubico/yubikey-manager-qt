@@ -65,9 +65,7 @@ ColumnLayout {
                 color: yubicoGreen
             }
 
-            Label {
-                text: '/ '
-                color: yubicoGrey
+            BreadCrumbSeparator {
             }
 
             Label {

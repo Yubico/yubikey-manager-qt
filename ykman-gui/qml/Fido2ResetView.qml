@@ -73,18 +73,14 @@ ColumnLayout {
                 color: yubicoGreen
             }
 
-            Label {
-                text: '/ '
-                color: yubicoGrey
+            BreadCrumbSeparator {
             }
             Label {
                 text: qsTr("FIDO2")
                 color: yubicoGreen
             }
 
-            Label {
-                text: '/ '
-                color: yubicoGrey
+            BreadCrumbSeparator {
             }
             Label {
                 text: qsTr("Reset FIDO")

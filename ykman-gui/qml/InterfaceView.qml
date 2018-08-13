@@ -120,10 +120,7 @@ ColumnLayout {
                 text: qsTr("Home")
                 color: yubicoGreen
             }
-
-            Label {
-                text: '/ '
-                color: yubicoGrey
+            BreadCrumbSeparator {
             }
 
             Label {

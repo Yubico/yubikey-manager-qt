@@ -70,26 +70,19 @@ ColumnLayout {
                 color: yubicoGreen
             }
 
-            Label {
-                text: '/ '
-                color: yubicoGrey
+            BreadCrumbSeparator {
             }
             Label {
                 text: qsTr("OTP")
                 color: yubicoGreen
             }
-            Label {
-                text: '/ '
-                color: yubicoGrey
+            BreadCrumbSeparator {
             }
-
             Label {
                 text: SlotUtils.slotNameCapitalized(views.selectedSlot)
                 color: yubicoGreen
             }
-            Label {
-                text: '/ '
-                color: yubicoGrey
+            BreadCrumbSeparator {
             }
 
             Label {
@@ -97,9 +90,7 @@ ColumnLayout {
                 color: yubicoGreen
             }
 
-            Label {
-                text: '/ '
-                color: yubicoGrey
+            BreadCrumbSeparator {
             }
             Label {
                 text: qsTr("Static Password")
