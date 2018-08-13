@@ -75,7 +75,7 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("FIDO2")
@@ -84,11 +84,11 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("Reset FIDO")
-                color: "grey"
+                color: yubicoGrey
             }
         }
 

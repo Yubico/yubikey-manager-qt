@@ -26,7 +26,7 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("OTP")
@@ -34,7 +34,7 @@ ColumnLayout {
             }
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
 
             Label {
@@ -43,12 +43,12 @@ ColumnLayout {
             }
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
 
             Label {
                 text: qsTr("Select Credential Type")
-                color: "grey"
+                color: yubicoGrey
             }
         }
 

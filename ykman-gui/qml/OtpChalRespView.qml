@@ -62,7 +62,7 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("OTP")
@@ -70,7 +70,7 @@ ColumnLayout {
             }
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
 
             Label {
@@ -79,7 +79,7 @@ ColumnLayout {
             }
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
 
             Label {
@@ -89,11 +89,11 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("Challenge-response")
-                color: "grey"
+                color: yubicoGrey
             }
         }
 

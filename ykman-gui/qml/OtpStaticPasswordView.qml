@@ -72,7 +72,7 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("OTP")
@@ -80,7 +80,7 @@ ColumnLayout {
             }
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
 
             Label {
@@ -89,7 +89,7 @@ ColumnLayout {
             }
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
 
             Label {
@@ -99,11 +99,11 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("Static Password")
-                color: "grey"
+                color: yubicoGrey
             }
         }
 

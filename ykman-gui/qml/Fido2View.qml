@@ -74,12 +74,12 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
 
             Label {
                 text: qsTr("FIDO2")
-                color: "grey"
+                color: yubicoGrey
             }
         }
 

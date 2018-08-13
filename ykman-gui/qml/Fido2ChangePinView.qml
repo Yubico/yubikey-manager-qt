@@ -82,7 +82,7 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("FIDO2")
@@ -91,11 +91,11 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("Change PIN")
-                color: "grey"
+                color: yubicoGrey
             }
         }
 

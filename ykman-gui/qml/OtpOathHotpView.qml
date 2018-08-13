@@ -53,7 +53,7 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("OTP")
@@ -61,7 +61,7 @@ ColumnLayout {
             }
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
 
             Label {
@@ -70,7 +70,7 @@ ColumnLayout {
             }
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
 
             Label {
@@ -80,11 +80,11 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
             Label {
                 text: qsTr("OATH-HOTP")
-                color: "grey"
+                color: yubicoGrey
             }
         }
 

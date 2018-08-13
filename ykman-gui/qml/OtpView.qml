@@ -89,12 +89,12 @@ ColumnLayout {
 
             Label {
                 text: '/ '
-                color: "grey"
+                color: yubicoGrey
             }
 
             Label {
                 text: qsTr("OTP")
-                color: "grey"
+                color: yubicoGrey
             }
         }
 
@@ -110,13 +110,13 @@ ColumnLayout {
                     text: qsTr("Short Touch (Slot 1)")
                     Layout.fillWidth: true
                     font.pointSize: constants.h2
-                    color: slot1Configured ? yubicoBlue : "grey"
+                    color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
                 Label {
                     text: slot1StatusTxt()
                     Layout.fillWidth: true
                     font.pointSize: 14
-                    color: slot1Configured ? yubicoBlue : "grey"
+                    color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
                 RowLayout {
                     Button {
@@ -144,13 +144,13 @@ ColumnLayout {
                     text: qsTr("Long Touch (Slot 2)")
                     Layout.fillWidth: true
                     font.pointSize: constants.h2
-                    color: views.slot2Configured ? yubicoBlue : "grey"
+                    color: views.slot2Configured ? yubicoBlue : yubicoGrey
                 }
                 Label {
                     text: slot2StatusTxt()
                     Layout.fillWidth: true
                     font.pointSize: 14
-                    color: slot1Configured ? yubicoBlue : "grey"
+                    color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
                 RowLayout {
                     Button {
