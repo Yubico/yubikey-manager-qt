@@ -6,13 +6,15 @@ import QtQuick.Controls.Material 2.3
 ColumnLayout {
     id: otpView
     Component.onCompleted: load()
+    property bool isBusy
+
     function load() {
-        views.setBusy()
+        isBusy = true
         yubiKey.slots_status(function (res) {
             views.slot1Configured = res[0]
             views.slot2Configured = res[1]
             views.selectedSlot = 0
-            views.unsetBusy()
+            isBusy = false
         })
     }
 
@@ -53,6 +55,12 @@ ColumnLayout {
                 }
             }
         })
+    }
+
+    BusyIndicator {
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        running: isBusy
+        visible: running
     }
 
     OtpSwapConfigurationsPopup {

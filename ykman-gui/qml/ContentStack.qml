@@ -10,7 +10,6 @@ StackView {
     property bool slot1Configured
     property bool slot2Configured
 
-    property bool isBusy
     property bool locked
 
     property bool isConfiguringInterfaces: currentItem !== null
@@ -40,14 +39,6 @@ StackView {
             return slot2Configured
         }
         return false
-    }
-
-    function setBusy() {
-        isBusy = true
-    }
-
-    function unsetBusy() {
-        isBusy = false
     }
 
     function home() {
@@ -228,11 +219,5 @@ StackView {
             color: yubicoBlue
             font.pointSize: constants.h2
         }
-    }
-
-    BusyIndicator {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        running: isBusy
     }
 }

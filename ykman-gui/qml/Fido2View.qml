@@ -9,11 +9,12 @@ ColumnLayout {
     property bool pinBlocked
     property string pinMessage
     property int pinRetries
+    property bool isBusy
 
     Component.onCompleted: load()
 
     function load() {
-        views.setBusy()
+        isBusy = true
         yubiKey.fido_has_pin(function (resp) {
             if (!resp.error) {
                 hasPin = resp.hasPin
@@ -25,15 +26,15 @@ ColumnLayout {
                             console.log(resp.error)
                             pinBlocked = (resp.error === 'PIN is blocked.')
                         }
-                        views.unsetBusy()
+                        isBusy = false
                     })
                 } else {
                     pinBlocked = false
-                    views.unsetBusy()
+                    isBusy = false
                 }
             } else {
                 console.log(resp.error)
-                views.unsetBusy()
+                isBusy = false
             }
         })
     }
@@ -48,6 +49,12 @@ ColumnLayout {
         if (hasPin && pinRetries) {
             return qsTr("A PIN is set, ") + pinRetries + qsTr(" retries left.")
         }
+    }
+
+    BusyIndicator {
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        running: isBusy
+        visible: running
     }
 
     ColumnLayout {
