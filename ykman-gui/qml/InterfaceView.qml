@@ -101,11 +101,11 @@ ColumnLayout {
     }
 
     ColumnLayout {
-        spacing: 10
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.margins: 20
         Layout.preferredHeight: app.height
+        Layout.preferredWidth: app.width
 
         Heading1 {
             text: qsTr("Interfaces")
@@ -145,10 +145,10 @@ ColumnLayout {
                 }
                 GridLayout {
                     columnSpacing: 0
-                    rowSpacing: 0
+                    rowSpacing: -10
                     anchors.leftMargin: -10
                     anchors.left: parent.left
-                    columns: 3
+                    columns: 2
                     CheckBox {
                         text: "OTP"
                         id: otpUsb
@@ -192,9 +192,9 @@ ColumnLayout {
                 GridLayout {
                     anchors.leftMargin: -10
                     anchors.left: parent.left
-                    columns: 3
+                    columns: 2
                     columnSpacing: 0
-                    rowSpacing: 0
+                    rowSpacing: -10
                     CheckBox {
                         id: otpNfc
                         text: "OTP"
