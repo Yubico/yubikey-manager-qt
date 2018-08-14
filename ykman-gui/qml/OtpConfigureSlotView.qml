@@ -15,31 +15,28 @@ ColumnLayout {
             text: qsTr("Select Credential Type")
         }
 
-        RowLayout {
-            Label {
+        BreadCrumbRow {
+            BreadCrumb {
                 text: qsTr("Home")
-                color: yubicoGreen
+                action: views.home
             }
-
             BreadCrumbSeparator {
             }
-            Label {
+            BreadCrumb {
                 text: qsTr("OTP")
-                color: yubicoGreen
+                action: views.otp
             }
             BreadCrumbSeparator {
             }
-
-            Label {
+            BreadCrumb {
                 text: SlotUtils.slotNameCapitalized(views.selectedSlot)
-                color: yubicoGreen
+                action: views.otp
             }
             BreadCrumbSeparator {
             }
-
-            Label {
+            BreadCrumb {
                 text: qsTr("Select Credential Type")
-                color: yubicoGrey
+                active: true
             }
         }
 

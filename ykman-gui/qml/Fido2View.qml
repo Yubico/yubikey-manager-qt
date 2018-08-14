@@ -61,19 +61,17 @@ ColumnLayout {
             text: qsTr("FIDO2")
         }
 
-        RowLayout {
-
-            Label {
+        BreadCrumbRow {
+            BreadCrumb {
                 text: qsTr("Home")
-                color: yubicoGreen
+                action: views.home
             }
 
             BreadCrumbSeparator {
             }
-
-            Label {
+            BreadCrumb {
                 text: qsTr("FIDO2")
-                color: yubicoGrey
+                active: true
             }
         }
 

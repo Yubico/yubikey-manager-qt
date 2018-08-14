@@ -75,20 +75,17 @@ ColumnLayout {
         Heading1 {
             text: qsTr("OTP")
         }
-
-        RowLayout {
-
-            Label {
+        BreadCrumbRow {
+            BreadCrumb {
                 text: qsTr("Home")
-                color: yubicoGreen
+                action: views.home
             }
 
             BreadCrumbSeparator {
             }
-
-            Label {
+            BreadCrumb {
                 text: qsTr("OTP")
-                color: yubicoGrey
+                active: true
             }
         }
 

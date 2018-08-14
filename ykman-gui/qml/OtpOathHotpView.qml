@@ -41,38 +41,40 @@ ColumnLayout {
             text: qsTr("OATH-HOTP")
         }
 
-        RowLayout {
-            Label {
+        BreadCrumbRow {
+            BreadCrumb {
                 text: qsTr("Home")
-                color: yubicoGreen
+                action: views.home
             }
 
             BreadCrumbSeparator {
             }
-            Label {
+            BreadCrumb {
                 text: qsTr("OTP")
-                color: yubicoGreen
+                action: views.otp
             }
+
+            BreadCrumbSeparator {
+            }
+            BreadCrumb {
+                text: qsTr(SlotUtils.slotNameCapitalized(views.selectedSlot))
+                action: views.otp
+            }
+
             BreadCrumbSeparator {
             }
 
-            Label {
-                text: SlotUtils.slotNameCapitalized(views.selectedSlot)
-                color: yubicoGreen
-            }
-            BreadCrumbSeparator {
-            }
-
-            Label {
+            BreadCrumb {
                 text: qsTr("Select Credential Type")
-                color: yubicoGreen
+                action: views.pop
             }
 
             BreadCrumbSeparator {
             }
-            Label {
+
+            BreadCrumb {
                 text: qsTr("OATH-HOTP")
-                color: yubicoGrey
+                active: true
             }
         }
 

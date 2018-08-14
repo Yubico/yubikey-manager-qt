@@ -60,37 +60,40 @@ ColumnLayout {
             text: qsTr("Static Password")
         }
 
-        RowLayout {
-            Label {
+        BreadCrumbRow {
+            BreadCrumb {
                 text: qsTr("Home")
-                color: yubicoGreen
+                action: views.home
             }
 
             BreadCrumbSeparator {
             }
-            Label {
+            BreadCrumb {
                 text: qsTr("OTP")
-                color: yubicoGreen
+                action: views.otp
             }
+
             BreadCrumbSeparator {
             }
-            Label {
-                text: SlotUtils.slotNameCapitalized(views.selectedSlot)
-                color: yubicoGreen
+            BreadCrumb {
+                text: qsTr(SlotUtils.slotNameCapitalized(views.selectedSlot))
+                action: views.otp
             }
+
             BreadCrumbSeparator {
             }
 
-            Label {
+            BreadCrumb {
                 text: qsTr("Select Credential Type")
-                color: yubicoGreen
+                action: views.pop
             }
 
             BreadCrumbSeparator {
             }
-            Label {
+
+            BreadCrumb {
                 text: qsTr("Static Password")
-                color: yubicoGrey
+                active: true
             }
         }
 

@@ -111,18 +111,19 @@ ColumnLayout {
             text: qsTr("Interfaces")
         }
 
-        RowLayout {
+        BreadCrumbRow {
 
-            Label {
+            BreadCrumb {
                 text: qsTr("Home")
-                color: yubicoGreen
+                action: views.home
             }
+
             BreadCrumbSeparator {
             }
 
-            Label {
+            BreadCrumb {
                 text: qsTr("Interfaces")
-                color: yubicoGrey
+                active: true
             }
         }
 

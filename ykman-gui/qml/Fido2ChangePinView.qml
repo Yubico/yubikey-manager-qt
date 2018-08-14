@@ -71,24 +71,24 @@ ColumnLayout {
             text: qsTr("Change PIN")
         }
 
-        RowLayout {
-            Label {
+        BreadCrumbRow {
+            BreadCrumb {
                 text: qsTr("Home")
-                color: yubicoGreen
+                action: views.home
             }
 
             BreadCrumbSeparator {
             }
-            Label {
+            BreadCrumb {
                 text: qsTr("FIDO2")
-                color: yubicoGreen
+                action: views.fido2
             }
 
             BreadCrumbSeparator {
             }
-            Label {
+            BreadCrumb {
                 text: qsTr("Change PIN")
-                color: yubicoGrey
+                active: true
             }
         }
 
