@@ -2,7 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
 
-RowLayout {
+ColumnLayout {
 
     function getYubiKeyImageSource() {
         if (yubiKey.isYubiKey4()) {
@@ -23,38 +23,39 @@ RowLayout {
         return "../images/yk4.png" //default for now
     }
 
-    RowLayout {
+    ColumnLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
         Layout.margins: 20
         Layout.preferredHeight: app.height
-        Layout.preferredWidth: app.width
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.fillWidth: true
-            Heading1 {
-                text: yubiKey.name
-            }
-            Label {
-                visible: yubiKey.version
-                color: yubicoBlue
-                font.pointSize: constants.h2
-                text: qsTr("Firmware: ") + yubiKey.version
-            }
-            Label {
-                visible: yubiKey.serial
-                color: yubicoBlue
-                font.pointSize: constants.h2
-                text: qsTr("Serial: ") + yubiKey.serial
-            }
+        Heading1 {
+            text: yubiKey.name
         }
-        ColumnLayout {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        RowLayout {
             Layout.fillWidth: true
-            Image {
-                fillMode: Image.PreserveAspectFit
-                source: getYubiKeyImageSource()
+            Layout.preferredWidth: app.width
+            ColumnLayout {
+                Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                Label {
+                    visible: yubiKey.version
+                    color: yubicoBlue
+                    font.pointSize: constants.h2
+                    text: qsTr("Firmware: ") + yubiKey.version
+                }
+                Label {
+                    visible: yubiKey.serial
+                    color: yubicoBlue
+                    font.pointSize: constants.h2
+                    text: qsTr("Serial: ") + yubiKey.serial
+                }
+            }
+            ColumnLayout {
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                Image {
+                    fillMode: Image.PreserveAspectFit
+                    source: getYubiKeyImageSource()
+                }
             }
         }
     }
