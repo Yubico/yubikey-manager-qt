@@ -10,15 +10,14 @@ Dialog {
     property string message: qsTr("Success! " + SlotUtils.slotNameCapitalized(
                                       views.selectedSlot) + " is configured.")
 
-    ColumnLayout {
-        anchors.fill: parent
-        Label {
-            text: message
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            color: yubicoBlue
-            font.pointSize: constants.h2
-        }
+    Label {
+        width: parent.width
+        text: message
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        color: yubicoBlue
+        font.pointSize: constants.h2
     }
+
     standardButtons: Dialog.Ok
     onClosed: views.otp()
 }

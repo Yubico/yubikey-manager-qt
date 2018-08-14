@@ -7,20 +7,20 @@ Dialog {
     width: app.width - 40
     margins: 20
     modal: true
-    ColumnLayout {
-        anchors.fill: parent
-        Label {
-            text: qsTr("Error!
+
+    Label {
+        width: parent.width
+        text: qsTr("Error!
 
 Failed to modify " + SlotUtils.slotNameCapitalized(views.selectedSlot) + ".
 
 Make sure the YubiKey does not have restricted access.")
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            color: yubicoBlue
-            font.pointSize: constants.h2
-            wrapMode: Text.WordWrap
-            Layout.maximumWidth: parent.width
-        }
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        color: yubicoBlue
+        font.pointSize: constants.h2
+        wrapMode: Text.WordWrap
+        Layout.maximumWidth: parent.width
     }
+
     standardButtons: Dialog.Ok
 }

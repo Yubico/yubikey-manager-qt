@@ -7,16 +7,12 @@ Dialog {
     width: app.width - 40
     margins: 20
     modal: true
-    ColumnLayout {
-        anchors.fill: parent
-        Label {
-            text: qsTr("Do you want to swap the credentials between Short Touch (Slot 1) and Long Touch (Slot 2)?")
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            color: yubicoBlue
-            font.pointSize: constants.h2
-            wrapMode: Text.WordWrap
-            Layout.maximumWidth: parent.width
-        }
+    Label {
+        width: parent.width
+        text: qsTr("Do you want to swap the credentials between Short Touch (Slot 1) and Long Touch (Slot 2)?")
+        color: yubicoBlue
+        font.pointSize: constants.h2
+        wrapMode: Text.WordWrap
     }
     standardButtons: Dialog.No | Dialog.Yes
 }

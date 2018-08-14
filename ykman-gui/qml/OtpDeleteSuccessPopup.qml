@@ -10,17 +10,15 @@ Dialog {
     property string message: qsTr("Success! The configuration in " + SlotUtils.slotNameCapitalized(
                                       views.selectedSlot) + " is deleted.")
 
-    ColumnLayout {
-        anchors.fill: parent
-        Label {
-            text: message
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            color: yubicoBlue
-            font.pointSize: constants.h2
-            wrapMode: Text.WordWrap
-            Layout.maximumWidth: parent.width
-        }
+    Label {
+        text: message
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        color: yubicoBlue
+        font.pointSize: constants.h2
+        wrapMode: Text.WordWrap
+        width: parent.width
     }
+
     standardButtons: Dialog.Ok
     onClosed: views.otp()
 }

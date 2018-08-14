@@ -10,17 +10,16 @@ Dialog {
     property string message: qsTr(
                                  "Success! The configurations have been swapped between the slots.")
 
-    ColumnLayout {
-        anchors.fill: parent
-        Label {
-            text: message
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            color: yubicoBlue
-            font.pointSize: constants.h2
-            wrapMode: Text.WordWrap
-            Layout.maximumWidth: parent.width
-        }
+    Label {
+        width: parent.width
+        text: message
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        color: yubicoBlue
+        font.pointSize: constants.h2
+        wrapMode: Text.WordWrap
+        Layout.maximumWidth: parent.width
     }
+
     standardButtons: Dialog.Ok
     onClosed: views.otp()
 }
