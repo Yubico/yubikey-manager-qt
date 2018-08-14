@@ -56,14 +56,11 @@ ColumnLayout {
 
     ColumnLayout {
         Layout.margins: 20
+        Layout.fillWidth: true
+        Layout.fillHeight: true
         Layout.preferredHeight: app.height
-
-        Label {
+        Heading1 {
             text: qsTr("Yubico OTP")
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Layout.fillWidth: true
-            font.pointSize: constants.h1
-            color: yubicoBlue
         }
 
         BreadCrumbRow {
@@ -103,14 +100,13 @@ ColumnLayout {
             }
         }
 
-        Label {
-            text: qsTr("Public ID")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
         RowLayout {
             Layout.fillWidth: true
-
+            Label {
+                text: qsTr("Public ID")
+                font.pointSize: constants.h3
+                color: yubicoBlue
+            }
             TextField {
                 id: publicIdInput
                 Layout.fillWidth: true
@@ -126,14 +122,14 @@ ColumnLayout {
                 onCheckedChanged: useSerial()
             }
         }
-        Label {
-            text: qsTr("Private ID")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
+
         RowLayout {
             Layout.fillWidth: true
-
+            Label {
+                text: qsTr("Private ID")
+                font.pointSize: constants.h3
+                color: yubicoBlue
+            }
             TextField {
                 id: privateIdInput
                 Layout.fillWidth: true
@@ -148,14 +144,14 @@ ColumnLayout {
                 onClicked: generatePrivateId()
             }
         }
-        Label {
-            text: qsTr("Secret key")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
+
         RowLayout {
             Layout.fillWidth: true
-
+            Label {
+                text: qsTr("Secret key")
+                font.pointSize: constants.h3
+                color: yubicoBlue
+            }
             TextField {
                 id: secretKeyInput
                 Layout.fillWidth: true
