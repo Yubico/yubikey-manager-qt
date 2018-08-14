@@ -107,11 +107,8 @@ ColumnLayout {
         Layout.margins: 20
         Layout.preferredHeight: app.height
 
-        Label {
+        Heading1 {
             text: qsTr("Interfaces")
-            color: yubicoBlue
-            font.pointSize: constants.h1
-            Layout.fillWidth: true
         }
 
         RowLayout {

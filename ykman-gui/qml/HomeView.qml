@@ -29,13 +29,12 @@ RowLayout {
         Layout.margins: 20
         Layout.preferredHeight: app.height
         Layout.preferredWidth: app.width
+
         ColumnLayout {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillWidth: true
-            Label {
+            Heading1 {
                 text: yubiKey.name
-                font.pointSize: constants.h2
-                color: yubicoBlue
             }
             Label {
                 visible: yubiKey.version

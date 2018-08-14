@@ -72,12 +72,8 @@ ColumnLayout {
         Layout.margins: 20
         Layout.preferredHeight: app.height
 
-        Label {
-            Layout.fillWidth: true
-            color: yubicoBlue
+        Heading1 {
             text: qsTr("OTP")
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            font.pointSize: constants.h1
         }
 
         RowLayout {

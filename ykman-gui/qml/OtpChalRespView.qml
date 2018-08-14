@@ -46,12 +46,8 @@ ColumnLayout {
         Layout.margins: 20
         Layout.preferredHeight: app.height
 
-        Label {
+        Heading1 {
             text: qsTr("Challenge-response")
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Layout.fillWidth: true
-            font.pointSize: constants.h1
-            color: yubicoBlue
         }
 
         RowLayout {

@@ -60,11 +60,8 @@ ColumnLayout {
         Layout.margins: 20
         Layout.preferredHeight: app.height
 
-        Label {
-            Layout.fillWidth: true
-            color: yubicoBlue
+        Heading1 {
             text: qsTr("Reset FIDO")
-            font.pointSize: constants.h1
         }
 
         RowLayout {

@@ -50,12 +50,8 @@ ColumnLayout {
         Layout.margins: 20
         Layout.preferredHeight: app.height
 
-        Label {
-            text: qsTr("Configure USB Interfaces")
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            color: yubicoBlue
-            font.pointSize: constants.h1
-            Layout.fillWidth: true
+        Heading1 {
+            text: qsTr("Interfaces")
         }
 
         RowLayout {

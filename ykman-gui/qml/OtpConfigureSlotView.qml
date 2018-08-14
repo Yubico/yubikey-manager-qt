@@ -11,11 +11,8 @@ ColumnLayout {
         Layout.fillHeight: true
         Layout.preferredHeight: app.height
 
-        Label {
+        Heading1 {
             text: qsTr("Select Credential Type")
-            font.pointSize: constants.h1
-            color: yubicoBlue
-            Layout.fillWidth: true
         }
 
         RowLayout {
