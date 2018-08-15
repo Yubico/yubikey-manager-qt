@@ -89,6 +89,9 @@ ColumnLayout {
             validator: RegExpValidator {
                 regExp: /[ 2-7a-zA-Z]+=*/
             }
+            ToolTip.delay: 1000
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Secret key must be a base32 encoded value.")
         }
         RowLayout {
             Label {
@@ -99,6 +102,9 @@ ColumnLayout {
             ComboBox {
                 id: digits
                 model: [6, 8]
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Number of digits in generated code.")
             }
         }
 
@@ -117,6 +123,9 @@ ColumnLayout {
                 highlighted: true
                 onClicked: finish()
                 enabled: secretKeyInput.acceptableInput
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey.")
             }
         }
     }
