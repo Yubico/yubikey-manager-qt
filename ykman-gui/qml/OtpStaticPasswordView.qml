@@ -113,12 +113,18 @@ ColumnLayout {
                 id: generatePasswordBtn
                 text: qsTr("Generate")
                 onClicked: generatePassword()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Generate a random password.")
             }
         }
         CheckBox {
             id: allowNonModhex
-            text: qsTr("Allow any character.")
+            text: qsTr("Allow any character")
             onCheckedChanged: passwordInput.text = ""
+            ToolTip.delay: 1000
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("By default only modhex characters are allowed, enable this option to allow any (US Layout) characters.")
         }
 
         RowLayout {
@@ -136,6 +142,9 @@ ColumnLayout {
                 highlighted: true
                 onClicked: finish()
                 enabled: passwordInput.acceptableInput
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey.")
             }
         }
     }
