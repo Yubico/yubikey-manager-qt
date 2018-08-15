@@ -83,12 +83,18 @@ ColumnLayout {
                     text: qsTr("OTP")
                     Material.foreground: yubicoBlue
                     onClicked: views.otp()
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Configure the OTP Application.")
                 }
                 MenuItem {
                     enabled: yubiKey.fido2Enabled()
                     text: qsTr("FIDO2")
                     onClicked: views.fido2()
                     Material.foreground: yubicoBlue
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Configure the FIDO2 Application.")
                 }
             }
         }
@@ -96,9 +102,11 @@ ColumnLayout {
             text: qsTr("Interfaces")
             flat: true
             Material.foreground: yubicoBlue
-
             enabled: yubiKey.hasDevice && yubiKey.canChangeInterfaces()
             onClicked: views.configureInterfaces()
+            ToolTip.delay: 1000
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Configure what is available over different interfaces.")
         }
     }
     Rectangle {
