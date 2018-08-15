@@ -55,24 +55,36 @@ ColumnLayout {
                 text: qsTr("Yubico OTP")
                 checked: true
                 property var view: otpYubiOtpView
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Configure a Yubico OTP credential.")
             }
             RadioButton {
                 id: chalRespBtn
                 text: qsTr("Challenge-response")
                 KeyNavigation.tab: staticBtn
                 property var view: otpChalRespView
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Configure a Challenge-response credential.")
             }
             RadioButton {
                 id: staticBtn
                 text: qsTr("Static password")
                 KeyNavigation.tab: oathHotpBtn
                 property var view: otpStaticPasswordView
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Configure a static password.")
             }
             RadioButton {
                 id: oathHotpBtn
                 text: qsTr("OATH-HOTP")
                 KeyNavigation.tab: backBtn
                 property var view: otpOathHotpView
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Configure a OATH-HOTP credential.")
             }
         }
         RowLayout {

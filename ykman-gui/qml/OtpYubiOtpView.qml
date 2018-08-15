@@ -114,12 +114,18 @@ ColumnLayout {
                 validator: RegExpValidator {
                     regExp: /[cbdefghijklnrtuv]{12}$/
                 }
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Public ID must be a 12 characters (6 bytes) modhex value.")
             }
             CheckBox {
                 id: useSerialCb
                 enabled: yubiKey.serial
-                text: qsTr("Use encoded serial number")
+                text: qsTr("Use serial")
                 onCheckedChanged: useSerial()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Use the encoded serial number of the YubiKey as Public ID.")
             }
         }
 
@@ -136,12 +142,18 @@ ColumnLayout {
                 validator: RegExpValidator {
                     regExp: /[0-9a-fA-F]{12}$/
                 }
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Private ID must be a 12 characters (6 bytes) hex value.")
             }
             Button {
                 id: generatePrivateIdBtn
                 text: qsTr("Generate")
                 Layout.fillWidth: false
                 onClicked: generatePrivateId()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Generate a random Private ID.")
             }
         }
 
@@ -158,11 +170,17 @@ ColumnLayout {
                 validator: RegExpValidator {
                     regExp: /[0-9a-fA-F]{32}$/
                 }
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Private ID must be a 32 characters (16 bytes) hex value.")
             }
             Button {
                 id: generateSecretKeyBtn
                 text: qsTr("Generate")
                 onClicked: generateKey()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Generate a random Secret Key.")
             }
         }
         RowLayout {
@@ -182,6 +200,9 @@ ColumnLayout {
                 enabled: publicIdInput.acceptableInput
                          && privateIdInput.acceptableInput
                          && secretKeyInput.acceptableInput
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey.")
             }
         }
     }
