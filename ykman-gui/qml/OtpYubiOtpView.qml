@@ -172,7 +172,7 @@ ColumnLayout {
                 }
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Private ID must be a 32 characters (16 bytes) hex value.")
+                ToolTip.text: qsTr("Secret key must be a 32 characters (16 bytes) hex value.")
             }
             Button {
                 id: generateSecretKeyBtn

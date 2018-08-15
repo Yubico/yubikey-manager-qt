@@ -101,18 +101,27 @@ ColumnLayout {
                 validator: RegExpValidator {
                     regExp: /([0-9a-fA-F]{2}){1,20}$/
                 }
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Secret key can be a up to 40 characters (20 bytes) hex value.")
             }
             Button {
                 id: generateBtn
                 text: qsTr("Generate")
                 Layout.fillWidth: false
                 onClicked: generateKey()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Generate a random Secret Key.")
             }
         }
         CheckBox {
             id: requireTouchCb
             enabled: yubiKey.serial
             text: qsTr("Require touch")
+            ToolTip.delay: 1000
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("YubiKey will require a touch for the challenge-response operation.")
         }
 
         RowLayout {
@@ -130,6 +139,9 @@ ColumnLayout {
                 highlighted: true
                 onClicked: finish()
                 enabled: secretKeyInput.acceptableInput
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey.")
             }
         }
     }
