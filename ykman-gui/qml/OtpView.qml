@@ -97,23 +97,18 @@ ColumnLayout {
             }
         }
 
-        GridLayout {
+        RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            Layout.fillHeight: true
+            spacing: 20
 
             ColumnLayout {
-                Layout.fillWidth: true
-
                 Label {
                     text: qsTr("Short Touch (Slot 1)")
-                    Layout.fillWidth: true
                     font.pointSize: constants.h2
                     color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
                 Label {
                     text: slot1StatusTxt()
-                    Layout.fillWidth: true
                     font.pointSize: 14
                     color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
@@ -125,6 +120,9 @@ ColumnLayout {
                             views.selectSlot1()
                             otpDeleteSlotPopup.open()
                         }
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Permanently delete the configuration of Short Touch (Slot 1).")
                     }
                     Button {
                         text: qsTr("Configure")
@@ -133,21 +131,38 @@ ColumnLayout {
                             views.selectSlot1()
                             views.push(otpConfigureSlotView)
                         }
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Configure a credential in Short Touch (Slot 1).")
                     }
+                }
+            }
+            ColumnLayout {
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Button {
+                    text: qsTr("Swap ⇄")
+                    font.family: "Helvetica Neue"
+                    Material.foreground: yubicoBlue
+                    font.capitalization: Font.MixedCase
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    onClicked: otpSwapConfigurationsPopup.open()
+                    flat: true
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Swap the configurations between the two slots.")
                 }
             }
 
             ColumnLayout {
-                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Label {
+                    id: slot2Heading
                     text: qsTr("Long Touch (Slot 2)")
-                    Layout.fillWidth: true
                     font.pointSize: constants.h2
                     color: views.slot2Configured ? yubicoBlue : yubicoGrey
                 }
                 Label {
                     text: slot2StatusTxt()
-                    Layout.fillWidth: true
                     font.pointSize: 14
                     color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
@@ -159,6 +174,9 @@ ColumnLayout {
                             views.selectSlot2()
                             otpDeleteSlotPopup.open()
                         }
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Permanently delete the configuration of Long Touch (Slot 2).")
                     }
                     Button {
                         text: qsTr("Configure")
@@ -167,16 +185,11 @@ ColumnLayout {
                             views.selectSlot2()
                             views.push(otpConfigureSlotView)
                         }
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Configure a credential in Long Touch (Slot 2).")
                     }
                 }
-            }
-        }
-        ColumnLayout {
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-            Button {
-                text: qsTr("Swap configuration between slots")
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                onClicked: otpSwapConfigurationsPopup.open()
             }
         }
     }
