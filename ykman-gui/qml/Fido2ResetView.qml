@@ -43,7 +43,7 @@ ColumnLayout {
 
     Fido2SuccessPopup {
         id: fido2ResetSucces
-        message: qsTr("Success! The FIDO application was reset.")
+        message: qsTr("Success! The FIDO applications were reset.")
     }
 
     Fido2GeneralErrorPopup {
@@ -107,6 +107,9 @@ A reset requires a re-insertion and a touch on the YubiKey.")
                 text: qsTr("Reset")
                 highlighted: true
                 onClicked: fido2ResetConfirmationPopup.open()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Finish and perform the FIDO Reset.")
             }
         }
     }

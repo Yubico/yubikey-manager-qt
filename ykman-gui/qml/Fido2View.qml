@@ -91,6 +91,10 @@ ColumnLayout {
                 text: hasPin ? qsTr("Change PIN") : qsTr("Set PIN")
                 highlighted: true
                 onClicked: hasPin ? views.fido2ChangePin() : views.fido2SetPin()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: hasPin ? qsTr("Change the FIDO2 PIN.") : qsTr(
+                                           "Configure a FIDO2 PIN.")
             }
         }
 
@@ -103,6 +107,9 @@ ColumnLayout {
                 text: qsTr("Reset")
                 highlighted: true
                 onClicked: views.fido2Reset()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Reset all FIDO applications.")
             }
         }
     }

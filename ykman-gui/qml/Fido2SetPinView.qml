@@ -79,6 +79,9 @@ ColumnLayout {
             id: newPin
             Layout.fillWidth: true
             echoMode: TextInput.Password
+            ToolTip.delay: 1000
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("The FIDO2 PIN must be at least 4 characters long.")
         }
 
         Label {
@@ -103,6 +106,9 @@ ColumnLayout {
                 text: qsTr("Set PIN")
                 highlighted: true
                 onClicked: setPin()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Finish and set the FIDO2 PIN.")
             }
         }
     }
