@@ -164,26 +164,45 @@ ColumnLayout {
                     CheckBox {
                         text: "OTP"
                         id: otpUsb
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle OTP availability over USB.")
                     }
                     CheckBox {
                         text: "FIDO2"
                         id: fido2Usb
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr(
+                                          "Toggle FIDO2 availability over USB.")
                     }
                     CheckBox {
                         text: "FIDO U2F"
                         id: u2fUsb
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle FIDO U2F availability over USB.")
                     }
                     CheckBox {
                         text: "OpenPGP"
                         id: pgpUsb
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle OpenPGP availability over USB.")
                     }
                     CheckBox {
                         text: "PIV"
                         id: pivUsb
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle PIV availability over USB.")
                     }
                     CheckBox {
                         text: "OATH"
                         id: oathUsb
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle OATH availability over USB.")
                     }
                 }
             }
@@ -210,26 +229,45 @@ ColumnLayout {
                     CheckBox {
                         id: otpNfc
                         text: "OTP"
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle OTP availability over NFC.")
                     }
                     CheckBox {
                         id: fido2Nfc
                         text: "FIDO2"
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr(
+                                          "Toggle FIDO2 availability over NFC.")
                     }
                     CheckBox {
                         id: u2fNfc
                         text: "FIDO U2F"
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle FIDO U2F availability over NFC.")
                     }
                     CheckBox {
                         id: pgpNfc
                         text: "OpenPGP"
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle OpenPGP availability over NFC.")
                     }
                     CheckBox {
                         id: pivNfc
                         text: "PIV"
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle PIV availability over NFC.")
                     }
                     CheckBox {
                         id: oathNfc
                         text: "OATH"
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle OATH availability over NFC.")
                     }
                 }
             }
@@ -259,6 +297,9 @@ ColumnLayout {
                 text: qsTr("Save Interfaces")
                 highlighted: true
                 onClicked: configureInterfaces()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Finish and save interfaces configuration to YubiKey.")
             }
         }
     }
