@@ -40,6 +40,14 @@ ColumnLayout {
         })
     }
 
+    function configurationHasChanged() {
+        var enabledYubiKeyUsbInterfaces = JSON.stringify(
+                    yubiKey.enabledUsbInterfaces.sort())
+        var enabledUiUsbInterfaces = JSON.stringify(
+                    getEnabledInterfaces().sort())
+        return enabledYubiKeyUsbInterfaces !== enabledUiUsbInterfaces
+    }
+
     function validCombination() {
         return otp.checked || fido.checked || ccid.checked
     }
@@ -51,7 +59,7 @@ ColumnLayout {
         Layout.preferredHeight: app.height
 
         Heading1 {
-            text: qsTr("Interfaces")
+            text: qsTr("USB Interfaces")
         }
 
         BreadCrumbRow {
@@ -76,30 +84,42 @@ ColumnLayout {
             CheckBox {
                 id: otp
                 enabled: yubiKey.otpInterfaceSupported()
-                text: "OTP"
+                text: qsTr("OTP")
                 checkable: true
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Toggle OTP interface over USB.")
             }
             CheckBox {
                 id: fido
                 enabled: yubiKey.fidoInterfaceSupported()
-                text: "FIDO"
+                text: qsTr("FIDO")
                 checkable: true
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Toggle FIDO interface over USB.")
             }
             CheckBox {
                 id: ccid
                 enabled: yubiKey.ccidInterfaceSupported()
                 text: "CCID (Smart Card)"
                 checkable: true
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Toggle CCID interface over USB.")
             }
         }
         RowLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Button {
-                enabled: validCombination()
-                text: qsTr("Save Configuration")
+                enabled: configurationHasChanged() && validCombination()
+                text: qsTr("Save Interfaces")
                 highlighted: true
                 onClicked: configureInterfaces()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Finish and save interfaces configuration to YubiKey.")
             }
         }
     }
