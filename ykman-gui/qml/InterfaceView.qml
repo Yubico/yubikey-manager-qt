@@ -25,6 +25,18 @@ ColumnLayout {
                              })
     }
 
+    function configurationHasChanged() {
+        var enabledYubiKeyUsb = JSON.stringify(
+                    yubiKey.enabledUsbApplications.sort())
+        var enabledUiUsb = JSON.stringify(getEnabledUsbApplications().sort())
+        var enabledYubiKeyNfc = JSON.stringify(
+                    yubiKey.enabledNfcApplications.sort())
+        var enabledUiNfc = JSON.stringify(getEnabledNfcApplications().sort())
+
+        return enabledYubiKeyUsb !== enabledUiUsb
+                || enabledYubiKeyNfc !== enabledUiNfc
+    }
+
     function getEnabledUsbApplications() {
         var enabledApplications = []
         if (otpUsb.checked) {
@@ -242,8 +254,9 @@ ColumnLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
             Button {
-                enabled: validCombination() && lockCodeProvidedIfNeeded()
-                text: qsTr("Save Configuration")
+                enabled: configurationHasChanged() && validCombination()
+                         && lockCodeProvidedIfNeeded()
+                text: qsTr("Save Interfaces")
                 highlighted: true
                 onClicked: configureInterfaces()
             }
