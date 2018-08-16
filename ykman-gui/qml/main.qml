@@ -16,7 +16,8 @@ ApplicationWindow {
     readonly property int margins: 12
     readonly property string yubicoGreen: "#9aca3c"
     readonly property string yubicoBlue: "#284c61"
-    readonly property string yubicoGrey: "#919191"
+    readonly property string yubicoLightBlue: "#417488"
+    readonly property string yubicoGrey: "#939598"
     Component.onDestruction: saveScreenLayout()
 
     Component.onCompleted: ensureValidWindowPosition()

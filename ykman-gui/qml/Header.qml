@@ -60,19 +60,15 @@ ColumnLayout {
             fillMode: Image.PreserveAspectFit
             source: "../images/yubico-logo.svg"
         }
-        Button {
+        TopMenuButton {
             text: qsTr("Home")
             onClicked: views.home()
-            flat: true
-            Material.foreground: yubicoBlue
         }
-        Button {
+        TopMenuButton {
             text: qsTr("Applications")
             Layout.fillWidth: false
             enabled: yubiKey.hasDevice
-            Material.foreground: yubicoBlue
             onClicked: applicationsMenu.open()
-            flat: true
 
             Menu {
                 id: applicationsMenu
@@ -98,10 +94,8 @@ ColumnLayout {
                 }
             }
         }
-        Button {
+        TopMenuButton {
             text: qsTr("Interfaces")
-            flat: true
-            Material.foreground: yubicoBlue
             enabled: yubiKey.hasDevice && yubiKey.canChangeInterfaces()
             onClicked: views.configureInterfaces()
             ToolTip.delay: 1000
