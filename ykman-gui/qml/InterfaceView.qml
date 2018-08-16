@@ -162,14 +162,14 @@ ColumnLayout {
                     anchors.left: parent.left
                     columns: 2
                     CheckBox {
-                        text: "OTP"
+                        text: qsTr("OTP")
                         id: otpUsb
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OTP availability over USB.")
                     }
                     CheckBox {
-                        text: "FIDO2"
+                        text: qsTr("FIDO2")
                         id: fido2Usb
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
@@ -177,28 +177,28 @@ ColumnLayout {
                                           "Toggle FIDO2 availability over USB.")
                     }
                     CheckBox {
-                        text: "FIDO U2F"
+                        text: qsTr("FIDO U2F")
                         id: u2fUsb
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle FIDO U2F availability over USB.")
                     }
                     CheckBox {
-                        text: "OpenPGP"
+                        text: qsTr("OpenPGP")
                         id: pgpUsb
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OpenPGP availability over USB.")
                     }
                     CheckBox {
-                        text: "PIV"
+                        text: qsTr("PIV")
                         id: pivUsb
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle PIV availability over USB.")
                     }
                     CheckBox {
-                        text: "OATH"
+                        text: qsTr("OATH")
                         id: oathUsb
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
@@ -209,7 +209,7 @@ ColumnLayout {
             GroupBox {
                 id: nfcGroupBox
                 label: Label {
-                    text: "NFC"
+                    text: qsTr("NFC")
                     lineHeight: 0.5
                     font.pointSize: constants.h2
                     color: yubicoBlue
@@ -228,14 +228,14 @@ ColumnLayout {
                     rowSpacing: -10
                     CheckBox {
                         id: otpNfc
-                        text: "OTP"
+                        text: qsTr("OTP")
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OTP availability over NFC.")
                     }
                     CheckBox {
                         id: fido2Nfc
-                        text: "FIDO2"
+                        text: qsTr("FIDO2")
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr(
@@ -243,28 +243,28 @@ ColumnLayout {
                     }
                     CheckBox {
                         id: u2fNfc
-                        text: "FIDO U2F"
+                        text: qsTr("FIDO U2F")
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle FIDO U2F availability over NFC.")
                     }
                     CheckBox {
                         id: pgpNfc
-                        text: "OpenPGP"
+                        text: qsTr("OpenPGP")
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OpenPGP availability over NFC.")
                     }
                     CheckBox {
                         id: pivNfc
-                        text: "PIV"
+                        text: qsTr("PIV")
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle PIV availability over NFC.")
                     }
                     CheckBox {
                         id: oathNfc
-                        text: "OATH"
+                        text: qsTr("OATH")
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OATH availability over NFC.")
