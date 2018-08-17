@@ -16,7 +16,7 @@ MenuBar {
         title: qsTr("\&Help")
         MenuItem {
             text: qsTr("\&About YubiKey Manager")
-            onTriggered: views.home()
+            onTriggered: aboutPage.open()
         }
     }
 }

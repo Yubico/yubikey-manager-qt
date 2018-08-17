@@ -131,4 +131,8 @@ ApplicationWindow {
     TouchYubiKeyPopup {
         id: touchYubiKey
     }
+
+    AboutPagePopup {
+        id: aboutPage
+    }
 }
