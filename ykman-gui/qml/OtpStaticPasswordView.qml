@@ -122,6 +122,7 @@ ColumnLayout {
             id: allowNonModhex
             text: qsTr("Allow any character")
             onCheckedChanged: passwordInput.text = ""
+            font.pointSize: constants.h3
             ToolTip.delay: 1000
             ToolTip.visible: hovered
             ToolTip.text: qsTr("By default only modhex characters are allowed, enable this option to allow any (US Layout) characters.")

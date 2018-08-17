@@ -124,6 +124,7 @@ ColumnLayout {
                 text: qsTr("Use serial")
                 onCheckedChanged: useSerial()
                 ToolTip.delay: 1000
+                font.pointSize: constants.h3
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Use the encoded serial number of the YubiKey as Public ID.")
             }

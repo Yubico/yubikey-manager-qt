@@ -119,6 +119,7 @@ ColumnLayout {
             id: requireTouchCb
             enabled: yubiKey.serial
             text: qsTr("Require touch")
+            font.pointSize: constants.h3
             ToolTip.delay: 1000
             ToolTip.visible: hovered
             ToolTip.text: qsTr("YubiKey will require a touch for the challenge-response operation.")
