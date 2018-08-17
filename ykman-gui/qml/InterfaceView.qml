@@ -163,6 +163,7 @@ ColumnLayout {
                     columns: 2
                     CheckBox {
                         text: qsTr("OTP")
+                        font.pointSize: constants.h3
                         id: otpUsb
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
@@ -170,6 +171,7 @@ ColumnLayout {
                     }
                     CheckBox {
                         text: qsTr("FIDO2")
+                        font.pointSize: constants.h3
                         id: fido2Usb
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
@@ -178,6 +180,7 @@ ColumnLayout {
                     }
                     CheckBox {
                         text: qsTr("FIDO U2F")
+                        font.pointSize: constants.h3
                         id: u2fUsb
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
@@ -186,6 +189,7 @@ ColumnLayout {
                     CheckBox {
                         text: qsTr("OpenPGP")
                         id: pgpUsb
+                        font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OpenPGP availability over USB.")
@@ -193,6 +197,7 @@ ColumnLayout {
                     CheckBox {
                         text: qsTr("PIV")
                         id: pivUsb
+                        font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle PIV availability over USB.")
@@ -200,6 +205,7 @@ ColumnLayout {
                     CheckBox {
                         text: qsTr("OATH")
                         id: oathUsb
+                        font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OATH availability over USB.")
@@ -229,6 +235,7 @@ ColumnLayout {
                     CheckBox {
                         id: otpNfc
                         text: qsTr("OTP")
+                        font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OTP availability over NFC.")
@@ -236,6 +243,7 @@ ColumnLayout {
                     CheckBox {
                         id: fido2Nfc
                         text: qsTr("FIDO2")
+                        font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr(
@@ -244,6 +252,7 @@ ColumnLayout {
                     CheckBox {
                         id: u2fNfc
                         text: qsTr("FIDO U2F")
+                        font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle FIDO U2F availability over NFC.")
@@ -251,6 +260,7 @@ ColumnLayout {
                     CheckBox {
                         id: pgpNfc
                         text: qsTr("OpenPGP")
+                        font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OpenPGP availability over NFC.")
@@ -258,6 +268,7 @@ ColumnLayout {
                     CheckBox {
                         id: pivNfc
                         text: qsTr("PIV")
+                        font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle PIV availability over NFC.")
@@ -265,6 +276,7 @@ ColumnLayout {
                     CheckBox {
                         id: oathNfc
                         text: qsTr("OATH")
+                        font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OATH availability over NFC.")

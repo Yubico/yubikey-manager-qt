@@ -85,6 +85,7 @@ ColumnLayout {
                 id: otp
                 enabled: yubiKey.otpInterfaceSupported()
                 text: qsTr("OTP")
+                font.pointSize: constants.h3
                 checkable: true
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
@@ -94,6 +95,7 @@ ColumnLayout {
                 id: fido
                 enabled: yubiKey.fidoInterfaceSupported()
                 text: qsTr("FIDO")
+                font.pointSize: constants.h3
                 checkable: true
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
@@ -102,7 +104,8 @@ ColumnLayout {
             CheckBox {
                 id: ccid
                 enabled: yubiKey.ccidInterfaceSupported()
-                text: "CCID (Smart Card)"
+                text: qsTr("CCID (Smart Card)")
+                font.pointSize: constants.h3
                 checkable: true
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
