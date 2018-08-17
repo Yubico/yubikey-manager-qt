@@ -3,10 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
 import "slotutils.js" as SlotUtils
 
-Dialog {
-    width: app.width - 40
-    margins: 20
-    modal: true
+InlinePopup {
     property string message: qsTr("Success! The configuration in " + SlotUtils.slotNameCapitalized(
                                       views.selectedSlot) + " is deleted.")
 

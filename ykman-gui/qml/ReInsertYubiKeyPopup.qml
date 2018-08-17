@@ -3,10 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
 import "utils.js" as Utils
 
-Dialog {
-    width: app.width - 40
-    margins: 20
-    modal: true
+InlinePopup {
     closePolicy: Popup.NoAutoClose
     Label {
         width: parent.width

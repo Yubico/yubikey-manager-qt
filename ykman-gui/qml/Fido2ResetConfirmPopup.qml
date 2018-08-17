@@ -3,10 +3,8 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
 import "slotutils.js" as SlotUtils
 
-Dialog {
-    width: app.width - 40
-    margins: 20
-    modal: true
+InlinePopup {
+
     Label {
         width: parent.width
         text: qsTr("Are you sure you want to reset FIDO? This will delete all FIDO credentials, including FIDO U2F credentials.

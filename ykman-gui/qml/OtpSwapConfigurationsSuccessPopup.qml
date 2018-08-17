@@ -3,13 +3,9 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
 import "slotutils.js" as SlotUtils
 
-Dialog {
-    width: app.width - 40
-    margins: 20
-    modal: true
+InlinePopup {
     property string message: qsTr(
                                  "Success! The configurations have been swapped between the slots.")
-
     Label {
         width: parent.width
         text: message

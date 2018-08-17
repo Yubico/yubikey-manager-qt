@@ -3,11 +3,8 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
 import "slotutils.js" as SlotUtils
 
-Dialog {
+InlinePopup {
     property string error
-    width: app.width - 40
-    margins: 20
-    modal: true
 
     Label {
         width: parent.width
