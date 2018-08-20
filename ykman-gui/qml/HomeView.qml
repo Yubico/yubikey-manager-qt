@@ -20,6 +20,9 @@ ColumnLayout {
         if (yubiKey.isYubiKeyStandard()) {
             return "../images/standard.png"
         }
+        if (yubiKey.isYubiKeyPreview()) {
+            return "../images/preview.png"
+        }
         return "../images/yk4.png" //default for now
     }
 
