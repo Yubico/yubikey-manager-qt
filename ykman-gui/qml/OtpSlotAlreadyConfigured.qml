@@ -9,14 +9,12 @@ Dialog {
     modal: true
     ColumnLayout {
         anchors.fill: parent
-        Label {
+        Heading2 {
             text: qsTr(SlotUtils.slotNameCapitalized(
                            views.selectedSlot) + " is already configured.
 
 Do you want to overwrite the existing configuration?")
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            color: yubicoBlue
-            font.pointSize: constants.h2
         }
     }
     standardButtons: Dialog.No | Dialog.Yes

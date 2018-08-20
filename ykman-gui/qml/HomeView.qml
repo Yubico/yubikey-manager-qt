@@ -37,16 +37,12 @@ ColumnLayout {
             Layout.preferredWidth: app.width
             ColumnLayout {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                Label {
+                Heading2 {
                     visible: yubiKey.version
-                    color: yubicoBlue
-                    font.pointSize: constants.h2
                     text: qsTr("Firmware: ") + yubiKey.version
                 }
-                Label {
+                Heading2 {
                     visible: yubiKey.serial
-                    color: yubicoBlue
-                    font.pointSize: constants.h2
                     text: qsTr("Serial: ") + yubiKey.serial
                 }
             }

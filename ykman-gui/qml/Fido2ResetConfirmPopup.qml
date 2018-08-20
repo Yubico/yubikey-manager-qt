@@ -5,14 +5,12 @@ import "slotutils.js" as SlotUtils
 
 InlinePopup {
 
-    Label {
+    Heading2 {
         width: parent.width
         text: qsTr("Are you sure you want to reset FIDO? This will delete all FIDO credentials, including FIDO U2F credentials.
 
 This action cannot be undone!")
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        color: yubicoBlue
-        font.pointSize: constants.h2
         wrapMode: Text.WordWrap
         Layout.maximumWidth: parent.width
     }

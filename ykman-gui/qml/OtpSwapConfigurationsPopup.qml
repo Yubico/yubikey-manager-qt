@@ -4,11 +4,9 @@ import QtQuick.Layouts 1.2
 import "slotutils.js" as SlotUtils
 
 InlinePopup {
-    Label {
+    Heading2 {
         width: parent.width
         text: qsTr("Do you want to swap the credentials between Short Touch (Slot 1) and Long Touch (Slot 2)?")
-        color: yubicoBlue
-        font.pointSize: constants.h2
         wrapMode: Text.WordWrap
     }
     standardButtons: Dialog.No | Dialog.Yes

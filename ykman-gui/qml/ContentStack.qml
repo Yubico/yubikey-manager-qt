@@ -201,23 +201,19 @@ StackView {
 
     Component {
         id: noDeviceView
-        Label {
+        Heading2 {
             text: qsTr("No YubiKey detected.")
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            color: yubicoBlue
-            font.pointSize: constants.h2
         }
     }
 
     Component {
         id: multipleDevicesView
-        Label {
+        Heading2 {
             text: qsTr("Multiple YubiKeys detected!")
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            color: yubicoBlue
-            font.pointSize: constants.h2
         }
     }
 }

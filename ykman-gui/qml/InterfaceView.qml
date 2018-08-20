@@ -145,11 +145,9 @@ ColumnLayout {
             GroupBox {
                 id: usbGroupBox
 
-                label: Label {
+                label: Heading2 {
                     text: "USB"
                     lineHeight: 0.5
-                    font.pointSize: constants.h2
-                    color: yubicoBlue
                 }
                 background: Rectangle {
                     border.color: "transparent"
@@ -214,11 +212,9 @@ ColumnLayout {
             }
             GroupBox {
                 id: nfcGroupBox
-                label: Label {
+                label: Heading2 {
                     text: qsTr("NFC")
                     lineHeight: 0.5
-                    font.pointSize: constants.h2
-                    color: yubicoBlue
                 }
 
                 background: Rectangle {

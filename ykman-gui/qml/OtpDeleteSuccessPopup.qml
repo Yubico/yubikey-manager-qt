@@ -7,11 +7,9 @@ InlinePopup {
     property string message: qsTr("Success! The configuration in " + SlotUtils.slotNameCapitalized(
                                       views.selectedSlot) + " is deleted.")
 
-    Label {
+    Heading2 {
         text: message
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        color: yubicoBlue
-        font.pointSize: constants.h2
         wrapMode: Text.WordWrap
         width: parent.width
     }

@@ -102,7 +102,7 @@ ColumnLayout {
             spacing: 20
 
             ColumnLayout {
-                Label {
+                Heading2 {
                     text: qsTr("Short Touch (Slot 1)")
                     font.pointSize: constants.h2
                     color: slot1Configured ? yubicoBlue : yubicoGrey
@@ -155,10 +155,9 @@ ColumnLayout {
 
             ColumnLayout {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                Label {
+                Heading2 {
                     id: slot2Heading
                     text: qsTr("Long Touch (Slot 2)")
-                    font.pointSize: constants.h2
                     color: views.slot2Configured ? yubicoBlue : yubicoGrey
                 }
                 Label {

@@ -6,14 +6,12 @@ import "slotutils.js" as SlotUtils
 InlinePopup {
     property string error
 
-    Label {
+    Heading2 {
         width: parent.width
         text: qsTr("Error!" + "
 
 " + error)
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        color: yubicoBlue
-        font.pointSize: constants.h2
         wrapMode: Text.WordWrap
         Layout.maximumWidth: parent.width
     }

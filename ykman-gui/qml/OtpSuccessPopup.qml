@@ -7,12 +7,10 @@ InlinePopup {
     property string message: qsTr("Success! " + SlotUtils.slotNameCapitalized(
                                       views.selectedSlot) + " is configured.")
 
-    Label {
+    Heading2 {
         width: parent.width
         text: message
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        color: yubicoBlue
-        font.pointSize: constants.h2
     }
 
     standardButtons: Dialog.Ok

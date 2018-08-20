@@ -5,11 +5,9 @@ import "utils.js" as Utils
 
 InlinePopup {
     closePolicy: Popup.NoAutoClose
-    Label {
+    Heading2 {
         width: parent.width
         text: qsTr("Touch your YubiKey!")
-        color: yubicoBlue
-        font.pointSize: constants.h2
         wrapMode: Text.WordWrap
         Layout.maximumWidth: parent.width
     }

@@ -5,7 +5,7 @@ import "slotutils.js" as SlotUtils
 
 InlinePopup {
 
-    Label {
+    Heading2 {
         width: parent.width
         text: qsTr("Error!
 
@@ -13,8 +13,6 @@ Failed to modify " + SlotUtils.slotNameCapitalized(views.selectedSlot) + ".
 
 Make sure the YubiKey does not have restricted access.")
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        color: yubicoBlue
-        font.pointSize: constants.h2
         wrapMode: Text.WordWrap
         Layout.maximumWidth: parent.width
     }
