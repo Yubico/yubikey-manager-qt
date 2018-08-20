@@ -117,6 +117,8 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Public ID must be a 12 characters (6 bytes) modhex value.")
+                selectByMouse: true
+                selectionColor: yubicoGreen
             }
             CheckBox {
                 id: useSerialCb
@@ -146,6 +148,8 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Private ID must be a 12 characters (6 bytes) hex value.")
+                selectByMouse: true
+                selectionColor: yubicoGreen
             }
             Button {
                 id: generatePrivateIdBtn
@@ -174,6 +178,8 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Secret key must be a 32 characters (16 bytes) hex value.")
+                selectByMouse: true
+                selectionColor: yubicoGreen
             }
             Button {
                 id: generateSecretKeyBtn

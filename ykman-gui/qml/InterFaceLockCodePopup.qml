@@ -34,6 +34,8 @@ InlinePopup {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Lock code must be a 32 characters (16 bytes) hex value.")
+                selectByMouse: true
+                selectionColor: yubicoGreen
             }
         }
     }

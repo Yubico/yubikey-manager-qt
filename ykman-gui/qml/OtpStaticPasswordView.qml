@@ -108,6 +108,8 @@ ColumnLayout {
                 id: passwordInput
                 Layout.fillWidth: true
                 validator: allowNonModhex.checked ? usLayoutValidator : modHexValidator
+                selectByMouse: true
+                selectionColor: yubicoGreen
             }
             Button {
                 id: generatePasswordBtn

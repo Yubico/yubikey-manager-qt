@@ -37,6 +37,7 @@ ColumnLayout {
             Layout.preferredWidth: app.width
             ColumnLayout {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+
                 Heading2 {
                     visible: yubiKey.version
                     text: qsTr("Firmware: ") + yubiKey.version

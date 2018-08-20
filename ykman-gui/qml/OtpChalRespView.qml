@@ -104,6 +104,8 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Secret key can be a up to 40 characters (20 bytes) hex value.")
+                selectByMouse: true
+                selectionColor: yubicoGreen
             }
             Button {
                 id: generateBtn

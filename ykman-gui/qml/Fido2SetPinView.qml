@@ -82,6 +82,8 @@ ColumnLayout {
             ToolTip.delay: 1000
             ToolTip.visible: hovered
             ToolTip.text: qsTr("The FIDO2 PIN must be at least 4 characters long.")
+            selectByMouse: true
+            selectionColor: yubicoGreen
         }
 
         Label {
@@ -93,6 +95,8 @@ ColumnLayout {
             id: confirmPin
             Layout.fillWidth: true
             echoMode: TextInput.Password
+            selectByMouse: true
+            selectionColor: yubicoGreen
         }
         RowLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom

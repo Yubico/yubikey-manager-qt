@@ -92,6 +92,8 @@ ColumnLayout {
             ToolTip.delay: 1000
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Secret key must be a base32 encoded value.")
+            selectByMouse: true
+            selectionColor: yubicoGreen
         }
         RowLayout {
             Label {
