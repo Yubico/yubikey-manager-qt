@@ -93,8 +93,7 @@ class Controller(object):
         return self._dev_info
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
-        if lock_code:
-            lock_code = lock_code.encode()
+
         usb_enabled = 0x00
         nfc_enabled = 0x00
         for app in usb_applications:
@@ -103,6 +102,11 @@ class Controller(object):
             nfc_enabled |= APPLICATION[app]
         with self._open_device() as dev:
             try:
+                if lock_code:
+                    lock_code = a2b_hex(lock_code)
+                    if len(lock_code) != 16:
+                        return {'success': False,
+                                'error': 'Lock code not 16 bytes'}
                 dev.write_config(
                     device_config(
                         usb_enabled=usb_enabled,

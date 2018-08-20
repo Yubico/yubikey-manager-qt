@@ -5,23 +5,33 @@ import "utils.js" as Utils
 
 ColumnLayout {
 
-    property string lockCode: lockCodeInput.text
+    property string lockCode: lockCodePopup.lockCode
     property bool configurationLocked
 
     objectName: "interfaces"
     Component.onCompleted: load()
 
     function configureInterfaces() {
+        if (configurationLocked) {
+            lockCodePopup.open()
+        } else {
+            writeInterfaces()
+        }
+    }
+
+    function writeInterfaces() {
         views.lock()
         yubiKey.write_config(getEnabledUsbApplications(),
                              getEnabledNfcApplications(), lockCode,
                              function (resp) {
                                  if (resp.success) {
-                                     views.pop()
+                                     views.unlock()
+                                     views.home()
                                  } else {
                                      console.log(resp.error)
+                                     views.unlock()
+                                     errorLockCodePopup.open()
                                  }
-                                 views.unlock()
                              })
     }
 
@@ -106,10 +116,6 @@ ColumnLayout {
     function validCombination() {
         return otpUsb.checked || fido2Usb.checked || u2fUsb.checked
                 || pivUsb.checked || pgpUsb.checked || oathUsb.checked
-    }
-
-    function lockCodeProvidedIfNeeded() {
-        return yubiKey.configurationLocked ? lockCodeInput.text.length > 0 : true
     }
 
     ColumnLayout {
@@ -281,17 +287,13 @@ ColumnLayout {
             }
         }
 
-        Label {
-            text: 'Lock Code'
-            visible: configurationLocked
-            color: yubicoBlue
-            font.pointSize: constants.h3
+        InterFaceLockCodePopup {
+            id: lockCodePopup
+            onAccepted: writeInterfaces()
         }
-        TextField {
-            id: lockCodeInput
-            visible: configurationLocked
-            Layout.fillWidth: true
-            echoMode: TextInput.Password
+
+        InterfacesErrorPopup {
+            id: errorLockCodePopup
         }
 
         RowLayout {
@@ -301,7 +303,6 @@ ColumnLayout {
 
             Button {
                 enabled: configurationHasChanged() && validCombination()
-                         && lockCodeProvidedIfNeeded()
                 text: qsTr("Save Interfaces")
                 highlighted: true
                 onClicked: configureInterfaces()
