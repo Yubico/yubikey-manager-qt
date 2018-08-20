@@ -29,10 +29,15 @@ ColumnLayout {
             textFormat: Text.RichText
             onLinkActivated: Qt.openUrlExternally(link)
             Layout.alignment: Qt.AlignRight
+
             MouseArea {
                 anchors.fill: parent
+                hoverEnabled: true
                 acceptedButtons: Qt.NoButton
                 cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+                ToolTip.delay: 1000
+                ToolTip.visible: parent.hoveredLink
+                ToolTip.text: qsTr("Visit Yubico Support in your web browser.")
             }
         }
     }
@@ -59,6 +64,15 @@ ColumnLayout {
             Layout.maximumWidth: 150
             fillMode: Image.PreserveAspectFit
             source: "../images/yubico-logo.svg"
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
+                onClicked: Qt.openUrlExternally("https://www.yubico.com/")
+                ToolTip.delay: 1000
+                ToolTip.visible: containsMouse
+                ToolTip.text: qsTr("Visit yubico.com in your web browser.")
+            }
         }
         TopMenuButton {
             text: qsTr("Home")
