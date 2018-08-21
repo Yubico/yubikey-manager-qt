@@ -13,5 +13,11 @@ InlinePopup {
             wrapMode: Text.WordWrap
             Layout.maximumWidth: parent.width
         }
+        Image {
+            fillMode: Image.PreserveAspectCrop
+            source: "../images/touch.svg"
+            sourceSize.width: 24
+            sourceSize.height: 24
+        }
     }
 }
