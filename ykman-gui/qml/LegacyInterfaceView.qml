@@ -59,7 +59,7 @@ ColumnLayout {
         Layout.preferredHeight: app.height
 
         Heading1 {
-            text: qsTr("USB Interfaces")
+            text: qsTr("Interfaces")
         }
 
         BreadCrumbRow {
@@ -80,36 +80,60 @@ ColumnLayout {
 
         RowLayout {
             Layout.fillWidth: true
-
-            CheckBox {
-                id: otp
-                enabled: yubiKey.otpInterfaceSupported()
-                text: qsTr("OTP")
-                font.pointSize: constants.h3
-                checkable: true
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Toggle OTP interface over USB.")
-            }
-            CheckBox {
-                id: fido
-                enabled: yubiKey.fidoInterfaceSupported()
-                text: qsTr("FIDO")
-                font.pointSize: constants.h3
-                checkable: true
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Toggle FIDO interface over USB.")
-            }
-            CheckBox {
-                id: ccid
-                enabled: yubiKey.ccidInterfaceSupported()
-                text: qsTr("CCID (Smart Card)")
-                font.pointSize: constants.h3
-                checkable: true
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Toggle CCID interface over USB.")
+            spacing: 20
+            GroupBox {
+                label: Row {
+                    spacing: 5
+                    Label {
+                        id: label
+                        text: "USB"
+                        lineHeight: 0.5
+                        color: yubicoBlue
+                        font.pointSize: constants.h2
+                    }
+                    Image {
+                        fillMode: Image.PreserveAspectCrop
+                        source: "../images/usb.svg"
+                        sourceSize.width: 24
+                        sourceSize.height: 24
+                    }
+                }
+                background: Rectangle {
+                    border.color: "transparent"
+                    color: app.color
+                }
+                RowLayout {
+                    CheckBox {
+                        id: otp
+                        enabled: yubiKey.otpInterfaceSupported()
+                        text: qsTr("OTP")
+                        font.pointSize: constants.h3
+                        checkable: true
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle OTP interface over USB.")
+                    }
+                    CheckBox {
+                        id: fido
+                        enabled: yubiKey.fidoInterfaceSupported()
+                        text: qsTr("FIDO")
+                        font.pointSize: constants.h3
+                        checkable: true
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle FIDO interface over USB.")
+                    }
+                    CheckBox {
+                        id: ccid
+                        enabled: yubiKey.ccidInterfaceSupported()
+                        text: qsTr("CCID (Smart Card)")
+                        font.pointSize: constants.h3
+                        checkable: true
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle CCID interface over USB.")
+                    }
+                }
             }
         }
         RowLayout {
