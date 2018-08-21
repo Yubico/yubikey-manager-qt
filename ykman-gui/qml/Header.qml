@@ -65,7 +65,7 @@ ColumnLayout {
     RowLayout {
         Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
         Layout.fillWidth: true
-        Layout.leftMargin: 10
+        Layout.leftMargin: 20
         Image {
             id: yubicoLogo
             Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
