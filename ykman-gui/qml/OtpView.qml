@@ -123,6 +123,12 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Permanently delete the configuration of Short Touch (Slot 1).")
+                        icon.source: "../images/delete.svg"
+                        font.capitalization: Font.MixedCase
+                        font.family: "Helvetica Neue"
+                        Material.foreground: yubicoBlue
+                        icon.width: 16
+                        icon.height: 16
                     }
                     Button {
                         text: qsTr("Configure")
@@ -134,6 +140,11 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Configure a credential in Short Touch (Slot 1).")
+                        icon.source: "../images/wrench.svg"
+                        font.capitalization: Font.MixedCase
+                        font.family: "Helvetica Neue"
+                        icon.width: 16
+                        icon.height: 16
                     }
                 }
             }
@@ -141,6 +152,7 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Button {
                     text: qsTr("Swap")
+                    enabled: slot1Configured || slot2Configured
                     icon.source: "../images/swap.svg"
                     font.family: "Helvetica Neue"
                     Material.foreground: yubicoBlue
@@ -177,6 +189,12 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Permanently delete the configuration of Long Touch (Slot 2).")
+                        icon.source: "../images/delete.svg"
+                        font.capitalization: Font.MixedCase
+                        Material.foreground: yubicoBlue
+                        font.family: "Helvetica Neue"
+                        icon.width: 16
+                        icon.height: 16
                     }
                     Button {
                         text: qsTr("Configure")
@@ -185,9 +203,14 @@ ColumnLayout {
                             views.selectSlot2()
                             views.push(otpConfigureSlotView)
                         }
+                        font.capitalization: Font.MixedCase
+                        font.family: "Helvetica Neue"
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Configure a credential in Long Touch (Slot 2).")
+                        icon.source: "../images/wrench.svg"
+                        icon.width: 16
+                        icon.height: 16
                     }
                 }
             }

@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
 import "slotutils.js" as SlotUtils
+import QtQuick.Controls.Material 2.3
 
 ColumnLayout {
 
@@ -159,6 +160,9 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Generate a random Private ID.")
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
+                Material.foreground: yubicoBlue
             }
         }
 
@@ -188,6 +192,9 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Generate a random Secret Key.")
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
+                Material.foreground: yubicoBlue
             }
         }
         RowLayout {
@@ -198,6 +205,12 @@ ColumnLayout {
                 id: backBtn
                 text: qsTr("Back")
                 onClicked: views.pop()
+                icon.source: "../images/back.svg"
+                icon.width: 16
+                icon.height: 16
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
+                Material.foreground: yubicoBlue
             }
             Button {
                 id: finnishBtn
@@ -210,6 +223,11 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Finish and write the configuration to the YubiKey.")
+                icon.source: "../images/finish.svg"
+                icon.width: 16
+                icon.height: 16
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
             }
         }
     }

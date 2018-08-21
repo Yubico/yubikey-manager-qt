@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
+import QtQuick.Controls.Material 2.3
 
 ColumnLayout {
     readonly property alias chosenCurrentPin: currentPin.text
@@ -135,8 +136,14 @@ ColumnLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
             Button {
-                text: qsTr("Cancel")
+                text: qsTr("Back")
                 onClicked: views.pop()
+                icon.source: "../images/back.svg"
+                icon.width: 16
+                icon.height: 16
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
+                Material.foreground: yubicoBlue
             }
             Button {
                 enabled: validPin()
@@ -146,6 +153,11 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Finish and change the FIDO2 PIN.")
+                icon.source: "../images/finish.svg"
+                icon.width: 16
+                icon.height: 16
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
             }
         }
     }

@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.3
 import "slotutils.js" as SlotUtils
+import QtQuick.Controls.Material 2.3
 
 ColumnLayout {
 
@@ -99,12 +100,23 @@ ColumnLayout {
                 id: backBtn
                 text: qsTr("Back")
                 onClicked: views.pop()
+                icon.source: "../images/back.svg"
+                icon.width: 16
+                icon.height: 16
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
+                Material.foreground: yubicoBlue
             }
             Button {
                 id: nextBtn
                 text: qsTr("Next")
                 highlighted: true
                 onClicked: views.push(configViewOptions.checkedButton.view)
+                icon.source: "../images/next.svg"
+                icon.width: 16
+                icon.height: 16
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
             }
         }
     }

@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
+import QtQuick.Controls.Material 2.3
 
 ColumnLayout {
 
@@ -100,8 +101,14 @@ A reset requires a re-insertion and a touch on the YubiKey.")
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
             Button {
-                text: qsTr("Cancel")
+                text: qsTr("Back")
                 onClicked: views.pop()
+                icon.source: "../images/back.svg"
+                icon.width: 16
+                icon.height: 16
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
+                Material.foreground: yubicoBlue
             }
             Button {
                 text: qsTr("Reset")
@@ -110,6 +117,11 @@ A reset requires a re-insertion and a touch on the YubiKey.")
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Finish and perform the FIDO Reset.")
+                icon.source: "../images/finish.svg"
+                icon.width: 16
+                icon.height: 16
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
             }
         }
     }

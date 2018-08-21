@@ -30,7 +30,7 @@ ColumnLayout {
             Image {
                 Layout.fillWidth: false
                 fillMode: Image.PreserveAspectCrop
-                source: "../images/wrench.svg"
+                source: "../images/cogwheel.svg"
                 sourceSize.width: 12
                 sourceSize.height: 12
                 visible: yubiKey.hasDevice

@@ -332,6 +332,11 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Finish and save interfaces configuration to YubiKey.")
+                icon.source: "../images/finish.svg"
+                icon.width: 16
+                icon.height: 16
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
             }
         }
     }
