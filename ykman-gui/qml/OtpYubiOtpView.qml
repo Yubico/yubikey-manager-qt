@@ -101,10 +101,12 @@ ColumnLayout {
             }
         }
 
-        RowLayout {
+        GridLayout {
+            columns: 3
             Layout.fillWidth: true
             Label {
                 text: qsTr("Public ID")
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 font.pointSize: constants.h3
                 color: yubicoBlue
             }
@@ -130,13 +132,12 @@ ColumnLayout {
                 font.pointSize: constants.h3
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Use the encoded serial number of the YubiKey as Public ID.")
+                Material.foreground: yubicoBlue
             }
-        }
 
-        RowLayout {
-            Layout.fillWidth: true
             Label {
                 text: qsTr("Private ID")
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 font.pointSize: constants.h3
                 color: yubicoBlue
             }
@@ -155,7 +156,7 @@ ColumnLayout {
             Button {
                 id: generatePrivateIdBtn
                 text: qsTr("Generate")
-                Layout.fillWidth: false
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 onClicked: generatePrivateId()
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
@@ -164,10 +165,7 @@ ColumnLayout {
                 font.family: "Helvetica Neue"
                 Material.foreground: yubicoBlue
             }
-        }
 
-        RowLayout {
-            Layout.fillWidth: true
             Label {
                 text: qsTr("Secret key")
                 font.pointSize: constants.h3
@@ -188,6 +186,7 @@ ColumnLayout {
             Button {
                 id: generateSecretKeyBtn
                 text: qsTr("Generate")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 onClicked: generateKey()
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered

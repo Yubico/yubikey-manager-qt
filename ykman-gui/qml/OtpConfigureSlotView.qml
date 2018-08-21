@@ -49,7 +49,7 @@ ColumnLayout {
         GridLayout {
             id: typeColumn
             Layout.fillWidth: true
-
+            Layout.leftMargin: 20
             columns: 2
             RadioButton {
                 id: otpBtn
@@ -60,6 +60,7 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Configure a Yubico OTP credential.")
+                Material.foreground: yubicoBlue
             }
             RadioButton {
                 id: chalRespBtn
@@ -70,6 +71,7 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Configure a Challenge-response credential.")
+                Material.foreground: yubicoBlue
             }
             RadioButton {
                 id: staticBtn
@@ -80,6 +82,7 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Configure a static password.")
+                Material.foreground: yubicoBlue
             }
             RadioButton {
                 id: oathHotpBtn
@@ -90,6 +93,7 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Configure a OATH-HOTP credential.")
+                Material.foreground: yubicoBlue
             }
         }
         RowLayout {
