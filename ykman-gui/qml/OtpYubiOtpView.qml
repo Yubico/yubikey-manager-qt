@@ -28,7 +28,7 @@ ColumnLayout {
 
     function finish() {
         if (views.selectedSlotConfigured()) {
-            otpSlotAlreadyConfigured.open()
+            otpSlotAlreadyConfiguredPopup.open()
         } else {
             programYubiOtp()
         }
@@ -50,8 +50,8 @@ ColumnLayout {
                             })
     }
 
-    OtpSlotAlreadyConfigured {
-        id: otpSlotAlreadyConfigured
+    OtpSlotAlreadyConfiguredPopup {
+        id: otpSlotAlreadyConfiguredPopup
         onAccepted: programYubiOtp()
     }
 

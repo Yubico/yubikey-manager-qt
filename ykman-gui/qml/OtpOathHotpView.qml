@@ -29,7 +29,7 @@ ColumnLayout {
                                   })
     }
 
-    OtpSlotAlreadyConfigured {
+    OtpSlotAlreadyConfiguredPopup {
         id: otpSlotAlreadyConfigured
         onAccepted: programOathHotp()
     }
@@ -78,23 +78,24 @@ ColumnLayout {
                 active: true
             }
         }
-
-        Label {
-            text: qsTr("Secret key")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
-        TextField {
-            id: secretKeyInput
-            Layout.fillWidth: true
-            validator: RegExpValidator {
-                regExp: /[ 2-7a-zA-Z]+=*/
+        RowLayout {
+            Label {
+                text: qsTr("Secret key")
+                font.pointSize: constants.h3
+                color: yubicoBlue
             }
-            ToolTip.delay: 1000
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Secret key must be a base32 encoded value.")
-            selectByMouse: true
-            selectionColor: yubicoGreen
+            TextField {
+                id: secretKeyInput
+                Layout.fillWidth: true
+                validator: RegExpValidator {
+                    regExp: /[ 2-7a-zA-Z]+=*/
+                }
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Secret key must be a base32 encoded value.")
+                selectByMouse: true
+                selectionColor: yubicoGreen
+            }
         }
         RowLayout {
             Label {
@@ -108,6 +109,7 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Number of digits in generated code.")
+                Material.foreground: yubicoBlue
             }
         }
 

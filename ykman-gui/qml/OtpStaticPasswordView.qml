@@ -48,7 +48,7 @@ ColumnLayout {
         regExp: /[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#\$%&'\(\)\*\+,-\.\/:;<=>\?@\[\]\^_{}\|~]{1,38}$/
     }
 
-    OtpSlotAlreadyConfigured {
+    OtpSlotAlreadyConfiguredPopup {
         id: otpSlotAlreadyConfigured
         onAccepted: programStaticPassword()
     }
@@ -98,13 +98,13 @@ ColumnLayout {
             }
         }
 
-        Label {
-            text: qsTr("Password")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
         RowLayout {
             Layout.fillWidth: true
+            Label {
+                text: qsTr("Password")
+                font.pointSize: constants.h3
+                color: yubicoBlue
+            }
             TextField {
                 id: passwordInput
                 Layout.fillWidth: true
@@ -129,6 +129,7 @@ ColumnLayout {
             text: qsTr("Allow any character")
             onCheckedChanged: passwordInput.text = ""
             font.pointSize: constants.h3
+            Material.foreground: yubicoBlue
             ToolTip.delay: 1000
             ToolTip.visible: hovered
             ToolTip.text: qsTr("By default only modhex characters are allowed, enable this option to allow any (US Layout) characters.")

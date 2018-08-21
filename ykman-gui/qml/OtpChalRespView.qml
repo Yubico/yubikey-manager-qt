@@ -38,7 +38,7 @@ ColumnLayout {
                                            })
     }
 
-    OtpSlotAlreadyConfigured {
+    OtpSlotAlreadyConfiguredPopup {
         id: otpSlotAlreadyConfigured
         onAccepted: programChallengeResponse()
     }
@@ -88,14 +88,13 @@ ColumnLayout {
             }
         }
 
-        Label {
-            text: qsTr("Secret key")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
         RowLayout {
             Layout.fillWidth: true
-
+            Label {
+                text: qsTr("Secret key")
+                font.pointSize: constants.h3
+                color: yubicoBlue
+            }
             TextField {
                 id: secretKeyInput
                 Layout.fillWidth: true
@@ -129,6 +128,7 @@ ColumnLayout {
             ToolTip.delay: 1000
             ToolTip.visible: hovered
             ToolTip.text: qsTr("YubiKey will require a touch for the challenge-response operation.")
+            Material.foreground: yubicoBlue
         }
 
         RowLayout {

@@ -104,6 +104,7 @@ ColumnLayout {
             spacing: 20
 
             ColumnLayout {
+                spacing: 10
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Heading2 {
@@ -117,6 +118,8 @@ ColumnLayout {
                     color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
                 RowLayout {
+                    Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+                    spacing: 10
                     Button {
                         text: qsTr("Delete")
                         enabled: slot1Configured
@@ -153,6 +156,7 @@ ColumnLayout {
                 }
             }
             ColumnLayout {
+                spacing: 10
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Button {
@@ -174,7 +178,8 @@ ColumnLayout {
             ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                spacing: 10
+
                 Heading2 {
                     id: slot2Heading
                     text: qsTr("Long Touch (Slot 2)")
@@ -186,6 +191,8 @@ ColumnLayout {
                     color: slot2Configured ? yubicoBlue : yubicoGrey
                 }
                 RowLayout {
+                    spacing: 10
+
                     Button {
                         text: qsTr("Delete")
                         enabled: views.slot2Configured
