@@ -84,7 +84,7 @@ ColumnLayout {
 
         RowLayout {
             Layout.alignment: Qt.AlignRight
-            Label {
+            Heading2 {
                 text: getPinMessage()
             }
             Button {
@@ -100,7 +100,7 @@ ColumnLayout {
 
         RowLayout {
             Layout.alignment: Qt.AlignRight
-            Label {
+            Heading2 {
                 text: qsTr("Reset FIDO.")
             }
             Button {
