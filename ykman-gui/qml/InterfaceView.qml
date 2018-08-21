@@ -151,11 +151,21 @@ ColumnLayout {
             GroupBox {
                 id: usbGroupBox
 
-                label: Label {
-                    text: "USB"
-                    lineHeight: 0.5
-                    color: yubicoBlue
-                    font.pointSize: constants.h2
+                label: Row {
+                    spacing: 5
+                    Label {
+                        id: label
+                        text: "USB"
+                        lineHeight: 0.5
+                        color: yubicoBlue
+                        font.pointSize: constants.h2
+                    }
+                    Image {
+                        fillMode: Image.PreserveAspectCrop
+                        source: "../images/usb.svg"
+                        sourceSize.width: 24
+                        sourceSize.height: 24
+                    }
                 }
                 background: Rectangle {
                     border.color: "transparent"
@@ -220,11 +230,20 @@ ColumnLayout {
             }
             GroupBox {
                 id: nfcGroupBox
-                label: Label {
-                    text: qsTr("NFC")
-                    lineHeight: 0.5
-                    color: yubicoBlue
-                    font.pointSize: constants.h2
+                label: Row {
+                    spacing: 5
+                    Label {
+                        text: qsTr("NFC")
+                        lineHeight: 0.5
+                        color: yubicoBlue
+                        font.pointSize: constants.h2
+                    }
+                    Image {
+                        fillMode: Image.PreserveAspectCrop
+                        source: "../images/wifi.svg"
+                        sourceSize.width: 24
+                        sourceSize.height: 24
+                    }
                 }
 
                 background: Rectangle {

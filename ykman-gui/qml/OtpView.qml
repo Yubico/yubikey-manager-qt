@@ -140,7 +140,8 @@ ColumnLayout {
             ColumnLayout {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Button {
-                    text: qsTr("Swap ⇄")
+                    text: qsTr("Swap")
+                    icon.source: "../images/swap.svg"
                     font.family: "Helvetica Neue"
                     Material.foreground: yubicoBlue
                     font.capitalization: Font.MixedCase

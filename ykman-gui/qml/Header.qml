@@ -23,34 +23,42 @@ ColumnLayout {
         Layout.alignment: Qt.AlignRight
         Layout.rightMargin: 10
         Layout.topMargin: 10
-
-        Label {
-            text: qsTr("<a href='https://www.yubico.com/kb' style='color:#284c61'>help</a>")
-            textFormat: Text.RichText
-            onLinkActivated: Qt.openUrlExternally(link)
+        RowLayout {
             Layout.alignment: Qt.AlignRight
+            Layout.fillWidth: true
 
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                acceptedButtons: Qt.NoButton
-                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+            Image {
+                Layout.fillWidth: false
+                fillMode: Image.PreserveAspectCrop
+                source: "../images/wrench.svg"
+                sourceSize.width: 12
+                sourceSize.height: 12
+                visible: yubiKey.hasDevice
+            }
+            Label {
+                text: activeKeyLbl()
+                Layout.fillWidth: false
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                color: yubicoBlue
+            }
+            Button {
+                flat: true
+                text: "Help"
+                font.pointSize: 12
+                font.capitalization: Font.MixedCase
+                font.family: "Helvetica Neue"
+                Material.foreground: yubicoBlue
+                display: AbstractButton.TextBesideIcon
+                Layout.fillWidth: false
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                icon.source: "../images/help.svg"
+                icon.width: 16
+                icon.height: 16
+                onClicked: Qt.openUrlExternally("https://www.yubico.com/kb")
                 ToolTip.delay: 1000
-                ToolTip.visible: parent.hoveredLink
+                ToolTip.visible: hovered
                 ToolTip.text: qsTr("Visit Yubico Support in your web browser.")
             }
-        }
-    }
-
-    RowLayout {
-        Layout.alignment: Qt.AlignRight
-        Layout.fillWidth: true
-        Layout.rightMargin: 10
-        Layout.topMargin: 10
-        Label {
-            text: activeKeyLbl()
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            color: yubicoBlue
         }
     }
 
