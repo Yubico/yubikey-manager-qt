@@ -65,6 +65,7 @@ ColumnLayout {
 
     ColumnLayout {
         Layout.fillWidth: true
+        Layout.fillHeight: true
         Layout.margins: 20
         Layout.preferredHeight: app.height
 
@@ -92,46 +93,53 @@ ColumnLayout {
                 active: true
             }
         }
+        GridLayout {
+            columns: 2
+            Layout.fillWidth: true
+            Label {
+                text: qsTr("Current PIN")
+                font.pointSize: constants.h3
+                color: yubicoBlue
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            }
+            TextField {
+                id: currentPin
+                Layout.fillWidth: true
+                echoMode: TextInput.Password
+                selectByMouse: true
+                selectionColor: yubicoGreen
+            }
+            Label {
+                text: qsTr("New PIN")
+                font.pointSize: constants.h3
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                color: yubicoBlue
+            }
+            TextField {
+                id: newPin
+                Layout.fillWidth: true
+                echoMode: TextInput.Password
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("The FIDO2 PIN must be at least 4 characters long.")
+                selectByMouse: true
+                selectionColor: yubicoGreen
+            }
+            Label {
+                text: qsTr("Confirm new PIN")
+                font.pointSize: constants.h3
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                color: yubicoBlue
+            }
+            TextField {
+                id: confirmPin
+                Layout.fillWidth: true
+                echoMode: TextInput.Password
+                selectByMouse: true
+                selectionColor: yubicoGreen
+            }
+        }
 
-        Label {
-            text: qsTr("Current PIN")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
-        TextField {
-            id: currentPin
-            Layout.fillWidth: true
-            echoMode: TextInput.Password
-            selectByMouse: true
-            selectionColor: yubicoGreen
-        }
-        Label {
-            text: qsTr("New PIN")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
-        TextField {
-            id: newPin
-            Layout.fillWidth: true
-            echoMode: TextInput.Password
-            ToolTip.delay: 1000
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("The FIDO2 PIN must be at least 4 characters long.")
-            selectByMouse: true
-            selectionColor: yubicoGreen
-        }
-        Label {
-            text: qsTr("Confirm PIN")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
-        TextField {
-            id: confirmPin
-            Layout.fillWidth: true
-            echoMode: TextInput.Password
-            selectByMouse: true
-            selectionColor: yubicoGreen
-        }
         RowLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true

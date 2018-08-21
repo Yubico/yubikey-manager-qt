@@ -42,6 +42,7 @@ ColumnLayout {
 
     ColumnLayout {
         Layout.fillWidth: true
+        Layout.fillHeight: true
         Layout.margins: 20
         Layout.preferredHeight: app.height
 
@@ -69,36 +70,40 @@ ColumnLayout {
                 active: true
             }
         }
-
-        Label {
-            text: qsTr("New PIN")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
-
-        TextField {
-            id: newPin
+        GridLayout {
+            columns: 2
             Layout.fillWidth: true
-            echoMode: TextInput.Password
-            ToolTip.delay: 1000
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("The FIDO2 PIN must be at least 4 characters long.")
-            selectByMouse: true
-            selectionColor: yubicoGreen
+            Label {
+                text: qsTr("New PIN")
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                font.pointSize: constants.h3
+                color: yubicoBlue
+            }
+            TextField {
+                id: newPin
+                Layout.fillWidth: true
+                echoMode: TextInput.Password
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("The FIDO2 PIN must be at least 4 characters long.")
+                selectByMouse: true
+                selectionColor: yubicoGreen
+            }
+            Label {
+                text: qsTr("Confirm PIN")
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                font.pointSize: constants.h3
+                color: yubicoBlue
+            }
+            TextField {
+                id: confirmPin
+                Layout.fillWidth: true
+                echoMode: TextInput.Password
+                selectByMouse: true
+                selectionColor: yubicoGreen
+            }
         }
 
-        Label {
-            text: qsTr("Confirm PIN")
-            font.pointSize: constants.h3
-            color: yubicoBlue
-        }
-        TextField {
-            id: confirmPin
-            Layout.fillWidth: true
-            echoMode: TextInput.Password
-            selectByMouse: true
-            selectionColor: yubicoGreen
-        }
         RowLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
