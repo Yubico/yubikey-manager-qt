@@ -9,5 +9,6 @@ InlinePopup {
         width: parent.width
         text: qsTr("Remove and re-insert your YubiKey!")
         wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
     }
 }

@@ -5,10 +5,13 @@ import "utils.js" as Utils
 
 InlinePopup {
     closePolicy: Popup.NoAutoClose
-    Heading2 {
-        width: parent.width
-        text: qsTr("Touch your YubiKey!")
-        wrapMode: Text.WordWrap
-        Layout.maximumWidth: parent.width
+    RowLayout {
+        anchors.fill: parent
+        Heading2 {
+            text: qsTr("Touch your YubiKey!")
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            Layout.maximumWidth: parent.width
+        }
     }
 }
