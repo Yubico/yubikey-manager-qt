@@ -18,8 +18,8 @@ ColumnLayout {
         })
     }
 
-    readonly property string slotIsConfigured: qsTr("The slot is configured.")
-    readonly property string slotIsEmpty: qsTr("The slot is empty.")
+    readonly property string slotIsConfigured: qsTr("This slot is configured.")
+    readonly property string slotIsEmpty: qsTr("This slot is empty.")
 
     function slot1StatusTxt() {
         return slot1Configured ? slotIsConfigured : slotIsEmpty
@@ -98,10 +98,14 @@ ColumnLayout {
         }
 
         RowLayout {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.fillHeight: true
             Layout.fillWidth: true
             spacing: 20
 
             ColumnLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 Heading2 {
                     text: qsTr("Short Touch (Slot 1)")
                     font.pointSize: constants.h2
@@ -109,13 +113,13 @@ ColumnLayout {
                 }
                 Label {
                     text: slot1StatusTxt()
-                    font.pointSize: 14
+                    font.pointSize: constants.h3
                     color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
                 RowLayout {
                     Button {
                         text: qsTr("Delete")
-                        enabled: views.slot1Configured
+                        enabled: slot1Configured
                         onClicked: {
                             views.selectSlot1()
                             otpDeleteSlotPopup.open()
@@ -149,6 +153,7 @@ ColumnLayout {
                 }
             }
             ColumnLayout {
+                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Button {
                     text: qsTr("Swap")
@@ -167,16 +172,18 @@ ColumnLayout {
             }
 
             ColumnLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Heading2 {
                     id: slot2Heading
                     text: qsTr("Long Touch (Slot 2)")
-                    color: views.slot2Configured ? yubicoBlue : yubicoGrey
+                    color: slot2Configured ? yubicoBlue : yubicoGrey
                 }
                 Label {
                     text: slot2StatusTxt()
-                    font.pointSize: 14
-                    color: slot1Configured ? yubicoBlue : yubicoGrey
+                    font.pointSize: constants.h3
+                    color: slot2Configured ? yubicoBlue : yubicoGrey
                 }
                 RowLayout {
                     Button {
