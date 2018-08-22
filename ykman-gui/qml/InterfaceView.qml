@@ -119,6 +119,54 @@ ColumnLayout {
                 || pivUsb.checked || pgpUsb.checked || oathUsb.checked
     }
 
+    function toggleNfc() {
+        function checkAll() {
+            otpNfc.checked = true
+            fido2Nfc.checked = true
+            u2fNfc.checked = true
+            pivNfc.checked = true
+            pgpNfc.checked = true
+            oathNfc.checked = true
+        }
+        function unCheckAll() {
+            otpNfc.checked = false
+            fido2Nfc.checked = false
+            u2fNfc.checked = false
+            pivNfc.checked = false
+            pgpNfc.checked = false
+            oathNfc.checked = false
+        }
+        if (getEnabledNfcApplications().length < 1) {
+            checkAll()
+        } else {
+            unCheckAll()
+        }
+    }
+
+    function toggleUsb() {
+        function checkAll() {
+            otpUsb.checked = true
+            fido2Usb.checked = true
+            u2fUsb.checked = true
+            pivUsb.checked = true
+            pgpUsb.checked = true
+            oathUsb.checked = true
+        }
+        function unCheckAll() {
+            otpUsb.checked = true // At least one USB application is required
+            fido2Usb.checked = false
+            u2fUsb.checked = false
+            pivUsb.checked = false
+            pgpUsb.checked = false
+            oathUsb.checked = false
+        }
+        if (getEnabledUsbApplications().length < 2) {
+            checkAll()
+        } else {
+            unCheckAll()
+        }
+    }
+
     ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -166,6 +214,14 @@ ColumnLayout {
                         source: "../images/usb.svg"
                         sourceSize.width: 24
                         sourceSize.height: 24
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            ToolTip.delay: 1000
+                            ToolTip.visible: containsMouse
+                            ToolTip.text: qsTr("Toggle USB availability. At least one USB application is required.")
+                            onClicked: toggleUsb()
+                        }
                     }
                 }
                 background: Rectangle {
@@ -240,6 +296,7 @@ ColumnLayout {
                 label: Row {
                     spacing: 5
                     Label {
+                        id: nfcLbl
                         text: qsTr("NFC")
                         lineHeight: 0.5
                         color: yubicoBlue
@@ -250,6 +307,14 @@ ColumnLayout {
                         source: "../images/wifi.svg"
                         sourceSize.width: 24
                         sourceSize.height: 24
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            ToolTip.delay: 1000
+                            ToolTip.visible: containsMouse
+                            ToolTip.text: qsTr("Toggle NFC availability.")
+                            onClicked: toggleNfc()
+                        }
                     }
                 }
 
