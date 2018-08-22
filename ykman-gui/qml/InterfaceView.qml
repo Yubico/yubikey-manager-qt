@@ -40,38 +40,28 @@ ColumnLayout {
 
     function writeInterfaces() {
         views.lock()
-        yubiKey.write_config(getEnabledUsbApplications(),
-                             getEnabledNfcApplications(), lockCode,
-                             function (resp) {
-                                 if (resp.success) {
-                                     views.unlock()
-                                     views.home()
-                                 } else {
-                                     console.log(resp.error)
-                                     views.unlock()
-                                     errorLockCodePopup.open()
-                                 }
-                             })
+        yubiKey.write_config(usbEnabled, nfcEnabled, lockCode, function (resp) {
+            if (resp.success) {
+                views.unlock()
+                views.home()
+            } else {
+                console.log(resp.error)
+                views.unlock()
+                errorLockCodePopup.open()
+            }
+        })
     }
 
     function configurationHasChanged() {
         var enabledYubiKeyUsb = JSON.stringify(
                     yubiKey.enabledUsbApplications.sort())
-        var enabledUiUsb = JSON.stringify(getEnabledUsbApplications().sort())
+        var enabledUiUsb = JSON.stringify(usbEnabled.sort())
         var enabledYubiKeyNfc = JSON.stringify(
                     yubiKey.enabledNfcApplications.sort())
-        var enabledUiNfc = JSON.stringify(getEnabledNfcApplications().sort())
+        var enabledUiNfc = JSON.stringify(nfcEnabled.sort())
 
         return enabledYubiKeyUsb !== enabledUiUsb
                 || enabledYubiKeyNfc !== enabledUiNfc
-    }
-
-    function getEnabledUsbApplications() {
-        return usbEnabled
-    }
-
-    function getEnabledNfcApplications() {
-        return nfcEnabled
     }
 
     function setUsbEnabledState(applicationId, enabled) {
@@ -110,7 +100,7 @@ ColumnLayout {
     }
 
     function toggleNfc() {
-        if (getEnabledNfcApplications().length < 1) {
+        if (nfcEnabled.length < 1) {
             nfcEnabled = Utils.pick(applications, 'id')
         } else {
             nfcEnabled = []
@@ -118,7 +108,7 @@ ColumnLayout {
     }
 
     function toggleUsb() {
-        if (getEnabledUsbApplications().length < 2) {
+        if (usbEnabled.length < 2) {
             usbEnabled = Utils.pick(applications, 'id')
         } else {
             usbEnabled = [applications[0].id]
