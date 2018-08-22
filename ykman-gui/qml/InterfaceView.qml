@@ -9,6 +9,28 @@ ColumnLayout {
     property string lockCode: lockCodePopup.lockCode
     property bool configurationLocked
 
+    readonly property var applications: [{
+            "id": 'OTP',
+            "name": qsTr('OTP')
+        }, {
+            "id": 'FIDO2',
+            "name": qsTr('FIDO2')
+        }, {
+            "id": 'U2F',
+            "name": qsTr('FIDO U2F')
+        }, {
+            "id": 'OPGP',
+            "name": qsTr('OpenPGP')
+        }, {
+            "id": 'PIV',
+            "name": qsTr('PIV')
+        }, {
+            "id": 'OATH',
+            "name": qsTr('OATH')
+        }]
+    property var usbEnabled: []
+    property var nfcEnabled: []
+
     objectName: "interfaces"
     Component.onCompleted: load()
 
@@ -22,148 +44,78 @@ ColumnLayout {
 
     function writeInterfaces() {
         views.lock()
-        yubiKey.write_config(getEnabledUsbApplications(),
-                             getEnabledNfcApplications(), lockCode,
-                             function (resp) {
-                                 if (resp.success) {
-                                     views.unlock()
-                                     views.home()
-                                 } else {
-                                     console.log(resp.error)
-                                     views.unlock()
-                                     errorLockCodePopup.open()
-                                 }
-                             })
+        yubiKey.write_config(usbEnabled, nfcEnabled, lockCode, function (resp) {
+            if (resp.success) {
+                views.unlock()
+                views.home()
+            } else {
+                console.log(resp.error)
+                views.unlock()
+                errorLockCodePopup.open()
+            }
+        })
     }
 
     function configurationHasChanged() {
         var enabledYubiKeyUsb = JSON.stringify(
                     yubiKey.enabledUsbApplications.sort())
-        var enabledUiUsb = JSON.stringify(getEnabledUsbApplications().sort())
+        var enabledUiUsb = JSON.stringify(usbEnabled.sort())
         var enabledYubiKeyNfc = JSON.stringify(
                     yubiKey.enabledNfcApplications.sort())
-        var enabledUiNfc = JSON.stringify(getEnabledNfcApplications().sort())
+        var enabledUiNfc = JSON.stringify(nfcEnabled.sort())
 
         return enabledYubiKeyUsb !== enabledUiUsb
                 || enabledYubiKeyNfc !== enabledUiNfc
     }
 
-    function getEnabledUsbApplications() {
-        var enabledApplications = []
-        if (otpUsb.checked) {
-            enabledApplications.push('OTP')
+    function setUsbEnabledState(applicationId, enabled) {
+        if (enabled) {
+            usbEnabled = Utils.including(usbEnabled, applicationId)
+        } else {
+            usbEnabled = Utils.without(usbEnabled, applicationId)
         }
-        if (fido2Usb.checked) {
-            enabledApplications.push('FIDO2')
-        }
-        if (u2fUsb.checked) {
-            enabledApplications.push('U2F')
-        }
-        if (pivUsb.checked) {
-            enabledApplications.push('PIV')
-        }
-        if (pgpUsb.checked) {
-            enabledApplications.push('OPGP')
-        }
-        if (oathUsb.checked) {
-            enabledApplications.push('OATH')
-        }
-        return enabledApplications
     }
 
-    function getEnabledNfcApplications() {
-        var enabledApplications = []
-        if (otpNfc.checked) {
-            enabledApplications.push('OTP')
+    function setNfcEnabledState(applicationId, enabled) {
+        if (enabled) {
+            nfcEnabled = Utils.including(nfcEnabled, applicationId)
+        } else {
+            nfcEnabled = Utils.without(nfcEnabled, applicationId)
         }
-        if (fido2Nfc.checked) {
-            enabledApplications.push('FIDO2')
-        }
-        if (u2fNfc.checked) {
-            enabledApplications.push('U2F')
-        }
-        if (pivNfc.checked) {
-            enabledApplications.push('PIV')
-        }
-        if (pgpNfc.checked) {
-            enabledApplications.push('OPGP')
-        }
-        if (oathNfc.checked) {
-            enabledApplications.push('OATH')
-        }
-        return enabledApplications
+    }
+
+    function getUsbEnabledState(applicationId) {
+        return Utils.includes(usbEnabled, applicationId)
+    }
+
+    function getNfcEnabledState(applicationId) {
+        return Utils.includes(nfcEnabled, applicationId)
     }
 
     function load() {
         configurationLocked = yubiKey.configurationLocked
 
-        otpUsb.checked = Utils.includes(yubiKey.enabledUsbApplications, 'OTP')
-        fido2Usb.checked = Utils.includes(yubiKey.enabledUsbApplications,
-                                          'FIDO2')
-        u2fUsb.checked = Utils.includes(yubiKey.enabledUsbApplications, 'U2F')
-        pivUsb.checked = Utils.includes(yubiKey.enabledUsbApplications, 'PIV')
-        pgpUsb.checked = Utils.includes(yubiKey.enabledUsbApplications, 'OPGP')
-        oathUsb.checked = Utils.includes(yubiKey.enabledUsbApplications, 'OATH')
-
-        otpNfc.checked = Utils.includes(yubiKey.enabledNfcApplications, 'OTP')
-        fido2Nfc.checked = Utils.includes(yubiKey.enabledNfcApplications,
-                                          'FIDO2')
-        u2fNfc.checked = Utils.includes(yubiKey.enabledNfcApplications, 'U2F')
-        pivNfc.checked = Utils.includes(yubiKey.enabledNfcApplications, 'PIV')
-        pgpNfc.checked = Utils.includes(yubiKey.enabledNfcApplications, 'OPGP')
-        oathNfc.checked = Utils.includes(yubiKey.enabledNfcApplications, 'OATH')
+        usbEnabled = yubiKey.enabledUsbApplications
+        nfcEnabled = yubiKey.enabledNfcApplications
     }
 
     function validCombination() {
-        return otpUsb.checked || fido2Usb.checked || u2fUsb.checked
-                || pivUsb.checked || pgpUsb.checked || oathUsb.checked
+        return usbEnabled.length >= 1
     }
 
     function toggleNfc() {
-        function checkAll() {
-            otpNfc.checked = true
-            fido2Nfc.checked = true
-            u2fNfc.checked = true
-            pivNfc.checked = true
-            pgpNfc.checked = true
-            oathNfc.checked = true
-        }
-        function unCheckAll() {
-            otpNfc.checked = false
-            fido2Nfc.checked = false
-            u2fNfc.checked = false
-            pivNfc.checked = false
-            pgpNfc.checked = false
-            oathNfc.checked = false
-        }
-        if (getEnabledNfcApplications().length < 1) {
-            checkAll()
+        if (nfcEnabled.length < 1) {
+            nfcEnabled = Utils.pick(applications, 'id')
         } else {
-            unCheckAll()
+            nfcEnabled = []
         }
     }
 
     function toggleUsb() {
-        function checkAll() {
-            otpUsb.checked = true
-            fido2Usb.checked = true
-            u2fUsb.checked = true
-            pivUsb.checked = true
-            pgpUsb.checked = true
-            oathUsb.checked = true
-        }
-        function unCheckAll() {
-            otpUsb.checked = true // At least one USB application is required
-            fido2Usb.checked = false
-            u2fUsb.checked = false
-            pivUsb.checked = false
-            pgpUsb.checked = false
-            oathUsb.checked = false
-        }
-        if (getEnabledUsbApplications().length < 2) {
-            checkAll()
+        if (usbEnabled.length < 2) {
+            usbEnabled = Utils.pick(applications, 'id')
         } else {
-            unCheckAll()
+            usbEnabled = [applications[0].id]
         }
     }
 
@@ -234,60 +186,21 @@ ColumnLayout {
                     anchors.leftMargin: -10
                     anchors.left: parent.left
                     columns: 2
-                    CheckBox {
-                        text: qsTr("OTP")
-                        font.pointSize: constants.h3
-                        id: otpUsb
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle OTP availability over USB.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        text: qsTr("FIDO2")
-                        font.pointSize: constants.h3
-                        id: fido2Usb
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr(
-                                          "Toggle FIDO2 availability over USB.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        text: qsTr("FIDO U2F")
-                        font.pointSize: constants.h3
-                        id: u2fUsb
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle FIDO U2F availability over USB.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        text: qsTr("OpenPGP")
-                        id: pgpUsb
-                        font.pointSize: constants.h3
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle OpenPGP availability over USB.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        text: qsTr("PIV")
-                        id: pivUsb
-                        font.pointSize: constants.h3
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle PIV availability over USB.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        text: qsTr("OATH")
-                        id: oathUsb
-                        font.pointSize: constants.h3
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle OATH availability over USB.")
-                        Material.foreground: yubicoBlue
+
+                    Repeater {
+                        model: applications
+                        CheckBox {
+                            checked: getUsbEnabledState(modelData.id)
+                            onCheckedChanged: setUsbEnabledState(modelData.id,
+                                                                 checked)
+                            text: modelData.name || modelData.id
+                            font.pointSize: constants.h3
+                            ToolTip.delay: 1000
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Toggle %1 availability over USB.").arg(
+                                              modelData.name || modelData.id)
+                            Material.foreground: yubicoBlue
+                        }
                     }
                 }
             }
@@ -329,60 +242,21 @@ ColumnLayout {
                     columns: 2
                     columnSpacing: 0
                     rowSpacing: -15
-                    CheckBox {
-                        id: otpNfc
-                        text: qsTr("OTP")
-                        font.pointSize: constants.h3
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle OTP availability over NFC.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        id: fido2Nfc
-                        text: qsTr("FIDO2")
-                        font.pointSize: constants.h3
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr(
-                                          "Toggle FIDO2 availability over NFC.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        id: u2fNfc
-                        text: qsTr("FIDO U2F")
-                        font.pointSize: constants.h3
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle FIDO U2F availability over NFC.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        id: pgpNfc
-                        text: qsTr("OpenPGP")
-                        font.pointSize: constants.h3
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle OpenPGP availability over NFC.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        id: pivNfc
-                        text: qsTr("PIV")
-                        font.pointSize: constants.h3
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle PIV availability over NFC.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        id: oathNfc
-                        text: qsTr("OATH")
-                        font.pointSize: constants.h3
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle OATH availability over NFC.")
-                        Material.foreground: yubicoBlue
+
+                    Repeater {
+                        model: applications
+                        CheckBox {
+                            checked: getNfcEnabledState(modelData.id)
+                            onCheckedChanged: setNfcEnabledState(modelData.id,
+                                                                 checked)
+                            text: modelData.name || modelData.id
+                            font.pointSize: constants.h3
+                            ToolTip.delay: 1000
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Toggle %1 availability over NFC.").arg(
+                                              modelData.name || modelData.id)
+                            Material.foreground: yubicoBlue
+                        }
                     }
                 }
             }

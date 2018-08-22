@@ -7,6 +7,36 @@ function includes(arr, value) {
 }
 
 /**
+ * Add `value` to `arr` if `arr` does not already include `value`.
+ *
+ * @param arr an array
+ * @param value a value to add to `arr` if not already present
+ *
+ * @return a new array that is the union of `arr` and `[value]` - unless `arr`
+ * already includes `value`, in which case `arr` is returned unchanged.
+ */
+function including(arr, value) {
+    if (includes(arr, value)) {
+        return arr;
+    } else {
+        return arr.concat(value);
+    }
+}
+
+/**
+ * Remove `value` from `arr`.
+ *
+ * @param arr an array
+ * @param value a value to remove from `arr`
+ *
+ * @return a new array that contains each element `e` of `arr` such that `e !==
+ * value`.
+ */
+function without(arr, value) {
+    return arr.filter(function(item) { return item !== value; });
+}
+
+/**
  * Wait for `delayMillis` milliseconds, then call `callback`.
  *
  * @param callback a function to call after `delayMillis` milliseconds have passed
