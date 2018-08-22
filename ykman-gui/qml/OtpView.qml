@@ -132,7 +132,7 @@ ColumnLayout {
                         ToolTip.text: qsTr("Permanently delete the configuration of Short Touch (Slot 1).")
                         icon.source: "../images/delete.svg"
                         font.capitalization: Font.MixedCase
-                        font.family: "Helvetica Neue"
+                        font.family: constants.fontFamily
                         Material.foreground: yubicoBlue
                         icon.width: 16
                         icon.height: 16
@@ -149,7 +149,7 @@ ColumnLayout {
                         ToolTip.text: qsTr("Configure a credential in Short Touch (Slot 1).")
                         icon.source: "../images/wrench.svg"
                         font.capitalization: Font.MixedCase
-                        font.family: "Helvetica Neue"
+                        font.family: constants.fontFamily
                         icon.width: 16
                         icon.height: 16
                     }
@@ -163,7 +163,7 @@ ColumnLayout {
                     text: qsTr("Swap")
                     enabled: slot1Configured || slot2Configured
                     icon.source: "../images/swap.svg"
-                    font.family: "Helvetica Neue"
+                    font.family: constants.fontFamily
                     Material.foreground: yubicoBlue
                     font.capitalization: Font.MixedCase
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -206,7 +206,7 @@ ColumnLayout {
                         icon.source: "../images/delete.svg"
                         font.capitalization: Font.MixedCase
                         Material.foreground: yubicoBlue
-                        font.family: "Helvetica Neue"
+                        font.family: constants.fontFamily
                         icon.width: 16
                         icon.height: 16
                     }
@@ -218,7 +218,7 @@ ColumnLayout {
                             views.push(otpConfigureSlotView)
                         }
                         font.capitalization: Font.MixedCase
-                        font.family: "Helvetica Neue"
+                        font.family: constants.fontFamily
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Configure a credential in Long Touch (Slot 2).")

@@ -155,7 +155,7 @@ ColumnLayout {
                 icon.width: 16
                 icon.height: 16
                 font.capitalization: Font.MixedCase
-                font.family: "Helvetica Neue"
+                font.family: constants.fontFamily
             }
         }
     }

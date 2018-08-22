@@ -7,5 +7,5 @@ Button {
     flat: true
     font.pointSize: 18
     Material.foreground: yubicoLightBlue
-    font.family: "Helvetica Neue"
+    font.family: constants.fontFamily
 }

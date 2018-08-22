@@ -6,4 +6,5 @@ QtObject {
     readonly property int h1: 45
     readonly property int h2: 24
     readonly property int h3: 18
+    readonly property string fontFamily: "Helvetica Neue"
 }

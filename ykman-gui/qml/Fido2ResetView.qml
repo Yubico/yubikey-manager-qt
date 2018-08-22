@@ -107,7 +107,7 @@ A reset requires a re-insertion and a touch on the YubiKey.")
                 icon.width: 16
                 icon.height: 16
                 font.capitalization: Font.MixedCase
-                font.family: "Helvetica Neue"
+                font.family: constants.fontFamily
                 Material.foreground: yubicoBlue
             }
             Button {
@@ -121,7 +121,7 @@ A reset requires a re-insertion and a touch on the YubiKey.")
                 icon.width: 16
                 icon.height: 16
                 font.capitalization: Font.MixedCase
-                font.family: "Helvetica Neue"
+                font.family: constants.fontFamily
             }
         }
     }

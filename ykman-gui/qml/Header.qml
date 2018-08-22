@@ -46,7 +46,7 @@ ColumnLayout {
                 text: "Help"
                 font.pointSize: 12
                 font.capitalization: Font.MixedCase
-                font.family: "Helvetica Neue"
+                font.family: constants.fontFamily
                 Material.foreground: yubicoBlue
                 display: AbstractButton.TextBesideIcon
                 Layout.fillWidth: false
@@ -104,6 +104,7 @@ ColumnLayout {
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Configure the OTP Application.")
+                    font.family: constants.fontFamily
                 }
                 MenuItem {
                     enabled: yubiKey.fido2Enabled()
@@ -113,6 +114,7 @@ ColumnLayout {
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Configure the FIDO2 Application.")
+                    font.family: constants.fontFamily
                 }
             }
         }
