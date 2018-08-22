@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
 import "utils.js" as Utils
+import QtQuick.Controls.Material 2.3
 
 ColumnLayout {
 
@@ -130,7 +131,7 @@ ColumnLayout {
         }
 
         BreadCrumbRow {
-
+            Layout.bottomMargin: 20
             BreadCrumb {
                 text: qsTr("Home")
                 action: views.home
@@ -173,7 +174,7 @@ ColumnLayout {
                 }
                 GridLayout {
                     columnSpacing: 0
-                    rowSpacing: -10
+                    rowSpacing: -15
                     anchors.leftMargin: -10
                     anchors.left: parent.left
                     columns: 2
@@ -184,6 +185,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OTP availability over USB.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         text: qsTr("FIDO2")
@@ -193,6 +195,7 @@ ColumnLayout {
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr(
                                           "Toggle FIDO2 availability over USB.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         text: qsTr("FIDO U2F")
@@ -201,6 +204,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle FIDO U2F availability over USB.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         text: qsTr("OpenPGP")
@@ -209,6 +213,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OpenPGP availability over USB.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         text: qsTr("PIV")
@@ -217,6 +222,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle PIV availability over USB.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         text: qsTr("OATH")
@@ -225,6 +231,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OATH availability over USB.")
+                        Material.foreground: yubicoBlue
                     }
                 }
             }
@@ -256,7 +263,7 @@ ColumnLayout {
                     anchors.left: parent.left
                     columns: 2
                     columnSpacing: 0
-                    rowSpacing: -10
+                    rowSpacing: -15
                     CheckBox {
                         id: otpNfc
                         text: qsTr("OTP")
@@ -264,6 +271,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OTP availability over NFC.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         id: fido2Nfc
@@ -273,6 +281,7 @@ ColumnLayout {
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr(
                                           "Toggle FIDO2 availability over NFC.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         id: u2fNfc
@@ -281,6 +290,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle FIDO U2F availability over NFC.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         id: pgpNfc
@@ -289,6 +299,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OpenPGP availability over NFC.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         id: pivNfc
@@ -297,6 +308,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle PIV availability over NFC.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         id: oathNfc
@@ -305,6 +317,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OATH availability over NFC.")
+                        Material.foreground: yubicoBlue
                     }
                 }
             }

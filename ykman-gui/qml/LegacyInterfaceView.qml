@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
 import "utils.js" as Utils
+import QtQuick.Controls.Material 2.3
 
 ColumnLayout {
     objectName: "interfaces"
@@ -112,6 +113,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle OTP interface over USB.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         id: fido
@@ -122,6 +124,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle FIDO interface over USB.")
+                        Material.foreground: yubicoBlue
                     }
                     CheckBox {
                         id: ccid
@@ -132,6 +135,7 @@ ColumnLayout {
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle CCID interface over USB.")
+                        Material.foreground: yubicoBlue
                     }
                 }
             }
