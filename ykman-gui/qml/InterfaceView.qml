@@ -10,9 +10,11 @@ ColumnLayout {
     property bool configurationLocked
 
     readonly property var applications: [{
-            "id": 'OTP'
+            "id": 'OTP',
+            "name": qsTr('OTP')
         }, {
-            "id": 'FIDO2'
+            "id": 'FIDO2',
+            "name": qsTr('FIDO2')
         }, {
             "id": 'U2F',
             "name": qsTr('FIDO U2F')
@@ -20,9 +22,11 @@ ColumnLayout {
             "id": 'OPGP',
             "name": qsTr('OpenPGP')
         }, {
-            "id": 'PIV'
+            "id": 'PIV',
+            "name": qsTr('PIV')
         }, {
-            "id": 'OATH'
+            "id": 'OATH',
+            "name": qsTr('OATH')
         }]
     property var usbEnabled: []
     property var nfcEnabled: []
