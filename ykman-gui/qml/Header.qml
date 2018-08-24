@@ -26,15 +26,6 @@ ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignRight
             Layout.fillWidth: true
-
-            Image {
-                Layout.fillWidth: false
-                fillMode: Image.PreserveAspectCrop
-                source: "../images/cogwheel.svg"
-                sourceSize.width: 12
-                sourceSize.height: 12
-                visible: yubiKey.hasDevice
-            }
             Label {
                 text: activeKeyLbl()
                 Layout.fillWidth: false
