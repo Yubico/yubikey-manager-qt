@@ -40,7 +40,7 @@ ColumnLayout {
             Layout.preferredWidth: app.width
             ColumnLayout {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-
+                Layout.leftMargin: 20
                 Heading2 {
                     visible: yubiKey.version
                     text: qsTr("Firmware: ") + yubiKey.version
@@ -51,6 +51,7 @@ ColumnLayout {
                 }
             }
             ColumnLayout {
+                Layout.rightMargin: 60
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Image {
                     fillMode: Image.PreserveAspectFit
