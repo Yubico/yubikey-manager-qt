@@ -97,6 +97,14 @@ ColumnLayout {
 
         usbEnabled = yubiKey.enabledUsbApplications
         nfcEnabled = yubiKey.enabledNfcApplications
+
+        // Populate initial state of checkboxes
+        for (var i = 0; i < applications.length; i++) {
+            usbCheckBoxes.itemAt(i).checked = getUsbEnabledState(
+                        applications[i].id)
+            nfcCheckBoxes.itemAt(i).checked = getNfcEnabledState(
+                        applications[i].id)
+        }
     }
 
     function validCombination() {
@@ -188,9 +196,9 @@ ColumnLayout {
                     columns: 2
 
                     Repeater {
+                        id: usbCheckBoxes
                         model: applications
                         CheckBox {
-                            checked: getUsbEnabledState(modelData.id)
                             onCheckedChanged: setUsbEnabledState(modelData.id,
                                                                  checked)
                             text: modelData.name || modelData.id
@@ -244,9 +252,9 @@ ColumnLayout {
                     rowSpacing: -15
 
                     Repeater {
+                        id: nfcCheckBoxes
                         model: applications
                         CheckBox {
-                            checked: getNfcEnabledState(modelData.id)
                             onCheckedChanged: setNfcEnabledState(modelData.id,
                                                                  checked)
                             text: modelData.name || modelData.id
