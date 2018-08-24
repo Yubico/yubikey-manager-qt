@@ -3,12 +3,14 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.2
 
 InlinePopup {
-    Heading2 {
-        width: parent.width
-        text: qsTr("YubiKey Manager
-
-Version: " + appVersion)
-        wrapMode: Text.WordWrap
-        Layout.maximumWidth: parent.width
+    ColumnLayout {
+        Heading2 {
+            text: qsTr("YubiKey Manager")
+        }
+        Label {
+            font.pointSize: constants.h3
+            color: yubicoBlue
+            text: qsTr("Version: " + appVersion)
+        }
     }
 }
