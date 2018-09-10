@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("YubiKey Manager");
     app.setApplicationVersion(APP_VERSION);
     app.setOrganizationName("Yubico");
-    app.setOrganizationDomain("com.yubico");
+    app.setOrganizationDomain("org.yubico");
 
     QCommandLineParser cliParser;
     cliParser.setApplicationDescription("Configure your YubiKey using a graphical application.");
