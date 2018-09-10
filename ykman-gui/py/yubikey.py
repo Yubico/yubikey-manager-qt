@@ -93,7 +93,6 @@ class Controller(object):
         return self._dev_info
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
-
         usb_enabled = 0x00
         nfc_enabled = 0x00
         for app in usb_applications:
@@ -132,9 +131,15 @@ class Controller(object):
         try:
             with self._open_device(TRANSPORT.OTP) as dev:
                 controller = OtpController(dev.driver)
-                return controller.slot_status
+                return {'status': controller.slot_status, 'error': None}
+        except YkpersError as e:
+            if e.errno == 4:
+                return {'status': None, 'error': 'timeout'}
+            logger.error('Failed to read slot status', exc_info=e)
+            return {'status': None, 'error': str(e)}
         except Exception as e:
             logger.error('Failed to read slot status', exc_info=e)
+            return {'status': None, 'error': str(e)}
 
     def erase_slot(self, slot):
         try:

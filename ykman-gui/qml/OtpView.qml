@@ -10,11 +10,21 @@ ColumnLayout {
 
     function load() {
         isBusy = true
-        yubiKey.slots_status(function (res) {
-            views.slot1Configured = res[0]
-            views.slot2Configured = res[1]
-            views.selectedSlot = 0
-            isBusy = false
+        yubiKey.slots_status(function (resp) {
+            if (!resp.error) {
+                views.slot1Configured = resp.status[0]
+                views.slot2Configured = resp.status[1]
+                views.selectedSlot = 0
+                isBusy = false
+            } else {
+                if (resp.error === 'timeout') {
+                    views.otpGeneralError(
+                                qsTr("Failed to load OTP application."))
+                } else {
+                    views.otpGeneralError(resp.error)
+                }
+                views.home()
+            }
         })
     }
 
@@ -37,7 +47,7 @@ ColumnLayout {
                 if (resp.error === 'write error') {
                     views.otpWriteError()
                 } else {
-                    views.otpGeneralError(resp.error)
+                    views.otpFailedToConfigureErrorPopup(resp.error)
                 }
             }
         })

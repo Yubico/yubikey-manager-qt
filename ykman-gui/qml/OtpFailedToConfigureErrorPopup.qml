@@ -10,6 +10,8 @@ InlinePopup {
         width: parent.width
         text: qsTr("Error!
 
+Failed to configure " + SlotUtils.slotNameCapitalized(views.selectedSlot) + ".
+
 " + error)
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         wrapMode: Text.WordWrap

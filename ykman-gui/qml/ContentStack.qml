@@ -97,6 +97,11 @@ StackView {
         otpWriteErrorPopup.open()
     }
 
+    function otpFailedToConfigureErrorPopup(error) {
+        otpFailedToConfigureErrorPopup.error = error
+        otpFailedToConfigureErrorPopup.open()
+    }
+
     function otpGeneralError(error) {
         otpGeneralErrorPopup.error = error
         otpGeneralErrorPopup.open()
@@ -142,8 +147,8 @@ StackView {
         id: otpWriteErrorPopup
     }
 
-    OtpGeneralErrorPopup {
-        id: otpGeneralErrorPopup
+    OtpFailedToConfigureErrorPopup {
+        id: otpFailedToConfigureErrorPopup
     }
 
     OtpSuccessPopup {
@@ -156,6 +161,10 @@ StackView {
 
     OtpSwapConfigurationsSuccessPopup {
         id: otpSwapConfigurationsSuccessPopup
+    }
+
+    OtpGeneralErrorPopup {
+        id: otpGeneralErrorPopup
     }
 
     Component {

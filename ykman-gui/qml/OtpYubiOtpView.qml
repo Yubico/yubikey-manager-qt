@@ -44,7 +44,8 @@ ColumnLayout {
                                     if (resp.error === 'write error') {
                                         views.otpWriteError()
                                     } else {
-                                        views.otpGeneralError(resp.error)
+                                        views.otpFailedToConfigureErrorPopup(
+                                                    resp.error)
                                     }
                                 }
                             })
