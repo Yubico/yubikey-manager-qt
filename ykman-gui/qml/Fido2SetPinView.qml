@@ -28,7 +28,6 @@ ColumnLayout {
     }
     Fido2SuccessPopup {
         id: fido2SetPinSucces
-        message: qsTr("Success! The FIDO2 PIN was set.")
     }
 
     Fido2GeneralErrorPopup {

@@ -1,15 +1,14 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
-import "slotutils.js" as SlotUtils
 
 InlinePopup {
-    property string message: qsTr("Success! " + SlotUtils.slotNameCapitalized(
-                                      views.selectedSlot) + " is configured.")
+    property string message: qsTr("Success!")
 
     Heading2 {
         width: parent.width
         text: message
+        horizontalAlignment: Text.AlignHCenter
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
     }
 

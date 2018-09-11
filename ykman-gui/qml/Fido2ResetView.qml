@@ -44,7 +44,6 @@ ColumnLayout {
 
     Fido2SuccessPopup {
         id: fido2ResetSucces
-        message: qsTr("Success! The FIDO applications were reset.")
     }
 
     Fido2GeneralErrorPopup {
