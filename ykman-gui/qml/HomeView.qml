@@ -7,7 +7,7 @@ ColumnLayout {
 
     function getYubiKeyImageSource() {
         if (yubiKey.isYubiKey4()) {
-            return "../images/yk4.png"
+            return "../images/yk4series.png"
         }
         if (yubiKey.isSecurityKeyByYubico()) {
             return "../images/sky2.png"
@@ -24,7 +24,7 @@ ColumnLayout {
         if (yubiKey.isYubiKeyPreview()) {
             return "../images/preview.png"
         }
-        return "../images/yk4.png" //default for now
+        return "../images/yk4series.png" //default for now
     }
 
     ColumnLayout {
