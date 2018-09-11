@@ -21,6 +21,7 @@ ColumnLayout {
                 if (resp.error === 'too long') {
                     fido2TooLongError.open()
                 } else if (resp.error === 'wrong pin') {
+                    clearPinInputs()
                     fido2WrongPinError.open()
                 } else if (resp.error === 'currently blocked') {
                     fido2CurrentlyBlockedError.open()
@@ -32,6 +33,12 @@ ColumnLayout {
                 }
             }
         })
+    }
+
+    function clearPinInputs() {
+        currentPin.text = ''
+        newPin.text = ''
+        confirmPin.text = ''
     }
 
     Fido2SuccessPopup {
