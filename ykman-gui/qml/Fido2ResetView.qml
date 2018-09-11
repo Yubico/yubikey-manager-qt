@@ -87,9 +87,8 @@ ColumnLayout {
 
         Label {
             color: yubicoBlue
-            text: qsTr("This action permanently deletes all FIDO credentials on the device (U2F & FIDO2), and removes the FIDO2 PIN.
-
-A reset requires a re-insertion and a touch on the YubiKey.")
+            text: qsTr("This action permanently deletes all FIDO credentials on the device (U2F & FIDO2), and removes the FIDO2 PIN.")
+            verticalAlignment: Text.AlignVCenter
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width
             wrapMode: Text.WordWrap
