@@ -15,6 +15,9 @@ StackView {
     property bool isConfiguringInterfaces: currentItem !== null
                                            && currentItem.objectName === "interfaces"
 
+    property bool isShowingHomeView: currentItem !== null
+                                     && currentItem.objectName === "homeview"
+
     function lock() {
         locked = true
     }
