@@ -211,7 +211,7 @@ StackView {
     Component {
         id: noDeviceView
         Heading2 {
-            text: qsTr("No YubiKey detected.")
+            text: qsTr("Insert your YubiKey!")
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
@@ -220,7 +220,7 @@ StackView {
     Component {
         id: multipleDevicesView
         Heading2 {
-            text: qsTr("Multiple YubiKeys detected!")
+            text: qsTr("Make sure only one YubiKey is inserted!")
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
