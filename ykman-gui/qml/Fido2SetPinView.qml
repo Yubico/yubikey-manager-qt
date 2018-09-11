@@ -108,7 +108,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Button {
                 text: qsTr("Back")
-                onClicked: views.pop()
+                onClicked: views.fido2()
                 icon.source: "../images/back.svg"
                 icon.width: 16
                 icon.height: 16
