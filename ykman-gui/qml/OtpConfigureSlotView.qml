@@ -7,37 +7,47 @@ import QtQuick.Controls.Material 2.2
 ColumnLayout {
 
     ColumnLayout {
-        Layout.margins: 20
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.preferredHeight: app.height
+        Layout.margins: constants.contentMargins
+        Layout.topMargin: constants.contentTopMargin
+        Layout.bottomMargin: constants.contentBottomMargin
+        Layout.preferredHeight: constants.contentHeight
+        Layout.maximumHeight: constants.contentHeight
+        Layout.preferredWidth: constants.contentWidth
+        Layout.maximumWidth: constants.contentWidth
+        spacing: 20
 
-        Heading1 {
-            text: qsTr("Select Credential Type")
-        }
-
-        BreadCrumbRow {
-            BreadCrumb {
-                text: qsTr("Home")
-                action: views.home
-            }
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
-                text: qsTr("OTP")
-                action: views.otp
-            }
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
-                text: SlotUtils.slotNameCapitalized(views.selectedSlot)
-                action: views.otp
-            }
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
+        ColumnLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            Heading1 {
                 text: qsTr("Select Credential Type")
-                active: true
+            }
+
+            BreadCrumbRow {
+                BreadCrumb {
+                    text: qsTr("Home")
+                    action: views.home
+                }
+                BreadCrumbSeparator {
+                }
+                BreadCrumb {
+                    text: qsTr("OTP")
+                    action: views.otp
+                }
+                BreadCrumbSeparator {
+                }
+                BreadCrumb {
+                    text: SlotUtils.slotNameCapitalized(views.selectedSlot)
+                    action: views.otp
+                }
+                BreadCrumbSeparator {
+                }
+                BreadCrumb {
+                    text: qsTr("Select Credential Type")
+                    active: true
+                }
             }
         }
 
@@ -47,6 +57,7 @@ ColumnLayout {
         }
 
         GridLayout {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             id: typeColumn
             Layout.fillWidth: true
             Layout.leftMargin: 20

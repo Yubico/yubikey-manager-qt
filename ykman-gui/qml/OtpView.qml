@@ -5,8 +5,12 @@ import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
     id: otpView
-    Component.onCompleted: load()
+
     property bool isBusy
+    readonly property string slotIsConfigured: qsTr("This slot is configured.")
+    readonly property string slotIsEmpty: qsTr("This slot is empty.")
+
+    Component.onCompleted: load()
 
     function load() {
         isBusy = true
@@ -28,9 +32,6 @@ ColumnLayout {
         })
     }
 
-    readonly property string slotIsConfigured: qsTr("This slot is configured.")
-    readonly property string slotIsEmpty: qsTr("This slot is empty.")
-
     function slot1StatusTxt() {
         return slot1Configured ? slotIsConfigured : slotIsEmpty
     }
@@ -42,7 +43,7 @@ ColumnLayout {
     function deleteSelectedSlot() {
         yubiKey.erase_slot(views.selectedSlot, function (resp) {
             if (resp.success) {
-                views.otpDeleteSuccess()
+                views.otpSuccess()
             } else {
                 if (resp.error === 'write error') {
                     views.otpWriteError()
@@ -56,7 +57,7 @@ ColumnLayout {
     function swapConfigurations() {
         yubiKey.swap_slots(function (resp) {
             if (resp.success) {
-                views.otpSwapConfigurationsSuccess()
+                views.otpSuccess()
             } else {
                 if (resp.error === 'write error') {
                     views.otpWriteError()
@@ -85,33 +86,45 @@ ColumnLayout {
 
     ColumnLayout {
         visible: !isBusy
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.margins: 20
-        Layout.preferredHeight: app.height
+        Layout.margins: constants.contentMargins
+        Layout.topMargin: constants.contentTopMargin
+        Layout.bottomMargin: constants.contentBottomMargin
+        Layout.preferredHeight: constants.contentHeight
+        Layout.maximumHeight: constants.contentHeight
+        Layout.preferredWidth: constants.contentWidth
+        Layout.maximumWidth: constants.contentWidth
+        spacing: 20
+        ColumnLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
-        Heading1 {
-            text: qsTr("OTP")
-        }
-        BreadCrumbRow {
-            BreadCrumb {
-                text: qsTr("Home")
-                action: views.home
-            }
-
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
+            Heading1 {
                 text: qsTr("OTP")
-                active: true
+            }
+
+            BreadCrumbRow {
+                BreadCrumb {
+                    text: qsTr("Home")
+                    action: views.home
+                }
+
+                BreadCrumbSeparator {
+                }
+
+                BreadCrumb {
+                    text: qsTr("OTP")
+                    active: true
+                }
             }
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Layout.fillHeight: true
             Layout.fillWidth: true
-            spacing: 20
+            spacing: 50
 
             ColumnLayout {
                 spacing: 10

@@ -71,36 +71,47 @@ ColumnLayout {
     }
 
     ColumnLayout {
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.margins: 20
-        Layout.preferredHeight: app.height
-
-        Heading1 {
-            text: qsTr("Change PIN")
-        }
-
-        BreadCrumbRow {
-            BreadCrumb {
-                text: qsTr("Home")
-                action: views.home
-            }
-
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
-                text: qsTr("FIDO2")
-                action: views.fido2
-            }
-
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
+        Layout.margins: constants.contentMargins
+        Layout.topMargin: constants.contentTopMargin
+        Layout.bottomMargin: constants.contentBottomMargin
+        Layout.preferredHeight: constants.contentHeight
+        Layout.maximumHeight: constants.contentHeight
+        Layout.preferredWidth: constants.contentWidth
+        Layout.maximumWidth: constants.contentWidth
+        spacing: 20
+        ColumnLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            Heading1 {
                 text: qsTr("Change PIN")
-                active: true
+            }
+
+            BreadCrumbRow {
+                BreadCrumb {
+                    text: qsTr("Home")
+                    action: views.home
+                }
+
+                BreadCrumbSeparator {
+                }
+                BreadCrumb {
+                    text: qsTr("FIDO2")
+                    action: views.fido2
+                }
+
+                BreadCrumbSeparator {
+                }
+                BreadCrumb {
+                    text: qsTr("Change PIN")
+                    active: true
+                }
             }
         }
         GridLayout {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.fillHeight: true
             columns: 2
             Layout.fillWidth: true
             Label {

@@ -57,53 +57,66 @@ ColumnLayout {
     }
 
     ColumnLayout {
-        Layout.margins: 20
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.preferredHeight: app.height
-        Heading1 {
-            text: qsTr("Yubico OTP")
-        }
+        Layout.margins: constants.contentMargins
+        Layout.topMargin: constants.contentTopMargin
+        Layout.bottomMargin: constants.contentBottomMargin
+        Layout.preferredHeight: constants.contentHeight
+        Layout.maximumHeight: constants.contentHeight
+        Layout.preferredWidth: constants.contentWidth
+        Layout.maximumWidth: constants.contentWidth
+        spacing: 20
+        ColumnLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
-        BreadCrumbRow {
-            BreadCrumb {
-                text: qsTr("Home")
-                action: views.home
-            }
-
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
-                text: qsTr("OTP")
-                action: views.otp
-            }
-
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
-                text: qsTr(SlotUtils.slotNameCapitalized(views.selectedSlot))
-                action: views.otp
-            }
-
-            BreadCrumbSeparator {
-            }
-
-            BreadCrumb {
-                text: qsTr("Select Credential Type")
-                action: views.pop
-            }
-
-            BreadCrumbSeparator {
-            }
-
-            BreadCrumb {
+            Heading1 {
                 text: qsTr("Yubico OTP")
-                active: true
+            }
+
+            BreadCrumbRow {
+                BreadCrumb {
+                    text: qsTr("Home")
+                    action: views.home
+                }
+
+                BreadCrumbSeparator {
+                }
+                BreadCrumb {
+                    text: qsTr("OTP")
+                    action: views.otp
+                }
+
+                BreadCrumbSeparator {
+                }
+                BreadCrumb {
+                    text: qsTr(SlotUtils.slotNameCapitalized(
+                                   views.selectedSlot))
+                    action: views.otp
+                }
+
+                BreadCrumbSeparator {
+                }
+
+                BreadCrumb {
+                    text: qsTr("Select Credential Type")
+                    action: views.pop
+                }
+
+                BreadCrumbSeparator {
+                }
+
+                BreadCrumb {
+                    text: qsTr("Yubico OTP")
+                    active: true
+                }
             }
         }
-
         GridLayout {
             columns: 3
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.fillHeight: true
             Layout.fillWidth: true
             Label {
                 text: qsTr("Public ID")

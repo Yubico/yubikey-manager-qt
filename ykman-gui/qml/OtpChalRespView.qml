@@ -44,51 +44,64 @@ ColumnLayout {
     }
 
     ColumnLayout {
-        Layout.margins: 20
-        Layout.preferredHeight: app.height
-
-        Heading1 {
-            text: qsTr("Challenge-response")
-        }
-
-        BreadCrumbRow {
-            BreadCrumb {
-                text: qsTr("Home")
-                action: views.home
-            }
-
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
-                text: qsTr("OTP")
-                action: views.otp
-            }
-
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
-                text: qsTr(SlotUtils.slotNameCapitalized(views.selectedSlot))
-                action: views.otp
-            }
-
-            BreadCrumbSeparator {
-            }
-
-            BreadCrumb {
-                text: qsTr("Select Credential Type")
-                action: views.pop
-            }
-
-            BreadCrumbSeparator {
-            }
-
-            BreadCrumb {
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.margins: constants.contentMargins
+        Layout.topMargin: constants.contentTopMargin
+        Layout.bottomMargin: constants.contentBottomMargin
+        Layout.preferredHeight: constants.contentHeight
+        Layout.maximumHeight: constants.contentHeight
+        Layout.preferredWidth: constants.contentWidth
+        Layout.maximumWidth: constants.contentWidth
+        spacing: 20
+        ColumnLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            Heading1 {
                 text: qsTr("Challenge-response")
-                active: true
+            }
+
+            BreadCrumbRow {
+                BreadCrumb {
+                    text: qsTr("Home")
+                    action: views.home
+                }
+
+                BreadCrumbSeparator {
+                }
+                BreadCrumb {
+                    text: qsTr("OTP")
+                    action: views.otp
+                }
+
+                BreadCrumbSeparator {
+                }
+                BreadCrumb {
+                    text: qsTr(SlotUtils.slotNameCapitalized(
+                                   views.selectedSlot))
+                    action: views.otp
+                }
+
+                BreadCrumbSeparator {
+                }
+
+                BreadCrumb {
+                    text: qsTr("Select Credential Type")
+                    action: views.pop
+                }
+
+                BreadCrumbSeparator {
+                }
+
+                BreadCrumb {
+                    text: qsTr("Challenge-response")
+                    active: true
+                }
             }
         }
-
         RowLayout {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.fillHeight: true
             Layout.fillWidth: true
             Label {
                 text: qsTr("Secret key")

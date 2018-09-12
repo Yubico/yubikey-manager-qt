@@ -140,6 +140,7 @@ ColumnLayout {
         Layout.maximumWidth: constants.contentWidth
         spacing: 20
         ColumnLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Heading1 {
                 text: qsTr("Interfaces")
             }

@@ -59,34 +59,45 @@ ColumnLayout {
 
     ColumnLayout {
         visible: !isBusy
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.margins: 20
-        Layout.preferredHeight: app.height
-
-        Heading1 {
-            text: qsTr("FIDO2")
-        }
-
-        BreadCrumbRow {
-            BreadCrumb {
-                text: qsTr("Home")
-                action: views.home
-            }
-
-            BreadCrumbSeparator {
-            }
-            BreadCrumb {
+        Layout.margins: constants.contentMargins
+        Layout.topMargin: constants.contentTopMargin
+        Layout.bottomMargin: constants.contentBottomMargin
+        Layout.preferredHeight: constants.contentHeight
+        Layout.maximumHeight: constants.contentHeight
+        Layout.preferredWidth: constants.contentWidth
+        Layout.maximumWidth: constants.contentWidth
+        spacing: 20
+        ColumnLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            Heading1 {
                 text: qsTr("FIDO2")
-                active: true
+            }
+
+            BreadCrumbRow {
+                BreadCrumb {
+                    text: qsTr("Home")
+                    action: views.home
+                }
+
+                BreadCrumbSeparator {
+                }
+                BreadCrumb {
+                    text: qsTr("FIDO2")
+                    active: true
+                }
             }
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Layout.fillHeight: true
             Layout.fillWidth: true
-            spacing: 120
+            spacing: 60
+            id: mainRow
+
             ColumnLayout {
                 spacing: 10
                 Layout.fillWidth: true
@@ -116,6 +127,19 @@ ColumnLayout {
                     font.family: constants.fontFamily
                 }
             }
+
+            Rectangle {
+                id: separator
+                Layout.minimumWidth: 1
+                Layout.maximumWidth: 1
+                Layout.maximumHeight: mainRow.height * 0.7
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: yubicoGrey
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                Layout.bottomMargin: 10
+            }
+
             ColumnLayout {
                 spacing: 10
                 Layout.fillWidth: true
