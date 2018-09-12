@@ -128,44 +128,49 @@ ColumnLayout {
     }
 
     ColumnLayout {
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.margins: 20
-        Layout.preferredHeight: app.height
-        Layout.preferredWidth: app.width
-
-        Heading1 {
-            text: qsTr("Interfaces")
-        }
-
-        BreadCrumbRow {
-            Layout.bottomMargin: 20
-            BreadCrumb {
-                text: qsTr("Home")
-                action: views.home
-            }
-
-            BreadCrumbSeparator {
-            }
-
-            BreadCrumb {
+        Layout.margins: constants.contentMargins
+        Layout.preferredHeight: constants.contentHeight
+        Layout.maximumHeight: constants.contentHeight
+        Layout.preferredWidth: constants.contentWidth
+        Layout.maximumWidth: constants.contentWidth
+        ColumnLayout {
+            Heading1 {
                 text: qsTr("Interfaces")
-                active: true
+            }
+
+            BreadCrumbRow {
+                BreadCrumb {
+                    text: qsTr("Home")
+                    action: views.home
+                }
+
+                BreadCrumbSeparator {
+                }
+
+                BreadCrumb {
+                    text: qsTr("Interfaces")
+                    active: true
+                }
             }
         }
 
         RowLayout {
-            spacing: 20
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.fillHeight: true
+            spacing: 60
             Layout.fillWidth: true
-            GroupBox {
-                id: usbGroupBox
+            Layout.bottomMargin: 20
+            id: mainRow
 
-                label: Row {
-                    spacing: 5
+            GridLayout {
+                columns: 2
+                RowLayout {
+                    Layout.columnSpan: 2
                     Label {
-                        id: label
-                        text: "USB"
-                        lineHeight: 0.5
+                        text: qsTr("USB")
                         color: yubicoBlue
                         font.pointSize: constants.h2
                     }
@@ -174,52 +179,45 @@ ColumnLayout {
                         source: "../images/usb.svg"
                         sourceSize.width: 24
                         sourceSize.height: 24
-                        MouseArea {
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            ToolTip.delay: 1000
-                            ToolTip.visible: containsMouse
-                            ToolTip.text: qsTr("Toggle USB availability. At least one USB application is required.")
-                            onClicked: toggleUsb()
-                        }
                     }
                 }
-                background: Rectangle {
-                    border.color: "transparent"
-                    color: app.color
-                }
-                GridLayout {
-                    columnSpacing: 0
-                    rowSpacing: -15
-                    anchors.leftMargin: -10
-                    anchors.left: parent.left
-                    columns: 2
 
-                    Repeater {
-                        id: usbCheckBoxes
-                        model: applications
-                        CheckBox {
-                            onCheckedChanged: setUsbEnabledState(modelData.id,
-                                                                 checked)
-                            text: modelData.name || modelData.id
-                            font.pointSize: constants.h3
-                            ToolTip.delay: 1000
-                            ToolTip.visible: hovered
-                            ToolTip.text: qsTr("Toggle %1 availability over USB.").arg(
-                                              modelData.name || modelData.id)
-                            Material.foreground: yubicoBlue
-                        }
+                Repeater {
+                    id: usbCheckBoxes
+                    model: applications
+                    CheckBox {
+                        Layout.bottomMargin: -20
+                        onCheckedChanged: setUsbEnabledState(modelData.id,
+                                                             checked)
+                        text: modelData.name || modelData.id
+                        font.pointSize: constants.h3
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle %1 availability over USB.").arg(
+                                          modelData.name || modelData.id)
+                        Material.foreground: yubicoBlue
                     }
                 }
             }
-            GroupBox {
-                id: nfcGroupBox
-                label: Row {
-                    spacing: 5
+
+            Rectangle {
+                id: separator
+                Layout.minimumWidth: 1
+                Layout.maximumWidth: 1
+                Layout.maximumHeight: mainRow.height * 0.7
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: yubicoGrey
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                Layout.bottomMargin: 10
+            }
+
+            GridLayout {
+                columns: 2
+                RowLayout {
+                    Layout.columnSpan: 2
                     Label {
-                        id: nfcLbl
                         text: qsTr("NFC")
-                        lineHeight: 0.5
                         color: yubicoBlue
                         font.pointSize: constants.h2
                     }
@@ -228,43 +226,23 @@ ColumnLayout {
                         source: "../images/wifi.svg"
                         sourceSize.width: 24
                         sourceSize.height: 24
-                        MouseArea {
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            ToolTip.delay: 1000
-                            ToolTip.visible: containsMouse
-                            ToolTip.text: qsTr("Toggle NFC availability.")
-                            onClicked: toggleNfc()
-                        }
                     }
                 }
 
-                background: Rectangle {
-                    border.color: "transparent"
-                    color: app.color
-                }
-
-                GridLayout {
-                    anchors.leftMargin: -10
-                    anchors.left: parent.left
-                    columns: 2
-                    columnSpacing: 0
-                    rowSpacing: -15
-
-                    Repeater {
-                        id: nfcCheckBoxes
-                        model: applications
-                        CheckBox {
-                            onCheckedChanged: setNfcEnabledState(modelData.id,
-                                                                 checked)
-                            text: modelData.name || modelData.id
-                            font.pointSize: constants.h3
-                            ToolTip.delay: 1000
-                            ToolTip.visible: hovered
-                            ToolTip.text: qsTr("Toggle %1 availability over NFC.").arg(
-                                              modelData.name || modelData.id)
-                            Material.foreground: yubicoBlue
-                        }
+                Repeater {
+                    id: nfcCheckBoxes
+                    model: applications
+                    CheckBox {
+                        Layout.bottomMargin: -20
+                        onCheckedChanged: setNfcEnabledState(modelData.id,
+                                                             checked)
+                        text: modelData.name || modelData.id
+                        font.pointSize: constants.h3
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Toggle %1 availability over NFC.").arg(
+                                          modelData.name || modelData.id)
+                        Material.foreground: yubicoBlue
                     }
                 }
             }
@@ -281,7 +259,6 @@ ColumnLayout {
 
         RowLayout {
             Layout.fillWidth: true
-
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
             Button {
