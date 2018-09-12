@@ -28,17 +28,24 @@ ColumnLayout {
     }
 
     ColumnLayout {
-        Layout.fillHeight: true
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         Layout.fillWidth: true
-        Layout.margins: 20
-        Layout.preferredHeight: app.height
+        Layout.fillHeight: true
+        Layout.margins: constants.contentMargins
+        Layout.topMargin: constants.contentTopMargin
+        Layout.bottomMargin: constants.contentBottomMargin
+        Layout.preferredHeight: constants.contentHeight
+        Layout.maximumHeight: constants.contentHeight
+        Layout.preferredWidth: constants.contentWidth
+        Layout.maximumWidth: constants.contentWidth
 
         Heading1 {
             text: yubiKey.name
         }
         RowLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.fillWidth: true
-            Layout.preferredWidth: app.width
+            Layout.preferredWidth: constants.contentWidth
             ColumnLayout {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 Layout.leftMargin: 20
@@ -52,8 +59,9 @@ ColumnLayout {
                 }
             }
             ColumnLayout {
-                Layout.rightMargin: 60
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                Layout.fillWidth: true
+
                 Image {
                     fillMode: Image.PreserveAspectFit
                     source: getYubiKeyImageSource()

@@ -54,41 +54,51 @@ ColumnLayout {
     }
 
     ColumnLayout {
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.margins: 20
-        Layout.preferredHeight: app.height
+        Layout.margins: constants.contentMargins
+        Layout.topMargin: constants.contentTopMargin
+        Layout.bottomMargin: constants.contentBottomMargin
+        Layout.preferredHeight: constants.contentHeight
+        Layout.maximumHeight: constants.contentHeight
+        Layout.preferredWidth: constants.contentWidth
+        Layout.maximumWidth: constants.contentWidth
 
-        Heading1 {
-            text: qsTr("Interfaces")
-        }
-
-        BreadCrumbRow {
-
-            BreadCrumb {
-                text: qsTr("Home")
-                action: views.home
-            }
-
-            BreadCrumbSeparator {
-            }
-
-            BreadCrumb {
+        ColumnLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            Heading1 {
                 text: qsTr("Interfaces")
-                active: true
+            }
+
+            BreadCrumbRow {
+                BreadCrumb {
+                    text: qsTr("Home")
+                    action: views.home
+                }
+
+                BreadCrumbSeparator {
+                }
+
+                BreadCrumb {
+                    text: qsTr("Interfaces")
+                    active: true
+                }
             }
         }
 
         RowLayout {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.fillHeight: true
             Layout.fillWidth: true
-            spacing: 20
-            GroupBox {
-                label: Row {
-                    spacing: 5
+            id: mainRow
+
+            GridLayout {
+                columns: 3
+                RowLayout {
+                    Layout.columnSpan: 3
                     Label {
-                        id: label
-                        text: "USB"
-                        lineHeight: 0.5
+                        text: qsTr("USB")
                         color: yubicoBlue
                         font.pointSize: constants.h2
                     }
@@ -99,44 +109,38 @@ ColumnLayout {
                         sourceSize.height: 24
                     }
                 }
-                background: Rectangle {
-                    border.color: "transparent"
-                    color: app.color
+                CheckBox {
+                    id: otp
+                    enabled: yubiKey.otpInterfaceSupported()
+                    text: qsTr("OTP")
+                    font.pointSize: constants.h3
+                    checkable: true
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Toggle OTP interface over USB.")
+                    Material.foreground: yubicoBlue
                 }
-                RowLayout {
-                    CheckBox {
-                        id: otp
-                        enabled: yubiKey.otpInterfaceSupported()
-                        text: qsTr("OTP")
-                        font.pointSize: constants.h3
-                        checkable: true
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle OTP interface over USB.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        id: fido
-                        enabled: yubiKey.fidoInterfaceSupported()
-                        text: qsTr("FIDO")
-                        font.pointSize: constants.h3
-                        checkable: true
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle FIDO interface over USB.")
-                        Material.foreground: yubicoBlue
-                    }
-                    CheckBox {
-                        id: ccid
-                        enabled: yubiKey.ccidInterfaceSupported()
-                        text: qsTr("CCID (Smart Card)")
-                        font.pointSize: constants.h3
-                        checkable: true
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle CCID interface over USB.")
-                        Material.foreground: yubicoBlue
-                    }
+                CheckBox {
+                    id: fido
+                    enabled: yubiKey.fidoInterfaceSupported()
+                    text: qsTr("FIDO")
+                    font.pointSize: constants.h3
+                    checkable: true
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Toggle FIDO interface over USB.")
+                    Material.foreground: yubicoBlue
+                }
+                CheckBox {
+                    id: ccid
+                    enabled: yubiKey.ccidInterfaceSupported()
+                    text: qsTr("CCID (Smart Card)")
+                    font.pointSize: constants.h3
+                    checkable: true
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Toggle CCID interface over USB.")
+                    Material.foreground: yubicoBlue
                 }
             }
         }

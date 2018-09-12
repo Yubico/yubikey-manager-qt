@@ -132,10 +132,13 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.margins: constants.contentMargins
+        Layout.topMargin: constants.contentTopMargin
+        Layout.bottomMargin: constants.contentBottomMargin
         Layout.preferredHeight: constants.contentHeight
         Layout.maximumHeight: constants.contentHeight
         Layout.preferredWidth: constants.contentWidth
         Layout.maximumWidth: constants.contentWidth
+        spacing: 20
         ColumnLayout {
             Heading1 {
                 text: qsTr("Interfaces")
@@ -162,7 +165,6 @@ ColumnLayout {
             Layout.fillHeight: true
             spacing: 60
             Layout.fillWidth: true
-            Layout.bottomMargin: 20
             id: mainRow
 
             GridLayout {
