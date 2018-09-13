@@ -70,7 +70,7 @@ ColumnLayout {
                 font.pointSize: constants.h3
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Configure a Yubico OTP credential.")
+                ToolTip.text: qsTr("Configure a Yubico OTP credential")
                 Material.foreground: yubicoBlue
             }
             RadioButton {
@@ -81,7 +81,7 @@ ColumnLayout {
                 property var view: otpChalRespView
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Configure a Challenge-response credential.")
+                ToolTip.text: qsTr("Configure a Challenge-response credential")
                 Material.foreground: yubicoBlue
             }
             RadioButton {
@@ -92,7 +92,7 @@ ColumnLayout {
                 property var view: otpStaticPasswordView
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Configure a static password.")
+                ToolTip.text: qsTr("Configure a static password")
                 Material.foreground: yubicoBlue
             }
             RadioButton {
@@ -103,7 +103,7 @@ ColumnLayout {
                 property var view: otpOathHotpView
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Configure a OATH-HOTP credential.")
+                ToolTip.text: qsTr("Configure a OATH-HOTP credential")
                 Material.foreground: yubicoBlue
             }
         }

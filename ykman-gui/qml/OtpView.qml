@@ -152,7 +152,7 @@ ColumnLayout {
                         }
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Permanently delete the configuration of Short Touch (Slot 1).")
+                        ToolTip.text: qsTr("Permanently delete the configuration of Short Touch (Slot 1)")
                         icon.source: "../images/delete.svg"
                         font.capitalization: Font.MixedCase
                         font.family: constants.fontFamily
@@ -169,7 +169,7 @@ ColumnLayout {
                         }
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Configure a credential in Short Touch (Slot 1).")
+                        ToolTip.text: qsTr("Configure a credential in Short Touch (Slot 1)")
                         icon.source: "../images/wrench.svg"
                         font.capitalization: Font.MixedCase
                         font.family: constants.fontFamily
@@ -194,7 +194,7 @@ ColumnLayout {
                     flat: true
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Swap the configurations between the two slots.")
+                    ToolTip.text: qsTr("Swap the configurations between the two slots")
                 }
             }
 
@@ -225,7 +225,7 @@ ColumnLayout {
                         }
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Permanently delete the configuration of Long Touch (Slot 2).")
+                        ToolTip.text: qsTr("Permanently delete the configuration of Long Touch (Slot 2)")
                         icon.source: "../images/delete.svg"
                         font.capitalization: Font.MixedCase
                         Material.foreground: yubicoBlue
@@ -244,7 +244,7 @@ ColumnLayout {
                         font.family: constants.fontFamily
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Configure a credential in Long Touch (Slot 2).")
+                        ToolTip.text: qsTr("Configure a credential in Long Touch (Slot 2)")
                         icon.source: "../images/wrench.svg"
                         icon.width: 16
                         icon.height: 16

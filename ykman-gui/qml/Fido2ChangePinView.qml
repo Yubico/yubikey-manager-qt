@@ -134,7 +134,8 @@ ColumnLayout {
                 echoMode: TextInput.Password
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("The FIDO2 PIN must be at least 4 characters long.")
+                ToolTip.text: qsTr(
+                                  "The FIDO2 PIN must be at least 4 characters")
                 selectByMouse: true
                 selectionColor: yubicoGreen
             }
@@ -173,7 +174,7 @@ ColumnLayout {
                 onClicked: changePin()
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and change the FIDO2 PIN.")
+                ToolTip.text: qsTr("Finish and change the FIDO2 PIN")
                 icon.source: "../images/finish.svg"
                 icon.width: 16
                 icon.height: 16

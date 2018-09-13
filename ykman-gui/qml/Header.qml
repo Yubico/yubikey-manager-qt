@@ -48,7 +48,7 @@ ColumnLayout {
                 onClicked: Qt.openUrlExternally("https://www.yubico.com/kb")
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Visit Yubico Support in your web browser.")
+                ToolTip.text: qsTr("Visit Yubico Support in your web browser")
             }
         }
     }
@@ -70,7 +70,7 @@ ColumnLayout {
                 onClicked: Qt.openUrlExternally("https://www.yubico.com/")
                 ToolTip.delay: 1000
                 ToolTip.visible: containsMouse
-                ToolTip.text: qsTr("Visit yubico.com in your web browser.")
+                ToolTip.text: qsTr("Visit yubico.com in your web browser")
             }
         }
         TopMenuButton {
@@ -94,7 +94,7 @@ ColumnLayout {
                     onClicked: views.otp()
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Configure the OTP Application.")
+                    ToolTip.text: qsTr("Configure OTP Application")
                     font.family: constants.fontFamily
                 }
                 MenuItem {
@@ -104,7 +104,7 @@ ColumnLayout {
                     Material.foreground: yubicoBlue
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Configure the FIDO2 Application.")
+                    ToolTip.text: qsTr("Configure FIDO2 Application")
                     font.family: constants.fontFamily
                 }
             }
@@ -115,7 +115,7 @@ ColumnLayout {
             onClicked: views.configureInterfaces()
             ToolTip.delay: 1000
             ToolTip.visible: hovered
-            ToolTip.text: qsTr("Configure what is available over different interfaces.")
+            ToolTip.text: qsTr("Configure what is available over different interfaces")
         }
     }
     Rectangle {

@@ -131,7 +131,7 @@ ColumnLayout {
                 onClicked: generatePassword()
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Generate a random password.")
+                ToolTip.text: qsTr("Generate a random password")
                 font.capitalization: Font.MixedCase
                 font.family: constants.fontFamily
                 Material.foreground: yubicoBlue
@@ -145,7 +145,7 @@ ColumnLayout {
             Material.foreground: yubicoBlue
             ToolTip.delay: 1000
             ToolTip.visible: hovered
-            ToolTip.text: qsTr("By default only modhex characters are allowed, enable this option to allow any (US Layout) characters.")
+            ToolTip.text: qsTr("By default only modhex characters are allowed, enable this option to allow any (US Layout) characters")
         }
 
         RowLayout {
@@ -171,7 +171,7 @@ ColumnLayout {
                 enabled: passwordInput.acceptableInput
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey.")
+                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey")
                 icon.source: "../images/finish.svg"
                 icon.width: 16
                 icon.height: 16

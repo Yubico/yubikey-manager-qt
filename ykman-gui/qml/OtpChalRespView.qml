@@ -116,7 +116,7 @@ ColumnLayout {
                 }
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Secret key can be a up to 40 characters (20 bytes) hex value.")
+                ToolTip.text: qsTr("Secret key can be a up to 40 characters (20 bytes) hex value")
                 selectByMouse: true
                 selectionColor: yubicoGreen
             }
@@ -127,7 +127,7 @@ ColumnLayout {
                 onClicked: generateKey()
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Generate a random Secret Key.")
+                ToolTip.text: qsTr("Generate a random Secret Key")
                 font.capitalization: Font.MixedCase
                 font.family: constants.fontFamily
                 Material.foreground: yubicoBlue
@@ -140,7 +140,7 @@ ColumnLayout {
             font.pointSize: constants.h3
             ToolTip.delay: 1000
             ToolTip.visible: hovered
-            ToolTip.text: qsTr("YubiKey will require a touch for the challenge-response operation.")
+            ToolTip.text: qsTr("YubiKey will require a touch for the challenge-response operation")
             Material.foreground: yubicoBlue
         }
 
@@ -167,7 +167,7 @@ ColumnLayout {
                 enabled: secretKeyInput.acceptableInput
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey.")
+                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey")
                 icon.source: "../images/finish.svg"
                 icon.width: 16
                 icon.height: 16

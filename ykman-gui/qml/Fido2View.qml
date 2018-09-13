@@ -118,8 +118,8 @@ ColumnLayout {
                                             ) : views.fido2SetPin()
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
-                    ToolTip.text: hasPin ? qsTr("Change the FIDO2 PIN.") : qsTr(
-                                               "Configure a FIDO2 PIN.")
+                    ToolTip.text: hasPin ? qsTr("Change the FIDO2 PIN") : qsTr(
+                                               "Configure a FIDO2 PIN")
                     icon.source: "../images/lock.svg"
                     icon.width: 16
                     icon.height: 16
@@ -159,7 +159,7 @@ ColumnLayout {
                     onClicked: views.fido2Reset()
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Reset all FIDO applications.")
+                    ToolTip.text: qsTr("Reset all FIDO applications")
                     icon.source: "../images/reset.svg"
                     icon.width: 16
                     icon.height: 16

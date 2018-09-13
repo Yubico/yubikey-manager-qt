@@ -196,7 +196,7 @@ ColumnLayout {
                         font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle %1 availability over USB.").arg(
+                        ToolTip.text: qsTr("Toggle %1 availability over USB").arg(
                                           modelData.name || modelData.id)
                         Material.foreground: yubicoBlue
                     }
@@ -243,7 +243,7 @@ ColumnLayout {
                         font.pointSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Toggle %1 availability over NFC.").arg(
+                        ToolTip.text: qsTr("Toggle %1 availability over NFC").arg(
                                           modelData.name || modelData.id)
                         Material.foreground: yubicoBlue
                     }
@@ -271,7 +271,7 @@ ColumnLayout {
                 onClicked: configureInterfaces()
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and save interfaces configuration to YubiKey.")
+                ToolTip.text: qsTr("Finish and save interfaces configuration to YubiKey")
                 icon.source: "../images/finish.svg"
                 icon.width: 16
                 icon.height: 16

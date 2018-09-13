@@ -108,7 +108,7 @@ ColumnLayout {
                 }
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Secret key must be a base32 encoded value.")
+                ToolTip.text: qsTr("Secret key must be a base32 encoded value")
                 selectByMouse: true
                 selectionColor: yubicoGreen
             }
@@ -124,7 +124,7 @@ ColumnLayout {
                 model: [6, 8]
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Number of digits in generated code.")
+                ToolTip.text: qsTr("Number of digits in generated code")
                 Material.foreground: yubicoBlue
             }
         }
@@ -152,7 +152,7 @@ ColumnLayout {
                 enabled: secretKeyInput.acceptableInput
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey.")
+                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey")
                 icon.source: "../images/finish.svg"
                 icon.width: 16
                 icon.height: 16

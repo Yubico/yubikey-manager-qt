@@ -117,7 +117,7 @@ ColumnLayout {
                     checkable: true
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Toggle OTP interface over USB.")
+                    ToolTip.text: qsTr("Toggle OTP interface over USB")
                     Material.foreground: yubicoBlue
                 }
                 CheckBox {
@@ -128,7 +128,7 @@ ColumnLayout {
                     checkable: true
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Toggle FIDO interface over USB.")
+                    ToolTip.text: qsTr("Toggle FIDO interface over USB")
                     Material.foreground: yubicoBlue
                 }
                 CheckBox {
@@ -139,7 +139,7 @@ ColumnLayout {
                     checkable: true
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Toggle CCID interface over USB.")
+                    ToolTip.text: qsTr("Toggle CCID interface over USB")
                     Material.foreground: yubicoBlue
                 }
             }
@@ -154,7 +154,7 @@ ColumnLayout {
                 onClicked: configureInterfaces()
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and save interfaces configuration to YubiKey.")
+                ToolTip.text: qsTr("Finish and save interfaces configuration to YubiKey")
                 icon.source: "../images/finish.svg"
                 icon.width: 16
                 icon.height: 16

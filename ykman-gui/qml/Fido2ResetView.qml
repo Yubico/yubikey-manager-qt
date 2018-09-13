@@ -121,7 +121,7 @@ ColumnLayout {
                 onClicked: fido2ResetConfirmationPopup.open()
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and perform the FIDO Reset.")
+                ToolTip.text: qsTr("Finish and perform the FIDO Reset")
                 icon.source: "../images/finish.svg"
                 icon.width: 16
                 icon.height: 16

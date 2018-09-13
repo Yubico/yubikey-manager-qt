@@ -133,7 +133,7 @@ ColumnLayout {
                 }
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Public ID must be a 12 characters (6 bytes) modhex value.")
+                ToolTip.text: qsTr("Public ID must be a 12 characters (6 bytes) modhex value")
                 selectByMouse: true
                 selectionColor: yubicoGreen
             }
@@ -145,7 +145,7 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 font.pointSize: constants.h3
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Use the encoded serial number of the YubiKey as Public ID.")
+                ToolTip.text: qsTr("Use the encoded serial number of the YubiKey as Public ID")
                 Material.foreground: yubicoBlue
             }
 
@@ -163,7 +163,7 @@ ColumnLayout {
                 }
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Private ID must be a 12 characters (6 bytes) hex value.")
+                ToolTip.text: qsTr("Private ID must be a 12 characters (6 bytes) hex value")
                 selectByMouse: true
                 selectionColor: yubicoGreen
             }
@@ -174,7 +174,7 @@ ColumnLayout {
                 onClicked: generatePrivateId()
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Generate a random Private ID.")
+                ToolTip.text: qsTr("Generate a random Private ID")
                 font.capitalization: Font.MixedCase
                 font.family: constants.fontFamily
                 Material.foreground: yubicoBlue
@@ -193,7 +193,7 @@ ColumnLayout {
                 }
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Secret key must be a 32 characters (16 bytes) hex value.")
+                ToolTip.text: qsTr("Secret key must be a 32 characters (16 bytes) hex value")
                 selectByMouse: true
                 selectionColor: yubicoGreen
             }
@@ -204,7 +204,7 @@ ColumnLayout {
                 onClicked: generateKey()
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Generate a random Secret Key.")
+                ToolTip.text: qsTr("Generate a random Secret Key")
                 font.capitalization: Font.MixedCase
                 font.family: constants.fontFamily
                 Material.foreground: yubicoBlue
@@ -235,7 +235,7 @@ ColumnLayout {
                          && secretKeyInput.acceptableInput
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey.")
+                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey")
                 icon.source: "../images/finish.svg"
                 icon.width: 16
                 icon.height: 16
