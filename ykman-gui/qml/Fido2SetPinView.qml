@@ -15,7 +15,7 @@ ColumnLayout {
     function setPin() {
         yubiKey.fido_set_pin(chosenPin, function (resp) {
             if (resp.success) {
-                fido2SetPinSucces.open()
+                fido2SuccessPopup.open()
             } else {
                 if (resp.error === 'too long') {
                     fido2TooLongError.open()
@@ -25,9 +25,6 @@ ColumnLayout {
                 }
             }
         })
-    }
-    Fido2SuccessPopup {
-        id: fido2SetPinSucces
     }
 
     Fido2GeneralErrorPopup {

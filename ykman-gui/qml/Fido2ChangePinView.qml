@@ -16,7 +16,7 @@ ColumnLayout {
     function changePin() {
         yubiKey.fido_change_pin(chosenCurrentPin, chosenPin, function (resp) {
             if (resp.success) {
-                fido2SetPinSucces.open()
+                fido2SuccessPopup.open()
             } else {
                 if (resp.error === 'too long') {
                     fido2TooLongError.open()
@@ -39,11 +39,6 @@ ColumnLayout {
         currentPin.text = ''
         newPin.text = ''
         confirmPin.text = ''
-    }
-
-    Fido2SuccessPopup {
-        id: fido2SetPinSucces
-        message: qsTr("Success! The FIDO2 PIN was changed.")
     }
 
     Fido2GeneralErrorPopup {

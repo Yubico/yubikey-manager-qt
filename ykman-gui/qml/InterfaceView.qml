@@ -46,8 +46,8 @@ ColumnLayout {
         views.lock()
         yubiKey.write_config(usbEnabled, nfcEnabled, lockCode, function (resp) {
             if (resp.success) {
+                interfacesSuccessPopup.open()
                 views.unlock()
-                views.home()
             } else {
                 console.log(resp.error)
                 views.unlock()

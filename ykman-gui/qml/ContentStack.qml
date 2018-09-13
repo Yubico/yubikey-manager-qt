@@ -88,14 +88,6 @@ StackView {
         otpSuccessPopup.open()
     }
 
-    function otpDeleteSuccess() {
-        otpDeleteSuccessPopup.open()
-    }
-
-    function otpSwapConfigurationsSuccess() {
-        otpSwapConfigurationsSuccessPopup.open()
-    }
-
     function otpWriteError() {
         otpWriteErrorPopup.open()
     }
@@ -154,16 +146,19 @@ StackView {
         id: otpFailedToConfigureErrorPopup
     }
 
-    OtpSuccessPopup {
+    SuccessPopup {
         id: otpSuccessPopup
+        onClosed: views.otp()
     }
 
-    OtpDeleteSuccessPopup {
-        id: otpDeleteSuccessPopup
+    SuccessPopup {
+        id: fido2SuccessPopup
+        onClosed: views.fido2()
     }
 
-    OtpSwapConfigurationsSuccessPopup {
-        id: otpSwapConfigurationsSuccessPopup
+    SuccessPopup {
+        id: interfacesSuccessPopup
+        onClosed: views.home()
     }
 
     OtpGeneralErrorPopup {

@@ -13,5 +13,4 @@ InlinePopup {
     }
 
     standardButtons: Dialog.Ok
-    onClosed: views.otp()
 }

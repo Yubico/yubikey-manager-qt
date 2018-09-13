@@ -19,7 +19,7 @@ ColumnLayout {
                 yubiKey.fido_reset(function (resp) {
                     touchYubiKey.close()
                     if (resp.success) {
-                        fido2ResetSucces.open()
+                        fido2SuccessPopup.open()
                     } else {
                         if (resp.error === 'touch timeout') {
                             fido2ResetTouchError.open()
@@ -40,10 +40,6 @@ ColumnLayout {
     Fido2ResetConfirmPopup {
         id: fido2ResetConfirmationPopup
         onAccepted: reInsertYubiKey.open()
-    }
-
-    Fido2SuccessPopup {
-        id: fido2ResetSucces
     }
 
     Fido2GeneralErrorPopup {
