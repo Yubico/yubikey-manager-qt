@@ -109,6 +109,7 @@ ApplicationWindow {
         id: yubiKey
         onError: console.log(traceback)
         onHasDeviceChanged: hasDevice ? yubiKeyInserted() : yubiKeyRemoved()
+        onNDevicesChanged: views.home()
     }
 
     Timer {
