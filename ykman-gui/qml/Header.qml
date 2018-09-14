@@ -76,6 +76,7 @@ ColumnLayout {
         TopMenuButton {
             text: qsTr("Home")
             onClicked: views.home()
+            enabled: yubiKey.hasDevice
         }
         TopMenuButton {
             text: qsTr("Applications")
