@@ -113,17 +113,28 @@ ColumnLayout {
 
     function toggleNfc() {
         if (nfcEnabled.length < 1) {
-            nfcEnabled = Utils.pick(applications, 'id')
+            for (var i = 0; i < nfcCheckBoxes.count; i++) {
+                nfcCheckBoxes.itemAt(i).checked = true
+            }
         } else {
-            nfcEnabled = []
+            for (var j = 0; j < nfcCheckBoxes.count; j++) {
+                nfcCheckBoxes.itemAt(j).checked = false
+            }
         }
     }
 
     function toggleUsb() {
         if (usbEnabled.length < 2) {
-            usbEnabled = Utils.pick(applications, 'id')
+            for (var i = 0; i < usbCheckBoxes.count; i++) {
+                usbCheckBoxes.itemAt(i).checked = true
+            }
         } else {
-            usbEnabled = [applications[0].id]
+            for (var j = 0; j < usbCheckBoxes.count; j++) {
+                // Leave OTP by default, not allowed to have 0 USB enabled.
+                if (usbCheckBoxes.itemAt(j).text !== 'OTP') {
+                    usbCheckBoxes.itemAt(j).checked = false
+                }
+            }
         }
     }
 
@@ -171,7 +182,6 @@ ColumnLayout {
             GridLayout {
                 columns: 2
                 RowLayout {
-                    Layout.columnSpan: 2
                     Label {
                         text: qsTr("USB")
                         color: yubicoBlue
@@ -183,6 +193,19 @@ ColumnLayout {
                         sourceSize.width: 24
                         sourceSize.height: 24
                     }
+                }
+                Button {
+                    text: usbEnabled.length < 2 ? qsTr("Enable all") : qsTr(
+                                                      "Disable all")
+                    font.pointSize: 12
+                    font.capitalization: Font.MixedCase
+                    font.family: constants.fontFamily
+                    Material.foreground: yubicoBlue
+                    flat: true
+                    onClicked: toggleUsb()
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Toggle all availability over USB (at least one USB application is required)")
                 }
 
                 Repeater {
@@ -218,11 +241,10 @@ ColumnLayout {
             GridLayout {
                 columns: 2
                 RowLayout {
-                    Layout.columnSpan: 2
                     Label {
                         text: qsTr("NFC")
-                        color: yubicoBlue
                         font.pointSize: constants.h2
+                        color: yubicoBlue
                     }
                     Image {
                         fillMode: Image.PreserveAspectCrop
@@ -230,6 +252,19 @@ ColumnLayout {
                         sourceSize.width: 24
                         sourceSize.height: 24
                     }
+                }
+                Button {
+                    text: nfcEnabled.length < 1 ? qsTr("Enable all") : qsTr(
+                                                      "Disable all")
+                    font.pointSize: 12
+                    font.capitalization: Font.MixedCase
+                    font.family: constants.fontFamily
+                    Material.foreground: yubicoBlue
+                    flat: true
+                    onClicked: toggleNfc()
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Toggle all availability over NFC")
                 }
 
                 Repeater {
