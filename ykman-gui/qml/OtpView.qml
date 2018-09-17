@@ -143,38 +143,25 @@ ColumnLayout {
                 RowLayout {
                     Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                     spacing: 10
-                    Button {
+                    CustomButton {
                         text: qsTr("Delete")
                         enabled: slot1Configured
                         onClicked: {
                             views.selectSlot1()
                             otpDeleteSlotPopup.open()
                         }
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Permanently delete the configuration of Short Touch (Slot 1)")
-                        icon.source: "../images/delete.svg"
-                        font.capitalization: Font.MixedCase
-                        font.family: constants.fontFamily
-                        Material.foreground: yubicoBlue
-                        icon.width: 16
-                        icon.height: 16
+                        toolTipText: qsTr("Permanently delete the configuration of Short Touch (Slot 1)")
+                        iconSource: "../images/delete.svg"
                     }
-                    Button {
+                    CustomButton {
                         text: qsTr("Configure")
                         highlighted: true
                         onClicked: {
                             views.selectSlot1()
                             views.push(otpConfigureSlotView)
                         }
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Configure a credential in Short Touch (Slot 1)")
-                        icon.source: "../images/wrench.svg"
-                        font.capitalization: Font.MixedCase
-                        font.family: constants.fontFamily
-                        icon.width: 16
-                        icon.height: 16
+                        toolTipText: qsTr("Configure a credential in Short Touch (Slot 1)")
+                        iconSource: "../images/wrench.svg"
                     }
                 }
             }
@@ -182,19 +169,14 @@ ColumnLayout {
                 spacing: 10
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Button {
+                CustomButton {
                     text: qsTr("Swap")
                     enabled: slot1Configured || slot2Configured
-                    icon.source: "../images/swap.svg"
-                    font.family: constants.fontFamily
-                    Material.foreground: yubicoBlue
-                    font.capitalization: Font.MixedCase
+                    iconSource: "../images/swap.svg"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     onClicked: otpSwapConfigurationsPopup.open()
                     flat: true
-                    ToolTip.delay: 1000
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Swap the configurations between the two slots")
+                    toolTipText: qsTr("Swap the configurations between the two slots")
                 }
             }
 
@@ -216,38 +198,25 @@ ColumnLayout {
                 RowLayout {
                     spacing: 10
 
-                    Button {
+                    CustomButton {
                         text: qsTr("Delete")
                         enabled: views.slot2Configured
                         onClicked: {
                             views.selectSlot2()
                             otpDeleteSlotPopup.open()
                         }
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Permanently delete the configuration of Long Touch (Slot 2)")
-                        icon.source: "../images/delete.svg"
-                        font.capitalization: Font.MixedCase
-                        Material.foreground: yubicoBlue
-                        font.family: constants.fontFamily
-                        icon.width: 16
-                        icon.height: 16
+                        toolTipText: qsTr("Permanently delete the configuration of Long Touch (Slot 2)")
+                        iconSource: "../images/delete.svg"
                     }
-                    Button {
+                    CustomButton {
                         text: qsTr("Configure")
                         highlighted: true
                         onClicked: {
                             views.selectSlot2()
                             views.push(otpConfigureSlotView)
                         }
-                        font.capitalization: Font.MixedCase
-                        font.family: constants.fontFamily
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Configure a credential in Long Touch (Slot 2)")
-                        icon.source: "../images/wrench.svg"
-                        icon.width: 16
-                        icon.height: 16
+                        toolTipText: qsTr("Configure a credential in Long Touch (Slot 2)")
+                        iconSource: "../images/wrench.svg"
                     }
                 }
             }

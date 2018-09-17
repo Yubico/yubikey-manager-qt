@@ -105,28 +105,17 @@ ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
-            Button {
+            CustomButton {
                 text: qsTr("Back")
                 onClicked: views.pop()
-                icon.source: "../images/back.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                Material.foreground: yubicoBlue
+                iconSource: "../images/back.svg"
             }
-            Button {
+            CustomButton {
                 text: qsTr("Reset")
                 highlighted: true
                 onClicked: fido2ResetConfirmationPopup.open()
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and perform the FIDO Reset")
-                icon.source: "../images/finish.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
+                toolTipText: qsTr("Finish and perform the FIDO Reset")
+                iconSource: "../images/finish.svg"
             }
         }
     }

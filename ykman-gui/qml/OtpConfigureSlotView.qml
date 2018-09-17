@@ -111,27 +111,18 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            Button {
+            CustomButton {
                 id: backBtn
                 text: qsTr("Back")
                 onClicked: views.pop()
-                icon.source: "../images/back.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                Material.foreground: yubicoBlue
+                iconSource: "../images/back.svg"
             }
-            Button {
+            CustomButton {
                 id: nextBtn
                 text: qsTr("Next")
                 highlighted: true
                 onClicked: views.push(configViewOptions.checkedButton.view)
-                icon.source: "../images/next.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
+                iconSource: "../images/next.svg"
             }
         }
     }

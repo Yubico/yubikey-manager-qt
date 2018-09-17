@@ -133,31 +133,20 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            Button {
+            CustomButton {
                 id: backBtn
                 text: qsTr("Back")
                 onClicked: views.pop()
-                icon.source: "../images/back.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                Material.foreground: yubicoBlue
+                iconSource: "../images/back.svg"
             }
-            Button {
+            CustomButton {
                 id: nextBtn
                 text: qsTr("Finish")
                 highlighted: true
                 onClicked: finish()
                 enabled: secretKeyInput.acceptableInput
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey")
-                icon.source: "../images/finish.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
+                toolTipText: qsTr("Finish and write the configuration to the YubiKey")
+                iconSource: "../images/finish.svg"
             }
         }
     }

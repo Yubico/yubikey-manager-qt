@@ -32,41 +32,21 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 color: yubicoBlue
             }
-            Button {
+            CustomButton {
                 flat: true
-                text: "Help"
-                font.pointSize: 12
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                Material.foreground: yubicoBlue
-                display: AbstractButton.TextBesideIcon
-                Layout.fillWidth: false
+                text: qsTr("Help")
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                icon.source: "../images/help.svg"
-                icon.width: 16
-                icon.height: 16
+                iconSource: "../images/help.svg"
+                toolTipText: qsTr("Visit Yubico Support in your web browser")
                 onClicked: Qt.openUrlExternally("https://www.yubico.com/kb")
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Visit Yubico Support in your web browser")
             }
-            Button {
+            CustomButton {
                 flat: true
-                text: "About"
-                font.pointSize: 12
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                Material.foreground: yubicoBlue
-                display: AbstractButton.TextBesideIcon
-                Layout.fillWidth: false
+                text: qsTr("About")
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                icon.source: "../images/info.svg"
-                icon.width: 16
-                icon.height: 16
+                iconSource: "../images/info.svg"
+                toolTipText: qsTr("About YubiKey Manager")
                 onClicked: aboutPage.open()
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("About YubiKey Manager")
             }
         }
     }

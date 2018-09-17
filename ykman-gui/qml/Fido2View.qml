@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
+import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
     id: fido2MainView
@@ -111,20 +112,16 @@ ColumnLayout {
                     font.pointSize: constants.h3
                     color: yubicoBlue
                 }
-                Button {
+                CustomButton {
                     text: hasPin ? qsTr("Change PIN") : qsTr("Set PIN")
                     highlighted: true
                     onClicked: hasPin ? views.fido2ChangePin(
                                             ) : views.fido2SetPin()
-                    ToolTip.delay: 1000
-                    ToolTip.visible: hovered
                     ToolTip.text: hasPin ? qsTr("Change the FIDO2 PIN") : qsTr(
                                                "Configure a FIDO2 PIN")
-                    icon.source: "../images/lock.svg"
-                    icon.width: 16
-                    icon.height: 16
-                    font.capitalization: Font.MixedCase
-                    font.family: constants.fontFamily
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    iconSource: "../images/lock.svg"
                 }
             }
 
@@ -153,18 +150,12 @@ ColumnLayout {
                     font.pointSize: constants.h3
                     color: yubicoBlue
                 }
-                Button {
+                CustomButton {
                     text: qsTr("Reset")
                     highlighted: true
                     onClicked: views.fido2Reset()
-                    ToolTip.delay: 1000
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Reset all FIDO applications")
-                    icon.source: "../images/reset.svg"
-                    icon.width: 16
-                    icon.height: 16
-                    font.capitalization: Font.MixedCase
-                    font.family: constants.fontFamily
+                    toolTipText: qsTr("Reset all FIDO applications")
+                    iconSource: "../images/reset.svg"
                 }
             }
         }

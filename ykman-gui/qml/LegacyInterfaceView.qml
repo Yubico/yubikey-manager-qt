@@ -147,19 +147,13 @@ ColumnLayout {
         RowLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-            Button {
+            CustomButton {
                 enabled: configurationHasChanged() && validCombination()
                 text: qsTr("Save Interfaces")
                 highlighted: true
                 onClicked: configureInterfaces()
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and save interfaces configuration to YubiKey")
-                icon.source: "../images/finish.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
+                toolTipText: qsTr("Finish and save interfaces configuration to YubiKey")
+                iconSource: "../images/finish.svg"
             }
         }
     }

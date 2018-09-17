@@ -194,18 +194,12 @@ ColumnLayout {
                         sourceSize.height: 24
                     }
                 }
-                Button {
+                CustomButton {
                     text: usbEnabled.length < 2 ? qsTr("Enable all") : qsTr(
                                                       "Disable all")
-                    font.pointSize: 12
-                    font.capitalization: Font.MixedCase
-                    font.family: constants.fontFamily
-                    Material.foreground: yubicoBlue
                     flat: true
                     onClicked: toggleUsb()
-                    ToolTip.delay: 1000
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Toggle all availability over USB (at least one USB application is required)")
+                    toolTipText: qsTr("Toggle all availability over USB (at least one USB application is required)")
                 }
 
                 Repeater {
@@ -253,18 +247,13 @@ ColumnLayout {
                         sourceSize.height: 24
                     }
                 }
-                Button {
+                CustomButton {
                     text: nfcEnabled.length < 1 ? qsTr("Enable all") : qsTr(
                                                       "Disable all")
-                    font.pointSize: 12
-                    font.capitalization: Font.MixedCase
-                    font.family: constants.fontFamily
-                    Material.foreground: yubicoBlue
+
                     flat: true
                     onClicked: toggleNfc()
-                    ToolTip.delay: 1000
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Toggle all availability over NFC")
+                    toolTipText: qsTr("Toggle all availability over NFC")
                 }
 
                 Repeater {
@@ -299,19 +288,13 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            Button {
+            CustomButton {
                 enabled: configurationHasChanged() && validCombination()
                 text: qsTr("Save Interfaces")
                 highlighted: true
                 onClicked: configureInterfaces()
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and save interfaces configuration to YubiKey")
-                icon.source: "../images/finish.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
+                toolTipText: qsTr("Finish and save interfaces configuration to YubiKey")
+                iconSource: "../images/finish.svg"
             }
         }
     }

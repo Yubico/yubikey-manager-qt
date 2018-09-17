@@ -157,29 +157,17 @@ ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
-            Button {
+            CustomButton {
                 text: qsTr("Back")
                 onClicked: views.fido2()
-                icon.source: "../images/back.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                Material.foreground: yubicoBlue
             }
-            Button {
+            CustomButton {
                 enabled: validPin()
                 text: qsTr("Change PIN")
                 highlighted: true
                 onClicked: changePin()
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and change the FIDO2 PIN")
-                icon.source: "../images/finish.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
+                toolTipText: qsTr("Finish and change the FIDO2 PIN")
+                iconSource: "../images/finish.svg"
             }
         }
     }

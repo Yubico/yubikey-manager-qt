@@ -167,17 +167,12 @@ ColumnLayout {
                 selectByMouse: true
                 selectionColor: yubicoGreen
             }
-            Button {
+            CustomButton {
                 id: generatePrivateIdBtn
                 text: qsTr("Generate")
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 onClicked: generatePrivateId()
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Generate a random Private ID")
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                Material.foreground: yubicoBlue
+                toolTipText: qsTr("Generate a random Private ID")
             }
 
             Label {
@@ -197,35 +192,25 @@ ColumnLayout {
                 selectByMouse: true
                 selectionColor: yubicoGreen
             }
-            Button {
+            CustomButton {
                 id: generateSecretKeyBtn
                 text: qsTr("Generate")
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 onClicked: generateKey()
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Generate a random Secret Key")
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                Material.foreground: yubicoBlue
+                toolTipText: qsTr("Generate a random Secret Key")
             }
         }
         RowLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            Button {
+            CustomButton {
                 id: backBtn
                 text: qsTr("Back")
                 onClicked: views.pop()
-                icon.source: "../images/back.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                Material.foreground: yubicoBlue
+                iconSource: "../images/back.svg"
             }
-            Button {
+            CustomButton {
                 id: finnishBtn
                 text: qsTr("Finish")
                 highlighted: true
@@ -233,14 +218,8 @@ ColumnLayout {
                 enabled: publicIdInput.acceptableInput
                          && privateIdInput.acceptableInput
                          && secretKeyInput.acceptableInput
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and write the configuration to the YubiKey")
-                icon.source: "../images/finish.svg"
-                icon.width: 16
-                icon.height: 16
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
+                toolTipText: qsTr("Finish and write the configuration to the YubiKey")
+                iconSource: "../images/finish.svg"
             }
         }
     }
