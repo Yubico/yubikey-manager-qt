@@ -101,9 +101,6 @@ ApplicationWindow {
         id: clipboard
     }
 
-    MainMenuBar {
-    }
-
     // @disable-check M301
     YubiKey {
         id: yubiKey

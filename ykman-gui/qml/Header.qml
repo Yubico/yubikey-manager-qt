@@ -50,6 +50,24 @@ ColumnLayout {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Visit Yubico Support in your web browser")
             }
+            Button {
+                flat: true
+                text: "About"
+                font.pointSize: 12
+                font.capitalization: Font.MixedCase
+                font.family: constants.fontFamily
+                Material.foreground: yubicoBlue
+                display: AbstractButton.TextBesideIcon
+                Layout.fillWidth: false
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                icon.source: "../images/info.svg"
+                icon.width: 16
+                icon.height: 16
+                onClicked: aboutPage.open()
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("About YubiKey Manager")
+            }
         }
     }
 
