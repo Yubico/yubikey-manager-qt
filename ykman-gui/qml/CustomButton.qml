@@ -32,6 +32,9 @@ Button {
         }
     }
 
+    // Since we are currently targeting Qt 5.9,
+    // we can not use the Button.icon property
+    // which was introduced in Qt 5.10.
     contentItem: RowLayout {
         Image {
             visible: iconSource !== null

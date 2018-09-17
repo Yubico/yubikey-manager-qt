@@ -106,7 +106,12 @@ ApplicationWindow {
         id: yubiKey
         onError: console.log(traceback)
         onHasDeviceChanged: hasDevice ? yubiKeyInserted() : yubiKeyRemoved()
-        onNDevicesChanged: views.home()
+        onNDevicesChanged: {
+            // Special fix for solving > 1 keys inserted at launch.
+            if (!hasDevice && (yubiKey.nDevices > 1)) {
+                views.home()
+            }
+        }
     }
 
     Timer {
