@@ -2,20 +2,20 @@ FROM ubuntu:xenial
 RUN apt-get update -qq \
     && apt-get install -qq software-properties-common \
     && add-apt-repository -y ppa:yubico/stable \
-    && add-apt-repository -y ppa:beineri/opt-qt-5.10.1-xenial \
+    && add-apt-repository -y ppa:beineri/opt-qt-5.11.1-xenial \
     && apt-get -qq update \
     && apt-get -qq upgrade
 RUN apt-get install -y git make build-essential libssl-dev zlib1g-dev libbz2-dev \
     devscripts equivs python3-dev python3-pip python3-venv wget fuse \
-    qt510base qt510declarative qt510xmlpatterns qt510script qt510tools qt510multimedia \
-    qt510svg qt510graphicaleffects qt510imageformats qt510translations qt510quickcontrols \
-    qt510quickcontrols2 qt510sensors qt510serialbus qt510serialport qt510x11extras \
-    qt510connectivity qt510scxml qt510wayland qt510remoteobjects qt510creator qtbase5-dev \
+    qt511base qt511declarative qt511xmlpatterns qt511script qt511tools qt511multimedia \
+    qt511svg qt511graphicaleffects qt511imageformats qt511translations qt511quickcontrols \
+    qt511quickcontrols2 qt511sensors qt511serialbus qt511serialport qt511x11extras \
+    qt511connectivity qt511scxml qt511wayland qt511remoteobjects qt511creator qtbase5-dev \
     desktop-file-utils libglib2.0-bin qtchooser python3-pip python mesa-common-dev curl swig \
     libpcsclite-dev libffi-dev libykpers-1-1
-ENV QT_BASE_DIR=/opt/qt510 \
-    QT_DIR=/opt/qt510 \
-    QT_BASE_DIR=/opt/qt510 \
+ENV QT_BASE_DIR=/opt/qt511 \
+    QT_DIR=/opt/qt511 \
+    QT_BASE_DIR=/opt/qt511 \
     PYTHON_CFLAGS=-fPIC \
     PYTHON_CONFIGURE_OPTS=--enable-shared
 ENV LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH \
