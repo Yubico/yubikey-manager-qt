@@ -1,4 +1,4 @@
-import QtQuick 2.5
+import QtQuick 2.9
 
 QtObject {
     readonly property int fido2PinMinLength: 4

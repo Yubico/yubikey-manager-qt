@@ -1,4 +1,4 @@
-import QtQuick 2.5
+import QtQuick 2.9
 import io.thp.pyotherside 1.4
 import "utils.js" as Utils
 
