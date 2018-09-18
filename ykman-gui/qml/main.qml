@@ -10,10 +10,9 @@ ApplicationWindow {
     id: app
     title: qsTr("YubiKey Manager")
     visible: true
-    height: 640
-    width: 800
+    width: 750
+    height: 500
     color: yubicoWhite
-    readonly property int margins: 12
     readonly property string yubicoGreen: "#9aca3c"
     readonly property string yubicoBlue: "#284c61"
     readonly property string yubicoLightBlue: "#417488"

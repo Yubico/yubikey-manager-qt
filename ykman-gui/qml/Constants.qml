@@ -8,9 +8,10 @@ QtObject {
     readonly property int h3: 18
     readonly property int h4: 14
     readonly property string fontFamily: "Helvetica Neue"
+
     readonly property int contentMargins: 40
     readonly property int contentTopMargin: 20
     readonly property int contentBottomMargin: 20
-    readonly property int contentWidth: 800
-    readonly property int contentHeight: 600
+    readonly property int contentWidth: app.width - 80
+    readonly property int contentHeight: app.height - header.height - 40
 }
