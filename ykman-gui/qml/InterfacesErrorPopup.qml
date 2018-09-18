@@ -8,7 +8,7 @@ InlinePopup {
         width: parent.width
         text: qsTr("Error!
 
-Failed to configure interfaces.")
+Failed to configure interfaces")
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         wrapMode: Text.WordWrap
     }

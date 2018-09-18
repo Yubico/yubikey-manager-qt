@@ -29,7 +29,7 @@ ColumnLayout {
 
     Fido2GeneralErrorPopup {
         id: fido2TooLongError
-        error: qsTr("Too long PIN, maximum size is 128 bytes.")
+        error: qsTr("Too long PIN, maximum size is 128 bytes")
     }
 
     Fido2GeneralErrorPopup {

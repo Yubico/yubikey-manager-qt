@@ -43,22 +43,22 @@ ColumnLayout {
 
     Fido2GeneralErrorPopup {
         id: fido2TooLongError
-        error: qsTr("Too long PIN, maximum size is 128 bytes.")
+        error: qsTr("Too long PIN, maximum size is 128 bytes")
     }
 
     Fido2GeneralErrorPopup {
         id: fido2WrongPinError
-        error: qsTr("The current PIN is wrong.")
+        error: qsTr("The current PIN is wrong")
     }
 
     Fido2GeneralErrorPopup {
         id: fido2CurrentlyBlockedError
-        error: qsTr("PIN authentication is currently blocked. Remove and re-insert your YubiKey.")
+        error: qsTr("PIN authentication is currently blocked - Remove and re-insert your YubiKey")
     }
 
     Fido2GeneralErrorPopup {
         id: fido2BlockedError
-        error: qsTr("PIN is blocked.")
+        error: qsTr("PIN is blocked")
     }
 
     Fido2GeneralErrorPopup {

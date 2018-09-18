@@ -13,7 +13,7 @@ InlinePopup {
     ColumnLayout {
         anchors.fill: parent
         Heading2 {
-            text: qsTr("Configuration is protected by a lock code.")
+            text: qsTr("Configuration is protected by a lock code")
             color: yubicoBlue
             font.pixelSize: constants.h3
         }
