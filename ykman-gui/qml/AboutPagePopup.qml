@@ -8,7 +8,7 @@ InlinePopup {
             text: qsTr("YubiKey Manager")
         }
         Label {
-            font.pointSize: constants.h3
+            font.pixelSize: constants.h3
             color: yubicoBlue
             text: qsTr("Version: " + appVersion)
         }

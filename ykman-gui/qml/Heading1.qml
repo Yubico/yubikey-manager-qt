@@ -7,7 +7,7 @@ TextInput {
     selectionColor: yubicoGreen
     readOnly: true
     color: yubicoBlue
-    font.pointSize: constants.h1
+    font.pixelSize: constants.h1
     font.bold: true
     Layout.fillWidth: true
 }

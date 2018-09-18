@@ -99,7 +99,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width
             wrapMode: Text.WordWrap
-            font.pointSize: constants.h3
+            font.pixelSize: constants.h3
         }
 
         RowLayout {

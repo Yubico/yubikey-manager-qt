@@ -111,7 +111,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Label {
                 text: qsTr("Current PIN")
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 color: yubicoBlue
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             }
@@ -124,7 +124,7 @@ ColumnLayout {
             }
             Label {
                 text: qsTr("New PIN")
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 color: yubicoBlue
             }
@@ -141,7 +141,7 @@ ColumnLayout {
             }
             Label {
                 text: qsTr("Confirm new PIN")
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 color: yubicoBlue
             }

@@ -31,7 +31,7 @@ ColumnLayout {
                 Layout.fillWidth: false
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 color: yubicoBlue
-                font.pointSize: constants.h4
+                font.pixelSize: constants.h4
             }
             CustomButton {
                 flat: true
@@ -40,7 +40,7 @@ ColumnLayout {
                 iconSource: "../images/help.svg"
                 toolTipText: qsTr("Visit Yubico Support in your web browser")
                 onClicked: Qt.openUrlExternally("https://www.yubico.com/kb")
-                font.pointSize: constants.h4
+                font.pixelSize: constants.h4
             }
             CustomButton {
                 flat: true
@@ -49,7 +49,7 @@ ColumnLayout {
                 iconSource: "../images/info.svg"
                 toolTipText: qsTr("About YubiKey Manager")
                 onClicked: aboutPage.open()
-                font.pointSize: constants.h4
+                font.pixelSize: constants.h4
             }
         }
     }
@@ -98,7 +98,7 @@ ColumnLayout {
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Configure OTP Application")
                     font.family: constants.fontFamily
-                    font.pointSize: constants.h3
+                    font.pixelSize: constants.h3
                 }
                 MenuItem {
                     enabled: yubiKey.fido2Enabled()
@@ -109,7 +109,7 @@ ColumnLayout {
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Configure FIDO2 Application")
                     font.family: constants.fontFamily
-                    font.pointSize: constants.h3
+                    font.pixelSize: constants.h3
                 }
             }
         }

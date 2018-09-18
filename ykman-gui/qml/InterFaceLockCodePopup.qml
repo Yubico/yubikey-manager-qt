@@ -15,14 +15,14 @@ InlinePopup {
         Heading2 {
             text: qsTr("Configuration is protected by a lock code.")
             color: yubicoBlue
-            font.pointSize: constants.h3
+            font.pixelSize: constants.h3
         }
 
         RowLayout {
             Heading2 {
                 text: qsTr("Lock Code")
                 color: yubicoBlue
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
             }
             TextField {
                 id: lockCodeInput

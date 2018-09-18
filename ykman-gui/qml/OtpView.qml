@@ -130,12 +130,12 @@ ColumnLayout {
             ColumnLayout {
                 Heading2 {
                     text: qsTr("Short Touch (Slot 1)")
-                    font.pointSize: constants.h2
+                    font.pixelSize: constants.h2
                     color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
                 Label {
                     text: slot1StatusTxt()
-                    font.pointSize: constants.h3
+                    font.pixelSize: constants.h3
                     color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
                 RowLayout {
@@ -202,7 +202,7 @@ ColumnLayout {
                 }
                 Label {
                     text: slot2StatusTxt()
-                    font.pointSize: constants.h3
+                    font.pixelSize: constants.h3
                     color: slot2Configured ? yubicoBlue : yubicoGrey
                 }
                 RowLayout {

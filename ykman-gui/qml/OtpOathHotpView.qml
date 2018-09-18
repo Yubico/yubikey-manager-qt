@@ -97,7 +97,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Label {
                 text: qsTr("Secret key")
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 color: yubicoBlue
             }
             TextField {
@@ -116,7 +116,7 @@ ColumnLayout {
         RowLayout {
             Label {
                 text: qsTr("Digits")
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 color: yubicoBlue
             }
             ComboBox {

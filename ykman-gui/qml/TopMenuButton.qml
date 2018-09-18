@@ -4,5 +4,5 @@ import QtQuick.Controls.Material 2.2
 
 CustomButton {
     flat: true
-    font.pointSize: constants.h3
+    font.pixelSize: constants.h3
 }

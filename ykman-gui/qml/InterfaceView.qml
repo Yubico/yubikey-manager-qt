@@ -185,7 +185,7 @@ ColumnLayout {
                     Label {
                         text: qsTr("USB")
                         color: yubicoBlue
-                        font.pointSize: constants.h2
+                        font.pixelSize: constants.h2
                     }
                     Image {
                         fillMode: Image.PreserveAspectCrop
@@ -210,7 +210,7 @@ ColumnLayout {
                         onCheckedChanged: setUsbEnabledState(modelData.id,
                                                              checked)
                         text: modelData.name || modelData.id
-                        font.pointSize: constants.h3
+                        font.pixelSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle %1 availability over USB").arg(
@@ -236,7 +236,7 @@ ColumnLayout {
                 RowLayout {
                     Label {
                         text: qsTr("NFC")
-                        font.pointSize: constants.h2
+                        font.pixelSize: constants.h2
                         color: yubicoBlue
                     }
                     Image {
@@ -263,7 +263,7 @@ ColumnLayout {
                         onCheckedChanged: setNfcEnabledState(modelData.id,
                                                              checked)
                         text: modelData.name || modelData.id
-                        font.pointSize: constants.h3
+                        font.pixelSize: constants.h3
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("Toggle %1 availability over NFC").arg(

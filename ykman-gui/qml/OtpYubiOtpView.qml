@@ -121,7 +121,7 @@ ColumnLayout {
             Label {
                 text: qsTr("Public ID")
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 color: yubicoBlue
             }
             TextField {
@@ -143,7 +143,7 @@ ColumnLayout {
                 text: qsTr("Use serial")
                 onCheckedChanged: useSerial()
                 ToolTip.delay: 1000
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Use the encoded serial number of the YubiKey as Public ID")
                 Material.foreground: yubicoBlue
@@ -152,7 +152,7 @@ ColumnLayout {
             Label {
                 text: qsTr("Private ID")
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 color: yubicoBlue
             }
             TextField {
@@ -177,7 +177,7 @@ ColumnLayout {
 
             Label {
                 text: qsTr("Secret key")
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 color: yubicoBlue
             }
             TextField {

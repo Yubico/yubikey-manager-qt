@@ -102,11 +102,11 @@ ColumnLayout {
             ColumnLayout {
                 Heading2 {
                     text: qsTr("FIDO2 PIN")
-                    font.pointSize: constants.h2
+                    font.pixelSize: constants.h2
                 }
                 Label {
                     text: getPinMessage()
-                    font.pointSize: constants.h3
+                    font.pixelSize: constants.h3
                     color: yubicoBlue
                 }
                 CustomButton {
@@ -137,7 +137,7 @@ ColumnLayout {
                 }
                 Label {
                     text: qsTr("Reset all FIDO applications")
-                    font.pointSize: constants.h3
+                    font.pixelSize: constants.h3
                     color: yubicoBlue
                 }
                 CustomButton {

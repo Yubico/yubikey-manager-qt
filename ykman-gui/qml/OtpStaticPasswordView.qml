@@ -115,7 +115,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Label {
                 text: qsTr("Password")
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 color: yubicoBlue
             }
             TextField {
@@ -136,7 +136,7 @@ ColumnLayout {
             id: allowNonModhex
             text: qsTr("Allow any character")
             onCheckedChanged: passwordInput.text = ""
-            font.pointSize: constants.h3
+            font.pixelSize: constants.h3
             Material.foreground: yubicoBlue
             ToolTip.delay: 1000
             ToolTip.visible: hovered

@@ -84,7 +84,7 @@ ColumnLayout {
             Label {
                 text: qsTr("New PIN")
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 color: yubicoBlue
             }
             TextField {
@@ -101,7 +101,7 @@ ColumnLayout {
             Label {
                 text: qsTr("Confirm PIN")
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                font.pointSize: constants.h3
+                font.pixelSize: constants.h3
                 color: yubicoBlue
             }
             TextField {

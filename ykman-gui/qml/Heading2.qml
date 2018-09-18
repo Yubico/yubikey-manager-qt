@@ -7,5 +7,5 @@ TextInput {
     readOnly: true
     color: yubicoBlue
     selectionColor: yubicoGreen
-    font.pointSize: constants.h2
+    font.pixelSize: constants.h2
 }

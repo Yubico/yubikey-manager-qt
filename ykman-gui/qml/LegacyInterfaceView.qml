@@ -100,7 +100,7 @@ ColumnLayout {
                     Label {
                         text: qsTr("USB")
                         color: yubicoBlue
-                        font.pointSize: constants.h2
+                        font.pixelSize: constants.h2
                     }
                     Image {
                         fillMode: Image.PreserveAspectCrop
@@ -113,7 +113,7 @@ ColumnLayout {
                     id: otp
                     enabled: yubiKey.otpInterfaceSupported()
                     text: qsTr("OTP")
-                    font.pointSize: constants.h3
+                    font.pixelSize: constants.h3
                     checkable: true
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
@@ -124,7 +124,7 @@ ColumnLayout {
                     id: fido
                     enabled: yubiKey.fidoInterfaceSupported()
                     text: qsTr("FIDO")
-                    font.pointSize: constants.h3
+                    font.pixelSize: constants.h3
                     checkable: true
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
@@ -135,7 +135,7 @@ ColumnLayout {
                     id: ccid
                     enabled: yubiKey.ccidInterfaceSupported()
                     text: qsTr("CCID (Smart Card)")
-                    font.pointSize: constants.h3
+                    font.pixelSize: constants.h3
                     checkable: true
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
