@@ -42,13 +42,13 @@ ColumnLayout {
 
     function getPinMessage() {
         if (pinBlocked) {
-            return qsTr("PIN is blocked.")
+            return qsTr("PIN is blocked")
         }
         if (!hasPin) {
-            return qsTr("No PIN is set.")
+            return qsTr("No PIN is set")
         }
         if (hasPin && pinRetries) {
-            return qsTr("A PIN is set, ") + pinRetries + qsTr(" retries left.")
+            return qsTr("A PIN is set, ") + pinRetries + qsTr(" retries left")
         }
     }
 
@@ -93,16 +93,13 @@ ColumnLayout {
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.fillWidth: true
             spacing: 60
             id: mainRow
 
             ColumnLayout {
-                spacing: 10
-                Layout.fillWidth: true
-                Layout.fillHeight: true
                 Heading2 {
                     text: qsTr("FIDO2 PIN")
                     font.pointSize: constants.h2
@@ -117,10 +114,8 @@ ColumnLayout {
                     highlighted: true
                     onClicked: hasPin ? views.fido2ChangePin(
                                             ) : views.fido2SetPin()
-                    ToolTip.text: hasPin ? qsTr("Change the FIDO2 PIN") : qsTr(
-                                               "Configure a FIDO2 PIN")
-                    ToolTip.delay: 1000
-                    ToolTip.visible: hovered
+                    toolTipText: hasPin ? qsTr("Change the FIDO2 PIN") : qsTr(
+                                              "Configure a FIDO2 PIN")
                     iconSource: "../images/lock.svg"
                 }
             }
@@ -133,20 +128,15 @@ ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 color: yubicoGrey
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                Layout.bottomMargin: 10
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
             ColumnLayout {
-                spacing: 10
-                Layout.fillWidth: true
-                Layout.fillHeight: true
                 Heading2 {
                     text: qsTr("FIDO Reset")
-                    font.pointSize: constants.h2
                 }
                 Label {
-                    text: qsTr("Reset all FIDO applications.")
+                    text: qsTr("Reset all FIDO applications")
                     font.pointSize: constants.h3
                     color: yubicoBlue
                 }

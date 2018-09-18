@@ -175,8 +175,8 @@ ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
-            spacing: 60
             Layout.fillWidth: true
+            spacing: 60
             id: mainRow
 
             GridLayout {
@@ -228,8 +228,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 color: yubicoGrey
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                Layout.bottomMargin: 10
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
             GridLayout {
