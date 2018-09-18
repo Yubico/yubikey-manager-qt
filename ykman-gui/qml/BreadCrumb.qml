@@ -6,6 +6,7 @@ Label {
     property var action
     color: active ? yubicoGrey : yubicoGreen
     font.underline: !active && mouseArea.containsMouse
+    font.pointSize: constants.h4
 
     MouseArea {
         id: mouseArea

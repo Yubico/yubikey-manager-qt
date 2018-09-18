@@ -7,8 +7,8 @@ ColumnLayout {
     id: otpView
 
     property bool isBusy
-    readonly property string slotIsConfigured: qsTr("This slot is configured.")
-    readonly property string slotIsEmpty: qsTr("This slot is empty.")
+    readonly property string slotIsConfigured: qsTr("This slot is configured")
+    readonly property string slotIsEmpty: qsTr("This slot is empty")
 
     Component.onCompleted: load()
 
@@ -22,8 +22,8 @@ ColumnLayout {
                 isBusy = false
             } else {
                 if (resp.error === 'timeout') {
-                    views.otpGeneralError(
-                                qsTr("Failed to load OTP application."))
+                    views.otpGeneralError(qsTr(
+                                              "Failed to load OTP application"))
                 } else {
                     views.otpGeneralError(resp.error)
                 }
