@@ -121,15 +121,13 @@ ColumnLayout {
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.fillWidth: true
-            spacing: 50
+            spacing: 60
+            id: mainRow
 
             ColumnLayout {
-                spacing: 10
-                Layout.fillWidth: true
-                Layout.fillHeight: true
                 Heading2 {
                     text: qsTr("Short Touch (Slot 1)")
                     font.pointSize: constants.h2
@@ -165,26 +163,38 @@ ColumnLayout {
                     }
                 }
             }
+
             ColumnLayout {
-                spacing: 10
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Rectangle {
+                    Layout.minimumWidth: 1
+                    Layout.maximumWidth: 1
+                    Layout.maximumHeight: mainRow.height * 0.3
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    color: yubicoGrey
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
                 CustomButton {
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     text: qsTr("Swap")
                     enabled: slot1Configured || slot2Configured
                     iconSource: "../images/swap.svg"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     onClicked: otpSwapConfigurationsPopup.open()
                     flat: true
                     toolTipText: qsTr("Swap the configurations between the two slots")
                 }
+                Rectangle {
+                    Layout.minimumWidth: 1
+                    Layout.maximumWidth: 1
+                    Layout.maximumHeight: mainRow.height * 0.3
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    color: yubicoGrey
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
             }
 
             ColumnLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                spacing: 10
-
                 Heading2 {
                     id: slot2Heading
                     text: qsTr("Long Touch (Slot 2)")
@@ -197,7 +207,7 @@ ColumnLayout {
                 }
                 RowLayout {
                     spacing: 10
-
+                    Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                     CustomButton {
                         text: qsTr("Delete")
                         enabled: views.slot2Configured
