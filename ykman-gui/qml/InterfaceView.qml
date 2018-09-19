@@ -211,6 +211,7 @@ ColumnLayout {
             }
 
             Rectangle {
+                visible: yubiKey.supportsNfcConfiguration()
                 id: separator
                 Layout.minimumWidth: 1
                 Layout.maximumWidth: 1
@@ -222,6 +223,7 @@ ColumnLayout {
             }
 
             GridLayout {
+                visible: yubiKey.supportsNfcConfiguration()
                 columns: 2
                 RowLayout {
                     Label {
