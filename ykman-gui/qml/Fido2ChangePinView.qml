@@ -149,6 +149,7 @@ ColumnLayout {
             CustomButton {
                 text: qsTr("Back")
                 onClicked: views.fido2()
+                iconSource: "../images/back.svg"
             }
             CustomButton {
                 enabled: validPin()
