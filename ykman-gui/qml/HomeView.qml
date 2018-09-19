@@ -22,7 +22,19 @@ ColumnLayout {
             return "../images/standard.png"
         }
         if (yubiKey.isYubiKeyPreview()) {
-            return "../images/preview.png"
+            return "../images/yk5nfc.png"
+        }
+        if (yubiKey.isYubiKey5NFC()) {
+            return "../images/yk5nfc.png"
+        }
+        if (yubiKey.isYubiKey5Nano()) {
+            return "../images/yk5nano.png"
+        }
+        if (yubiKey.isYubiKey5C()) {
+            return "../images/yk5c.png"
+        }
+        if (yubiKey.isYubiKey5CNano()) {
+            return "../images/yk5cnano.png"
         }
         return "../images/yk4series.png" //default for now
     }
