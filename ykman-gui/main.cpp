@@ -29,6 +29,10 @@ int main(int argc, char *argv[])
     app.setOrganizationName("Yubico");
     app.setOrganizationDomain("org.yubico");
 
+    // Workaround for https://bugreports.qt.io/browse/QTBUG-66915
+    // Fixing 64bit builds on Windows
+    app.setAttribute(Qt::AA_DisableShaderDiskCache);
+
     QCommandLineParser cliParser;
     cliParser.setApplicationDescription("Configure your YubiKey using a graphical application.");
     cliParser.addHelpOption();
