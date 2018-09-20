@@ -11,6 +11,7 @@ ColumnLayout {
     readonly property string slotIsEmpty: qsTr("This slot is empty")
 
     Component.onCompleted: load()
+    objectName: "otpView"
 
     function load() {
         isBusy = true

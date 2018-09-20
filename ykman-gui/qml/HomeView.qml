@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 
 ColumnLayout {
-    objectName: "homeview"
+    objectName: "homeView"
 
     function getYubiKeyImageSource() {
         if (yubiKey.isYubiKey4()) {

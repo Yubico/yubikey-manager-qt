@@ -16,7 +16,13 @@ StackView {
                                            && currentItem.objectName === "interfaces"
 
     property bool isShowingHomeView: currentItem !== null
-                                     && currentItem.objectName === "homeview"
+                                     && currentItem.objectName === "homeView"
+
+    property bool isShowingOtp: currentItem !== null
+                                && currentItem.objectName === "otpView"
+
+    property bool isShowingFido2: currentItem !== null
+                                  && currentItem.objectName === "fido2View"
 
     function lock() {
         locked = true
@@ -56,6 +62,10 @@ StackView {
     }
 
     function configureInterfaces() {
+        if (isConfiguringInterfaces) {
+            return
+        }
+
         var interfaceComponent = yubiKey.supportsNewInterfaces(
                     ) ? interfaces : legacyInterfaces
         clear()
@@ -63,6 +73,9 @@ StackView {
     }
 
     function fido2() {
+        if (isShowingFido2) {
+            return
+        }
         clear()
         push(fido2View)
     }
@@ -80,6 +93,9 @@ StackView {
     }
 
     function otp() {
+        if (isShowingOtp) {
+            return
+        }
         clear()
         push(otpViewComponent)
     }
