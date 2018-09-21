@@ -87,16 +87,16 @@ ColumnLayout {
                 columns: 3
                 RowLayout {
                     Layout.columnSpan: 3
-                    Label {
-                        text: qsTr("USB")
-                        color: yubicoBlue
-                        font.pixelSize: constants.h2
-                    }
                     Image {
                         fillMode: Image.PreserveAspectCrop
                         source: "../images/usb.svg"
                         sourceSize.width: 24
                         sourceSize.height: 24
+                    }
+                    Label {
+                        text: qsTr("USB")
+                        color: yubicoBlue
+                        font.pixelSize: constants.h2
                     }
                 }
                 CheckBox {

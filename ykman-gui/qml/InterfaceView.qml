@@ -172,16 +172,16 @@ ColumnLayout {
             GridLayout {
                 columns: 2
                 RowLayout {
-                    Label {
-                        text: qsTr("USB")
-                        color: yubicoBlue
-                        font.pixelSize: constants.h2
-                    }
                     Image {
                         fillMode: Image.PreserveAspectCrop
                         source: "../images/usb.svg"
                         sourceSize.width: 24
                         sourceSize.height: 24
+                    }
+                    Label {
+                        text: qsTr("USB")
+                        color: yubicoBlue
+                        font.pixelSize: constants.h2
                     }
                 }
                 CustomButton {
@@ -224,22 +224,21 @@ ColumnLayout {
             GridLayout {
                 columns: 2
                 RowLayout {
-                    Label {
-                        text: qsTr("NFC")
-                        font.pixelSize: constants.h2
-                        color: yubicoBlue
-                    }
                     Image {
                         fillMode: Image.PreserveAspectCrop
                         source: "../images/wifi.svg"
                         sourceSize.width: 24
                         sourceSize.height: 24
                     }
+                    Label {
+                        text: qsTr("NFC")
+                        font.pixelSize: constants.h2
+                        color: yubicoBlue
+                    }
                 }
                 CustomButton {
                     text: nfcEnabled.length < 1 ? qsTr("Enable all") : qsTr(
                                                       "Disable all")
-
                     flat: true
                     onClicked: toggleNfc()
                     toolTipText: qsTr("Toggle all availability over NFC")
