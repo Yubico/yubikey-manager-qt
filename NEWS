@@ -1,5 +1,8 @@
-* Version 1.0.0 (unreleased)
-  ** New UI.
+* Version 1.0.0 (released 2018-09-24)
+  ** Completely new UI
+  ** Support for YubiKey 5 Series
+  ** Support for configuring NFC and USB interfaces
+  ** Linux: Release as AppImage (experimental)
 
 * Version 0.5.2 (released 2018-07-09)
   ** Support for YubiKey FIPS.
