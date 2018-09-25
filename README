@@ -11,20 +11,25 @@ This application provides an easy way to perform the most common configuration t
 
 The current version can:
 
-* Display the serial number and firmware version of a YubiKey.
-* Configure a FIDO2 PIN.
-* Reset FIDO Applications.
-* Configure OTP Application. A YubiKey have two slots (Short Touch and Long Touch), which may both be configured for different functionality.
+* Display the serial number and firmware version of a YubiKey
+* Configure a FIDO2 PIN
+* Reset the FIDO Applications
+* Configure the OTP Application. A YubiKey have two slots (Short Touch and Long Touch), which may both be configured for different functionality.
 This tool can configure a https://developers.yubico.com/OTP/[Yubico OTP] credential, a static password, a challenge-response credential or an https://developers.yubico.com/OATH/[OATH] HOTP credential in both of these slots.
-* Swap the credentials between two configured slots.
-* Enable or disable the different USB interfaces.
+* Swap the credentials between two configured slots
+* Enable and disable USB and NFC interfaces
 
 === Installation
 
 ==== Windows and macOS
 Installers are available https://developers.yubico.com/yubikey-manager-qt/Releases/[here].
 
-==== Ubuntu
+==== Linux
+
+===== AppImage
+An experimental AppImage is available https://developers.yubico.com/yubikey-manager-qt/Releases/[here].
+
+===== Ubuntu
 
     $ sudo apt-add-repository ppa:yubico/stable
     $ sudo apt update
