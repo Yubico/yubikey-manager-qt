@@ -13,12 +13,16 @@ Python {
     property string serial
     property bool canWriteConfig
     property bool configurationLocked
-    property var supportedUsbInterfaces: []
-    property var enabledUsbInterfaces: []
-    property var supportedUsbApplications: []
-    property var enabledUsbApplications: []
-    property var supportedNfcApplications: []
-    property var enabledNfcApplications: []
+
+    property var applicationsEnabledOverUsb: []
+    property var applicationsEnabledOverNfc: []
+
+    property var applicationsSupportedOverUsb: []
+    property var applicationsSupportedOverNfc: []
+
+    property var usbInterfacesSupported: []
+    property var usbInterfacesEnabled: []
+
     property bool yubikeyModuleLoaded: false
     property bool yubikeyReady: false
     property var queue: []
@@ -59,12 +63,12 @@ Python {
         version = ''
         serial = ''
         configurationLocked = false
-        supportedUsbInterfaces = []
-        enabledUsbInterfaces = []
-        supportedUsbApplications = []
-        enabledUsbApplications = []
-        supportedNfcApplications = []
-        enabledNfcApplications = []
+        usbInterfacesSupported = []
+        usbInterfacesEnabled = []
+        applicationsSupportedOverUsb = []
+        applicationsEnabledOverUsb = []
+        applicationsSupportedOverNfc = []
+        applicationsEnabledOverNfc = []
     }
 
     function isPythonReady(funcName) {
@@ -148,31 +152,42 @@ Python {
     }
 
     function supportsNfcConfiguration() {
-        return supportedNfcApplications.length > 0
+        return applicationsSupportedOverNfc.length > 0
+    }
+    function supportsUsbConfiguration() {
+        return applicationsSupportedOverUsb.length > 1
     }
 
     function canChangeInterfaces() {
-        return supportedUsbInterfaces.length > 1
-    }
-
-    function otpEnabled() {
-        return Utils.includes(enabledUsbApplications, 'OTP')
-    }
-
-    function fido2Enabled() {
-        return Utils.includes(enabledUsbApplications, 'FIDO2')
+        return usbInterfacesSupported.length > 1
     }
 
     function otpInterfaceSupported() {
-        return Utils.includes(supportedUsbInterfaces, 'OTP')
+        return Utils.includes(usbInterfacesSupported, 'OTP')
     }
 
     function fidoInterfaceSupported() {
-        return Utils.includes(supportedUsbInterfaces, 'FIDO')
+        return Utils.includes(usbInterfacesSupported, 'FIDO')
     }
 
     function ccidInterfaceSupported() {
-        return Utils.includes(supportedUsbInterfaces, 'CCID')
+        return Utils.includes(usbInterfacesSupported, 'CCID')
+    }
+
+    function isEnabledOverUsb(applicationId) {
+        return Utils.includes(applicationsEnabledOverUsb, applicationId)
+    }
+
+    function isEnabledOverNfc(applicationId) {
+        return Utils.includes(applicationsEnabledOverNfc, applicationId)
+    }
+
+    function isSupportedOverUSB(applicationId) {
+        return Utils.includes(applicationsSupportedOverUsb, applicationId)
+    }
+
+    function isSupportedOverNfc(applicationId) {
+        return Utils.includes(applicationsSupportedOverNfc, applicationId)
     }
 
     function refresh(doneCallback) {
@@ -185,12 +200,12 @@ Python {
                     version = dev ? dev.version : ''
                     serial = dev ? dev.serial : ''
                     configurationLocked = dev ? dev.configuration_locked : false
-                    supportedUsbApplications = dev ? dev.usb_supported : []
-                    enabledUsbApplications = dev ? dev.usb_enabled : []
-                    supportedNfcApplications = dev ? dev.nfc_supported : []
-                    enabledNfcApplications = dev ? dev.nfc_enabled : []
-                    supportedUsbInterfaces = dev ? dev.usb_interfaces_supported : []
-                    enabledUsbInterfaces = dev ? dev.usb_interfaces_enabled : []
+                    applicationsSupportedOverUsb = dev ? dev.usb_supported : []
+                    applicationsEnabledOverUsb = dev ? dev.usb_enabled : []
+                    applicationsSupportedOverNfc = dev ? dev.nfc_supported : []
+                    applicationsEnabledOverNfc = dev ? dev.nfc_enabled : []
+                    usbInterfacesSupported = dev ? dev.usb_interfaces_supported : []
+                    usbInterfacesEnabled = dev ? dev.usb_interfaces_enabled : []
                     canWriteConfig = dev ? dev.can_write_config : []
                 })
             } else if (hasDevice) {

@@ -5,9 +5,12 @@ import "utils.js" as Utils
 import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
+    objectName: "interfaces"
 
     property string lockCode: lockCodePopup.lockCode
-    property bool configurationLocked
+
+    property var newApplicationsEnabledOverUsb: []
+    property var newApplicationsEnabledOverNfc: []
 
     readonly property var applications: [{
             id: "OTP",
@@ -28,14 +31,11 @@ ColumnLayout {
             id: "OATH",
             name: qsTr("OATH")
         }]
-    property var usbEnabled: []
-    property var nfcEnabled: []
 
-    objectName: "interfaces"
     Component.onCompleted: load()
 
     function configureInterfaces() {
-        if (configurationLocked) {
+        if (yubiKey.configurationLocked) {
             lockCodePopup.open()
         } else {
             writeInterfaces()
@@ -44,75 +44,70 @@ ColumnLayout {
 
     function writeInterfaces() {
         views.lock()
-        yubiKey.write_config(usbEnabled, nfcEnabled, lockCode, function (resp) {
-            if (resp.success) {
-                interfacesSuccessPopup.open()
-                views.unlock()
-            } else {
-                console.log(resp.error)
-                views.unlock()
-                errorLockCodePopup.open()
-            }
-        })
+        yubiKey.write_config(newApplicationsEnabledOverUsb,
+                             newApplicationsEnabledOverNfc, lockCode,
+                             function (resp) {
+                                 if (resp.success) {
+                                     interfacesSuccessPopup.open()
+                                     views.unlock()
+                                 } else {
+                                     console.log(resp.error)
+                                     views.unlock()
+                                     errorLockCodePopup.open()
+                                 }
+                             })
     }
 
     function configurationHasChanged() {
         var enabledYubiKeyUsb = JSON.stringify(
-                    yubiKey.enabledUsbApplications.sort())
-        var enabledUiUsb = JSON.stringify(usbEnabled.sort())
+                    yubiKey.applicationsEnabledOverUsb.sort())
+        var enabledUiUsb = JSON.stringify(newApplicationsEnabledOverUsb.sort())
         var enabledYubiKeyNfc = JSON.stringify(
-                    yubiKey.enabledNfcApplications.sort())
-        var enabledUiNfc = JSON.stringify(nfcEnabled.sort())
+                    yubiKey.applicationsEnabledOverNfc.sort())
+        var enabledUiNfc = JSON.stringify(newApplicationsEnabledOverNfc.sort())
 
         return enabledYubiKeyUsb !== enabledUiUsb
                 || enabledYubiKeyNfc !== enabledUiNfc
     }
 
-    function setUsbEnabledState(applicationId, enabled) {
+    function toggleEnabledOverUsb(applicationId, enabled) {
         if (enabled) {
-            usbEnabled = Utils.including(usbEnabled, applicationId)
+            newApplicationsEnabledOverUsb = Utils.including(
+                        newApplicationsEnabledOverUsb, applicationId)
         } else {
-            usbEnabled = Utils.without(usbEnabled, applicationId)
+            newApplicationsEnabledOverUsb = Utils.without(
+                        newApplicationsEnabledOverUsb, applicationId)
         }
     }
 
-    function setNfcEnabledState(applicationId, enabled) {
+    function toggleEnabledOverNfc(applicationId, enabled) {
         if (enabled) {
-            nfcEnabled = Utils.including(nfcEnabled, applicationId)
+            newApplicationsEnabledOverNfc = Utils.including(
+                        newApplicationsEnabledOverNfc, applicationId)
         } else {
-            nfcEnabled = Utils.without(nfcEnabled, applicationId)
+            newApplicationsEnabledOverNfc = Utils.without(
+                        newApplicationsEnabledOverNfc, applicationId)
         }
-    }
-
-    function getUsbEnabledState(applicationId) {
-        return Utils.includes(usbEnabled, applicationId)
-    }
-
-    function getNfcEnabledState(applicationId) {
-        return Utils.includes(nfcEnabled, applicationId)
     }
 
     function load() {
-        configurationLocked = yubiKey.configurationLocked
-
-        usbEnabled = yubiKey.enabledUsbApplications
-        nfcEnabled = yubiKey.enabledNfcApplications
-
         // Populate initial state of checkboxes
         for (var i = 0; i < applications.length; i++) {
-            usbCheckBoxes.itemAt(i).checked = getUsbEnabledState(
+            usbCheckBoxes.itemAt(i).checked = yubiKey.isEnabledOverUsb(
+                        applications[i].id) && yubiKey.isSupportedOverUSB(
                         applications[i].id)
-            nfcCheckBoxes.itemAt(i).checked = getNfcEnabledState(
+            nfcCheckBoxes.itemAt(i).checked = yubiKey.isEnabledOverNfc(
+                        applications[i].id) && yubiKey.isSupportedOverNfc(
                         applications[i].id)
         }
     }
 
     function validCombination() {
-        return usbEnabled.length >= 1
+        return newApplicationsEnabledOverUsb.length >= 1
     }
 
     function toggleNfc() {
-        if (nfcEnabled.length < 1) {
+        if (newApplicationsEnabledOverNfc.length < 1) {
             for (var i = 0; i < nfcCheckBoxes.count; i++) {
                 nfcCheckBoxes.itemAt(i).checked = true
             }
@@ -124,7 +119,7 @@ ColumnLayout {
     }
 
     function toggleUsb() {
-        if (usbEnabled.length < 2) {
+        if (newApplicationsEnabledOverUsb.length < 2) {
             for (var i = 0; i < usbCheckBoxes.count; i++) {
                 usbCheckBoxes.itemAt(i).checked = true
             }
@@ -170,6 +165,7 @@ ColumnLayout {
             id: mainRow
 
             GridLayout {
+                visible: yubiKey.supportsUsbConfiguration()
                 columns: 2
                 RowLayout {
                     Image {
@@ -185,8 +181,8 @@ ColumnLayout {
                     }
                 }
                 CustomButton {
-                    text: usbEnabled.length < 2 ? qsTr("Enable all") : qsTr(
-                                                      "Disable all")
+                    text: newApplicationsEnabledOverUsb.length < 2 ? qsTr("Enable all") : qsTr(
+                                                                         "Disable all")
                     flat: true
                     onClicked: toggleUsb()
                     toolTipText: qsTr("Toggle all availability over USB (at least one USB application is required)")
@@ -196,9 +192,10 @@ ColumnLayout {
                     id: usbCheckBoxes
                     model: applications
                     CheckBox {
+                        enabled: yubiKey.isSupportedOverUSB(modelData.id)
                         Layout.bottomMargin: -20
-                        onCheckedChanged: setUsbEnabledState(modelData.id,
-                                                             checked)
+                        onCheckedChanged: toggleEnabledOverUsb(modelData.id,
+                                                               checked)
                         text: modelData.name || modelData.id
                         font.pixelSize: constants.h3
                         ToolTip.delay: 1000
@@ -212,6 +209,7 @@ ColumnLayout {
 
             Rectangle {
                 visible: yubiKey.supportsNfcConfiguration()
+                         && yubiKey.supportsUsbConfiguration()
                 id: separator
                 Layout.minimumWidth: 1
                 Layout.maximumWidth: 1
@@ -239,8 +237,8 @@ ColumnLayout {
                     }
                 }
                 CustomButton {
-                    text: nfcEnabled.length < 1 ? qsTr("Enable all") : qsTr(
-                                                      "Disable all")
+                    text: newApplicationsEnabledOverNfc.length < 1 ? qsTr("Enable all") : qsTr(
+                                                                         "Disable all")
                     flat: true
                     onClicked: toggleNfc()
                     toolTipText: qsTr("Toggle all availability over NFC")
@@ -250,9 +248,10 @@ ColumnLayout {
                     id: nfcCheckBoxes
                     model: applications
                     CheckBox {
+                        enabled: yubiKey.isSupportedOverNfc(modelData.id)
                         Layout.bottomMargin: -20
-                        onCheckedChanged: setNfcEnabledState(modelData.id,
-                                                             checked)
+                        onCheckedChanged: toggleEnabledOverNfc(modelData.id,
+                                                               checked)
                         text: modelData.name || modelData.id
                         font.pixelSize: constants.h3
                         ToolTip.delay: 1000

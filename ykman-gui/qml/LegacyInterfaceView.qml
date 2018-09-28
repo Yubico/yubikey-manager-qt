@@ -8,9 +8,9 @@ ColumnLayout {
     objectName: "interfaces"
     Component.onCompleted: load()
     function load() {
-        otp.checked = Utils.includes(yubiKey.enabledUsbInterfaces, 'OTP')
-        fido.checked = Utils.includes(yubiKey.enabledUsbInterfaces, 'FIDO')
-        ccid.checked = Utils.includes(yubiKey.enabledUsbInterfaces, 'CCID')
+        otp.checked = Utils.includes(yubiKey.usbInterfacesEnabled, 'OTP')
+        fido.checked = Utils.includes(yubiKey.usbInterfacesEnabled, 'FIDO')
+        ccid.checked = Utils.includes(yubiKey.usbInterfacesEnabled, 'CCID')
     }
 
     function getEnabledInterfaces() {
@@ -43,7 +43,7 @@ ColumnLayout {
 
     function configurationHasChanged() {
         var enabledYubiKeyUsbInterfaces = JSON.stringify(
-                    yubiKey.enabledUsbInterfaces.sort())
+                    yubiKey.usbInterfacesEnabled.sort())
         var enabledUiUsbInterfaces = JSON.stringify(
                     getEnabledInterfaces().sort())
         return enabledYubiKeyUsbInterfaces !== enabledUiUsbInterfaces

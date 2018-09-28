@@ -90,7 +90,7 @@ ColumnLayout {
                 y: parent.height
                 Material.elevation: 1
                 MenuItem {
-                    enabled: yubiKey.otpEnabled()
+                    enabled: yubiKey.isEnabledOverUsb('OTP')
                     text: qsTr("OTP")
                     Material.foreground: yubicoBlue
                     onClicked: views.otp()
@@ -101,7 +101,7 @@ ColumnLayout {
                     font.pixelSize: constants.h3
                 }
                 MenuItem {
-                    enabled: yubiKey.fido2Enabled()
+                    enabled: yubiKey.isEnabledOverUsb('FIDO2')
                     text: qsTr("FIDO2")
                     onClicked: views.fido2()
                     Material.foreground: yubicoBlue
