@@ -135,17 +135,20 @@ Python {
         return name === 'YubiKey 5C Nano'
     }
 
-    function isYubiKey5() {
-        return isYubiKey5NFC() || isYubiKey5Nano() || isYubiKey5C()
-                || isYubiKey5CNano()
+    function isYubiKey5A() {
+        return name === 'YubiKey 5A'
+    }
+
+    function isYubiKey5Family() {
+        return name.startsWith('YubiKey 5')
     }
 
     function supportsNewInterfaces() {
-        return isYubiKeyPreview() || isYubiKey5()
+        return isYubiKeyPreview() || isYubiKey5Family()
     }
 
     function supportsNfcConfiguration() {
-        return isYubiKey5NFC() || isYubiKeyPreview()
+        return supportedNfcApplications.length > 0
     }
 
     function canChangeInterfaces() {
