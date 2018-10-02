@@ -111,8 +111,9 @@ class Controller(object):
             usb_enabled |= APPLICATION[app]
         for app in nfc_applications:
             nfc_enabled |= APPLICATION[app]
-        with self._open_device() as dev:
-            try:
+        try:
+            with self._open_device() as dev:
+
                 if lock_code:
                     lock_code = a2b_hex(lock_code)
                     if len(lock_code) != 16:
@@ -126,18 +127,18 @@ class Controller(object):
                     reboot=True,
                     lock_key=lock_code)
                 return {'success': True, 'error': None}
-            except Exception as e:
-                logger.error('Failed to write config', exc_info=e)
-                return {'success': False, 'error': str(e)}
+        except Exception as e:
+            logger.error('Failed to write config', exc_info=e)
+            return {'success': False, 'error': str(e)}
 
     def set_mode(self, interfaces):
-        with self._open_device() as dev:
-            try:
+        try:
+            with self._open_device() as dev:
                 transports = sum([TRANSPORT[i] for i in interfaces])
                 dev.mode = Mode(transports & TRANSPORT.usb_transports())
-            except Exception as e:
-                logger.error('Failed to set mode', exc_info=e)
-                return str(e)
+        except Exception as e:
+            logger.error('Failed to set mode', exc_info=e)
+            return str(e)
 
     def slots_status(self):
         try:
