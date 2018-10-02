@@ -194,19 +194,23 @@ Python {
         do_call('yubikey.controller.count_devices', [], function (n) {
             nDevices = n
             if (nDevices == 1) {
-                do_call('yubikey.controller.refresh', [], function (dev) {
-                    hasDevice = dev !== undefined && dev !== null
-                    name = dev ? dev.name : ''
-                    version = dev ? dev.version : ''
-                    serial = dev ? dev.serial : ''
-                    configurationLocked = dev ? dev.configuration_locked : false
-                    applicationsSupportedOverUsb = dev ? dev.usb_supported : []
-                    applicationsEnabledOverUsb = dev ? dev.usb_enabled : []
-                    applicationsSupportedOverNfc = dev ? dev.nfc_supported : []
-                    applicationsEnabledOverNfc = dev ? dev.nfc_enabled : []
-                    usbInterfacesSupported = dev ? dev.usb_interfaces_supported : []
-                    usbInterfacesEnabled = dev ? dev.usb_interfaces_enabled : []
-                    canWriteConfig = dev ? dev.can_write_config : []
+                do_call('yubikey.controller.refresh', [], function (resp) {
+                    if (!resp.error && resp.dev) {
+                        hasDevice = true
+                        name = resp.dev.name
+                        version = resp.dev.version
+                        serial = resp.dev.serial
+                        configurationLocked = resp.dev.configuration_locked
+                        applicationsSupportedOverUsb = resp.dev.usb_supported
+                        applicationsEnabledOverUsb = resp.dev.usb_enabled
+                        applicationsSupportedOverNfc = resp.dev.nfc_supported
+                        applicationsEnabledOverNfc = resp.dev.nfc_enabled
+                        usbInterfacesSupported = resp.dev.usb_interfaces_supported
+                        usbInterfacesEnabled = resp.dev.usb_interfaces_enabled
+                        canWriteConfig = resp.dev.can_write_config
+                    } else {
+                        clearYubiKey()
+                    }
                 })
             } else if (hasDevice) {
                 clearYubiKey()
