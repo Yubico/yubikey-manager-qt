@@ -55,42 +55,54 @@ class Controller(object):
         descriptors = list(get_descriptors())
         if len(descriptors) != 1:
             self._descriptor = None
-            return
-
+            return {'success': False, 'error': 'Multiple devices', 'dev': None}
         desc = descriptors[0]
-        if desc.fingerprint != (
-                self._descriptor.fingerprint if self._descriptor else None):
-            self._descriptor = desc
 
+        # If we have a cached descriptor
+        if self._descriptor:
+            # Same device, return
+            if desc.fingerprint == self._descriptor.fingerprint:
+                return {'success': True, 'error': None, 'dev': self._dev_info}
+
+        self._descriptor = desc
+
+        try:
             with self._open_device() as dev:
                 if not dev:
-                    return
+                    return {
+                        'success': False,
+                        'error': 'No device',
+                        'dev': None
+                    }
 
                 self._dev_info = {
-                    'name': dev.device_name,
-                    'version': '.'.join(str(x) for x in dev.version),
-                    'serial': dev.serial or '',
-                    'usb_enabled': [
-                        a.name for a in APPLICATION
-                        if a & dev.config.usb_enabled],
-                    'usb_supported': [
-                        a.name for a in APPLICATION
-                        if a & dev.config.usb_supported],
-                    'usb_interfaces_supported': [
-                        t.name for t in TRANSPORT
-                        if t & dev.config.usb_supported],
-                    'nfc_enabled': [
-                        a.name for a in APPLICATION
-                        if a & dev.config.nfc_enabled],
-                    'nfc_supported': [
-                        a.name for a in APPLICATION
-                        if a & dev.config.nfc_supported],
-                    'usb_interfaces_enabled': str(dev.mode).split('+'),
-                    'can_write_config': dev.can_write_config,
-                    'configuration_locked': dev.config.configuration_locked
-                }
+                        'name': dev.device_name,
+                        'version': '.'.join(str(x) for x in dev.version),
+                        'serial': dev.serial or '',
+                        'usb_enabled': [
+                            a.name for a in APPLICATION
+                            if a & dev.config.usb_enabled],
+                        'usb_supported': [
+                            a.name for a in APPLICATION
+                            if a & dev.config.usb_supported],
+                        'usb_interfaces_supported': [
+                            t.name for t in TRANSPORT
+                            if t & dev.config.usb_supported],
+                        'nfc_enabled': [
+                            a.name for a in APPLICATION
+                            if a & dev.config.nfc_enabled],
+                        'nfc_supported': [
+                            a.name for a in APPLICATION
+                            if a & dev.config.nfc_supported],
+                        'usb_interfaces_enabled': str(dev.mode).split('+'),
+                        'can_write_config': dev.can_write_config,
+                        'configuration_locked': dev.config.configuration_locked
+                    }
+                return {'success': True, 'error': None, 'dev': self._dev_info}
 
-        return self._dev_info
+        except Exception as e:
+            logger.error('Failed to open device', exc_info=e)
+            return {'success': False, 'error': str(e), 'dev': None}
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
         usb_enabled = 0x00
@@ -99,8 +111,9 @@ class Controller(object):
             usb_enabled |= APPLICATION[app]
         for app in nfc_applications:
             nfc_enabled |= APPLICATION[app]
-        with self._open_device() as dev:
-            try:
+        try:
+            with self._open_device() as dev:
+
                 if lock_code:
                     lock_code = a2b_hex(lock_code)
                     if len(lock_code) != 16:
@@ -114,18 +127,18 @@ class Controller(object):
                     reboot=True,
                     lock_key=lock_code)
                 return {'success': True, 'error': None}
-            except Exception as e:
-                logger.error('Failed to write config', exc_info=e)
-                return {'success': False, 'error': str(e)}
+        except Exception as e:
+            logger.error('Failed to write config', exc_info=e)
+            return {'success': False, 'error': str(e)}
 
     def set_mode(self, interfaces):
-        with self._open_device() as dev:
-            try:
+        try:
+            with self._open_device() as dev:
                 transports = sum([TRANSPORT[i] for i in interfaces])
                 dev.mode = Mode(transports & TRANSPORT.usb_transports())
-            except Exception as e:
-                logger.error('Failed to set mode', exc_info=e)
-                return str(e)
+        except Exception as e:
+            logger.error('Failed to set mode', exc_info=e)
+            return str(e)
 
     def slots_status(self):
         try:
