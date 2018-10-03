@@ -62,10 +62,6 @@ StackView {
     }
 
     function configureInterfaces() {
-        if (isConfiguringInterfaces) {
-            return
-        }
-
         var interfaceComponent = yubiKey.supportsNewInterfaces(
                     ) ? interfaces : legacyInterfaces
         clear()
@@ -73,9 +69,6 @@ StackView {
     }
 
     function fido2() {
-        if (isShowingFido2) {
-            return
-        }
         clear()
         push(fido2View)
     }
@@ -93,9 +86,6 @@ StackView {
     }
 
     function otp() {
-        if (isShowingOtp) {
-            return
-        }
         clear()
         push(otpViewComponent)
     }
