@@ -168,11 +168,12 @@ ColumnLayout {
                 visible: yubiKey.supportsUsbConfiguration()
                 columns: 2
                 RowLayout {
+                    spacing: 8
                     Image {
                         fillMode: Image.PreserveAspectCrop
                         source: "../images/usb.svg"
-                        sourceSize.width: 24
-                        sourceSize.height: 24
+                        sourceSize.width: 20
+                        sourceSize.height: 20
                     }
                     Label {
                         text: qsTr("USB")
@@ -224,11 +225,12 @@ ColumnLayout {
                 visible: yubiKey.supportsNfcConfiguration()
                 columns: 2
                 RowLayout {
+                    spacing: 8
                     Image {
                         fillMode: Image.PreserveAspectCrop
-                        source: "../images/wifi.svg"
-                        sourceSize.width: 24
-                        sourceSize.height: 24
+                        source: "../images/contactless.svg"
+                        sourceSize.width: 18
+                        sourceSize.height: 18
                     }
                     Label {
                         text: qsTr("NFC")
