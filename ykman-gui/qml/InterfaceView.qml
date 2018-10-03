@@ -218,7 +218,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 color: yubicoGrey
-                Layout.alignment: Qt.AlignHCentesr | Qt.AlignVCenter
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
             GridLayout {
