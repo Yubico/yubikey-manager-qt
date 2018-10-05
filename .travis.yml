@@ -88,7 +88,7 @@ after_success:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
-      macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/
+      macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/ -appstore-compliant
       # Copy needed dylibs
       find /usr/local/Cellar/json-c/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
       find /usr/local/Cellar/ykpers/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
