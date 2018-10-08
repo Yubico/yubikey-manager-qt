@@ -315,7 +315,7 @@ class Controller(object):
                 return {'success': False,
                         'error': 'currently blocked'}
             if e.code == CtapError.ERR.PIN_BLOCKED:
-                return {'success': False, 'error': 'blocked.'}
+                return {'success': False, 'error': 'blocked'}
             logger.error('Failed to set PIN', exc_info=e)
             return {'success': False, 'error': str(e)}
         except Exception as e:
