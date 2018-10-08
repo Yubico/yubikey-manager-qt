@@ -103,6 +103,10 @@ Python {
         return name === 'YubiKey NEO'
     }
 
+    function isYubiKeyEdge() {
+        return name === 'YubiKey Edge'
+    }
+
     function isYubiKey4() {
         return name === 'YubiKey 4'
     }

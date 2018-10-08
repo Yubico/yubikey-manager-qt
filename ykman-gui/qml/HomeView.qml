@@ -9,6 +9,9 @@ ColumnLayout {
         if (yubiKey.isYubiKey4()) {
             return "../images/yk4series.png"
         }
+        if (yubiKey.isYubiKeyEdge()) {
+            return "../images/ykedge.png"
+        }
         if (yubiKey.isSecurityKeyByYubico()) {
             return "../images/sky2.png"
         }
