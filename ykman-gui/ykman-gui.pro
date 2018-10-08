@@ -6,8 +6,8 @@ SOURCES += main.cpp
 # This is the verson number for the application,
 # will be in info.plist file, about page etc.
 # Windows requires 4 digits.
-win32|win64:VERSION = 1.0.0.0
-else:VERSION = 1.0.0
+win32|win64:VERSION = 1.0.1.0
+else:VERSION = 1.0.1
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 

@@ -1,7 +1,8 @@
 * Version 1.0.1 (unreleased)
+  ** Support for YubiKey 5A
   ** Bugfix: Show picture for FIDO U2F Security key
-  ** Bugfix: Reload view after swapping OTP slots or delteing OTP slot configuration.
-  ** Bugfix: Fix isse where wrong device information was showing.
+  ** Bugfix: Swapping OTP slots or deleting OTP a slot configuration now reloads the view
+  ** Bugfix: Under some conditions the wrong device info was shown
 
 * Version 1.0.0 (released 2018-09-24)
   ** Completely new UI
