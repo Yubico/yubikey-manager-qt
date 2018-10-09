@@ -24,6 +24,9 @@ StackView {
     property bool isShowingFido2: currentItem !== null
                                   && currentItem.objectName === "fido2View"
 
+    property bool isShowingPiv: currentItem !== null
+                                && currentItem.objectName === "pivView"
+
     function lock() {
         locked = true
     }
@@ -66,6 +69,15 @@ StackView {
                     ) ? interfaces : legacyInterfaces
         clear()
         push(interfaceComponent)
+    }
+
+    function piv() {
+        clear()
+        push(pivView)
+    }
+
+    function pivCertificates() {
+        push(pivCertificatesView)
     }
 
     function fido2() {
@@ -195,8 +207,20 @@ StackView {
 
     Component {
         id: fido2View
-
         Fido2View {
+        }
+    }
+
+    Component {
+        id: pivView
+
+        PivView {
+        }
+    }
+
+    Component {
+        id: pivCertificatesView
+        PivCertificateView {
         }
     }
 
