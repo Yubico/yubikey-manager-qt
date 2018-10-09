@@ -3,13 +3,14 @@ QT += qml quick widgets quickcontrols2
 CONFIG += c++11
 SOURCES += main.cpp
 
-# This is the verson number for the application,
-# will be in info.plist file, about page etc.
-# Windows requires 4 digits.
-win32|win64:VERSION = 1.0.1.0
-else:VERSION = 1.0.1
-
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+# This is the internal verson number, Windows requires 4 digits.
+win32|win64 {
+    VERSION = 1.0.1.0
+} else {
+    VERSION = 1.0.1
+}
+# This is the version shown on the About page
+DEFINES += APP_VERSION=\\\"1.0.1\\\"
 
 message(Version of this build: $$VERSION)
 
