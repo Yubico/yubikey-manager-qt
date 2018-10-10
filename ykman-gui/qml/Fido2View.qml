@@ -12,7 +12,7 @@ ColumnLayout {
     property int pinRetries
     property bool isBusy
 
-    Component.onCompleted: load()
+    StackView.onActivating: load()
 
     objectName: "fido2View"
 
