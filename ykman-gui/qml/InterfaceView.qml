@@ -32,7 +32,7 @@ ColumnLayout {
             name: qsTr("OATH")
         }]
 
-    Component.onCompleted: load()
+    StackView.onActivating: load()
 
     function configureInterfaces() {
         if (yubiKey.configurationLocked) {
