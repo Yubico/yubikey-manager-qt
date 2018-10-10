@@ -4,8 +4,8 @@ import QtQuick.Controls 2.2
 Label {
     property bool active
     property var action
-    color: active ? yubicoGrey : yubicoGreen
-    font.underline: !active && mouseArea.containsMouse
+    color: action ? yubicoGreen : yubicoGrey
+    font.underline: !active && action && mouseArea.containsMouse
     font.pixelSize: constants.h4
 
     MouseArea {
