@@ -59,6 +59,7 @@ ColumnLayout {
                     toolTipText: qsTr("Reset the PIV application")
                     flat: true
                     iconSource: "../images/reset.svg"
+                    onClicked: views.pivReset()
                 }
                 CustomButton {
                     text: qsTr("Setup for macOS")

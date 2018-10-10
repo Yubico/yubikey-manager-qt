@@ -65,11 +65,9 @@ ColumnLayout {
         }
         StackLayout {
             currentIndex: bar.currentIndex
-
             Heading2 {
                 text: qsTr("Authentication (9a)")
             }
-
             Heading2 {
                 text: qsTr("Digital Signature (9c)")
             }
