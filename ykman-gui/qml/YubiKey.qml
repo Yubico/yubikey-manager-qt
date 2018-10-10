@@ -305,4 +305,8 @@ Python {
     function fido_pin_retries(cb) {
         do_call('yubikey.controller.fido_pin_retries', [], cb)
     }
+
+    function piv_reset(cb) {
+        do_call('yubikey.controller.piv_reset', [], cb)
+    }
 }

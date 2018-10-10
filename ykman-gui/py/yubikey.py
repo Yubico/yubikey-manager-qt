@@ -18,6 +18,7 @@ from ykman.driver_otp import YkpersError
 from ykman.device import device_config
 from ykman.otp import OtpController
 from ykman.fido import Fido2Controller
+from ykman.piv import PivController
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
@@ -338,6 +339,16 @@ class Controller(object):
                 return {'success': False, 'error': str(e)}
         except Exception as e:
             logger.error('Reset throwed an exception', exc_info=e)
+            return {'success': False, 'error': str(e)}
+
+    def piv_reset(self):
+        try:
+            with self._open_device(TRANSPORT.CCID) as dev:
+                controller = PivController(dev.driver)
+                controller.reset()
+                return {'success': True, 'error': None}
+        except Exception as e:
+            logger.error('Failed to reset PIV application', exc_info=e)
             return {'success': False, 'error': str(e)}
 
 

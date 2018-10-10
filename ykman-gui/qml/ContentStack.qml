@@ -80,6 +80,10 @@ StackView {
         push(pivCertificatesView)
     }
 
+    function pivReset() {
+        push(pivResetView)
+    }
+
     function fido2() {
         clear()
         push(fido2View)
@@ -175,6 +179,11 @@ StackView {
     }
 
     SuccessPopup {
+        id: pivSuccessPopup
+        onClosed: views.piv()
+    }
+
+    SuccessPopup {
         id: interfacesSuccessPopup
         onClosed: views.home()
     }
@@ -221,6 +230,12 @@ StackView {
     Component {
         id: pivCertificatesView
         PivCertificateView {
+        }
+    }
+
+    Component {
+        id: pivResetView
+        PivResetView {
         }
     }
 
