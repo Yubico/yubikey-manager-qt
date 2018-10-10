@@ -114,6 +114,14 @@ StackView {
         replaceAtDepth(2, pivResetView, 'pivResetView')
     }
 
+    function pivPinManagement() {
+        replaceAtDepth(2, pivPinManagementView, 'pivPinManagementView')
+    }
+
+    function pivChangePin() {
+        replaceAtDepth(3, pivChangePinView, 'pivChangePinView')
+    }
+
     function fido2() {
         replaceAtDepth(1, fido2View, 'fido2View')
     }
@@ -208,7 +216,6 @@ StackView {
 
     SuccessPopup {
         id: pivSuccessPopup
-        onClosed: views.piv()
     }
 
     SuccessPopup {
@@ -268,6 +275,20 @@ StackView {
     }
 
     Component {
+        id: pivPinManagementView
+
+        PivPinManagementView {
+        }
+    }
+
+    Component {
+        id: pivChangePinView
+
+        PivChangePinView {
+        }
+    }
+
+    Component {
         id: legacyInterfaces
         LegacyInterfaceView {
         }
@@ -295,5 +316,9 @@ StackView {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
+    }
+
+    PivGeneralErrorPopup {
+        id: pivError
     }
 }

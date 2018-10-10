@@ -340,7 +340,22 @@ Python {
         do_call('yubikey.controller.fido_pin_retries', [], cb)
     }
 
+    function piv_change_pin(old_pin, new_pin, cb) {
+        do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin],
+                _refreshPivBefore(cb))
+    }
+
+    function piv_change_puk(old_puk, new_puk, cb) {
+        do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk],
+                _refreshPivBefore(cb))
+    }
+
     function piv_reset(cb) {
         do_call('yubikey.controller.piv_reset', [], _refreshPivBefore(cb))
+    }
+
+    function piv_unblock_pin(puk, newPin, cb) {
+        do_call('yubikey.controller.piv_unblock_pin', [puk, newPin],
+                _refreshPivBefore(cb))
     }
 }

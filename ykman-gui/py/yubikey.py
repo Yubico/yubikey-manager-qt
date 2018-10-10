@@ -14,16 +14,16 @@ from binascii import b2a_hex, a2b_hex
 from fido2.ctap import CtapError
 
 from ykman.descriptor import get_descriptors
+from ykman.driver_ccid import APDUError
 from ykman.driver_otp import YkpersError
 from ykman.device import device_config
 from ykman.otp import OtpController
 from ykman.fido import Fido2Controller
-from ykman.piv import PivController
+from ykman.piv import (PivController, SW)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
     generate_static_pw)
-
 
 logger = logging.getLogger(__name__)
 
@@ -375,6 +375,65 @@ class Controller(object):
         except Exception as e:
             logger.error('Failed to reset PIV application', exc_info=e)
             return {'success': False, 'error': str(e)}
+
+    def piv_change_pin(self, old_pin, new_pin):
+        with self._open_piv() as piv_controller:
+            try:
+                piv_controller.change_pin(old_pin, new_pin)
+                logger.debug('PIN change successful!')
+                return {'success': True}
+            except APDUError as e:
+                if e.sw == SW.AUTHENTICATION_BLOCKED:
+                    return {
+                        'success': False,
+                        'error': 'blocked',
+                    }
+
+                if SW.is_verify_fail(e.sw):
+                    return {
+                        'success': False,
+                        'error': 'wrong pin',
+                        'tries_left': SW.tries_left(e.sw),
+                    }
+
+                tries_left = piv_controller.get_pin_tries()
+                logger.debug('PIN change failed. %s tries left.',
+                             tries_left, exc_info=e)
+                return {
+                    'success': False,
+                    'tries_left': tries_left,
+                }
+            except Exception as e:
+                tries_left = piv_controller.get_pin_tries()
+                logger.debug('PIN change failed. %s tries left.',
+                             tries_left, exc_info=e)
+                return {
+                    'success': False,
+                    'tries_left': tries_left,
+                }
+
+    def piv_change_puk(self, old_puk, new_puk):
+        with self._open_piv() as piv_controller:
+            result = piv_controller.change_puk(old_puk, new_puk)
+            logger.debug('PUK change result: %s', result)
+            return {
+                'success': result.success,
+                'tries_left': result.tries_left,
+              }
+
+    def piv_unblock_pin(self, puk, new_pin):
+        with self._open_piv() as piv_controller:
+            try:
+                piv_controller.unblock_pin(puk, new_pin)
+                return {
+                    'success': True,
+                    'pin_tries': piv_controller.get_pin_tries(),
+                }
+            except ValueError as e:
+                return {
+                    'success': False,
+                    'message': str(e),
+                }
 
 
 controller = None

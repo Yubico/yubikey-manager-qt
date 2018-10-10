@@ -3,6 +3,8 @@ import QtQuick 2.9
 QtObject {
     readonly property int fido2PinMinLength: 4
     readonly property int fido2PinMaxLength: 128
+    readonly property int pivPinMinLength: 4
+    readonly property int pivPinMaxLength: 8
     readonly property int h1: 32
     readonly property int h2: 24
     readonly property int h3: 18
