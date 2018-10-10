@@ -142,18 +142,9 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-
-                BreadCrumbSeparator {
-                }
-
-                BreadCrumb {
-                    text: qsTr("Interfaces")
-                    active: true
-                }
+                items: [
+                    { text: qsTr("Interfaces") },
+                ]
             }
         }
 

@@ -95,18 +95,7 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-
-                BreadCrumbSeparator {
-                }
-
-                BreadCrumb {
-                    text: qsTr("OTP")
-                    active: true
-                }
+                items: [{ text: qsTr("OTP") }]
             }
         }
 
