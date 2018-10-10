@@ -117,6 +117,20 @@ ColumnLayout {
                     font.family: constants.fontFamily
                     font.pixelSize: constants.h3
                 }
+                MenuItem {
+                    enabled: yubiKey.isEnabledOverUsb('PIV')
+                    text: qsTr("PIV")
+                    onClicked: {
+                        if (!views.isShowingPiv)
+                            views.piv()
+                    }
+                    Material.foreground: yubicoBlue
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Configure PIV Application")
+                    font.family: constants.fontFamily
+                    font.pixelSize: constants.h3
+                }
             }
         }
         TopMenuButton {
