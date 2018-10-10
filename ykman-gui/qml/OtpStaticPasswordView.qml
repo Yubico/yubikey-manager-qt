@@ -63,9 +63,8 @@ ColumnLayout {
 
             BreadCrumbRow {
                 items: [
-                    { text: qsTr("OTP"), action: views.otp },
-                    { text: qsTr(SlotUtils.slotNameCapitalized(views.selectedSlot)), action: views.otp },
-                    { text: qsTr("Select Credential Type"), action: views.pop },
+                    { text: qsTr("OTP") },
+                    { text: qsTr(SlotUtils.slotNameCapitalized(views.selectedSlot)) },
                     { text: qsTr("Static Password") },
                 ]
             }

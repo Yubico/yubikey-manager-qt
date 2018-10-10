@@ -73,12 +73,10 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [{
-                        "text": qsTr("FIDO2"),
-                        "action": views.fido2
-                    }, {
-                        "text": qsTr("Change PIN")
-                    }]
+                items: [
+                    { text: qsTr("FIDO2") },
+                    { text: qsTr("Change PIN") },
+                ]
             }
         }
         GridLayout {

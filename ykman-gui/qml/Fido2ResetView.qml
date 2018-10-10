@@ -61,7 +61,7 @@ ColumnLayout {
 
             BreadCrumbRow {
                 items: [
-                    { text: qsTr("FIDO2"), action: views.fido2 },
+                    { text: qsTr("FIDO2") },
                     { text: qsTr("Reset FIDO") },
                 ]
             }

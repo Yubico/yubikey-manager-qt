@@ -4,14 +4,11 @@ import QtQuick.Layouts 1.2
 RowLayout {
 
     property var items
-    property var root: ({
-                            text: qsTr("Home"),
-                            action: views.home
-                        })
+    property var root: ({ text: qsTr("Home") })
 
     BreadCrumb {
         text: root.text
-        action: root.action
+        action: items.length > 0 && function() { popToHeight(0) }
     }
 
     Repeater {
@@ -22,8 +19,10 @@ RowLayout {
             }
             BreadCrumb {
                 text: items[index].text
-                action: items[index].action
-                active: index == items.length - 1
+                action: !active && function() {
+                    popToHeight(index + 1)
+                }
+                active: index === items.length - 1
             }
         }
     }
