@@ -11,16 +11,18 @@ ColumnLayout {
     property int maxLength
     property int minLength
 
-    property string confirmNewPinLabel: qsTr("Confirm new PIN")
-    property string currentPinLabel: qsTr("Current PIN")
-    property string finishButtonText: qsTr("Change PIN")
-    property string finishButtonTooltip: qsTr("Finish and change the PIN")
+    property string codeName: qsTr("PIN")
+    property string confirmNewPinLabel: qsTr("Confirm new %1").arg(codeName)
+    property string currentPinLabel: qsTr("Current %1").arg(codeName)
+    property string finishButtonText: qsTr("Change %1").arg(codeName)
+    property string finishButtonTooltip: qsTr("Finish and change the %1")
 
-    property string mainHeading: hasCurrentPin ? qsTr("Change PIN") : qsTr(
-                                                     "Set PIN")
-    property string newPinLabel: qsTr("New PIN")
-    property string newPinTooltip: qsTr("The PIN must be at least %1 characters").arg(
-                                       minLength)
+    property string mainHeading: hasCurrentPin ? qsTr("Change %1").arg(
+                                                     codeName) : qsTr(
+                                                     "Set %1").arg(codeName)
+    property string newPinLabel: qsTr("New %1").arg(codeName)
+    property string newPinTooltip: qsTr("The %1 must be at least %1 characters").arg(
+                                       codeName).arg(minLength)
 
     readonly property alias chosenCurrentPin: currentPin.text
     readonly property alias chosenPin: newPin.text
