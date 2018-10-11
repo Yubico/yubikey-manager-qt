@@ -54,8 +54,8 @@ ColumnLayout {
                 items: [{
                         text: qsTr("OTP")
                     }, {
-                        text: qsTr(SlotUtils.slotNameCapitalized(
-                                         views.selectedSlot))
+                        text: SlotUtils.slotNameCapitalized(
+                                    views.selectedSlot)
                     }, {
                         text: qsTr("Challenge-response")
                     }]
