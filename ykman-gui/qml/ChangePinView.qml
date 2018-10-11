@@ -6,11 +6,13 @@ import QtQuick.Controls.Material 2.2
 ColumnLayout {
 
     property var breadcrumbs
+    property string defaultCurrentPin
     property bool hasCurrentPin
     property int maxLength
     property int minLength
 
     property string confirmNewPinLabel: qsTr("Confirm new PIN")
+    property string currentPinLabel: qsTr("Current PIN")
     property string finishButtonText: qsTr("Change PIN")
     property string finishButtonTooltip: qsTr("Finish and change the PIN")
 
@@ -62,7 +64,7 @@ ColumnLayout {
             Layout.fillWidth: true
 
             Label {
-                text: qsTr("Current PIN")
+                text: currentPinLabel
                 font.pixelSize: constants.h3
                 color: yubicoBlue
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter

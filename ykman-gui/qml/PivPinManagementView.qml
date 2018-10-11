@@ -78,6 +78,15 @@ ColumnLayout {
                     onClicked: views.pivChangePin()
                     toolTipText: qsTr("Change the PIV PIN")
                     iconSource: "../images/lock.svg"
+                    enabled: !pinBlocked
+                }
+                CustomButton {
+                    text: qsTr("Unblock PIN")
+                    highlighted: true
+                    onClicked: views.pivUnblockPin()
+                    toolTipText: qsTr("Unblock PIN")
+                    iconSource: "../images/reset.svg"
+                    visible: pinBlocked
                 }
             }
 

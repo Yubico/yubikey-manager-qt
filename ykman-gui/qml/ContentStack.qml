@@ -122,6 +122,10 @@ StackView {
         replaceAtDepth(3, pivChangePinView, 'pivChangePinView')
     }
 
+    function pivUnblockPin() {
+        replaceAtDepth(3, pivUnblockPinView, 'pivUnblockPinView')
+    }
+
     function fido2() {
         replaceAtDepth(1, fido2View, 'fido2View')
     }
@@ -285,6 +289,13 @@ StackView {
         id: pivChangePinView
 
         PivChangePinView {
+        }
+    }
+
+    Component {
+        id: pivUnblockPinView
+
+        PivUnblockPinView {
         }
     }
 
