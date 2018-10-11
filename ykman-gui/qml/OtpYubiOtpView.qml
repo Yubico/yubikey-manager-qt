@@ -70,7 +70,7 @@ ColumnLayout {
                         text: qsTr("OTP")
                     }, {
                         text: SlotUtils.slotNameCapitalized(
-                                    views.selectedSlot)
+                                    views.selectedSlot) || ""
                     }, {
                         text: qsTr("Yubico OTP")
                     }]
