@@ -52,13 +52,13 @@ StackView {
     }
 
     function popToDepth(height) {
-        pop(find(function(item, searchIndex) {
-            return searchIndex === height;
+        pop(find(function (item, searchIndex) {
+            return searchIndex === height
         }))
     }
 
     function replaceAtDepth(depth, item, objectName) {
-        var itemToReplace = find(function(item, index) {
+        var itemToReplace = find(function (item, index) {
             return index === depth
         })
         if (itemToReplace) {
@@ -78,7 +78,9 @@ StackView {
 
     function home() {
         if (yubiKey.hasDevice) {
-            var homeViewOnStack = find(function(item) { return item.objectName === 'homeView' })
+            var homeViewOnStack = find(function (item) {
+                return item.objectName === 'homeView'
+            })
             if (homeViewOnStack) {
                 pop(homeViewOnStack)
             } else {

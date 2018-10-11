@@ -51,11 +51,14 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [
-                    { text: qsTr("OTP") },
-                    { text: qsTr(SlotUtils.slotNameCapitalized(views.selectedSlot)) },
-                    { text: qsTr("Challenge-response") },
-                ]
+                items: [{
+                        text: qsTr("OTP")
+                    }, {
+                        text: qsTr(SlotUtils.slotNameCapitalized(
+                                         views.selectedSlot))
+                    }, {
+                        text: qsTr("Challenge-response")
+                    }]
             }
         }
         RowLayout {

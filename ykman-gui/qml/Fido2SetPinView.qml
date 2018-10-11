@@ -45,10 +45,11 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [
-                    { text: qsTr("FIDO2") },
-                    { text: qsTr("Set PIN") },
-                ]
+                items: [{
+                        text: qsTr("FIDO2")
+                    }, {
+                        text: qsTr("Set PIN")
+                    }]
             }
         }
         GridLayout {
