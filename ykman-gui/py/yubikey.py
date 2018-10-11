@@ -56,6 +56,17 @@ class Fido2ContextManager(object):
         self._dev.close()
 
 
+class PivContextManager(object):
+    def __init__(self, dev):
+        self._dev = dev
+
+    def __enter__(self):
+        return PivController(self._dev.driver)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._dev.close()
+
+
 class Controller(object):
     _descriptor = None
     _dev_info = None
@@ -81,6 +92,10 @@ class Controller(object):
     def _open_fido2_controller(self):
         return Fido2ContextManager(
             self._descriptor.open_device(transports=TRANSPORT.FIDO))
+
+    def _open_piv(self):
+        return PivContextManager(
+                self._descriptor.open_device(transports=TRANSPORT.CCID))
 
     def refresh(self):
         descriptors = list(get_descriptors())
@@ -358,8 +373,7 @@ class Controller(object):
 
     def piv_reset(self):
         try:
-            with self._open_device(TRANSPORT.CCID) as dev:
-                controller = PivController(dev.driver)
+            with self._open_piv() as controller:
                 controller.reset()
                 return {'success': True, 'error': None}
         except Exception as e:
