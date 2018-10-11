@@ -6,7 +6,7 @@ import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
     objectName: "interfaces"
-    Component.onCompleted: load()
+    StackView.onActivating: load()
     function load() {
         otp.checked = Utils.includes(yubiKey.usbInterfacesEnabled, 'OTP')
         fido.checked = Utils.includes(yubiKey.usbInterfacesEnabled, 'FIDO')
@@ -62,18 +62,9 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-
-                BreadCrumbSeparator {
-                }
-
-                BreadCrumb {
-                    text: qsTr("Interfaces")
-                    active: true
-                }
+                items: [{
+                        text: qsTr("Interfaces")
+                    }]
             }
         }
 

@@ -10,7 +10,7 @@ ColumnLayout {
     readonly property string slotIsConfigured: qsTr("This slot is configured")
     readonly property string slotIsEmpty: qsTr("This slot is empty")
 
-    Component.onCompleted: load()
+    StackView.onActivating: load()
     objectName: "otpView"
 
     function load() {
@@ -45,6 +45,7 @@ ColumnLayout {
         yubiKey.erase_slot(views.selectedSlot, function (resp) {
             if (resp.success) {
                 views.otpSuccess()
+                load()
             } else {
                 if (resp.error === 'write error') {
                     views.otpWriteError()
@@ -59,6 +60,7 @@ ColumnLayout {
         yubiKey.swap_slots(function (resp) {
             if (resp.success) {
                 views.otpSuccess()
+                load()
             } else {
                 if (resp.error === 'write error') {
                     views.otpWriteError()
@@ -95,18 +97,9 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-
-                BreadCrumbSeparator {
-                }
-
-                BreadCrumb {
-                    text: qsTr("OTP")
-                    active: true
-                }
+                items: [{
+                        text: qsTr("OTP")
+                    }]
             }
         }
 

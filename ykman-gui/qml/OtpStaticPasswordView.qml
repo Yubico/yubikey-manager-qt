@@ -62,41 +62,14 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("OTP")
-                    action: views.otp
-                }
-
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr(SlotUtils.slotNameCapitalized(
-                                   views.selectedSlot))
-                    action: views.otp
-                }
-
-                BreadCrumbSeparator {
-                }
-
-                BreadCrumb {
-                    text: qsTr("Select Credential Type")
-                    action: views.pop
-                }
-
-                BreadCrumbSeparator {
-                }
-
-                BreadCrumb {
-                    text: qsTr("Static Password")
-                    active: true
-                }
+                items: [{
+                        text: qsTr("OTP")
+                    }, {
+                        text: SlotUtils.slotNameCapitalized(
+                                    views.selectedSlot) || ""
+                    }, {
+                        text: qsTr("Static Password")
+                    }]
             }
         }
 
