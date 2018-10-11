@@ -10,9 +10,9 @@ RowLayout {
 
     BreadCrumb {
         text: root.text
-        action: items.length > 0 && function () {
+        action: root.action || (items.length > 0 && function () {
             popToDepth(0)
-        }
+        })
     }
 
     Repeater {
@@ -23,10 +23,11 @@ RowLayout {
             }
             BreadCrumb {
                 text: items[index].text
-                action: !active && function () {
-                    popToDepth(index + 1)
-                }
-                active: index === items.length - 1
+                action: items[index].action || (index < items.length - 1
+                                                && function () {
+                                                    popToDepth(index + 1)
+                                                })
+                active: !!action
             }
         }
     }
