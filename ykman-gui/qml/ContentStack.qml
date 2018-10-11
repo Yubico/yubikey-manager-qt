@@ -51,7 +51,7 @@ StackView {
         return false
     }
 
-    function popToHeight(height) {
+    function popToDepth(height) {
         pop(find(function(item, searchIndex) {
             return searchIndex === height;
         }))
