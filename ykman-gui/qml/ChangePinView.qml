@@ -41,6 +41,10 @@ ColumnLayout {
         changePin(chosenCurrentPin, chosenPin)
     }
 
+    function inputDefaultCurrentPin() {
+        currentPin.text = defaultCurrentPin
+    }
+
     onClearPinInputs: {
         currentPin.text = ''
         newPin.text = ''
@@ -72,13 +76,24 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 visible: hasCurrentPin
             }
-            TextField {
-                id: currentPin
-                Layout.fillWidth: true
-                echoMode: TextInput.Password
-                selectByMouse: true
-                selectionColor: yubicoGreen
-                visible: hasCurrentPin
+            RowLayout {
+                TextField {
+                    id: currentPin
+                    Layout.fillWidth: true
+                    echoMode: TextInput.Password
+                    selectByMouse: true
+                    selectionColor: yubicoGreen
+                    visible: hasCurrentPin
+                }
+
+                CustomButton {
+                    id: defaultCurrentPinBtn
+                    text: qsTr("Default")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    onClicked: inputDefaultCurrentPin()
+                    toolTipText: qsTr("Input the default %1").arg(codeName)
+                    visible: defaultCurrentPin
+                }
             }
 
             Label {

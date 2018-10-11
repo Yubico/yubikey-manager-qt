@@ -11,6 +11,7 @@ ChangePinView {
             text: qsTr("Change PUK")
         }]
     codeName: qsTr("PUK")
+    defaultCurrentPin: '12345678'
     finishButtonTooltip: qsTr("Finish and change the PIV PUK")
     hasCurrentPin: true
     mainHeading: qsTr("Change PIV PUK")

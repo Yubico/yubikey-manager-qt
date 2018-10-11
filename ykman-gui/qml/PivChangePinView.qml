@@ -10,6 +10,7 @@ ChangePinView {
         }, {
             text: qsTr("Change PIN")
         }]
+    defaultCurrentPin: '123456'
     finishButtonTooltip: qsTr("Finish and change the PIV PIN")
     hasCurrentPin: true
     mainHeading: qsTr("Change PIV PIN")
