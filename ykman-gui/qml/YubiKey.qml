@@ -26,6 +26,7 @@ Python {
     property bool yubikeyModuleLoaded: false
     property bool yubikeyReady: false
     property var queue: []
+    property var piv
 
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
@@ -231,6 +232,39 @@ Python {
                 [usbApplications, nfcApplications, lockCode], cb)
     }
 
+    function refreshPiv(doneCallback) {
+        if (hasDevice) {
+            do_call('yubikey.controller.refresh_piv', [], function (pivData) {
+                piv = pivData
+                doneCallback()
+            })
+        } else {
+            doneCallback()
+        }
+    }
+
+    /**
+     * Transform a `callback` into one that will first call `refreshPiv` and then
+     * itself when `refresh` is done.
+     *
+     * The arguments and `this` context of the call to the `callback` are
+     * preseved.
+     *
+     * @param callback a function
+     *
+     * @return a function which will call `refreshPiv()` and delay the execution of
+     *          the `callback` until the `refreshPiv()` is done.
+     */
+    function _refreshPivBefore(callback) {
+        return function (/* ...arguments */ ) {
+            var callbackThis = this
+            var callbackArguments = arguments
+            refreshPiv(function () {
+                callback.apply(callbackThis, callbackArguments)
+            })
+        }
+    }
+
     function set_mode(connections, cb) {
         do_call('yubikey.controller.set_mode', [connections], cb)
     }
@@ -307,6 +341,6 @@ Python {
     }
 
     function piv_reset(cb) {
-        do_call('yubikey.controller.piv_reset', [], cb)
+        do_call('yubikey.controller.piv_reset', [], _refreshPivBefore(cb))
     }
 }
