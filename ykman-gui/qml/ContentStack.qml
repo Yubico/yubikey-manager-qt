@@ -57,13 +57,13 @@ StackView {
         }))
     }
 
-    function replaceAtDepth(depth, item, objectName) {
+    function replaceAtDepth(depth, item, newObjectName) {
         var itemToReplace = find(function (item, index) {
             return index === depth
         })
         if (itemToReplace) {
-            if (objectName) {
-                if (itemToReplace.objectName === objectName) {
+            if (newObjectName) {
+                if (itemToReplace.objectName === newObjectName) {
                     pop(itemToReplace)
                 } else {
                     replace(itemToReplace, item)
