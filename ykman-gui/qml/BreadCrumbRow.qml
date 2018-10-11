@@ -3,7 +3,25 @@ import QtQuick.Layouts 1.2
 
 RowLayout {
 
+
+    /**
+     * Type: `[item]`, where `item` has the shape:
+     *
+     * {
+     *   text: string,
+     *   action: function?,
+     * }
+     *
+     * If `action` is not present, it defaults to popping the stack to the
+     * depth of the breadcrumb item. The last breadcrumb item has no action by
+     * default.
+     */
     property var items
+
+
+    /**
+     * Type: `item` as described in `items` docstring
+     */
     property var root: ({
                             text: qsTr("Home")
                         })
