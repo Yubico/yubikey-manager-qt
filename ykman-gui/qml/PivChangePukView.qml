@@ -8,7 +8,9 @@ ChangePinView {
     breadcrumbs: [{
             text: qsTr("PUK")
         }, {
-            text: qsTr("Change PUK")
+            text: qsTr("Configure PINs")
+        }, {
+            text: qsTr("PUK")
         }]
     codeName: qsTr("PUK")
     defaultCurrentPin: '12345678'

@@ -8,7 +8,9 @@ ChangePinView {
     breadcrumbs: [{
             text: qsTr("PIV")
         }, {
-            text: qsTr("Change PIN")
+            text: qsTr("Configure PINs")
+        }, {
+            text: qsTr("PIN")
         }]
     defaultCurrentPin: '123456'
     finishButtonTooltip: qsTr("Finish and change the PIV PIN")

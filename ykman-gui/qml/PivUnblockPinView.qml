@@ -8,6 +8,8 @@ ChangePinView {
     breadcrumbs: [{
             text: qsTr("PIV")
         }, {
+            text: qsTr("Configure PINs")
+        }, {
             text: qsTr("Unblock PIN")
         }]
     currentPinLabel: qsTr("PUK:")
