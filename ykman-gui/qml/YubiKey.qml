@@ -27,6 +27,7 @@ Python {
     property bool yubikeyReady: false
     property var queue: []
     property var piv
+    property bool pivPukBlocked: false
 
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
@@ -347,11 +348,20 @@ Python {
 
     function piv_change_puk(old_puk, new_puk, cb) {
         do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk],
-                _refreshPivBefore(cb))
+                _refreshPivBefore(function (resp) {
+                    if (!resp.success && resp.tries_left < 1) {
+                        pivPukBlocked = true
+                    }
+                    cb(resp)
+                }))
     }
 
     function piv_reset(cb) {
-        do_call('yubikey.controller.piv_reset', [], _refreshPivBefore(cb))
+        do_call('yubikey.controller.piv_reset', [],
+                _refreshPivBefore(function (resp) {
+                    pivPukBlocked = false
+                    cb(resp)
+                }))
     }
 
     function piv_unblock_pin(puk, newPin, cb) {

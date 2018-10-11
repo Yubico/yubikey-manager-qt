@@ -5,6 +5,8 @@ QtObject {
     readonly property int fido2PinMaxLength: 128
     readonly property int pivPinMinLength: 4
     readonly property int pivPinMaxLength: 8
+    readonly property int pivPukMinLength: 4
+    readonly property int pivPukMaxLength: 8
     readonly property int h1: 32
     readonly property int h2: 24
     readonly property int h3: 18

@@ -11,6 +11,7 @@ ColumnLayout {
     readonly property var pivData: yubiKey.piv || {}
     readonly property bool pinBlocked: pinRetries < 1
     readonly property int pinRetries: pivData.pin_tries
+    readonly property bool pukBlocked: yubiKey.pivPukBlocked
 
     StackView.onActivating: load()
 
@@ -18,7 +19,7 @@ ColumnLayout {
 
     function load() {
         isBusy = true
-        yubiKey.refreshPiv(function() {
+        yubiKey.refreshPiv(function () {
             isBusy = false
         })
     }
@@ -28,6 +29,14 @@ ColumnLayout {
             return qsTr("PIN is blocked.")
         } else {
             return qsTr("%1 PIN retries left").arg(pinRetries)
+        }
+    }
+
+    function getPukMessage() {
+        if (pukBlocked) {
+            return qsTr("PUK is blocked.")
+        } else {
+            return ""
         }
     }
 
@@ -107,7 +116,7 @@ ColumnLayout {
                     font.pixelSize: constants.h2
                 }
                 Label {
-                    text: ""
+                    text: getPukMessage()
                     font.pixelSize: constants.h3
                     color: yubicoBlue
                 }
@@ -117,6 +126,7 @@ ColumnLayout {
                     onClicked: views.pivChangePuk()
                     toolTipText: qsTr("Change the PIV PUK")
                     iconSource: "../images/lock.svg"
+                    enabled: !pukBlocked
                 }
             }
 
