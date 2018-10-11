@@ -121,6 +121,10 @@ StackView {
         replaceAtDepth(3, pivChangePukView, 'pivChangePukView')
     }
 
+    function pivChangeManagementKey() {
+        replaceAtDepth(3, pivChangeManagementKeyView, 'pivChangeManagementKeyView')
+    }
+
     function fido2() {
         replaceAtDepth(1, fido2View, 'fido2View')
     }
@@ -298,6 +302,13 @@ StackView {
         id: pivChangePukView
 
         PivChangePukView {
+        }
+    }
+
+    Component {
+        id: pivChangeManagementKeyView
+
+        PivChangeManagementKeyView {
         }
     }
 
