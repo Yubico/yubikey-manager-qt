@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
+import "utils.js" as Utils
 
 StackView {
     anchors.fill: parent
@@ -53,57 +54,84 @@ StackView {
         return false
     }
 
-    function home() {
-        clear()
-        if (yubiKey.hasDevice) {
-            push(homeView)
-        } else if (yubiKey.nDevices > 1) {
-            push(multipleDevicesView)
+    function popToDepth(height) {
+        pop(find(function (item, searchIndex) {
+            return searchIndex === height
+        }))
+    }
+
+    function replaceAtDepth(depth, item, newObjectName) {
+        var itemToReplace = find(function (item, index) {
+            return index === depth
+        })
+        if (itemToReplace) {
+            if (newObjectName) {
+                if (itemToReplace.objectName === newObjectName) {
+                    pop(itemToReplace)
+                } else {
+                    replace(itemToReplace, item)
+                }
+            } else {
+                replace(itemToReplace, item)
+            }
         } else {
-            push(noDeviceView)
+            push(item)
+        }
+    }
+
+    function home() {
+        if (yubiKey.hasDevice) {
+            var homeViewOnStack = find(function (item) {
+                return item.objectName === 'homeView'
+            })
+            if (homeViewOnStack) {
+                pop(homeViewOnStack)
+            } else {
+                replaceAtDepth(0, homeView, 'homeView')
+            }
+        } else if (yubiKey.nDevices > 1) {
+            replaceAtDepth(0, multipleDevicesView, 'multipleDevicesView')
+        } else {
+            replaceAtDepth(0, noDeviceView, 'noDeviceView')
         }
     }
 
     function configureInterfaces() {
         var interfaceComponent = yubiKey.supportsNewInterfaces(
                     ) ? interfaces : legacyInterfaces
-        clear()
-        push(interfaceComponent)
+        replaceAtDepth(1, interfaceComponent, 'interfaces')
     }
 
     function piv() {
-        clear()
-        push(pivView)
+        replaceAtDepth(1, pivView, 'pivView')
     }
 
     function pivCertificates() {
-        push(pivCertificatesView)
+        replaceAtDepth(2, pivCertificatesView, 'pivCertificatesView')
     }
 
     function pivReset() {
-        push(pivResetView)
+        replaceAtDepth(2, pivResetView, 'pivResetView')
     }
 
     function fido2() {
-        clear()
-        push(fido2View)
+        replaceAtDepth(1, fido2View, 'fido2View')
     }
 
     function fido2SetPin() {
-        push(fido2SetPinView)
+        replaceAtDepth(2, fido2SetPinView, 'fido2SetPinView')
     }
 
     function fido2ChangePin() {
-        push(fido2ChangePinView)
+        replaceAtDepth(2, fido2ChangePinView, 'fido2ChangePinView')
     }
 
     function fido2Reset() {
-        push(fido2ResetView)
+        replaceAtDepth(2, fido2ResetView, 'fido2ResetView')
     }
 
     function otp() {
-        clear()
-        push(otpViewComponent)
+        replaceAtDepth(1, otpViewComponent, 'otpView')
     }
 
     function otpSuccess() {

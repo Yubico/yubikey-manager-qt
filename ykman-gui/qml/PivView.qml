@@ -6,7 +6,7 @@ import QtQuick.Controls.Material 2.2
 ColumnLayout {
     id: pivView
 
-    Component.onCompleted: load()
+    StackView.onActivating: load()
 
     objectName: "pivView"
     property bool isBusy
@@ -30,17 +30,9 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("PIV")
-                    active: true
-                }
+                items: [{
+                        text: qsTr("PIV")
+                    }]
             }
             RowLayout {
                 Layout.fillWidth: false

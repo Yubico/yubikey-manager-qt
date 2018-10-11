@@ -23,6 +23,10 @@ function including(arr, value) {
     }
 }
 
+function last(arr) {
+    return arr[arr.length - 1];
+}
+
 /**
  * Remove `value` from `arr`.
  *

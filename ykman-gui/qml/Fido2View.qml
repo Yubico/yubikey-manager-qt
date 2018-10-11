@@ -12,7 +12,7 @@ ColumnLayout {
     property int pinRetries
     property bool isBusy
 
-    Component.onCompleted: load()
+    StackView.onActivating: load()
 
     objectName: "fido2View"
 
@@ -70,17 +70,9 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("FIDO2")
-                    active: true
-                }
+                items: [{
+                        text: qsTr("FIDO2")
+                    }]
             }
         }
 

@@ -45,24 +45,11 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("FIDO2")
-                    action: views.fido2
-                }
-
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("Set PIN")
-                    active: true
-                }
+                items: [{
+                        text: qsTr("FIDO2")
+                    }, {
+                        text: qsTr("Set PIN")
+                    }]
             }
         }
         GridLayout {

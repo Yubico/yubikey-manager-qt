@@ -15,28 +15,12 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("OTP")
-                    action: views.otp
-                }
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: SlotUtils.slotNameCapitalized(views.selectedSlot)
-                    action: views.otp
-                }
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("Select Credential Type")
-                    active: true
-                }
+                items: [{
+                        text: qsTr("OTP")
+                    }, {
+                        text: SlotUtils.slotNameCapitalized(
+                                    views.selectedSlot) || ""
+                    }]
             }
         }
 

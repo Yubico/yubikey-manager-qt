@@ -32,7 +32,7 @@ ColumnLayout {
             name: qsTr("OATH")
         }]
 
-    Component.onCompleted: load()
+    StackView.onActivating: load()
 
     function configureInterfaces() {
         if (yubiKey.configurationLocked) {
@@ -142,18 +142,9 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-
-                BreadCrumbSeparator {
-                }
-
-                BreadCrumb {
-                    text: qsTr("Interfaces")
-                    active: true
-                }
+                items: [{
+                        text: qsTr("Interfaces")
+                    }]
             }
         }
 

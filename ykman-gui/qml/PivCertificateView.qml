@@ -6,7 +6,7 @@ import QtQuick.Controls.Material 2.2
 ColumnLayout {
     id: pivCertificatesView
 
-    Component.onCompleted: load()
+    StackView.onActivating: load()
 
     function load() {// TODO: load
     }
@@ -20,22 +20,11 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("PIV")
-                    action: views.piv
-                }
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("Certificates")
-                    active: true
-                }
+                items: [{
+                        text: qsTr("PIV")
+                    }, {
+                        text: qsTr("Certificates")
+                    }]
             }
         }
 

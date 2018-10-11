@@ -7,9 +7,9 @@ function slotName(slotNumber) {
 
 function slotNameCapitalized(slotNumber) {
     if (slotNumber === 1)
-        return "Short Touch (Slot 1)"
+        return qsTr("Short Touch (Slot 1)")
     if (slotNumber === 2)
-        return "Long Touch (Slot 2)"
+        return qsTr("Long Touch (Slot 2)")
 }
 
 function configuredTxt(configured) {

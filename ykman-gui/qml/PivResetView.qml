@@ -44,24 +44,11 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                BreadCrumb {
-                    text: qsTr("Home")
-                    action: views.home
-                }
-
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("PIV")
-                    action: views.piv
-                }
-
-                BreadCrumbSeparator {
-                }
-                BreadCrumb {
-                    text: qsTr("Reset PIV")
-                    active: true
-                }
+                items: [{
+                        text: qsTr("PIV")
+                    }, {
+                        text: qsTr("Reset PIV")
+                    }]
             }
         }
 
