@@ -5,6 +5,8 @@ import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
 
+    readonly property bool pinBlocked: yubiKey.piv.pin_tries < 1
+
     function next() {
         if (storedBtn.checked) {
             console.log('Stored management key')
@@ -48,13 +50,14 @@ ColumnLayout {
             RadioButton {
                 id: storedBtn
                 text: qsTr("PIN as management key")
-                checked: true
+                checked: !pinBlocked
                 font.pixelSize: constants.h3
                 Material.foreground: yubicoBlue
+                enabled: !pinBlocked
             }
 
             Label {
-                text: qsTr("A random management key will be stored on the YubiKey, protected by the PIN. Recommended for most users.")
+                text: pinBlocked ? qsTr("PIN is blocked.") : qsTr("A random management key will be stored on the YubiKey, protected by the PIN. Recommended for most users.")
                 wrapMode: Text.WordWrap
                 Layout.fillWidth: true
             }
@@ -62,6 +65,7 @@ ColumnLayout {
             RadioButton {
                 id: separateBtn
                 text: qsTr("Separate management key")
+                checked: pinBlocked
                 font.pixelSize: constants.h3
                 Material.foreground: yubicoBlue
             }
