@@ -40,6 +40,15 @@ ColumnLayout {
         }
     }
 
+    function getManagementKeyMessage() {
+        if (pivData.has_derived_key) {
+            return qsTr("Management key is derived from PIN.")
+        } else if (pivData.has_stored_key) {
+            return qsTr("Management key is stored, protected by PIN.")
+        }
+        return qsTr("Management key is not stored.")
+    }
+
     BusyIndicator {
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         running: isBusy
@@ -72,6 +81,8 @@ ColumnLayout {
             id: mainRow
 
             ColumnLayout {
+                Layout.fillWidth: true
+
                 Heading2 {
                     text: qsTr("PIN")
                     font.pixelSize: constants.h2
@@ -111,6 +122,8 @@ ColumnLayout {
             }
 
             ColumnLayout {
+                Layout.fillWidth: true
+
                 Heading2 {
                     text: qsTr("PUK")
                     font.pixelSize: constants.h2
@@ -141,14 +154,17 @@ ColumnLayout {
             }
 
             ColumnLayout {
+                Layout.fillWidth: true
+
                 Heading2 {
                     text: qsTr("Management Key")
                     font.pixelSize: constants.h2
                 }
                 Label {
-                    text: ""
+                    text: getManagementKeyMessage()
                     font.pixelSize: constants.h3
                     color: yubicoBlue
+                    wrapMode: Text.WordWrap
                 }
                 CustomButton {
                     text: qsTr("Change Management Key")
