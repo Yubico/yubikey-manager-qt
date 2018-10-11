@@ -167,11 +167,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            CustomButton {
-                id: backBtn
-                text: qsTr("Back")
-                onClicked: views.pop()
-                iconSource: "../images/back.svg"
+            BackButton {
             }
             CustomButton {
                 id: finnishBtn
