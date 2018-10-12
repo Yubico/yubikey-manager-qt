@@ -24,7 +24,7 @@ ChangePinView {
                 views.pop()
             } else {
                 if (resp.error === 'wrong pin') {
-                    clearPinInputs()
+                    clearCurrentPinInput()
                     pivError.show(qsTr("Wrong current PIN. Tries remaining: %1").arg(resp.tries_left))
                 } else if (resp.error === 'blocked') {
                     pivError.show(qsTr("PIN is blocked. Use the PUK to unlock it, or reset the PIV application."))

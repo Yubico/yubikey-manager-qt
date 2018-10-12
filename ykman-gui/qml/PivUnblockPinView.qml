@@ -28,6 +28,7 @@ ChangePinView {
                 views.pop()
             } else {
                 if (resp.message) {
+                    clearCurrentPinInput()
                     pivError.show(resp.message)
                 } else {
                     pivError.show(qsTr("Unknown error."))

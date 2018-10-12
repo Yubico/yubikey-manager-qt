@@ -28,6 +28,7 @@ ChangePinView {
                     pivError.show(qsTr("PUK is blocked."))
                     views.pop()
                 } else {
+                    clearCurrentPinInput()
                     pivError.show(
                                 qsTr("PUK change failed. Tries remaining: %1").arg(
                                     resp.tries_left))
