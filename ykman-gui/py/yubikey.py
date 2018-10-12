@@ -152,6 +152,7 @@ class Controller(object):
             return {
                 'has_protected_key': piv_controller.has_protected_key,
                 'pin_tries': piv_controller.get_pin_tries(),
+                'puk_blocked': piv_controller.puk_blocked,
                 'supported_touch_policies': [
                     policy.name for policy in
                     piv_controller.supported_touch_policies],
