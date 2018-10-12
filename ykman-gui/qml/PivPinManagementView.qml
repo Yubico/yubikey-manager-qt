@@ -28,7 +28,7 @@ ColumnLayout {
         if (pinBlocked) {
             return qsTr("PIN is blocked.")
         } else {
-            return qsTr("%1 PIN retries left").arg(pinRetries)
+            return qsTr("%1 retries left").arg(pinRetries)
         }
     }
 
