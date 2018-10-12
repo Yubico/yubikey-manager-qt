@@ -9,7 +9,7 @@ ColumnLayout {
 
     function next() {
         if (storedBtn.checked) {
-            console.log('Stored management key')
+            views.push(setStoredManagementKeyView)
         } else {
             console.log('Separate management key')
         }
@@ -93,6 +93,12 @@ ColumnLayout {
                 onClicked: next()
                 iconSource: "../images/next.svg"
             }
+        }
+    }
+
+    Component {
+        id: setStoredManagementKeyView
+        PivSetStoredManagementKeyView {
         }
     }
 }
