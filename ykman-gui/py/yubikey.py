@@ -389,7 +389,13 @@ class Controller(object):
                         'error': 'blocked',
                     }
 
-                if SW.is_verify_fail(e.sw):
+                elif e.sw == SW.INCORRECT_PARAMETERS:
+                    return {
+                        'success': False,
+                        'error': 'incorrect parameters',
+                    }
+
+                elif SW.is_verify_fail(e.sw):
                     return {
                         'success': False,
                         'error': 'wrong pin',

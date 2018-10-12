@@ -34,6 +34,7 @@ ColumnLayout {
     }
 
     signal changePin(string currentPin, string newPin)
+    signal clearNewPinInputs
     signal clearPinInputs
 
     function triggerChangePin() {
@@ -52,10 +53,14 @@ ColumnLayout {
         }
     }
 
+    onClearNewPinInputs: {
+        newPin.clear()
+        confirmPin.clear()
+    }
+
     onClearPinInputs: {
         currentPin.text = ''
-        newPin.text = ''
-        confirmPin.text = ''
+        clearNewPinInputs()
     }
 
     CustomContentColumn {
