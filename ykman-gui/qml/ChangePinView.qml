@@ -34,6 +34,7 @@ ColumnLayout {
     }
 
     signal changePin(string currentPin, string newPin)
+    signal clearCurrentPinInput
     signal clearNewPinInputs
     signal clearPinInputs
 
@@ -58,8 +59,13 @@ ColumnLayout {
         confirmPin.clear()
     }
 
+    onClearCurrentPinInput: {
+        currentPin.clear()
+        useDefaultCurrentPinCheckbox.checked = false
+    }
+
     onClearPinInputs: {
-        currentPin.text = ''
+        onClearCurrentPinInput()
         clearNewPinInputs()
     }
 
