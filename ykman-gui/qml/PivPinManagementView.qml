@@ -85,7 +85,6 @@ ColumnLayout {
                     text: qsTr("Change PIN")
                     highlighted: true
                     onClicked: views.pivChangePin()
-                    toolTipText: qsTr("Change the PIV PIN")
                     iconSource: "../images/lock.svg"
                     enabled: !pinBlocked
                 }
@@ -124,7 +123,6 @@ ColumnLayout {
                     text: qsTr("Change PUK")
                     highlighted: true
                     onClicked: views.pivChangePuk()
-                    toolTipText: qsTr("Change the PIV PUK")
                     iconSource: "../images/lock.svg"
                     enabled: !pukBlocked
                 }
