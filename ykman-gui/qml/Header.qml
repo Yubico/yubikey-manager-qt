@@ -93,10 +93,7 @@ ColumnLayout {
                     enabled: yubiKey.isEnabledOverUsb('OTP')
                     text: qsTr("OTP")
                     Material.foreground: yubicoBlue
-                    onClicked: {
-                        if (!views.isShowingOtp)
-                            views.otp()
-                    }
+                    onClicked: views.otp()
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Configure OTP Application")
@@ -106,10 +103,7 @@ ColumnLayout {
                 MenuItem {
                     enabled: yubiKey.isEnabledOverUsb('FIDO2')
                     text: qsTr("FIDO2")
-                    onClicked: {
-                        if (!views.isShowingFido2)
-                            views.fido2()
-                    }
+                    onClicked: views.fido2()
                     Material.foreground: yubicoBlue
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
@@ -122,11 +116,7 @@ ColumnLayout {
         TopMenuButton {
             text: qsTr("Interfaces")
             enabled: yubiKey.hasDevice && yubiKey.canChangeInterfaces()
-            onClicked: {
-                if (!views.isConfiguringInterfaces) {
-                    views.configureInterfaces()
-                }
-            }
+            onClicked: views.configureInterfaces()
             toolTipText: qsTr("Configure what is available over different interfaces")
         }
     }
