@@ -21,7 +21,7 @@ ColumnLayout {
                                                      codeName) : qsTr(
                                                      "Set %1").arg(codeName)
     property string newPinLabel: qsTr("New %1").arg(codeName)
-    property string newPinTooltip: qsTr("The %1 must be at least %1 characters").arg(
+    property string newPinTooltip: qsTr("The %1 must be at least %2 characters").arg(
                                        codeName).arg(minLength)
 
     readonly property alias chosenCurrentPin: currentPin.text
