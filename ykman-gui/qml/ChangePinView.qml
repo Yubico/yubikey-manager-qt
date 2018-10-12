@@ -44,6 +44,14 @@ ColumnLayout {
         currentPin.text = defaultCurrentPin
     }
 
+    function toggleUseDefaultCurrentPin() {
+        if (useDefaultCurrentPinCheckbox.checked) {
+            currentPin.text = defaultCurrentPin
+        } else {
+            currentPin.clear()
+        }
+    }
+
     onClearPinInputs: {
         currentPin.text = ''
         newPin.text = ''
@@ -79,19 +87,19 @@ ColumnLayout {
                 TextField {
                     id: currentPin
                     Layout.fillWidth: true
-                    echoMode: TextInput.Password
+                    echoMode: enabled ? TextInput.Password : TextInput.Normal
                     selectByMouse: true
                     selectionColor: yubicoGreen
                     visible: hasCurrentPin
+                    enabled: !useDefaultCurrentPinCheckbox.checked
                 }
 
-                CustomButton {
-                    id: defaultCurrentPinBtn
-                    text: qsTr("Default")
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    onClicked: inputDefaultCurrentPin()
-                    toolTipText: qsTr("Input the default %1").arg(codeName)
-                    visible: defaultCurrentPin
+                CheckBox {
+                    id: useDefaultCurrentPinCheckbox
+                    text: qsTr("Use default")
+                    onCheckedChanged: toggleUseDefaultCurrentPin()
+                    font.pixelSize: constants.h3
+                    Material.foreground: yubicoBlue
                 }
             }
 
