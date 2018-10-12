@@ -33,8 +33,7 @@ ChangePinView {
                     clearNewPinInputs()
                     pivError.show(qsTr("Invalid PIN format. PIN must be %1 to %2 characters.").arg(minLength).arg(maxLength))
                 } else {
-                    pivGeneralError.error = resp.error
-                    pivGeneralError.open()
+                    pivError.show(resp.error)
                 }
             }
         })
