@@ -36,7 +36,7 @@ ColumnLayout {
         if (pukBlocked) {
             return qsTr("PUK is blocked.")
         } else {
-            return ""
+            return qsTr("PIN Unlock Key")
         }
     }
 
