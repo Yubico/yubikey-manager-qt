@@ -86,7 +86,7 @@ ColumnLayout {
                     highlighted: true
                     onClicked: views.pivChangePin()
                     iconSource: "../images/lock.svg"
-                    enabled: !pinBlocked
+                    visible: !pinBlocked
                 }
                 CustomButton {
                     text: qsTr("Unblock PIN")
