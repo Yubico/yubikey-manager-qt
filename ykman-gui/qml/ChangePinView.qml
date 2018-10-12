@@ -35,7 +35,6 @@ ColumnLayout {
 
     signal changePin(string currentPin, string newPin)
     signal clearPinInputs
-    signal goBack
 
     function triggerChangePin() {
         changePin(chosenCurrentPin, chosenPin)
@@ -131,10 +130,7 @@ ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
-            CustomButton {
-                text: qsTr("Back")
-                onClicked: goBack()
-                iconSource: "../images/back.svg"
+            BackButton {
             }
             CustomButton {
                 enabled: validPin()

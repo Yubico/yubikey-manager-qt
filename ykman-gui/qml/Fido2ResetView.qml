@@ -81,10 +81,7 @@ ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
-            CustomButton {
-                text: qsTr("Back")
-                onClicked: views.pop()
-                iconSource: "../images/back.svg"
+            BackButton {
             }
             CustomButton {
                 text: qsTr("Reset")

@@ -40,8 +40,6 @@ ChangePinView {
         })
     }
 
-    onGoBack: views.fido2()
-
     Fido2GeneralErrorPopup {
         id: fido2TooLongError
         error: qsTr("Too long PIN, maximum size is 128 bytes")

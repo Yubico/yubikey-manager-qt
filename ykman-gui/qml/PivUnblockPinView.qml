@@ -37,6 +37,4 @@ ChangePinView {
             }
         })
     }
-
-    onGoBack: views.pop()
 }

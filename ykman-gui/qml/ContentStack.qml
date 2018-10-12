@@ -19,15 +19,6 @@ StackView {
     property bool isShowingHomeView: currentItem !== null
                                      && currentItem.objectName === "homeView"
 
-    property bool isShowingOtp: currentItem !== null
-                                && currentItem.objectName === "otpView"
-
-    property bool isShowingFido2: currentItem !== null
-                                  && currentItem.objectName === "fido2View"
-
-    property bool isShowingPiv: currentItem !== null
-                                && currentItem.objectName === "pivView"
-
     function lock() {
         locked = true
     }
