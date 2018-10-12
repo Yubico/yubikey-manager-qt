@@ -12,7 +12,7 @@ ChangePinView {
         }, {
             text: qsTr("PIN")
         }]
-    defaultCurrentPin: '123456'
+    defaultCurrentPin: constants.pivDefaultPin
     hasCurrentPin: true
     maxLength: constants.pivPinMaxLength
     minLength: constants.pivPinMinLength

@@ -13,7 +13,7 @@ ChangePinView {
             text: qsTr("Unblock PIN")
         }]
     currentPinLabel: qsTr("PUK:")
-    defaultCurrentPin: '12345678'
+    defaultCurrentPin: constants.pivDefaultPuk
     finishButtonText: qsTr("Unblock PIN")
     finishButtonTooltip: qsTr("Finish and unblock the PIN")
     hasCurrentPin: true

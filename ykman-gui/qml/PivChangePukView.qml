@@ -13,7 +13,7 @@ ChangePinView {
             text: qsTr("PUK")
         }]
     codeName: qsTr("PUK")
-    defaultCurrentPin: '12345678'
+    defaultCurrentPin: constants.pivDefaultPuk
     hasCurrentPin: true
     maxLength: constants.pivPukMaxLength
     minLength: constants.pivPukMinLength
