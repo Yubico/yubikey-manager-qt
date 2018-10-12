@@ -14,13 +14,9 @@ ChangePinView {
         }]
     codeName: qsTr("PUK")
     defaultCurrentPin: '12345678'
-    finishButtonTooltip: qsTr("Finish and change the PIV PUK")
     hasCurrentPin: true
-    mainHeading: qsTr("Change PIV PUK")
     maxLength: constants.pivPukMaxLength
     minLength: constants.pivPukMinLength
-    newPinTooltip: qsTr("The PIV PUK must be at least %1 characters").arg(
-                       minLength)
 
     onChangePin: {
         yubiKey.piv_change_puk(currentPin, newPin, function (resp) {

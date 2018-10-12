@@ -52,7 +52,7 @@ ColumnLayout {
         ColumnLayout {
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Heading1 {
-                text: qsTr("Configure PIV PINs")
+                text: qsTr("Configure PINs")
             }
 
             BreadCrumbRow {

@@ -15,13 +15,11 @@ ChangePinView {
     currentPinLabel: qsTr("PUK:")
     defaultCurrentPin: '12345678'
     finishButtonText: qsTr("Unblock PIN")
-    finishButtonTooltip: qsTr("Finish and unblock the PIV PIN")
+    finishButtonTooltip: qsTr("Finish and unblock the PIN")
     hasCurrentPin: true
-    mainHeading: qsTr("Unblock PIV PIN")
+    mainHeading: qsTr("Unblock PIN")
     maxLength: constants.pivPinMaxLength
     minLength: constants.pivPinMinLength
-    newPinTooltip: qsTr("The PIV PIN must be at least %1 characters").arg(
-                       minLength)
 
     onChangePin: {
         yubiKey.piv_unblock_pin(currentPin, newPin, function (resp) {

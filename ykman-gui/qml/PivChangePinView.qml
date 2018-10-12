@@ -13,13 +13,9 @@ ChangePinView {
             text: qsTr("PIN")
         }]
     defaultCurrentPin: '123456'
-    finishButtonTooltip: qsTr("Finish and change the PIV PIN")
     hasCurrentPin: true
-    mainHeading: qsTr("Change PIV PIN")
     maxLength: constants.pivPinMaxLength
     minLength: constants.pivPinMinLength
-    newPinTooltip: qsTr("The PIV PIN must be at least %1 characters").arg(
-                       minLength)
 
     onChangePin: {
         yubiKey.piv_change_pin(currentPin, newPin, function (resp) {
