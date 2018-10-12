@@ -95,6 +95,7 @@ ColumnLayout {
                     toolTipText: qsTr("Unblock PIN")
                     iconSource: "../images/reset.svg"
                     visible: pinBlocked
+                    enabled: !pukBlocked
                 }
             }
 
