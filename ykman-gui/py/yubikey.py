@@ -44,6 +44,17 @@ class OtpContextManager(object):
         self._dev.close()
 
 
+class Fido2ContextManager(object):
+    def __init__(self, dev):
+        self._dev = dev
+
+    def __enter__(self):
+        return Fido2Controller(self._dev.driver)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._dev.close()
+
+
 class Controller(object):
     _descriptor = None
     _dev_info = None
@@ -65,6 +76,10 @@ class Controller(object):
     def _open_otp_controller(self):
         return OtpContextManager(
             self._descriptor.open_device(transports=TRANSPORT.OTP))
+
+    def _open_fido2_controller(self):
+        return Fido2ContextManager(
+            self._descriptor.open_device(transports=TRANSPORT.FIDO))
 
     def refresh(self):
         descriptors = list(get_descriptors())
@@ -264,19 +279,15 @@ class Controller(object):
 
     def fido_has_pin(self):
         try:
-            with self._open_device(TRANSPORT.FIDO) as dev:
-                dev = self._descriptor.open_device(TRANSPORT.FIDO)
-                controller = Fido2Controller(dev.driver)
-            return {'hasPin': controller.has_pin, 'error': None}
+            with self._open_fido2_controller() as controller:
+                return {'hasPin': controller.has_pin, 'error': None}
         except Exception as e:
             logger.error('Failed to read if PIN is set', exc_info=e)
             return {'hasPin': None, 'error': str(e)}
 
     def fido_pin_retries(self):
         try:
-            with self._open_device(TRANSPORT.FIDO) as dev:
-                dev = self._descriptor.open_device(TRANSPORT.FIDO)
-                controller = Fido2Controller(dev.driver)
+            with self._open_fido2_controller() as controller:
                 return {'retries': controller.get_pin_retries(), 'error': None}
         except CtapError as e:
             if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
@@ -292,9 +303,7 @@ class Controller(object):
 
     def fido_set_pin(self, new_pin):
         try:
-            with self._open_device(TRANSPORT.FIDO) as dev:
-                dev = self._descriptor.open_device(TRANSPORT.FIDO)
-                controller = Fido2Controller(dev.driver)
+            with self._open_fido2_controller() as controller:
                 controller.set_pin(new_pin)
                 return {'success': True, 'error': None}
         except CtapError as e:
@@ -308,8 +317,7 @@ class Controller(object):
 
     def fido_change_pin(self, current_pin, new_pin):
         try:
-            with self._open_device(TRANSPORT.FIDO) as dev:
-                controller = Fido2Controller(dev.driver)
+            with self._open_fido2_controller() as controller:
                 controller.change_pin(old_pin=current_pin, new_pin=new_pin)
                 return {'success': True, 'error': None}
         except CtapError as e:
@@ -332,8 +340,7 @@ class Controller(object):
 
     def fido_reset(self):
         try:
-            with self._open_device(TRANSPORT.FIDO) as dev:
-                controller = Fido2Controller(dev.driver)
+            with self._open_fido2_controller() as controller:
                 controller.reset()
                 return {'success': True, 'error': None}
         except CtapError as e:
