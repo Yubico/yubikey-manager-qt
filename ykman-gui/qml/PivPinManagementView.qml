@@ -10,8 +10,8 @@ ColumnLayout {
 
     readonly property var pivData: yubiKey.piv || {}
     readonly property bool pinBlocked: pinRetries < 1
-    readonly property int pinRetries: pivData.pin_tries
-    readonly property bool pukBlocked: yubiKey.pivPukBlocked || pivData.puk_blocked
+    readonly property int pinRetries: pivData.pin_tries || 0
+    readonly property bool pukBlocked: yubiKey.pivPukBlocked || pivData.puk_blocked || false
 
     StackView.onActivating: load()
 
