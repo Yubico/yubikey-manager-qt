@@ -12,15 +12,15 @@ ColumnLayout {
     property int minLength
 
     property string codeName: qsTr("PIN")
-    property string confirmNewPinLabel: qsTr("Confirm new %1").arg(codeName)
-    property string currentPinLabel: qsTr("Current %1").arg(codeName)
+    property string confirmNewPinLabel: qsTr("Confirm new %1:").arg(codeName)
+    property string currentPinLabel: qsTr("Current %1:").arg(codeName)
     property string finishButtonText: qsTr("Change %1").arg(codeName)
     property string finishButtonTooltip: qsTr("Finish and change the %1")
 
     property string mainHeading: hasCurrentPin ? qsTr("Change %1").arg(
                                                      codeName) : qsTr(
                                                      "Set %1").arg(codeName)
-    property string newPinLabel: qsTr("New %1").arg(codeName)
+    property string newPinLabel: qsTr("New %1:").arg(codeName)
     property string newPinTooltip: qsTr("The %1 must be at least %2 characters").arg(
                                        codeName).arg(minLength)
 
