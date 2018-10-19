@@ -93,7 +93,11 @@ ColumnLayout {
 
                 } else if (resp.error === 'blocked') {
                     pivError.show(qsTr('PIN is blocked.'))
-                    views.pop()
+                    if (hasProtectedKey) {
+                        views.pivPinManagement()
+                    } else {
+                        views.pop()
+                    }
 
                 } else if (resp.error === 'pin_required') {
                     pivError.show(qsTr("Please enter the PIN."))
