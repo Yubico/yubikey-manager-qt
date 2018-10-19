@@ -173,7 +173,6 @@ ColumnLayout {
                 TextField {
                     id: currentManagementKey
                     Layout.fillWidth: true
-                    echoMode: enabled ? TextInput.Password : TextInput.Normal
                     selectByMouse: true
                     selectionColor: yubicoGreen
                     visible: !hasProtectedKey
