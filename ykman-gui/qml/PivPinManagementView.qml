@@ -8,6 +8,7 @@ ColumnLayout {
     property string pinMessage
     property bool isBusy
 
+    readonly property bool hasProtectedKey: pivData.has_protected_key || false
     readonly property var pivData: yubiKey.piv || {}
     readonly property bool pinBlocked: pinRetries < 1
     readonly property int pinRetries: pivData.pin_tries || 0
@@ -44,7 +45,11 @@ ColumnLayout {
         if (pivData.has_derived_key) {
             return qsTr("Management key is derived from PIN.")
         } else if (pivData.has_stored_key) {
-            return qsTr("Management key is stored, protected by PIN.")
+            if (pinBlocked) {
+                return qsTr("Management key is inaccessible because PIN is blocked.")
+            } else {
+                return qsTr("Management key is stored, protected by PIN.")
+            }
         }
         return qsTr("Management key is not stored.")
     }
@@ -172,6 +177,7 @@ ColumnLayout {
                     onClicked: views.pivChangeManagementKey()
                     toolTipText: qsTr("Change the PIV management key")
                     iconSource: "../images/lock.svg"
+                    enabled: !(hasProtectedKey && pinBlocked)
                 }
             }
         }
