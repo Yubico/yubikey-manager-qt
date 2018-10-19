@@ -18,6 +18,7 @@ ApplicationWindow {
     readonly property string yubicoLightBlue: "#417488"
     readonly property string yubicoGrey: "#939598"
     readonly property string yubicoWhite: "#FFFFFF"
+    readonly property string yubicoRed: "#ff0000"
 
     Component.onDestruction: saveScreenLayout()
 

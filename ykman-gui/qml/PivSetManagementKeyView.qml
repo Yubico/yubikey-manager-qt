@@ -215,6 +215,22 @@ ColumnLayout {
                     onClicked: generateManagementKey()
                     visible: hasNewManagementKeyInput
                 }
+
+                Label {
+                    visible: hasNewManagementKeyInput
+                }
+                Label {
+                    text: qsTr("Please store the management key in a safe place.")
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
+                    font.pixelSize: constants.h3
+                    color: yubicoRed
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    visible: hasNewManagementKeyInput
+                }
+                Label {
+                    visible: hasNewManagementKeyInput
+                }
             }
 
             CheckBox {
