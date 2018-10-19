@@ -12,11 +12,10 @@ PivSetManagementKeyView {
             }, {
                 text: qsTr("Management Key Type")
             }, {
-                text: qsTr("PIN as Management Key")
+                text: qsTr("Separate Management Key")
             }]
-    hasNewManagementKeyInput: false
-    hasPinInput: true
-    heading: qsTr("Set PIN as Management Key")
-    storeManagementKey: true
+    hasNewManagementKeyInput: true
+    heading: qsTr("Set Management Key")
+    storeManagementKey: false
 
 }

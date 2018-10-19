@@ -11,7 +11,7 @@ ColumnLayout {
         if (storedBtn.checked) {
             views.push(setStoredManagementKeyView)
         } else {
-            console.log('Separate management key')
+            views.push(setChosenManagementKeyView)
         }
     }
 
@@ -99,6 +99,12 @@ ColumnLayout {
     Component {
         id: setStoredManagementKeyView
         PivSetStoredManagementKeyView {
+        }
+    }
+
+    Component {
+        id: setChosenManagementKeyView
+        PivSetChosenManagementKeyView {
         }
     }
 }
