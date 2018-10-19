@@ -231,13 +231,16 @@ ColumnLayout {
                 Label {
                     visible: hasNewManagementKeyInput
                 }
+
+                Label {}
+                CheckBox {
+                    id: requireTouch
+                    text: qsTr("Require touch")
+                    Layout.fillWidth: true
+                }
+                Label {}
             }
 
-            CheckBox {
-                id: requireTouch
-                text: qsTr("Require touch")
-                Layout.fillWidth: true
-            }
         }
 
         RowLayout {
