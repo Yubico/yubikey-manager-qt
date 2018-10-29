@@ -50,7 +50,6 @@ ColumnLayout {
                 id: chalRespBtn
                 text: qsTr("Challenge-response")
                 font.pixelSize: constants.h3
-                KeyNavigation.tab: staticBtn
                 property var view: otpChalRespView
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
@@ -61,7 +60,6 @@ ColumnLayout {
                 id: staticBtn
                 text: qsTr("Static password")
                 font.pixelSize: constants.h3
-                KeyNavigation.tab: oathHotpBtn
                 property var view: otpStaticPasswordView
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
@@ -72,7 +70,6 @@ ColumnLayout {
                 id: oathHotpBtn
                 text: qsTr("OATH-HOTP")
                 font.pixelSize: constants.h3
-                KeyNavigation.tab: backBtn
                 property var view: otpOathHotpView
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
@@ -84,11 +81,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            CustomButton {
-                id: backBtn
-                text: qsTr("Back")
-                onClicked: views.pop()
-                iconSource: "../images/back.svg"
+            BackButton {
             }
             CustomButton {
                 id: nextBtn

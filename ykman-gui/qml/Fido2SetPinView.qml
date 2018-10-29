@@ -92,10 +92,7 @@ ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
-            CustomButton {
-                text: qsTr("Back")
-                onClicked: views.fido2()
-                iconSource: "../images/back.svg"
+            BackButton {
             }
             CustomButton {
                 enabled: validPin()
