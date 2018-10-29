@@ -9,9 +9,42 @@ ColumnLayout {
     StackView.onActivating: load()
 
     objectName: "pivView"
+
     property bool isBusy
 
-    function load() {// TODO: load
+    function load() {
+        isBusy = true
+        yubiKey.piv_list_certificates(function (resp) {
+            if (!resp.error) {
+                for (var i = 0; i < resp.certs.length; i++) {
+                    var cert = resp.certs[i]
+                    if (cert.slot === 'AUTHENTICATION') {
+                        yubiKey.authenticationCert = cert
+                    }
+                    if (cert.slot === 'SIGNATURE') {
+                        yubiKey.signatureCert = cert
+                    }
+                    if (cert.slot === 'KEY_MANAGEMENT') {
+                        yubiKey.keyManagementCert = cert
+                    }
+                    if (cert.slot === 'CARD_AUTH') {
+                        yubiKey.cardAuthenticationCert = cert
+                    }
+                }
+            } else {
+                console.log(resp.error)
+            }
+            isBusy = false
+        })
+    }
+
+    function getNumberOfCertsMessage() {
+        var numberOfCerts = yubiKey.numberOfPivCertificates()
+        if (numberOfCerts > 0) {
+            return numberOfCerts + qsTr(" certificates loaded.")
+        } else {
+            return qsTr("No certificates loaded.")
+        }
     }
 
     BusyIndicator {
@@ -103,7 +136,7 @@ ColumnLayout {
                     text: qsTr("Certificates")
                 }
                 Label {
-                    text: qsTr("No certificates loaded")
+                    text: getNumberOfCertsMessage()
                     font.pixelSize: constants.h3
                     color: yubicoBlue
                 }

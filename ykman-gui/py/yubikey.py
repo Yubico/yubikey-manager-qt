@@ -12,13 +12,14 @@ import ykman.logging_setup
 from base64 import b32decode
 from binascii import b2a_hex, a2b_hex
 from fido2.ctap import CtapError
-
+from cryptography import x509
 from ykman.descriptor import get_descriptors
 from ykman.driver_otp import YkpersError
+from ykman.driver_ccid import APDUError
 from ykman.device import device_config
 from ykman.otp import OtpController
 from ykman.fido import Fido2Controller
-from ykman.piv import PivController
+from ykman.piv import PivController, SLOT, SW
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
@@ -380,8 +381,45 @@ class Controller(object):
             logger.error('Failed to reset PIV application', exc_info=e)
             return {'success': False, 'error': str(e)}
 
+    def piv_read_certificate(self, slot):
+        try:
+            with self._open_piv() as controller:
+                cert = controller.read_certificate(SLOT[slot])
+                cert = _piv_serialise_cert(SLOT[slot], cert)
+                return {'success': True, 'cert': cert, 'error': None}
+        except APDUError as e:
+            if e.sw == SW.NOT_FOUND:
+                return {'success': True, 'cert': None, 'error': None}
+            raise
+        except Exception as e:
+            logger.error('Failed to read PIV certificate', exc_info=e)
+            return {'success': False, 'error': str(e)}
+
+    def piv_list_certificates(self):
+        try:
+            with self._open_piv() as controller:
+                certs = [
+                     _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
+                ]
+                return {'success': True, 'certs': certs, 'error': None}
+        except Exception as e:
+            logger.error('Failed to read PIV certificates', exc_info=e)
+            return {'success': False, 'error': str(e)}
+
 
 controller = None
+
+
+def _piv_serialise_cert(slot, cert):
+    return {
+        'slot': SLOT(slot).name,
+        'issuedFrom': cert.issuer.get_attributes_for_oid(
+            x509.NameOID.COMMON_NAME)[0].value,
+        'issuedTo': cert.subject.get_attributes_for_oid(
+            x509.NameOID.COMMON_NAME)[0].value,
+        'validFrom': cert.not_valid_before.date().isoformat(),
+        'validTo': cert.not_valid_after.date().isoformat()
+    }
 
 
 def init_with_logging(log_level, log_file=None):

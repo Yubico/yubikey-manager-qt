@@ -27,6 +27,11 @@ Python {
     property bool yubikeyReady: false
     property var queue: []
 
+    property var authenticationCert
+    property var signatureCert
+    property var keyManagementCert
+    property var cardAuthenticationCert
+
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
 
@@ -194,6 +199,14 @@ Python {
         return Utils.includes(applicationsSupportedOverNfc, applicationId)
     }
 
+    function numberOfPivCertificates() {
+        function hasCert(cert) {
+            return !!cert
+        }
+        return [yubiKey.authenticationCert, yubiKey.signatureCert, yubiKey.keyManagementCert,
+                yubiKey.cardAuthenticationCert].filter(hasCert).length
+    }
+
     function refresh(doneCallback) {
         do_call('yubikey.controller.count_devices', [], function (n) {
             nDevices = n
@@ -308,5 +321,13 @@ Python {
 
     function piv_reset(cb) {
         do_call('yubikey.controller.piv_reset', [], cb)
+    }
+
+    function piv_list_certificates(cb) {
+        do_call('yubikey.controller.piv_list_certificates', [], cb)
+    }
+
+    function piv_read_certificate(slot, cb) {
+        do_call('yubikey.controller.piv_read_certificate', [slot], cb)
     }
 }
