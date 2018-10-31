@@ -16,7 +16,7 @@ ColumnLayout {
     function load() {
         isBusy = true
         yubiKey.slots_status(function (resp) {
-            if (!resp.error) {
+            if (resp.success) {
                 views.slot1Configured = resp.status[0]
                 views.slot2Configured = resp.status[1]
                 views.selectedSlot = 0

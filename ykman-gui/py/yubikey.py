@@ -173,15 +173,18 @@ class Controller(object):
     def slots_status(self):
         try:
             with self._open_otp_controller() as controller:
-                return {'status': controller.slot_status, 'error': None}
+                return {
+                    'success': True,
+                    'status': controller.slot_status,
+                    'error': None}
         except YkpersError as e:
             if e.errno == 4:
-                return {'status': None, 'error': 'timeout'}
+                return {'success': False, 'status': None, 'error': 'timeout'}
             logger.error('Failed to read slot status', exc_info=e)
-            return {'status': None, 'error': str(e)}
+            return {'success': False, 'status': None, 'error': str(e)}
         except Exception as e:
             logger.error('Failed to read slot status', exc_info=e)
-            return {'status': None, 'error': str(e)}
+            return {'success': False, 'status': None, 'error': str(e)}
 
     def erase_slot(self, slot):
         try:
@@ -280,26 +283,36 @@ class Controller(object):
     def fido_has_pin(self):
         try:
             with self._open_fido2_controller() as controller:
-                return {'hasPin': controller.has_pin, 'error': None}
+                return {
+                    'success': True,
+                    'hasPin': controller.has_pin,
+                    'error': None}
         except Exception as e:
             logger.error('Failed to read if PIN is set', exc_info=e)
-            return {'hasPin': None, 'error': str(e)}
+            return {'success': False, 'hasPin': None, 'error': str(e)}
 
     def fido_pin_retries(self):
         try:
             with self._open_fido2_controller() as controller:
-                return {'retries': controller.get_pin_retries(), 'error': None}
+                return {
+                    'success': True,
+                    'retries': controller.get_pin_retries(),
+                    'error': None}
         except CtapError as e:
             if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
                 return {
+                    'success': False,
                     'retries': None,
                     'error': 'PIN authentication is currently blocked. '
                              'Remove and re-insert the YubiKey.'}
             if e.code == CtapError.ERR.PIN_BLOCKED:
-                return {'retries': None, 'error': 'PIN is blocked.'}
+                return {
+                    'success': False,
+                    'retries': None,
+                    'error': 'PIN is blocked.'}
         except Exception as e:
             logger.error('Failed to read PIN retries', exc_info=e)
-            return {'retries': None, 'error': str(e)}
+            return {'success': False, 'retries': None, 'error': str(e)}
 
     def fido_set_pin(self, new_pin):
         try:
