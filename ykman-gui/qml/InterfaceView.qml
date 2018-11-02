@@ -189,6 +189,7 @@ ColumnLayout {
                     model: applications
                     CheckBox {
                         enabled: yubiKey.isSupportedOverUSB(modelData.id)
+                        visible: yubiKey.isSupportedOverUSB(modelData.id)
                         Layout.bottomMargin: -20
                         onCheckedChanged: toggleEnabledOverUsb(modelData.id,
                                                                checked)
@@ -245,6 +246,7 @@ ColumnLayout {
                     id: nfcCheckBoxes
                     model: applications
                     CheckBox {
+                        visible: yubiKey.isSupportedOverNfc(modelData.id)
                         enabled: yubiKey.isSupportedOverNfc(modelData.id)
                         Layout.bottomMargin: -20
                         onCheckedChanged: toggleEnabledOverNfc(modelData.id,
