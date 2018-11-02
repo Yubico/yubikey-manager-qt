@@ -153,6 +153,7 @@ Python {
 
     function supportsNewInterfaces() {
         return isYubiKeyPreview() || isYubiKey5Family()
+                || isSecurityKeyByYubico()
     }
 
     function supportsNfcConfiguration() {
@@ -163,7 +164,7 @@ Python {
     }
 
     function canChangeInterfaces() {
-        return usbInterfacesSupported.length > 1
+        return usbInterfacesSupported.length > 1 || supportsUsbConfiguration()
     }
 
     function otpInterfaceSupported() {
