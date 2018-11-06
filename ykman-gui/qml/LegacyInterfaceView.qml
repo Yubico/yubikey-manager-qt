@@ -30,7 +30,7 @@ ColumnLayout {
     function configureInterfaces() {
         yubiKey.set_mode(getEnabledInterfaces(), function (error) {
             if (error) {
-                console.log(error)
+                legacyInterfacesErrorPopup.open()
             } else {
                 if (!yubiKey.canWriteConfig) {
                     reInsertYubiKey.open()
@@ -51,6 +51,10 @@ ColumnLayout {
 
     function validCombination() {
         return otp.checked || fido.checked || ccid.checked
+    }
+
+    LegacyInterfaceErrorPopup {
+        id: legacyInterfacesErrorPopup
     }
 
     CustomContentColumn {
