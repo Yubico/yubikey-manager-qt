@@ -30,19 +30,19 @@ Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#bu
     $ sudo add-apt-repository -y ppa:yubico/stable
     $ sudo apt update
     $ sudo apt install python3-yubikey-manager qml-module-qt-labs-settings qml-module-qtquick-dialogs \
-      qml-module-qtquick-controls qt5-default libqt5svg5-dev qtdeclarative5-dev qtbase5-dev 
+      qml-module-qtquick-controls2 qt5-default libqt5svg5-dev qtdeclarative5-dev qtbase5-dev
       qml-module-io-thp-pyotherside
 
-=== Setup the repository:
+=== Setup the repository
 
     $ git clone https://github.com/Yubico/yubikey-manager-qt.git
     $ cd yubikey-manager-qt
 
-=== Compile the app:
+=== Compile the app
 
     $ qmake && make
 
-=== Run the app:
+=== Run the app
 
     $ ykman-gui
 
