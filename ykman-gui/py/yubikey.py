@@ -14,7 +14,7 @@ from binascii import b2a_hex, a2b_hex
 from fido2.ctap import CtapError
 
 from ykman.descriptor import get_descriptors
-from ykman.driver_otp import YkpersError
+from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.device import device_config
 from ykman.otp import OtpController
 from ykman.fido import Fido2Controller
@@ -74,6 +74,10 @@ class Controller(object):
         return self._descriptor.open_device(transports=transports)
 
     def _open_otp_controller(self):
+        if ykpers_version is None:
+            raise Exception(
+                'Could not find the "ykpers" library. Please ensure that '
+                'YubiKey Manager was installed correctly.')
         return OtpContextManager(
             self._descriptor.open_device(transports=TRANSPORT.OTP))
 
