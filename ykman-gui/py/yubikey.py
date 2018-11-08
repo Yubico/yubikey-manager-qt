@@ -181,13 +181,8 @@ class Controller(object):
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
             return {
-                'has_protected_key': piv_controller.has_protected_key,
                 'pin_tries': piv_controller.get_pin_tries(),
                 'puk_blocked': piv_controller.puk_blocked,
-                'supported_touch_policies': [
-                    policy.name for policy in
-                    piv_controller.supported_touch_policies],
-                'supports_pin_policies': piv_controller.supports_pin_policies,  # noqa: E501
             }
 
     def set_mode(self, interfaces):
