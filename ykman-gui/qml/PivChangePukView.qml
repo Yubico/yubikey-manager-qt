@@ -24,14 +24,22 @@ ChangePinView {
                 pivSuccessPopup.open()
                 views.pop()
             } else {
-                if (resp.tries_left < 1) {
+                if (resp.error === 'blocked') {
                     pivError.show(qsTr("PUK is blocked."))
                     views.pop()
-                } else {
+                } else if (resp.error === 'wrong puk') {
                     clearCurrentPinInput()
                     pivError.show(
-                                qsTr("PUK change failed. Tries remaining: %1").arg(
+                                qsTr("Wrong current PUK. Tries remaning: %1").arg(
                                     resp.tries_left))
+                } else if (resp.message) {
+                    pivError.show(
+                                qsTr("PUK change failed for an unknown reason. Error message: %1").arg(
+                                    resp.message))
+                } else {
+                    pivError.show(
+                                qsTr(
+                                    "PUK change failed for an unknown reason."))
                 }
             }
         })

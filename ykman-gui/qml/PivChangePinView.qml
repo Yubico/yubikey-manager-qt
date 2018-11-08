@@ -25,15 +25,26 @@ ChangePinView {
             } else {
                 if (resp.error === 'wrong pin') {
                     clearCurrentPinInput()
-                    pivError.show(qsTr("Wrong current PIN. Tries remaining: %1").arg(resp.tries_left))
+                    pivError.show(
+                                qsTr("Wrong current PIN. Tries remaining: %1").arg(
+                                    resp.tries_left))
                 } else if (resp.error === 'blocked') {
-                    pivError.show(qsTr("PIN is blocked. Use the PUK to unlock it, or reset the PIV application."))
+                    pivError.show(
+                                qsTr("PIN is blocked. Use the PUK to unlock it, or reset the PIV application."))
                     views.pop()
                 } else if (resp.error === 'incorrect parameters') {
                     clearNewPinInputs()
-                    pivError.show(qsTr("Invalid PIN format. PIN must be %1 to %2 characters.").arg(minLength).arg(maxLength))
+                    pivError.show(
+                                qsTr("Invalid PIN format. PIN must be %1 to %2 characters.").arg(
+                                    minLength).arg(maxLength))
+                } else if (resp.message) {
+                    pivError.show(
+                                qsTr("PIN change failed for an unknown reason. Error message: %1").arg(
+                                    resp.message))
                 } else {
-                    pivError.show(resp.error)
+                    pivError.show(
+                                qsTr(
+                                    "PIN change failed for an unknown reason."))
                 }
             }
         })

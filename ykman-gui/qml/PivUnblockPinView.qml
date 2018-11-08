@@ -27,11 +27,20 @@ ChangePinView {
                 pivSuccessPopup.open()
                 views.pop()
             } else {
-                if (resp.message) {
+                if (resp.error === 'blocked') {
+                    pivError.show(qsTr("PUK is blocked."))
+                    views.pop()
+                } else if (resp.error === 'wrong puk') {
                     clearCurrentPinInput()
-                    pivError.show(resp.message)
+                    pivError.show(qsTr("Wrong PUK. Tries remaning: %1").arg(
+                                      resp.tries_left))
+                } else if (resp.message) {
+                    pivError.show(
+                                qsTr("PIN unblock failed for an unknown reason. Error message: %1").arg(
+                                    resp.message))
                 } else {
-                    pivError.show(qsTr("Unknown error."))
+                    pivError.show(
+                                qsTr("PIN unblock failed for an unknown reason."))
                 }
             }
         })

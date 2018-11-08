@@ -244,6 +244,7 @@ Python {
         }
     }
 
+
     /**
      * Transform a `callback` into one that will first call `refreshPiv` and then
      * itself when `refresh` is done.
@@ -349,7 +350,7 @@ Python {
     function piv_change_puk(old_puk, new_puk, cb) {
         do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk],
                 _refreshPivBefore(function (resp) {
-                    if (!resp.success && resp.tries_left < 1) {
+                    if (!resp.success && resp.error === 'blocked') {
                         pivPukBlocked = true
                     }
                     cb(resp)
@@ -366,6 +367,11 @@ Python {
 
     function piv_unblock_pin(puk, newPin, cb) {
         do_call('yubikey.controller.piv_unblock_pin', [puk, newPin],
-                _refreshPivBefore(cb))
+                _refreshPivBefore(function (resp) {
+                    if (!resp.success && resp.error === 'blocked') {
+                        pivPukBlocked = true
+                    }
+                    cb(resp)
+                }))
     }
 }
