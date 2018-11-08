@@ -35,7 +35,29 @@ def as_json(f):
     return wrapped
 
 
-class PivContextManager:
+class OtpContextManager(object):
+    def __init__(self, dev):
+        self._dev = dev
+
+    def __enter__(self):
+        return OtpController(self._dev.driver)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._dev.close()
+
+
+class Fido2ContextManager(object):
+    def __init__(self, dev):
+        self._dev = dev
+
+    def __enter__(self):
+        return Fido2Controller(self._dev.driver)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._dev.close()
+
+
+class PivContextManager(object):
     def __init__(self, dev):
         self._dev = dev
 
@@ -63,6 +85,14 @@ class Controller(object):
 
     def _open_device(self, transports=sum(TRANSPORT)):
         return self._descriptor.open_device(transports=transports)
+
+    def _open_otp_controller(self):
+        return OtpContextManager(
+            self._descriptor.open_device(transports=TRANSPORT.OTP))
+
+    def _open_fido2_controller(self):
+        return Fido2ContextManager(
+            self._descriptor.open_device(transports=TRANSPORT.FIDO))
 
     def _open_piv(self):
         return PivContextManager(
@@ -171,8 +201,7 @@ class Controller(object):
 
     def slots_status(self):
         try:
-            with self._open_device(TRANSPORT.OTP) as dev:
-                controller = OtpController(dev.driver)
+            with self._open_otp_controller() as controller:
                 return {'status': controller.slot_status, 'error': None}
         except YkpersError as e:
             if e.errno == 4:
@@ -185,8 +214,7 @@ class Controller(object):
 
     def erase_slot(self, slot):
         try:
-            with self._open_device(TRANSPORT.OTP) as dev:
-                controller = OtpController(dev.driver)
+            with self._open_otp_controller() as controller:
                 controller.zap_slot(slot)
             return {'success': True, 'error': None}
         except YkpersError as e:
@@ -198,8 +226,7 @@ class Controller(object):
 
     def swap_slots(self):
         try:
-            with self._open_device(TRANSPORT.OTP) as dev:
-                controller = OtpController(dev.driver)
+            with self._open_otp_controller() as controller:
                 controller.swap_slots()
             return {'success': True, 'error': None}
         except YkpersError as e:
@@ -228,8 +255,7 @@ class Controller(object):
             key = a2b_hex(key)
             public_id = modhex_decode(public_id)
             private_id = a2b_hex(private_id)
-            with self._open_device(TRANSPORT.OTP) as dev:
-                controller = OtpController(dev.driver)
+            with self._open_otp_controller() as controller:
                 controller.program_otp(slot, key, public_id, private_id)
             return {'success': True, 'error': None}
         except YkpersError as e:
@@ -242,8 +268,7 @@ class Controller(object):
     def program_challenge_response(self, slot, key, touch):
         try:
             key = a2b_hex(key)
-            with self._open_device(TRANSPORT.OTP) as dev:
-                controller = OtpController(dev.driver)
+            with self._open_otp_controller() as controller:
                 controller.program_chalresp(slot, key, touch)
             return {'success': True, 'error': None}
         except YkpersError as e:
@@ -255,8 +280,7 @@ class Controller(object):
 
     def program_static_password(self, slot, key, keyboard_layout):
         try:
-            with self._open_device(TRANSPORT.OTP) as dev:
-                controller = OtpController(dev.driver)
+            with self._open_otp_controller() as controller:
                 controller.program_static(
                     slot, key,
                     keyboard_layout=KEYBOARD_LAYOUT[keyboard_layout])
@@ -272,8 +296,7 @@ class Controller(object):
         try:
             unpadded = key.upper().rstrip('=').replace(' ', '')
             key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
-            with self._open_device(TRANSPORT.OTP) as dev:
-                controller = OtpController(dev.driver)
+            with self._open_otp_controller() as controller:
                 controller.program_hotp(slot, key, hotp8=(digits == 8))
             return {'success': True, 'error': None}
         except YkpersError as e:
@@ -285,19 +308,15 @@ class Controller(object):
 
     def fido_has_pin(self):
         try:
-            with self._open_device(TRANSPORT.FIDO) as dev:
-                dev = self._descriptor.open_device(TRANSPORT.FIDO)
-                controller = Fido2Controller(dev.driver)
-            return {'hasPin': controller.has_pin, 'error': None}
+            with self._open_fido2_controller() as controller:
+                return {'hasPin': controller.has_pin, 'error': None}
         except Exception as e:
             logger.error('Failed to read if PIN is set', exc_info=e)
             return {'hasPin': None, 'error': str(e)}
 
     def fido_pin_retries(self):
         try:
-            with self._open_device(TRANSPORT.FIDO) as dev:
-                dev = self._descriptor.open_device(TRANSPORT.FIDO)
-                controller = Fido2Controller(dev.driver)
+            with self._open_fido2_controller() as controller:
                 return {'retries': controller.get_pin_retries(), 'error': None}
         except CtapError as e:
             if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
@@ -313,9 +332,7 @@ class Controller(object):
 
     def fido_set_pin(self, new_pin):
         try:
-            with self._open_device(TRANSPORT.FIDO) as dev:
-                dev = self._descriptor.open_device(TRANSPORT.FIDO)
-                controller = Fido2Controller(dev.driver)
+            with self._open_fido2_controller() as controller:
                 controller.set_pin(new_pin)
                 return {'success': True, 'error': None}
         except CtapError as e:
@@ -329,8 +346,7 @@ class Controller(object):
 
     def fido_change_pin(self, current_pin, new_pin):
         try:
-            with self._open_device(TRANSPORT.FIDO) as dev:
-                controller = Fido2Controller(dev.driver)
+            with self._open_fido2_controller() as controller:
                 controller.change_pin(old_pin=current_pin, new_pin=new_pin)
                 return {'success': True, 'error': None}
         except CtapError as e:
@@ -353,8 +369,7 @@ class Controller(object):
 
     def fido_reset(self):
         try:
-            with self._open_device(TRANSPORT.FIDO) as dev:
-                controller = Fido2Controller(dev.driver)
+            with self._open_fido2_controller() as controller:
                 controller.reset()
                 return {'success': True, 'error': None}
         except CtapError as e:
