@@ -63,7 +63,7 @@ ColumnLayout {
     }
 
     onClearPinInputs: {
-        onClearCurrentPinInput()
+        clearCurrentPinInput()
         clearNewPinInputs()
     }
 
