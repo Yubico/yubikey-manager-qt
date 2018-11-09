@@ -26,7 +26,7 @@ ChangePinView {
                 if (resp.error === 'too long') {
                     fido2TooLongError.open()
                 } else if (resp.error === 'wrong pin') {
-                    clearPinInputs()
+                    clearCurrentPinInput()
                     fido2WrongPinError.open()
                 } else if (resp.error === 'currently blocked') {
                     fido2CurrentlyBlockedError.open()
