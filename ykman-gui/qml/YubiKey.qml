@@ -350,7 +350,9 @@ Python {
     function piv_change_puk(old_puk, new_puk, cb) {
         do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk],
                 _refreshPivBefore(function (resp) {
-                    if (!resp.success && resp.error === 'blocked') {
+                    if (resp.success) {
+                        pivPukBlocked = false
+                    } else if (resp.error === 'blocked') {
                         pivPukBlocked = true
                     }
                     cb(resp)
@@ -360,7 +362,9 @@ Python {
     function piv_reset(cb) {
         do_call('yubikey.controller.piv_reset', [],
                 _refreshPivBefore(function (resp) {
-                    pivPukBlocked = false
+                    if (resp.success) {
+                        pivPukBlocked = false
+                    }
                     cb(resp)
                 }))
     }
@@ -368,7 +372,9 @@ Python {
     function piv_unblock_pin(puk, newPin, cb) {
         do_call('yubikey.controller.piv_unblock_pin', [puk, newPin],
                 _refreshPivBefore(function (resp) {
-                    if (!resp.success && resp.error === 'blocked') {
+                    if (resp.success) {
+                        pivPukBlocked = false
+                    } else if (resp.error === 'blocked') {
                         pivPukBlocked = true
                     }
                     cb(resp)
