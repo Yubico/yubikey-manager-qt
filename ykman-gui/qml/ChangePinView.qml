@@ -42,15 +42,13 @@ ColumnLayout {
         changePin(chosenCurrentPin, chosenPin)
     }
 
-    function inputDefaultCurrentPin() {
-        currentPin.text = defaultCurrentPin
-    }
-
     function toggleUseDefaultCurrentPin() {
-        if (useDefaultCurrentPinCheckbox.checked) {
-            currentPin.text = defaultCurrentPin
-        } else {
-            currentPin.clear()
+        if (defaultCurrentPin) {
+            if (useDefaultCurrentPinCheckbox.checked) {
+                currentPin.text = defaultCurrentPin
+            } else {
+                currentPin.clear()
+            }
         }
     }
 
@@ -95,13 +93,14 @@ ColumnLayout {
                 visible: hasCurrentPin
             }
             RowLayout {
+                visible: hasCurrentPin
+
                 TextField {
                     id: currentPin
                     Layout.fillWidth: true
                     echoMode: enabled ? TextInput.Password : TextInput.Normal
                     selectByMouse: true
                     selectionColor: yubicoGreen
-                    visible: hasCurrentPin
                     enabled: !useDefaultCurrentPinCheckbox.checked
                 }
 
@@ -111,6 +110,7 @@ ColumnLayout {
                     onCheckedChanged: toggleUseDefaultCurrentPin()
                     font.pixelSize: constants.h3
                     Material.foreground: yubicoBlue
+                    visible: defaultCurrentPin
                 }
             }
 
