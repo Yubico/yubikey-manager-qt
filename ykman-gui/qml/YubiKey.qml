@@ -155,6 +155,7 @@ Python {
 
     function supportsNewInterfaces() {
         return isYubiKeyPreview() || isYubiKey5Family()
+                || isSecurityKeyByYubico()
     }
 
     function supportsNfcConfiguration() {
@@ -165,7 +166,7 @@ Python {
     }
 
     function canChangeInterfaces() {
-        return usbInterfacesSupported.length > 1
+        return usbInterfacesSupported.length > 1 || supportsUsbConfiguration()
     }
 
     function otpInterfaceSupported() {
@@ -201,7 +202,7 @@ Python {
             nDevices = n
             if (nDevices == 1) {
                 do_call('yubikey.controller.refresh', [], function (resp) {
-                    if (!resp.error && resp.dev) {
+                    if (resp.success && resp.dev) {
                         hasDevice = true
                         name = resp.dev.name
                         version = resp.dev.version

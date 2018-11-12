@@ -19,11 +19,11 @@ ColumnLayout {
     function load() {
         isBusy = true
         yubiKey.fido_has_pin(function (resp) {
-            if (!resp.error) {
+            if (resp.success) {
                 hasPin = resp.hasPin
                 if (hasPin) {
                     yubiKey.fido_pin_retries(function (resp) {
-                        if (!resp.error) {
+                        if (resp.success) {
                             pinRetries = resp.retries
                         } else {
                             console.log(resp.error)
@@ -36,8 +36,7 @@ ColumnLayout {
                     isBusy = false
                 }
             } else {
-                console.log(resp.error)
-                isBusy = false
+                views.home()
             }
         })
     }
@@ -89,7 +88,7 @@ ColumnLayout {
                     font.pixelSize: constants.h2
                 }
                 Label {
-                    text: getPinMessage()
+                    text: getPinMessage() || ''
                     font.pixelSize: constants.h3
                     color: yubicoBlue
                 }
