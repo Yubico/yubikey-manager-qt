@@ -11,7 +11,6 @@ ColumnLayout {
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
     Layout.fillWidth: true
 
-    Component.objectName: load()
     onVisibleChanged: visible ? load() : ''
     function load() {
         yubiKey.piv_read_certificate(slot, function (resp) {
@@ -34,58 +33,74 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredWidth: constants.contentWidth
         id: mainRow
-        ColumnLayout {
+        GridLayout {
+            visible: !!certificate
+            columns: 2
+            //flow: GridLayout.TopToBottom
             Layout.fillWidth: true
             Label {
-                id: issuedFrom
-                visible: !!certificate
                 color: yubicoBlue
-                text: certificate ? qsTr("Issued from: ") + certificate.issuedFrom : ''
+                text: qsTr("Issued from:")
                 font.pixelSize: constants.h3
             }
             Label {
-                id: issuedTo
-                visible: !!certificate
                 color: yubicoBlue
-                text: certificate ? qsTr("Issued to: ") + certificate.issuedTo : ''
+                text: !!certificate ? certificate.issuedFrom : ''
                 font.pixelSize: constants.h3
             }
             Label {
-                id: validFrom
-                visible: !!certificate
                 color: yubicoBlue
-                text: certificate ? qsTr("Valid from: ") + certificate.validFrom : ''
+                text: qsTr("Issued to:")
                 font.pixelSize: constants.h3
             }
             Label {
-                id: validTo
-                visible: !!certificate
                 color: yubicoBlue
-                text: certificate ? qsTr(
-                                        "Valid to: ") + certificate.validTo : ''
+                text: !!certificate ? certificate.issuedTo : ''
                 font.pixelSize: constants.h3
             }
             Label {
-                visible: !certificate
-                text: qsTr("No certficate.")
                 color: yubicoBlue
+                text: qsTr("Valid from:")
+                font.pixelSize: constants.h3
+            }
+            Label {
+                color: yubicoBlue
+                text: !!certificate ? certificate.validFrom : ''
+                font.pixelSize: constants.h3
+            }
+            Label {
+                color: yubicoBlue
+                text: qsTr("Valid to:")
+                font.pixelSize: constants.h3
+            }
+            Label {
+                color: yubicoBlue
+                text: !!certificate ? certificate.validTo : ''
                 font.pixelSize: constants.h3
             }
         }
 
+        Label {
+            visible: !certificate
+            text: qsTr("No certificate loaded.")
+            color: yubicoBlue
+            font.pixelSize: constants.h3
+        }
+
         GridLayout {
             columnSpacing: 10
-            Layout.fillWidth: true
+            Layout.fillWidth: false
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             columns: 2
             CustomButton {
-                visible: !!certificate
+                enabled: !!certificate
                 text: qsTr("Delete")
                 iconSource: "../images/delete.svg"
                 toolTipText: qsTr("Delete certificate")
             }
             CustomButton {
-                visible: !!certificate
+                Layout.fillWidth: true
+                enabled: !!certificate
                 text: qsTr("Export")
                 highlighted: true
                 toolTipText: qsTr("Export certificate")
