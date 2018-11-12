@@ -549,7 +549,7 @@ class Controller(object):
             'utf-8')
 
     def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
-                           touch=False, store_on_device=False):
+                           store_on_device=False):
         with self._open_piv() as piv_controller:
 
             if piv_controller.has_protected_key or store_on_device:
@@ -581,7 +581,8 @@ class Controller(object):
                 }
 
             try:
-                piv_controller.set_mgm_key(new_key, touch, store_on_device)
+                piv_controller.set_mgm_key(
+                    new_key, touch=False, store_on_device=store_on_device)
                 return {'success': True}
             except Exception as e:
                 logger.error('Failed to change management key', exc_info=e)

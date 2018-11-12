@@ -59,7 +59,7 @@ ColumnLayout {
         }
     }
 
-    function finish(pin, currentManagementKey, newManagementKey, requireTouch) {
+    function finish(pin, currentManagementKey, newManagementKey) {
         isBusy = true
         yubiKey.piv_change_mgm_key(
             function(resp) {
@@ -113,7 +113,6 @@ ColumnLayout {
             pin,
             currentManagementKey,
             hasNewManagementKeyInput ? newManagementKey : false,
-            requireTouch,
             touchYubiKey.open,
             storeManagementKey
         )
@@ -231,14 +230,6 @@ ColumnLayout {
                 Label {
                     visible: hasNewManagementKeyInput
                 }
-
-                Label {}
-                CheckBox {
-                    id: requireTouch
-                    text: qsTr("Require touch")
-                    Layout.fillWidth: true
-                }
-                Label {}
             }
 
         }
@@ -257,7 +248,7 @@ ColumnLayout {
                 id: nextBtn
                 text: qsTr("Finish")
                 highlighted: true
-                onClicked: finish(pin.text, currentManagementKey.text, newManagementKey.text, requireTouch.checked)
+                onClicked: finish(pin.text, currentManagementKey.text, newManagementKey.text)
                 iconSource: "../images/next.svg"
                 enabled: validNewManagementKey
             }
