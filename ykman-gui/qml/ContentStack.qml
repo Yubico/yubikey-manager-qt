@@ -308,7 +308,7 @@ StackView {
     Component {
         id: pivChangeManagementKeyView
 
-        PivSelectManagementKeyTypeView {
+        PivSetManagementKeyView {
         }
     }
 

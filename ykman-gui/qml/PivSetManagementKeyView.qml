@@ -5,15 +5,12 @@ import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
 
-    property var breadcrumbs
-    property string heading
-    property bool hasNewManagementKeyInput
-    property bool storeManagementKey
-
-    property bool hasPinInput: hasProtectedKey
+    property bool hasNewManagementKeyInput: true
+    property bool hasPinInput: hasProtectedKey || storeManagementKey
     property bool isBusy: false
 
     readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key
+    readonly property bool storeManagementKey: storeManagementKeyCheckbox.checked
     readonly property bool validNewManagementKey: (!hasNewManagementKeyInput
         || newManagementKey.text.length == constants.pivManagementKeyHexLength)
 
@@ -112,7 +109,7 @@ ColumnLayout {
             },
             pin,
             currentManagementKey,
-            hasNewManagementKeyInput ? newManagementKey : false,
+            newManagementKey,
             touchYubiKey.open,
             storeManagementKey
         )
@@ -123,11 +120,17 @@ ColumnLayout {
         ColumnLayout {
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Heading1 {
-                text: heading
+                text: qsTr("Set Management Key")
             }
 
             BreadCrumbRow {
-                items: breadcrumbs
+                items: [{
+                    text: qsTr("PIV")
+                }, {
+                    text: qsTr("Configure PINs")
+                }, {
+                    text: qsTr("Set Management Key")
+                }]
             }
         }
 
@@ -191,7 +194,6 @@ ColumnLayout {
                     font.pixelSize: constants.h3
                     color: yubicoBlue
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    visible: hasNewManagementKeyInput
                 }
                 TextField {
                     id: newManagementKey
@@ -205,15 +207,23 @@ ColumnLayout {
                     ToolTip.delay: 1000
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Management key must be exactly 48 hexadecimal digits.")
-                    visible: hasNewManagementKeyInput
                 }
                 CustomButton {
                     id: randomManagementKeyBtn
                     text: qsTr("Generate")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     onClicked: generateManagementKey()
-                    visible: hasNewManagementKeyInput
                 }
+
+                Label {}
+                CheckBox {
+                    id: storeManagementKeyCheckbox
+                    checked: true
+                    text: qsTr("Store on YubiKey, protected by PIN")
+                    font.pixelSize: constants.h3
+                    Material.foreground: yubicoBlue
+                }
+                Label {}
             }
 
         }
