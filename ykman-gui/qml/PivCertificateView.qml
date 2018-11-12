@@ -26,29 +26,20 @@ ColumnLayout {
         TabBar {
             id: bar
             Layout.fillWidth: true
-            TabButton {
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                text: qsTr("Authentication")
-                Material.foreground: yubicoBlue
-            }
-            TabButton {
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                text: qsTr("Digital Signature")
-                Material.foreground: yubicoBlue
-            }
-            TabButton {
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                text: qsTr("Key Management")
-                Material.foreground: yubicoBlue
-            }
-            TabButton {
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                text: qsTr("Card Authentication")
-                Material.foreground: yubicoBlue
+            Repeater {
+                model: [
+                    qsTr("Authentication"),
+                    qsTr("Digital Signature"),
+                    qsTr("Key Management"),
+                    qsTr("Card Authentication"),
+                ]
+
+                TabButton {
+                    text: modelData
+                    font.capitalization: Font.MixedCase
+                    font.family: constants.fontFamily
+                    Material.foreground: yubicoBlue
+                }
             }
         }
 
