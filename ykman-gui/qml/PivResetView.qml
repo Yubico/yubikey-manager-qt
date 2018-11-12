@@ -13,6 +13,7 @@ ColumnLayout {
             isBusy = false
             if (resp.success) {
                 pivSuccessPopup.open()
+                views.pop()
             } else {
                 pivGeneralError.error = resp.error
                 pivGeneralError.open()

@@ -5,14 +5,29 @@ import QtQuick.Layouts 1.2
 InlinePopup {
     property string error
 
-    Heading2 {
-        width: parent.width
-        text: qsTr("Error!" + "
-
-" + error)
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        wrapMode: Text.WordWrap
-        Layout.maximumWidth: parent.width
-    }
     standardButtons: Dialog.Ok
+
+    function show(message) {
+        error = message
+        open()
+    }
+
+    ColumnLayout {
+        width: parent.width
+
+        Heading2 {
+            width: parent.width
+            text: qsTr("Error!")
+            Layout.alignment: Qt.AlignHCenter
+            wrapMode: Text.WordWrap
+            Layout.maximumWidth: parent.width
+        }
+        Heading2 {
+            width: parent.width
+            text: error
+            Layout.alignment: Qt.AlignHCenter
+            wrapMode: Text.WordWrap
+            Layout.maximumWidth: parent.width
+        }
+    }
 }
