@@ -15,7 +15,7 @@ ColumnLayout {
     property string confirmNewPinLabel: qsTr("Confirm new %1:").arg(codeName)
     property string currentPinLabel: qsTr("Current %1:").arg(codeName)
     property string finishButtonText: qsTr("Change %1").arg(codeName)
-    property string finishButtonTooltip: qsTr("Finish and change the %1")
+    property string finishButtonTooltip: qsTr("Finish and change the %1").arg(codeName)
 
     property string mainHeading: hasCurrentPin ? qsTr("Change %1").arg(
                                                      codeName) : qsTr(
@@ -29,7 +29,8 @@ ColumnLayout {
     readonly property bool pinMatches: newPin.text === confirmPin.text
 
     function validPin() {
-        return (pinMatches) && (chosenPin.length >= minLength)
+        return (!hasCurrentPin || currentPin.length >= minLength)
+                && (pinMatches) && (chosenPin.length >= minLength)
                 && (chosenPin.length <= maxLength)
     }
 

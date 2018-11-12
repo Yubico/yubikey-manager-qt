@@ -109,7 +109,9 @@ ColumnLayout {
     function toggleNfc() {
         if (newApplicationsEnabledOverNfc.length < 1) {
             for (var i = 0; i < nfcCheckBoxes.count; i++) {
-                nfcCheckBoxes.itemAt(i).checked = true
+                if (usbCheckBoxes.itemAt(i).enabled) {
+                    nfcCheckBoxes.itemAt(i).checked = true
+                }
             }
         } else {
             for (var j = 0; j < nfcCheckBoxes.count; j++) {
@@ -121,7 +123,9 @@ ColumnLayout {
     function toggleUsb() {
         if (newApplicationsEnabledOverUsb.length < 2) {
             for (var i = 0; i < usbCheckBoxes.count; i++) {
-                usbCheckBoxes.itemAt(i).checked = true
+                if (usbCheckBoxes.itemAt(i).enabled) {
+                    usbCheckBoxes.itemAt(i).checked = true
+                }
             }
         } else {
             for (var j = 0; j < usbCheckBoxes.count; j++) {
@@ -185,6 +189,7 @@ ColumnLayout {
                     model: applications
                     CheckBox {
                         enabled: yubiKey.isSupportedOverUSB(modelData.id)
+                        visible: yubiKey.isSupportedOverUSB(modelData.id)
                         Layout.bottomMargin: -20
                         onCheckedChanged: toggleEnabledOverUsb(modelData.id,
                                                                checked)
@@ -241,6 +246,7 @@ ColumnLayout {
                     id: nfcCheckBoxes
                     model: applications
                     CheckBox {
+                        visible: yubiKey.isSupportedOverNfc(modelData.id)
                         enabled: yubiKey.isSupportedOverNfc(modelData.id)
                         Layout.bottomMargin: -20
                         onCheckedChanged: toggleEnabledOverNfc(modelData.id,
