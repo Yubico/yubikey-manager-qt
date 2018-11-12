@@ -37,15 +37,6 @@ ColumnLayout {
             RowLayout {
                 Layout.fillWidth: false
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-
-                CustomButton {
-                    text: qsTr("Configure PINs")
-                    highlighted: true
-                    flat: true
-                    toolTipText: qsTr("Configure PIN, PUK and Management Key")
-                    iconSource: "../images/lock.svg"
-                    onClicked: views.pivPinManagement()
-                }
                 CustomButton {
                     text: qsTr("Reset PIV")
                     highlighted: true
@@ -73,18 +64,20 @@ ColumnLayout {
 
             ColumnLayout {
                 Heading2 {
-                    text: qsTr("Initialisation")
+                    text: qsTr("PIN Management")
                     font.pixelSize: constants.h2
                 }
                 Label {
-                    text: qsTr("PIV Application is not initialised")
+                    text: qsTr("Configure PIN, PUK and Management Key")
                     font.pixelSize: constants.h3
                     color: yubicoBlue
                 }
                 CustomButton {
-                    text: qsTr("Initialise")
+                    text: qsTr("Configure PINs")
                     highlighted: true
-                    toolTipText: qsTr("Change the default PINs and Management Key")
+                    toolTipText: qsTr("Configure PIN, PUK and Management Key")
+                    iconSource: "../images/lock.svg"
+                    onClicked: views.pivPinManagement()
                 }
             }
 
