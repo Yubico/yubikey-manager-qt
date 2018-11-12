@@ -29,7 +29,7 @@ ColumnLayout {
     readonly property bool pinMatches: newPin.text === confirmPin.text
 
     function validPin() {
-        return (currentPin.length >= minLength)
+        return (!hasCurrentPin || currentPin.length >= minLength)
                 && (pinMatches) && (chosenPin.length >= minLength)
                 && (chosenPin.length <= maxLength)
     }
