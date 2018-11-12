@@ -77,6 +77,7 @@ ColumnLayout {
                     flat: true
                     toolTipText: qsTr("Configure PIN, PUK and Management Key")
                     iconSource: "../images/lock.svg"
+                    onClicked: views.pivPinManagement()
                 }
                 CustomButton {
                     text: qsTr("Reset PIV")

@@ -26,6 +26,8 @@ Python {
     property bool yubikeyModuleLoaded: false
     property bool yubikeyReady: false
     property var queue: []
+    property var piv
+    property bool pivPukBlocked: false
 
     property var authenticationCert
     property var signatureCert
@@ -158,6 +160,7 @@ Python {
 
     function supportsNewInterfaces() {
         return isYubiKeyPreview() || isYubiKey5Family()
+                || isSecurityKeyByYubico()
     }
 
     function supportsNfcConfiguration() {
@@ -168,7 +171,7 @@ Python {
     }
 
     function canChangeInterfaces() {
-        return usbInterfacesSupported.length > 1
+        return usbInterfacesSupported.length > 1 || supportsUsbConfiguration()
     }
 
     function otpInterfaceSupported() {
@@ -212,7 +215,7 @@ Python {
             nDevices = n
             if (nDevices == 1) {
                 do_call('yubikey.controller.refresh', [], function (resp) {
-                    if (!resp.error && resp.dev) {
+                    if (resp.success && resp.dev) {
                         hasDevice = true
                         name = resp.dev.name
                         version = resp.dev.version
@@ -242,6 +245,40 @@ Python {
     function write_config(usbApplications, nfcApplications, lockCode, cb) {
         do_call('yubikey.controller.write_config',
                 [usbApplications, nfcApplications, lockCode], cb)
+    }
+
+    function refreshPiv(doneCallback) {
+        if (hasDevice) {
+            do_call('yubikey.controller.refresh_piv', [], function (pivData) {
+                piv = pivData
+                doneCallback()
+            })
+        } else {
+            doneCallback()
+        }
+    }
+
+
+    /**
+     * Transform a `callback` into one that will first call `refreshPiv` and then
+     * itself when `refresh` is done.
+     *
+     * The arguments and `this` context of the call to the `callback` are
+     * preseved.
+     *
+     * @param callback a function
+     *
+     * @return a function which will call `refreshPiv()` and delay the execution of
+     *          the `callback` until the `refreshPiv()` is done.
+     */
+    function _refreshPivBefore(callback) {
+        return function (/* ...arguments */ ) {
+            var callbackThis = this
+            var callbackArguments = arguments
+            refreshPiv(function () {
+                callback.apply(callbackThis, callbackArguments)
+            })
+        }
     }
 
     function set_mode(connections, cb) {
@@ -319,8 +356,37 @@ Python {
         do_call('yubikey.controller.fido_pin_retries', [], cb)
     }
 
+    function piv_change_pin(old_pin, new_pin, cb) {
+        do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin],
+                _refreshPivBefore(cb))
+    }
+
+    function piv_change_puk(old_puk, new_puk, cb) {
+        do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk],
+                _refreshPivBefore(function (resp) {
+                    if (!resp.success && resp.error === 'blocked') {
+                        pivPukBlocked = true
+                    }
+                    cb(resp)
+                }))
+    }
+
     function piv_reset(cb) {
-        do_call('yubikey.controller.piv_reset', [], cb)
+        do_call('yubikey.controller.piv_reset', [],
+                _refreshPivBefore(function (resp) {
+                    pivPukBlocked = false
+                    cb(resp)
+                }))
+    }
+
+    function piv_unblock_pin(puk, newPin, cb) {
+        do_call('yubikey.controller.piv_unblock_pin', [puk, newPin],
+                _refreshPivBefore(function (resp) {
+                    if (!resp.success && resp.error === 'blocked') {
+                        pivPukBlocked = true
+                    }
+                    cb(resp)
+                }))
     }
 
     function piv_list_certificates(cb) {

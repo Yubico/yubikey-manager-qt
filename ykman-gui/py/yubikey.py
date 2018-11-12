@@ -14,17 +14,19 @@ from binascii import b2a_hex, a2b_hex
 from fido2.ctap import CtapError
 from cryptography import x509
 from ykman.descriptor import get_descriptors
-from ykman.driver_otp import YkpersError
-from ykman.driver_ccid import APDUError
 from ykman.device import device_config
 from ykman.otp import OtpController
 from ykman.fido import Fido2Controller
-from ykman.piv import PivController, SLOT, SW
+from ykman.driver_ccid import APDUError, SW
+from ykman.driver_otp import YkpersError, libversion as ykpers_version
+from ykman.device import device_config
+from ykman.otp import OtpController
+from ykman.fido import Fido2Controller
+from ykman.piv import PivController, SLOT, AuthenticationBlocked, WrongPin, WrongPuk
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
     generate_static_pw)
-
 
 logger = logging.getLogger(__name__)
 
@@ -87,6 +89,10 @@ class Controller(object):
         return self._descriptor.open_device(transports=transports)
 
     def _open_otp_controller(self):
+        if ykpers_version is None:
+            raise Exception(
+                'Could not find the "ykpers" library. Please ensure that '
+                'YubiKey Manager was installed correctly.')
         return OtpContextManager(
             self._descriptor.open_device(transports=TRANSPORT.OTP))
 
@@ -178,6 +184,13 @@ class Controller(object):
             logger.error('Failed to write config', exc_info=e)
             return {'success': False, 'error': str(e)}
 
+    def refresh_piv(self):
+        with self._open_piv() as piv_controller:
+            return {
+                'pin_tries': piv_controller.get_pin_tries(),
+                'puk_blocked': piv_controller.puk_blocked,
+            }
+
     def set_mode(self, interfaces):
         try:
             with self._open_device() as dev:
@@ -190,15 +203,18 @@ class Controller(object):
     def slots_status(self):
         try:
             with self._open_otp_controller() as controller:
-                return {'status': controller.slot_status, 'error': None}
+                return {
+                    'success': True,
+                    'status': controller.slot_status,
+                    'error': None}
         except YkpersError as e:
             if e.errno == 4:
-                return {'status': None, 'error': 'timeout'}
+                return {'success': False, 'status': None, 'error': 'timeout'}
             logger.error('Failed to read slot status', exc_info=e)
-            return {'status': None, 'error': str(e)}
+            return {'success': False, 'status': None, 'error': str(e)}
         except Exception as e:
             logger.error('Failed to read slot status', exc_info=e)
-            return {'status': None, 'error': str(e)}
+            return {'success': False, 'status': None, 'error': str(e)}
 
     def erase_slot(self, slot):
         try:
@@ -297,26 +313,36 @@ class Controller(object):
     def fido_has_pin(self):
         try:
             with self._open_fido2_controller() as controller:
-                return {'hasPin': controller.has_pin, 'error': None}
+                return {
+                    'success': True,
+                    'hasPin': controller.has_pin,
+                    'error': None}
         except Exception as e:
             logger.error('Failed to read if PIN is set', exc_info=e)
-            return {'hasPin': None, 'error': str(e)}
+            return {'success': False, 'hasPin': None, 'error': str(e)}
 
     def fido_pin_retries(self):
         try:
             with self._open_fido2_controller() as controller:
-                return {'retries': controller.get_pin_retries(), 'error': None}
+                return {
+                    'success': True,
+                    'retries': controller.get_pin_retries(),
+                    'error': None}
         except CtapError as e:
             if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
                 return {
+                    'success': False,
                     'retries': None,
                     'error': 'PIN authentication is currently blocked. '
                              'Remove and re-insert the YubiKey.'}
             if e.code == CtapError.ERR.PIN_BLOCKED:
-                return {'retries': None, 'error': 'PIN is blocked.'}
+                return {
+                    'success': False,
+                    'retries': None,
+                    'error': 'PIN is blocked.'}
         except Exception as e:
             logger.error('Failed to read PIN retries', exc_info=e)
-            return {'retries': None, 'error': str(e)}
+            return {'success': False, 'retries': None, 'error': str(e)}
 
     def fido_set_pin(self, new_pin):
         try:
@@ -381,6 +407,7 @@ class Controller(object):
             logger.error('Failed to reset PIV application', exc_info=e)
             return {'success': False, 'error': str(e)}
 
+<<<<<<< HEAD
     def piv_read_certificate(self, slot):
         try:
             with self._open_piv() as controller:
@@ -405,6 +432,104 @@ class Controller(object):
         except Exception as e:
             logger.error('Failed to read PIV certificates', exc_info=e)
             return {'success': False, 'error': str(e)}
+=======
+    def piv_change_pin(self, old_pin, new_pin):
+        with self._open_piv() as piv_controller:
+            try:
+                piv_controller.change_pin(old_pin, new_pin)
+                logger.debug('PIN change successful!')
+                return {'success': True}
+
+            except AuthenticationBlocked as e:
+                return {
+                    'success': False,
+                    'error': 'blocked',
+                }
+
+            except WrongPin as e:
+                return {
+                    'success': False,
+                    'error': 'wrong pin',
+                    'tries_left': e.tries_left,
+                }
+
+            except APDUError as e:
+                if e.sw == SW.INCORRECT_PARAMETERS:
+                    return {
+                        'success': False,
+                        'error': 'incorrect parameters',
+                    }
+
+                tries_left = piv_controller.get_pin_tries()
+                logger.debug('PIN change failed. %s tries left.',
+                             tries_left, exc_info=e)
+                return {
+                    'success': False,
+                    'tries_left': tries_left,
+                }
+
+            except Exception as e:
+                tries_left = piv_controller.get_pin_tries()
+                logger.error('PIN change failed. %s tries left.',
+                             tries_left, exc_info=e)
+                return {
+                    'success': False,
+                    'tries_left': tries_left,
+                    'message': str(e),
+                }
+
+    def piv_change_puk(self, old_puk, new_puk):
+        with self._open_piv() as piv_controller:
+            try:
+                piv_controller.change_puk(old_puk, new_puk)
+                return {'success': True}
+
+            except AuthenticationBlocked as e:
+                return {
+                    'success': False,
+                    'error': 'blocked',
+                }
+
+            except WrongPuk as e:
+                return {
+                    'success': False,
+                    'error': 'wrong puk',
+                    'tries_left': e.tries_left,
+                }
+
+            except Exception as e:
+                logger.error('PUK change failed.', exc_info=e)
+                return {
+                    'success': False,
+                    'message': str(e),
+                }
+
+    def piv_unblock_pin(self, puk, new_pin):
+        with self._open_piv() as piv_controller:
+            try:
+                piv_controller.unblock_pin(puk, new_pin)
+                return {'success': True}
+
+            except AuthenticationBlocked as e:
+                return {
+                    'success': False,
+                    'error': 'blocked',
+                }
+
+            except WrongPuk as e:
+                return {
+                    'success': False,
+                    'error': 'wrong puk',
+                    'tries_left': e.tries_left,
+                }
+
+            except Exception as e:
+                logger.error('PIN unblock failed.', exc_info=e)
+                return {
+                    'success': False,
+                    'message': str(e),
+                }
+>>>>>>> piv
 
 
 controller = None
