@@ -14,10 +14,14 @@ ColumnLayout {
     onVisibleChanged: visible ? load() : ''
     function load() {
         yubiKey.piv_read_certificate(slot, function (resp) {
-            if (!resp.error) {
+            if (resp.success) {
                 certificate = resp.cert
             } else {
-                console.log(resp.error)
+                if (resp.error) {
+                    pivError.show(resp.error)
+                } else {
+                    pivError.show('Failed to read certificate')
+                }
             }
         })
     }
@@ -36,7 +40,6 @@ ColumnLayout {
         GridLayout {
             visible: !!certificate
             columns: 2
-            //flow: GridLayout.TopToBottom
             Layout.fillWidth: true
             Label {
                 color: yubicoBlue
