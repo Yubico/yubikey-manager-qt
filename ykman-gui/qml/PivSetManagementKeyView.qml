@@ -141,31 +141,6 @@ ColumnLayout {
                 columns: 3
 
                 Label {
-                    text: qsTr("PIN:")
-                    font.pixelSize: constants.h3
-                    color: yubicoBlue
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    visible: hasPinInput
-                }
-                TextField {
-                    id: pin
-                    Layout.fillWidth: true
-                    echoMode: enabled ? TextInput.Password : TextInput.Normal
-                    selectByMouse: true
-                    selectionColor: yubicoGreen
-                    visible: hasPinInput
-                    enabled: !useDefaultPinCheckbox.checked
-                }
-                CheckBox {
-                    id: useDefaultPinCheckbox
-                    text: qsTr("Use default")
-                    onCheckedChanged: toggleUseDefaultCurrentPin()
-                    font.pixelSize: constants.h3
-                    Material.foreground: yubicoBlue
-                    visible: hasPinInput
-                }
-
-                Label {
                     text: qsTr("Current Management Key:")
                     font.pixelSize: constants.h3
                     color: yubicoBlue
@@ -224,6 +199,31 @@ ColumnLayout {
                     Material.foreground: yubicoBlue
                 }
                 Label {}
+
+                Label {
+                    text: qsTr("PIN:")
+                    font.pixelSize: constants.h3
+                    color: yubicoBlue
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    visible: hasPinInput
+                }
+                TextField {
+                    id: pin
+                    Layout.fillWidth: true
+                    echoMode: enabled ? TextInput.Password : TextInput.Normal
+                    selectByMouse: true
+                    selectionColor: yubicoGreen
+                    visible: hasPinInput
+                    enabled: !useDefaultPinCheckbox.checked
+                }
+                CheckBox {
+                    id: useDefaultPinCheckbox
+                    text: qsTr("Use default")
+                    onCheckedChanged: toggleUseDefaultCurrentPin()
+                    font.pixelSize: constants.h3
+                    Material.foreground: yubicoBlue
+                    visible: hasPinInput
+                }
             }
 
         }
