@@ -88,7 +88,7 @@ ColumnLayout {
                     font.pixelSize: constants.h2
                 }
                 Label {
-                    text: getPinMessage()
+                    text: getPinMessage() || ''
                     font.pixelSize: constants.h3
                     color: yubicoBlue
                 }
