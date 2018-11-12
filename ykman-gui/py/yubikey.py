@@ -407,7 +407,6 @@ class Controller(object):
             logger.error('Failed to reset PIV application', exc_info=e)
             return {'success': False, 'error': str(e)}
 
-<<<<<<< HEAD
     def piv_read_certificate(self, slot):
         try:
             with self._open_piv() as controller:
@@ -432,7 +431,7 @@ class Controller(object):
         except Exception as e:
             logger.error('Failed to read PIV certificates', exc_info=e)
             return {'success': False, 'error': str(e)}
-=======
+
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -529,7 +528,6 @@ class Controller(object):
                     'success': False,
                     'message': str(e),
                 }
->>>>>>> piv
 
 
 controller = None
