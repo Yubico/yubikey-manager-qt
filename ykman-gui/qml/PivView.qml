@@ -15,7 +15,7 @@ ColumnLayout {
     function load() {
         isBusy = true
         yubiKey.piv_list_certificates(function (resp) {
-            if (!resp.error) {
+            if (resp.success) {
                 for (var i = 0; i < resp.certs.length; i++) {
                     var cert = resp.certs[i]
                     if (cert.slot === 'AUTHENTICATION') {
@@ -32,7 +32,11 @@ ColumnLayout {
                     }
                 }
             } else {
-                console.log(resp.error)
+                if (resp.error) {
+                    pivError.show(resp.error)
+                } else {
+                    pivError.show('Failed to list certificates')
+                }
             }
             isBusy = false
         })
