@@ -81,7 +81,6 @@ ColumnLayout {
                 toolTipText: qsTr("Delete certificate")
             }
             CustomButton {
-                Layout.fillWidth: true
                 enabled: !!certificate
                 text: qsTr("Export")
                 iconSource: "../images/export.svg"
