@@ -49,8 +49,6 @@ ColumnLayout {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             currentIndex: bar.currentIndex
             PivCertificateInfo {
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.fillWidth: true
                 title: qsTr("Authentication (Slot 9a)")
                 slot: 'AUTHENTICATION'
                 certificate: yubiKey.authenticationCert
