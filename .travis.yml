@@ -63,7 +63,8 @@ before_script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
-       pre-commit run --all-files
+        # qmllint does not exist on Travis's linux machines
+        pre-commit run --all-files
     fi
 
 script:
