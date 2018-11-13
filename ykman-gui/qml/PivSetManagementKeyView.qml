@@ -7,10 +7,13 @@ ColumnLayout {
 
     property bool isBusy: false
 
+    readonly property bool hasCurrentManagementKeyInput: !hasProtectedKey
     readonly property bool hasNewManagementKeyInput: true
     readonly property bool hasPinInput: hasProtectedKey || storeManagementKey
     readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key
     readonly property bool storeManagementKey: storeManagementKeyCheckbox.checked
+    readonly property bool validCurrentManagementKey: (!hasCurrentManagementKeyInput
+        || currentManagementKey.text.length === constants.pivManagementKeyHexLength)
     readonly property bool validNewManagementKey: (!hasNewManagementKeyInput
         || newManagementKey.text.length === constants.pivManagementKeyHexLength)
 
@@ -135,14 +138,18 @@ ColumnLayout {
                     font.pixelSize: constants.h3
                     color: yubicoBlue
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    visible: !hasProtectedKey
+                    visible: hasCurrentManagementKeyInput
                 }
                 TextField {
                     id: currentManagementKey
                     Layout.fillWidth: true
                     selectByMouse: true
                     selectionColor: yubicoGreen
-                    visible: !hasProtectedKey
+                    maximumLength: constants.pivManagementKeyHexLength
+                    validator: RegExpValidator {
+                        regExp: /[0-9a-f]*/
+                    }
+                    visible: hasCurrentManagementKeyInput
                     enabled: !useDefaultCurrentManagementKeyCheckbox.checked
                 }
                 CheckBox {
@@ -151,7 +158,7 @@ ColumnLayout {
                     onCheckedChanged: toggleUseDefaultCurrentManagementKey()
                     font.pixelSize: constants.h3
                     Material.foreground: yubicoBlue
-                    visible: !hasProtectedKey
+                    visible: hasCurrentManagementKeyInput
                 }
 
                 Label {
@@ -210,7 +217,7 @@ ColumnLayout {
                 highlighted: true
                 onClicked: finish(currentManagementKey.text, newManagementKey.text)
                 iconSource: "../images/next.svg"
-                enabled: validNewManagementKey
+                enabled: validCurrentManagementKey && validNewManagementKey
             }
         }
     }
