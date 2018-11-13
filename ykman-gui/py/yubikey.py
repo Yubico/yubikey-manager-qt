@@ -19,7 +19,9 @@ from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.device import device_config
 from ykman.otp import OtpController
 from ykman.fido import Fido2Controller
-from ykman.piv import PivController, AuthenticationBlocked, WrongPin, WrongPuk
+from ykman.piv import (
+    PivController, AuthenticationBlocked, AuthenticationFailed, BadFormat,
+    WrongPin, WrongPuk)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
@@ -184,6 +186,9 @@ class Controller(object):
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
             return {
+                'has_derived_key': piv_controller.has_derived_key,
+                'has_protected_key': piv_controller.has_protected_key,
+                'has_stored_key': piv_controller.has_stored_key,
                 'pin_tries': piv_controller.get_pin_tries(),
                 'puk_blocked': piv_controller.puk_blocked,
             }
@@ -404,6 +409,70 @@ class Controller(object):
             logger.error('Failed to reset PIV application', exc_info=e)
             return {'success': False, 'error': str(e)}
 
+    def _piv_verify_pin(self, piv_controller, pin=None):
+        if pin:
+            try:
+                piv_controller.verify(pin)
+
+            except AuthenticationBlocked as e:
+                return {
+                    'success': False,
+                    'error': 'blocked',
+                }
+
+            except WrongPin as e:
+                return {
+                    'success': False,
+                    'error': 'wrong_pin',
+                    'tries_left': e.tries_left,
+                }
+
+            except Exception as e:
+                tries_left = piv_controller.get_pin_tries()
+                logger.debug('PIN verification failed. %s tries left.',
+                             tries_left, exc_info=e)
+                return {
+                    'success': False,
+                    'tries_left': tries_left,
+                }
+
+        else:
+            return {
+                'success': False,
+                'error': 'pin_required'
+            }
+
+    def _piv_ensure_authenticated(self, piv_controller, pin=None,
+                                  mgm_key_hex=None):
+        if piv_controller.has_protected_key:
+            return self._piv_verify_pin(piv_controller, pin)
+        else:
+            if mgm_key_hex:
+                try:
+                    piv_controller.authenticate(a2b_hex(mgm_key_hex))
+                except AuthenticationFailed as e:
+                    return {
+                        'success': False,
+                        'error': 'wrong_key'
+                    }
+                except BadFormat as e:
+                    return {
+                        'success': False,
+                        'error': 'bad_format'
+                    }
+                except Exception as e:
+                    logger.debug('Failed to authenticate with management key',
+                                 exc_info=e)
+                    return {
+                        'success': False,
+                        'message': str(e)
+                    }
+            else:
+                return {
+                    'success': False,
+                    'error': 'key_required'
+                }
+
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -470,6 +539,53 @@ class Controller(object):
 
             except Exception as e:
                 logger.error('PUK change failed.', exc_info=e)
+                return {
+                    'success': False,
+                    'message': str(e),
+                }
+
+    def piv_generate_random_mgm_key(self):
+        return b2a_hex(ykman.piv.generate_random_management_key()).decode(
+            'utf-8')
+
+    def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
+                           store_on_device=False):
+        with self._open_piv() as piv_controller:
+
+            if piv_controller.has_protected_key or store_on_device:
+                pin_failed = self._piv_verify_pin(
+                    piv_controller, pin=pin)
+                if pin_failed:
+                    return pin_failed
+
+            auth_failed = self._piv_ensure_authenticated(
+                piv_controller, pin=pin, mgm_key_hex=current_key_hex)
+            if auth_failed:
+                return auth_failed
+
+            try:
+                new_key = a2b_hex(new_key_hex) if new_key_hex else None
+            except Exception as e:
+                logger.debug('Failed to parse new management key', exc_info=e)
+                return {
+                    'success': False,
+                    'error': 'new_key_bad_hex'
+                  }
+
+            if new_key is not None and len(new_key) != 24:
+                logger.debug('Wrong length for new management key: %d',
+                             len(new_key))
+                return {
+                    'success': False,
+                    'error': 'new_key_bad_length'
+                }
+
+            try:
+                piv_controller.set_mgm_key(
+                    new_key, touch=False, store_on_device=store_on_device)
+                return {'success': True}
+            except Exception as e:
+                logger.error('Failed to change management key', exc_info=e)
                 return {
                     'success': False,
                     'message': str(e),

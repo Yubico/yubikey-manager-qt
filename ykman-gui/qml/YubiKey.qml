@@ -351,17 +351,39 @@ Python {
     function piv_change_puk(old_puk, new_puk, cb) {
         do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk],
                 _refreshPivBefore(function (resp) {
-                    if (!resp.success && resp.error === 'blocked') {
+                    if (resp.success) {
+                        pivPukBlocked = false
+                    } else if (resp.error === 'blocked') {
                         pivPukBlocked = true
                     }
                     cb(resp)
                 }))
     }
 
+    function piv_generate_random_mgm_key(cb) {
+        do_call('yubikey.controller.piv_generate_random_mgm_key', [], cb)
+    }
+
+    function piv_change_mgm_key(cb, pin, currentMgmKey, newKey, touchCallback, storeOnDevice) {
+        var touchPromptTimer = Utils.delay(touchCallback, 500)
+
+        // PyOtherSide doesn't seem to support passing through functions as arguments
+        do_call('yubikey.controller.piv_change_mgm_key',
+                [pin, currentMgmKey, newKey, storeOnDevice],
+                function (result) {
+                    touchPromptTimer.stop()
+                    refreshPiv(function() {
+                        cb(result)
+                    })
+                })
+    }
+
     function piv_reset(cb) {
         do_call('yubikey.controller.piv_reset', [],
                 _refreshPivBefore(function (resp) {
-                    pivPukBlocked = false
+                    if (resp.success) {
+                        pivPukBlocked = false
+                    }
                     cb(resp)
                 }))
     }
@@ -369,7 +391,9 @@ Python {
     function piv_unblock_pin(puk, newPin, cb) {
         do_call('yubikey.controller.piv_unblock_pin', [puk, newPin],
                 _refreshPivBefore(function (resp) {
-                    if (!resp.success && resp.error === 'blocked') {
+                    if (resp.success) {
+                        pivPukBlocked = false
+                    } else if (resp.error === 'blocked') {
                         pivPukBlocked = true
                     }
                     cb(resp)
