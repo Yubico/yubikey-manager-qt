@@ -188,7 +188,7 @@ ColumnLayout {
                 Label {}
 
                 Label {
-                    text: qsTr("PIN:")
+                    text: qsTr("Current PIN:")
                     font.pixelSize: constants.h3
                     color: yubicoBlue
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
