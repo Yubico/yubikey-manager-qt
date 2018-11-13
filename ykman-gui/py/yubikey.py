@@ -12,16 +12,15 @@ import ykman.logging_setup
 from base64 import b32decode
 from binascii import b2a_hex, a2b_hex
 from fido2.ctap import CtapError
-
+from cryptography import x509
 from ykman.descriptor import get_descriptors
-from ykman.driver_ccid import APDUError, SW
-from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.device import device_config
 from ykman.otp import OtpController
 from ykman.fido import Fido2Controller
+from ykman.driver_ccid import APDUError, SW
+from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.piv import (
-    PivController, AuthenticationBlocked, AuthenticationFailed, BadFormat,
-    WrongPin, WrongPuk)
+    PivController, SLOT, AuthenticationBlocked, WrongPin, WrongPuk)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
@@ -409,69 +408,30 @@ class Controller(object):
             logger.error('Failed to reset PIV application', exc_info=e)
             return {'success': False, 'error': str(e)}
 
-    def _piv_verify_pin(self, piv_controller, pin=None):
-        if pin:
-            try:
-                piv_controller.verify(pin)
+    def piv_read_certificate(self, slot):
+        try:
+            with self._open_piv() as controller:
+                cert = controller.read_certificate(SLOT[slot])
+                cert = _piv_serialise_cert(SLOT[slot], cert)
+                return {'success': True, 'cert': cert, 'error': None}
+        except APDUError as e:
+            if e.sw == SW.NOT_FOUND:
+                return {'success': True, 'cert': None, 'error': None}
+            raise
+        except Exception as e:
+            logger.error('Failed to read PIV certificate', exc_info=e)
+            return {'success': False, 'error': str(e)}
 
-            except AuthenticationBlocked as e:
-                return {
-                    'success': False,
-                    'error': 'blocked',
-                }
-
-            except WrongPin as e:
-                return {
-                    'success': False,
-                    'error': 'wrong_pin',
-                    'tries_left': e.tries_left,
-                }
-
-            except Exception as e:
-                tries_left = piv_controller.get_pin_tries()
-                logger.debug('PIN verification failed. %s tries left.',
-                             tries_left, exc_info=e)
-                return {
-                    'success': False,
-                    'tries_left': tries_left,
-                }
-
-        else:
-            return {
-                'success': False,
-                'error': 'pin_required'
-            }
-
-    def _piv_ensure_authenticated(self, piv_controller, pin=None,
-                                  mgm_key_hex=None):
-        if piv_controller.has_protected_key:
-            return self._piv_verify_pin(piv_controller, pin)
-        else:
-            if mgm_key_hex:
-                try:
-                    piv_controller.authenticate(a2b_hex(mgm_key_hex))
-                except AuthenticationFailed as e:
-                    return {
-                        'success': False,
-                        'error': 'wrong_key'
-                    }
-                except BadFormat as e:
-                    return {
-                        'success': False,
-                        'error': 'bad_format'
-                    }
-                except Exception as e:
-                    logger.debug('Failed to authenticate with management key',
-                                 exc_info=e)
-                    return {
-                        'success': False,
-                        'message': str(e)
-                    }
-            else:
-                return {
-                    'success': False,
-                    'error': 'key_required'
-                }
+    def piv_list_certificates(self):
+        try:
+            with self._open_piv() as controller:
+                certs = [
+                     _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
+                ]
+                return {'success': True, 'certs': certs, 'error': None}
+        except Exception as e:
+            logger.error('Failed to read PIV certificates', exc_info=e)
+            return {'success': False, 'error': str(e)}
 
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:
@@ -617,8 +577,84 @@ class Controller(object):
                     'message': str(e),
                 }
 
+    def _piv_verify_pin(self, piv_controller, pin=None):
+        if pin:
+            try:
+                piv_controller.verify(pin)
+
+            except AuthenticationBlocked as e:
+                return {
+                    'success': False,
+                    'error': 'blocked',
+                }
+
+            except WrongPin as e:
+                return {
+                    'success': False,
+                    'error': 'wrong_pin',
+                    'tries_left': e.tries_left,
+                }
+
+            except Exception as e:
+                tries_left = piv_controller.get_pin_tries()
+                logger.debug('PIN verification failed. %s tries left.',
+                             tries_left, exc_info=e)
+                return {
+                    'success': False,
+                    'tries_left': tries_left,
+                }
+
+        else:
+            return {
+                'success': False,
+                'error': 'pin_required'
+            }
+
+    def _piv_ensure_authenticated(self, piv_controller, pin=None,
+                                  mgm_key_hex=None):
+        if piv_controller.has_protected_key:
+            return self._piv_verify_pin(piv_controller, pin)
+        else:
+            if mgm_key_hex:
+                try:
+                    piv_controller.authenticate(a2b_hex(mgm_key_hex))
+                except AuthenticationFailed as e:
+                    return {
+                        'success': False,
+                        'error': 'wrong_key'
+                    }
+                except BadFormat as e:
+                    return {
+                        'success': False,
+                        'error': 'bad_format'
+                    }
+                except Exception as e:
+                    logger.debug('Failed to authenticate with management key',
+                                 exc_info=e)
+                    return {
+                        'success': False,
+                        'message': str(e)
+                    }
+            else:
+                return {
+                    'success': False,
+                    'error': 'key_required'
+                }
+
 
 controller = None
+
+
+def _piv_serialise_cert(slot, cert):
+    return {
+        'slot': SLOT(slot).name,
+        'issuedFrom': cert.issuer.get_attributes_for_oid(
+            x509.NameOID.COMMON_NAME)[0].value,
+        'issuedTo': cert.subject.get_attributes_for_oid(
+            x509.NameOID.COMMON_NAME)[0].value,
+        'validFrom': cert.not_valid_before.date().isoformat(),
+        'validTo': cert.not_valid_after.date().isoformat()
+    }
 
 
 def init_with_logging(log_level, log_file=None):

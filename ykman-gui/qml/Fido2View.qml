@@ -15,7 +15,6 @@ ColumnLayout {
     StackView.onActivating: load()
 
     objectName: "fido2View"
-
     function load() {
         isBusy = true
         yubiKey.fido_has_pin(function (resp) {

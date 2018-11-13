@@ -29,6 +29,11 @@ Python {
     property var piv
     property bool pivPukBlocked: false
 
+    property var authenticationCert
+    property var signatureCert
+    property var keyManagementCert
+    property var cardAuthenticationCert
+
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
 
@@ -195,6 +200,14 @@ Python {
 
     function isSupportedOverNfc(applicationId) {
         return Utils.includes(applicationsSupportedOverNfc, applicationId)
+    }
+
+    function numberOfPivCertificates() {
+        function hasCert(cert) {
+            return !!cert
+        }
+        return [yubiKey.authenticationCert, yubiKey.signatureCert, yubiKey.keyManagementCert,
+                yubiKey.cardAuthenticationCert].filter(hasCert).length
     }
 
     function refresh(doneCallback) {
@@ -398,5 +411,13 @@ Python {
                     }
                     cb(resp)
                 }))
+    }
+
+    function piv_list_certificates(cb) {
+        do_call('yubikey.controller.piv_list_certificates', [], cb)
+    }
+
+    function piv_read_certificate(slot, cb) {
+        do_call('yubikey.controller.piv_read_certificate', [slot], cb)
     }
 }

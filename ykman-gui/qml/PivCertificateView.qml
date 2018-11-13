@@ -6,11 +6,6 @@ import QtQuick.Controls.Material 2.2
 ColumnLayout {
     id: pivCertificatesView
 
-    StackView.onActivating: load()
-
-    function load() {// TODO: load
-    }
-
     CustomContentColumn {
 
         ColumnLayout {
@@ -21,9 +16,9 @@ ColumnLayout {
 
             BreadCrumbRow {
                 items: [{
-                        text: qsTr("PIV")
+                        "text": qsTr("PIV")
                     }, {
-                        text: qsTr("Certificates")
+                        "text": qsTr("Certificates")
                     }]
             }
         }
@@ -31,40 +26,53 @@ ColumnLayout {
         TabBar {
             id: bar
             Layout.fillWidth: true
-            TabButton {
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                text: qsTr("Authentication")
-            }
-            TabButton {
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                text: qsTr("Digital Signature")
-            }
-            TabButton {
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                text: qsTr("Key Management")
-            }
-            TabButton {
-                font.capitalization: Font.MixedCase
-                font.family: constants.fontFamily
-                text: qsTr("Card Authentication")
+            Repeater {
+                model: [
+                    qsTr("Authentication"),
+                    qsTr("Digital Signature"),
+                    qsTr("Key Management"),
+                    qsTr("Card Authentication"),
+                ]
+
+                TabButton {
+                    text: modelData
+                    font.capitalization: Font.MixedCase
+                    font.family: constants.fontFamily
+                    Material.foreground: yubicoBlue
+                }
             }
         }
+
         StackLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             currentIndex: bar.currentIndex
-            Heading2 {
-                text: qsTr("Authentication (9a)")
+            PivCertificateInfo {
+                title: qsTr("Authentication (Slot 9a)")
+                slot: 'AUTHENTICATION'
+                certificate: yubiKey.authenticationCert
             }
-            Heading2 {
-                text: qsTr("Digital Signature (9c)")
+            PivCertificateInfo {
+                title: qsTr("Digital Signature (Slot 9c)")
+                slot: 'SIGNATURE'
+                certificate: yubiKey.signatureCert
             }
-            Heading2 {
-                text: qsTr("Key Management (9d)")
+            PivCertificateInfo {
+                title: qsTr("Key Management (Slot 9d)")
+                slot: 'KEY_MANAGEMENT'
+                certificate: yubiKey.keyManagementCert
             }
-            Heading2 {
-                text: qsTr("Card Authentication (9e)")
+            PivCertificateInfo {
+                title: qsTr("Card Authentication (Slot 9e)")
+                slot: 'CARD_AUTH'
+                certificate: yubiKey.cardAuthenticationCert
+            }
+        }
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+            BackButton {
             }
         }
     }
