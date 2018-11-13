@@ -110,7 +110,7 @@ ColumnLayout {
         ColumnLayout {
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Heading1 {
-                text: qsTr("Set Management Key")
+                text: qsTr("Change Management Key")
             }
 
             BreadCrumbRow {
