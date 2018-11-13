@@ -21,10 +21,6 @@ ColumnLayout {
         }
     }
 
-    function clearPin() {
-        pin.clear()
-    }
-
     function generateManagementKey() {
         yubiKey.piv_generate_random_mgm_key(function(key) {
             newManagementKey.text = key
@@ -43,63 +39,70 @@ ColumnLayout {
         }
     }
 
-    function finish(pin, currentManagementKey, newManagementKey) {
-        isBusy = true
-        yubiKey.piv_change_mgm_key(
-            function(resp) {
-                isBusy = false
-                touchYubiKey.close()
+    function finish(currentManagementKey, newManagementKey, pin) {
+        if (hasProtectedKey || storeManagementKey) {
+            pivPinPopup.getPinAndThen(_finish)
+        } else {
+            _finish()
+        }
 
-                if (resp.success) {
-                    pivSuccessPopup.open()
-                    views.pivPinManagement()
+        function _finish(pin) {
+            isBusy = true
+            yubiKey.piv_change_mgm_key(
+                function(resp) {
+                    isBusy = false
+                    touchYubiKey.close()
 
-                } else if (resp.error === 'bad_format') {
-                    pivError.show(qsTr(
-                        "Current management key must be exactly %1 hexadecimal characters.")
-                            .arg(constants.pivManagementKeyHexLength))
-
-                } else if (resp.error === 'new_key_bad_length' || resp.error === 'new_key_bad_hex') {
-                    pivError.show(qsTr(
-                        "New management key must be exactly %1 hexadecimal characters.")
-                            .arg(constants.pivManagementKeyHexLength))
-
-                } else if (resp.error === 'wrong_key') {
-                    clearDefaultManagementKey()
-                    pivError.show(qsTr("Wrong current management key."))
-
-                } else if (resp.error === 'key_required') {
-                    pivError.show(qsTr("Please enter the current management key."))
-
-                } else if (resp.error === 'wrong_pin') {
-                    clearPin()
-                    pivError.show(qsTr('Wrong PIN, %1 tries left.').arg(resp.tries_left))
-
-                } else if (resp.error === 'blocked') {
-                    pivError.show(qsTr('PIN is blocked.'))
-                    if (hasProtectedKey) {
+                    if (resp.success) {
+                        pivSuccessPopup.open()
                         views.pivPinManagement()
+
+                    } else if (resp.error === 'bad_format') {
+                        pivError.show(qsTr(
+                            "Current management key must be exactly %1 hexadecimal characters.")
+                                .arg(constants.pivManagementKeyHexLength))
+
+                    } else if (resp.error === 'new_key_bad_length' || resp.error === 'new_key_bad_hex') {
+                        pivError.show(qsTr(
+                            "New management key must be exactly %1 hexadecimal characters.")
+                                .arg(constants.pivManagementKeyHexLength))
+
+                    } else if (resp.error === 'wrong_key') {
+                        clearDefaultManagementKey()
+                        pivError.show(qsTr("Wrong current management key."))
+
+                    } else if (resp.error === 'key_required') {
+                        pivError.show(qsTr("Please enter the current management key."))
+
+                    } else if (resp.error === 'wrong_pin') {
+                        pivError.show(qsTr('Wrong PIN, %1 tries left.').arg(resp.tries_left))
+
+                    } else if (resp.error === 'blocked') {
+                        pivError.show(qsTr('PIN is blocked.'))
+                        if (hasProtectedKey) {
+                            views.pivPinManagement()
+                        } else {
+                            views.pop()
+                        }
+
+                    } else if (resp.error === 'pin_required') {
+                        pivError.show(qsTr("Please enter the PIN."))
+
+                    } else if (resp.message) {
+                        pivError.show(resp.message)
+
                     } else {
-                        views.pop()
+                        console.log('Unknown failure:', resp.error)
+                        pivError.show(qsTr('Unknown failure.'))
                     }
-
-                } else if (resp.error === 'pin_required') {
-                    pivError.show(qsTr("Please enter the PIN."))
-
-                } else if (resp.message) {
-                    pivError.show(resp.message)
-
-                } else {
-                    console.log('Unknown failure:', resp.error)
-                    pivError.show(qsTr('Unknown failure.'))
-                }
-            },
-            pin,
-            currentManagementKey,
-            newManagementKey,
-            touchYubiKey.open,
-            storeManagementKey
-        )
+                },
+                pin,
+                currentManagementKey,
+                newManagementKey,
+                touchYubiKey.open,
+                storeManagementKey
+            )
+        }
     }
 
     CustomContentColumn {
@@ -189,23 +192,6 @@ ColumnLayout {
                     ToolTip.text: qsTr("Store the management key on the YubiKey, protected by PIN.")
                 }
                 Label {}
-
-                Label {
-                    text: qsTr("Current PIN:")
-                    font.pixelSize: constants.h3
-                    color: yubicoBlue
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    visible: hasPinInput
-                }
-                TextField {
-                    id: pin
-                    Layout.fillWidth: true
-                    echoMode: TextInput.Password
-                    selectByMouse: true
-                    selectionColor: yubicoGreen
-                    visible: hasPinInput
-                }
-                Item {}
             }
 
         }
@@ -224,7 +210,7 @@ ColumnLayout {
                 id: nextBtn
                 text: qsTr("Finish")
                 highlighted: true
-                onClicked: finish(pin.text, currentManagementKey.text, newManagementKey.text)
+                onClicked: finish(currentManagementKey.text, newManagementKey.text)
                 iconSource: "../images/next.svg"
                 enabled: validNewManagementKey
             }
