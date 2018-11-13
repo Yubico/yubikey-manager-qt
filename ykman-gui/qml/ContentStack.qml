@@ -345,4 +345,8 @@ StackView {
     PivGeneralErrorPopup {
         id: pivError
     }
+
+    PivPinPopup {
+        id: pivPinPopup
+    }
 }
