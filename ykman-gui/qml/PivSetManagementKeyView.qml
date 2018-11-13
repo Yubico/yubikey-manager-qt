@@ -5,10 +5,10 @@ import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
 
-    property bool hasNewManagementKeyInput: true
-    property bool hasPinInput: hasProtectedKey || storeManagementKey
     property bool isBusy: false
 
+    readonly property bool hasNewManagementKeyInput: true
+    readonly property bool hasPinInput: hasProtectedKey || storeManagementKey
     readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key
     readonly property bool storeManagementKey: storeManagementKeyCheckbox.checked
     readonly property bool validNewManagementKey: (!hasNewManagementKeyInput
