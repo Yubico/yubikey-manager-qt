@@ -12,7 +12,7 @@ ColumnLayout {
     readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key
     readonly property bool storeManagementKey: storeManagementKeyCheckbox.checked
     readonly property bool validNewManagementKey: (!hasNewManagementKeyInput
-        || newManagementKey.text.length == constants.pivManagementKeyHexLength)
+        || newManagementKey.text.length === constants.pivManagementKeyHexLength)
 
     function clearDefaultManagementKey() {
         if (useDefaultCurrentManagementKeyCheckbox.checked) {
