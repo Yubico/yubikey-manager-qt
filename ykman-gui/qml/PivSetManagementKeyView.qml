@@ -23,25 +23,12 @@ ColumnLayout {
 
     function clearPin() {
         pin.clear()
-        useDefaultPinCheckbox.checked = false
     }
 
     function generateManagementKey() {
         yubiKey.piv_generate_random_mgm_key(function(key) {
             newManagementKey.text = key
         })
-    }
-
-    function inputDefaultPin() {
-        pin.text = constants.pivDefaultPin
-    }
-
-    function toggleUseDefaultCurrentPin() {
-        if (useDefaultPinCheckbox.checked) {
-            pin.text = constants.pivDefaultPin
-        } else {
-            pin.clear()
-        }
     }
 
     function inputDefaultManagementKey() {
@@ -210,20 +197,12 @@ ColumnLayout {
                 TextField {
                     id: pin
                     Layout.fillWidth: true
-                    echoMode: enabled ? TextInput.Password : TextInput.Normal
+                    echoMode: TextInput.Password
                     selectByMouse: true
                     selectionColor: yubicoGreen
                     visible: hasPinInput
-                    enabled: !useDefaultPinCheckbox.checked
                 }
-                CheckBox {
-                    id: useDefaultPinCheckbox
-                    text: qsTr("Use default")
-                    onCheckedChanged: toggleUseDefaultCurrentPin()
-                    font.pixelSize: constants.h3
-                    Material.foreground: yubicoBlue
-                    visible: hasPinInput
-                }
+                Item {}
             }
 
         }
