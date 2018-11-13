@@ -179,19 +179,17 @@ ColumnLayout {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     onClicked: generateManagementKey()
                 }
+            }
 
-                Label {}
-                CheckBox {
-                    id: storeManagementKeyCheckbox
-                    checked: false
-                    text: qsTr("Protect with PIN")
-                    font.pixelSize: constants.h3
-                    Material.foreground: yubicoBlue
-                    ToolTip.delay: 1000
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Store the management key on the YubiKey, protected by PIN.")
-                }
-                Label {}
+            CheckBox {
+                id: storeManagementKeyCheckbox
+                checked: false
+                text: qsTr("Protect with PIN")
+                font.pixelSize: constants.h3
+                Material.foreground: yubicoBlue
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Store the management key on the YubiKey, protected by PIN.")
             }
 
         }
