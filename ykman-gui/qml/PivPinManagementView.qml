@@ -8,6 +8,7 @@ ColumnLayout {
     property string pinMessage
     property bool isBusy
 
+    readonly property bool hasProtectedKey: pivData.has_protected_key || false
     readonly property var pivData: yubiKey.piv || {}
     readonly property bool pinBlocked: pinRetries < 1
     readonly property int pinRetries: pivData.pin_tries || 0
@@ -38,6 +39,19 @@ ColumnLayout {
         } else {
             return qsTr("PIN Unlock Key")
         }
+    }
+
+    function getManagementKeyMessage() {
+        if (pivData.has_derived_key) {
+            return qsTr("Management key is derived from PIN.")
+        } else if (pivData.has_stored_key) {
+            if (pinBlocked) {
+                return qsTr("Management key is inaccessible because PIN is blocked.")
+            } else {
+                return qsTr("Management key is stored, protected by PIN.")
+            }
+        }
+        return qsTr("Management key is not stored.")
     }
 
     BusyIndicator {
@@ -72,6 +86,8 @@ ColumnLayout {
             id: mainRow
 
             ColumnLayout {
+                Layout.fillWidth: true
+
                 Heading2 {
                     text: qsTr("PIN")
                     font.pixelSize: constants.h2
@@ -111,6 +127,8 @@ ColumnLayout {
             }
 
             ColumnLayout {
+                Layout.fillWidth: true
+
                 Heading2 {
                     text: qsTr("PUK")
                     font.pixelSize: constants.h2
@@ -141,14 +159,17 @@ ColumnLayout {
             }
 
             ColumnLayout {
+                Layout.fillWidth: true
+
                 Heading2 {
                     text: qsTr("Management Key")
                     font.pixelSize: constants.h2
                 }
                 Label {
-                    text: ""
+                    text: getManagementKeyMessage()
                     font.pixelSize: constants.h3
                     color: yubicoBlue
+                    wrapMode: Text.WordWrap
                 }
                 CustomButton {
                     text: qsTr("Change Management Key")
@@ -156,6 +177,7 @@ ColumnLayout {
                     onClicked: views.pivChangeManagementKey()
                     toolTipText: qsTr("Change the PIV management key")
                     iconSource: "../images/lock.svg"
+                    enabled: !(hasProtectedKey && pinBlocked)
                 }
             }
         }

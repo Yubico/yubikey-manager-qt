@@ -3,8 +3,10 @@ import QtQuick 2.9
 QtObject {
     readonly property int fido2PinMinLength: 4
     readonly property int fido2PinMaxLength: 128
+    readonly property string pivDefaultManagementKey: "010203040506070801020304050607080102030405060708"
     readonly property string pivDefaultPin: "123456"
     readonly property string pivDefaultPuk: "12345678"
+    readonly property int pivManagementKeyHexLength: 48
     readonly property int pivPinMinLength: 6
     readonly property int pivPinMaxLength: 8
     readonly property int pivPukMinLength: 6

@@ -121,6 +121,10 @@ StackView {
         replaceAtDepth(3, pivChangePukView, 'pivChangePukView')
     }
 
+    function pivChangeManagementKey() {
+        replaceAtDepth(3, pivChangeManagementKeyView, 'pivChangeManagementKeyView')
+    }
+
     function fido2() {
         replaceAtDepth(1, fido2View, 'fido2View')
     }
@@ -302,6 +306,13 @@ StackView {
     }
 
     Component {
+        id: pivChangeManagementKeyView
+
+        PivSetManagementKeyView {
+        }
+    }
+
+    Component {
         id: legacyInterfaces
         LegacyInterfaceView {
         }
@@ -333,5 +344,9 @@ StackView {
 
     PivGeneralErrorPopup {
         id: pivError
+    }
+
+    PivPinPopup {
+        id: pivPinPopup
     }
 }
