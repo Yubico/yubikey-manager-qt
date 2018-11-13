@@ -41,45 +41,24 @@ ColumnLayout {
             visible: !!certificate
             columns: 2
             Layout.fillWidth: true
-            Label {
-                color: yubicoBlue
-                text: qsTr("Issued from:")
-                font.pixelSize: constants.h3
-            }
-            Label {
-                color: yubicoBlue
-                text: !!certificate ? certificate.issuedFrom : ''
-                font.pixelSize: constants.h3
-            }
-            Label {
-                color: yubicoBlue
-                text: qsTr("Issued to:")
-                font.pixelSize: constants.h3
-            }
-            Label {
-                color: yubicoBlue
-                text: !!certificate ? certificate.issuedTo : ''
-                font.pixelSize: constants.h3
-            }
-            Label {
-                color: yubicoBlue
-                text: qsTr("Valid from:")
-                font.pixelSize: constants.h3
-            }
-            Label {
-                color: yubicoBlue
-                text: !!certificate ? certificate.validFrom : ''
-                font.pixelSize: constants.h3
-            }
-            Label {
-                color: yubicoBlue
-                text: qsTr("Valid to:")
-                font.pixelSize: constants.h3
-            }
-            Label {
-                color: yubicoBlue
-                text: !!certificate ? certificate.validTo : ''
-                font.pixelSize: constants.h3
+
+            Repeater {
+                model: [
+                    qsTr("Issued from:"),
+                    certificate ? certificate.issuedFrom : '',
+                    qsTr("Issued to:"),
+                    certificate ? certificate.issuedTo : '',
+                    qsTr("Valid from:"),
+                    certificate ? certificate.validFrom : '',
+                    qsTr("Valid to:"),
+                    certificate ? certificate.validTo : '',
+                ]
+
+                Label {
+                    text: modelData
+                    color: yubicoBlue
+                    font.pixelSize: constants.h3
+                }
             }
         }
 
