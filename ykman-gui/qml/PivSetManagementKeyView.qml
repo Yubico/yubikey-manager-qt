@@ -181,9 +181,12 @@ ColumnLayout {
                 CheckBox {
                     id: storeManagementKeyCheckbox
                     checked: true
-                    text: qsTr("Store on YubiKey, protected by PIN")
+                    text: qsTr("Protect with PIN")
                     font.pixelSize: constants.h3
                     Material.foreground: yubicoBlue
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Store the management key on the YubiKey, protected by PIN.")
                 }
                 Label {}
 
