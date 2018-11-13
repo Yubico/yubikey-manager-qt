@@ -180,7 +180,7 @@ ColumnLayout {
                 Label {}
                 CheckBox {
                     id: storeManagementKeyCheckbox
-                    checked: true
+                    checked: false
                     text: qsTr("Protect with PIN")
                     font.pixelSize: constants.h3
                     Material.foreground: yubicoBlue
