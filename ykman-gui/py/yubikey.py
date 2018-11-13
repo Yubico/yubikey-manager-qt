@@ -19,10 +19,8 @@ from ykman.otp import OtpController
 from ykman.fido import Fido2Controller
 from ykman.driver_ccid import APDUError, SW
 from ykman.driver_otp import YkpersError, libversion as ykpers_version
-from ykman.device import device_config
-from ykman.otp import OtpController
-from ykman.fido import Fido2Controller
-from ykman.piv import PivController, SLOT, AuthenticationBlocked, WrongPin, WrongPuk
+from ykman.piv import (
+    PivController, SLOT, AuthenticationBlocked, WrongPin, WrongPuk)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
