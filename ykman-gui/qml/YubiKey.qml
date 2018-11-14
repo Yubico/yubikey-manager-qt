@@ -436,4 +436,21 @@ Python {
     function pivReadCertificate(slot, cb) {
         doCall('yubikey.controller.piv_read_certificate', [slot], cb)
     }
+
+    function pivGenerateCertificate(args) {
+        doCall('yubikey.controller.piv_generate_certificate',
+            [
+                args.slotName,
+                args.algorithm,
+                args.commonName,
+                args.expirationDate,
+                !!args.selfSign,
+                args.csrFileUrl,
+                args.pin,
+                args.keyHex,
+            ],
+            _refreshPivBefore(args.callback)
+        )
+    }
+
 }

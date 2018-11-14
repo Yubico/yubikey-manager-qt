@@ -2,17 +2,20 @@
 # -*- coding: utf-8 -*-
 
 
+import datetime
 import json
 import logging
 import os
 import struct
 import types
+import urllib.parse
 import ykman.logging_setup
 
 from base64 import b32decode
 from binascii import b2a_hex, a2b_hex
 from fido2.ctap import CtapError
 from cryptography import x509
+from cryptography.hazmat.primitives import serialization
 from ykman.descriptor import get_descriptors
 from ykman.device import device_config
 from ykman.otp import OtpController
@@ -20,8 +23,8 @@ from ykman.fido import Fido2Controller
 from ykman.driver_ccid import APDUError, SW
 from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.piv import (
-    PivController, SLOT, AuthenticationBlocked, AuthenticationFailed,
-    BadFormat, WrongPin, WrongPuk)
+    PivController, ALGO, PIN_POLICY, SLOT, TOUCH_POLICY, AuthenticationBlocked,
+    AuthenticationFailed, BadFormat, WrongPin, WrongPuk)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
@@ -434,6 +437,99 @@ class Controller(object):
             logger.error('Failed to read PIV certificates', exc_info=e)
             return {'success': False, 'error': str(e)}
 
+    def piv_generate_certificate(
+            self, slot_name, algorithm, common_name, expiration_date,
+            self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None,
+            pin_policy=None, touch_policy=None):
+        logger.debug('slot_name=%s algorithm=%s common_name=%s '
+                     'expiration_date=%s self_sign=%s csr_file_url=%s '
+                     'pin_policy=%s touch_policy=%s',
+                     slot_name, algorithm, common_name, expiration_date,
+                     self_sign, csr_file_url, pin_policy, touch_policy)
+
+        file_path = urllib.parse.urlparse(csr_file_url).path
+
+        with self._open_piv() as piv_controller:
+            try:
+                auth_failed = self._piv_ensure_authenticated(
+                    piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+                if auth_failed:
+                    return auth_failed
+
+                now = datetime.datetime.now()
+                try:
+                    year = int(expiration_date[0:4])
+                    month = int(expiration_date[(4+1):(4+1+2)])
+                    day = int(expiration_date[(4+1+2+1):(4+1+2+1+2)])
+                    valid_to = datetime.datetime(year, month, day)
+                except ValueError as e:
+                    logger.debug('Failed to parse date: ' + expiration_date,
+                                 exc_info=e)
+                    return {
+                        'success': False,
+                        'message': 'Invalid date: ' + expiration_date,
+                        'failure': {'invalidDate': True},
+                    }
+
+                unsupported_policy = self._piv_check_policies(
+                    piv_controller, pin_policy=pin_policy,
+                    touch_policy=touch_policy)
+                if unsupported_policy:
+                    return unsupported_policy
+
+                public_key = piv_controller.generate_key(
+                    SLOT[slot_name], ALGO[algorithm],
+                    pin_policy=(PIN_POLICY.from_string(pin_policy)
+                                if pin_policy else PIN_POLICY.DEFAULT),
+                    touch_policy=(TOUCH_POLICY.from_string(touch_policy)
+                                  if touch_policy else TOUCH_POLICY.DEFAULT))
+
+                if pin:
+                    pin_failed = self._piv_verify_pin(piv_controller, pin)
+                    if pin_failed:
+                        return pin_failed
+
+                if self_sign:
+                    try:
+                        piv_controller.generate_self_signed_certificate(
+                            SLOT[slot_name], public_key, common_name, now,
+                            valid_to)
+                    except APDUError as e:
+                        if e.sw == SW.ACCESS_DENIED:
+                            return {
+                                'success': False,
+                                'failure': {'pinRequired': True}
+                            }
+                        else:
+                            logger.error(
+                                'Failed to generate self signed certificate',
+                                exc_info=e)
+                            return {
+                                'success': False,
+                                'message': str(e),
+                                'failure': {'unknown': True}
+                            }
+                else:
+                    csr = piv_controller.generate_certificate_signing_request(
+                        SLOT[slot_name], public_key, common_name)
+                    try:
+                        with open(file_path, 'w+b') as csr_file:
+                            csr_file.write(csr.public_bytes(
+                                encoding=serialization.Encoding.PEM))
+                    except Exception as e:
+                        logger.error('Failed to write CSR file to %s',
+                                     csr_file_url, exc_info=e)
+                        return {
+                            'success': False,
+                            'message': str(e),
+                            'failure': {'writeFile': True},
+                        }
+
+                return {'success': True}
+            except APDUError as e:
+                logger.error('Failed', exc_info=e)
+                return {'success': False}
+
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -641,6 +737,26 @@ class Controller(object):
                     'success': False,
                     'error': 'key_required'
                 }
+
+    def _piv_check_policies(self, piv_controller, pin_policy=None,
+                            touch_policy=None):
+        if pin_policy and not piv_controller.supports_pin_policies:
+            return {
+                'success': False,
+                'failure': {'supportedPinPolicies': []}
+            }
+
+        if touch_policy and not (
+                TOUCH_POLICY[touch_policy]
+                in piv_controller.supported_touch_policies):
+            return {
+                'success': False,
+                'failure': {
+                    'supportedTouchPolicies': [
+                        policy.name for policy in
+                        piv_controller.supported_touch_policies],
+                }
+            }
 
 
 controller = None
