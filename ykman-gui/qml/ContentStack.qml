@@ -321,6 +321,13 @@ StackView {
     }
 
     Component {
+        id: pivGenerateCertificateWizard
+
+        PivGenerateCertificateWizard {
+        }
+    }
+
+    Component {
         id: legacyInterfaces
         LegacyInterfaceView {
         }
