@@ -157,8 +157,28 @@ ColumnLayout {
                 }
 
                 ColumnLayout {
-                    Label {
-                        text: "Expiry date"
+                    Heading2 {
+                        text: qsTr("Expiry date")
+                    }
+
+                    RowLayout {
+                        Label {
+                            text: qsTr("Expiry date:")
+                            font.pixelSize: constants.h3
+                            color: yubicoBlue
+                        }
+
+                        TextField {
+                            id: expirationDate
+                            Layout.fillWidth: true
+                            ToolTip.delay: 1000
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("The expiry date for the certificate, in YYYY-MM-DD format.")
+                            selectionColor: yubicoGreen
+                            validator: RegExpValidator {
+                                regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
+                            }
+                        }
                     }
                 }
 
