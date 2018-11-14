@@ -183,8 +183,26 @@ ColumnLayout {
                 }
 
                 ColumnLayout {
-                    Label {
-                        text: "Advanced options"
+                    Heading2 {
+                        text: qsTr("Advanced options")
+                    }
+
+                    RowLayout {
+                        Label {
+                            text: qsTr("Algorithm:")
+                            font.pixelSize: constants.h3
+                            color: yubicoBlue
+                        }
+
+                        ComboBox {
+                            id: algorithm
+                            model: ["RSA1024", "RSA2048", "ECCP256", "ECCP384"]
+                            currentIndex: 2
+                            ToolTip.delay: 1000
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Algorithm for the private key")
+                            Material.foreground: yubicoBlue
+                        }
                     }
                 }
             }
