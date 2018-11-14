@@ -140,15 +140,9 @@ ColumnLayout {
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     visible: hasCurrentManagementKeyInput
                 }
-                TextField {
+                PivManagementKeyTextField {
                     id: currentManagementKey
                     Layout.fillWidth: true
-                    selectByMouse: true
-                    selectionColor: yubicoGreen
-                    maximumLength: constants.pivManagementKeyHexLength
-                    validator: RegExpValidator {
-                        regExp: /[0-9a-f]*/
-                    }
                     visible: hasCurrentManagementKeyInput
                     enabled: !useDefaultCurrentManagementKeyCheckbox.checked
                 }
@@ -167,18 +161,9 @@ ColumnLayout {
                     color: yubicoBlue
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 }
-                TextField {
+                PivManagementKeyTextField {
                     id: newManagementKey
                     Layout.fillWidth: true
-                    selectByMouse: true
-                    selectionColor: yubicoGreen
-                    maximumLength: constants.pivManagementKeyHexLength
-                    validator: RegExpValidator {
-                        regExp: /[0-9a-f]*/
-                    }
-                    ToolTip.delay: 1000
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Management key must be exactly 48 hexadecimal digits.")
                 }
                 CustomButton {
                     id: randomManagementKeyBtn
