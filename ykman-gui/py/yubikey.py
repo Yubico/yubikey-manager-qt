@@ -20,7 +20,8 @@ from ykman.fido import Fido2Controller
 from ykman.driver_ccid import APDUError, SW
 from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.piv import (
-    PivController, SLOT, AuthenticationBlocked, WrongPin, WrongPuk)
+    PivController, SLOT, AuthenticationBlocked, AuthenticationFailed,
+    BadFormat, WrongPin, WrongPuk)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
