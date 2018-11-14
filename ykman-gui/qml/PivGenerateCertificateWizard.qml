@@ -18,12 +18,38 @@ ColumnLayout {
     onStepIndexChanged: highestVisitedStepIndex = Math.max(stepIndex, highestVisitedStepIndex)
 
     function finish() {
+        function _finish(pin, managementKey) {
+            isBusy = true
+            yubiKey.pivGenerateCertificate({
+                slotName: slot,
+                algorithm: algorithm.currentText,
+                commonName: subjectCommonName.text,
+                expirationDate: expirationDate.text,
+                selfSign: selfSign,
+                csrFileUrl: false,
+                pin: pin,
+                keyHex: managementKey,
+                callback: function(resp) {
+                    isBusy = false
+                    if (resp.success) {
+                        pivSuccessPopup.open()
+                        views.pop()
+                    } else {
+                        console.log(resp.success, resp.error, resp.message, resp.failure)
+                        if (resp.message) {
+                            pivError.show(resp.message)
+                        }
+                    }
+                },
+            })
+        }
+
         views.pivGetPinOrManagementKey(
             function(pin) {
-                console.log("pin", pin)
+                _finish(pin, false)
             },
             function(key) {
-                console.log("key", key)
+                _finish(false, key)
             }
         );
     }
