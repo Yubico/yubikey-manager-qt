@@ -95,7 +95,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            BackButton {
+            BackPopButton {
             }
             FinishButton {
                 onClicked: finish()

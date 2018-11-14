@@ -1,0 +1,3 @@
+BackButton {
+    onClicked: views.pop()
+}
