@@ -11,6 +11,8 @@ ColumnLayout {
     property int stepIndex: 0
     property int highestVisitedStepIndex: 0
 
+    readonly property bool selfSign: selfSignBtn.checked
+
     objectName: "pivGenerateCertificateWizard"
 
     onStepIndexChanged: highestVisitedStepIndex = Math.max(stepIndex, highestVisitedStepIndex)
@@ -92,8 +94,42 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                 ColumnLayout {
-                    Label {
-                        text: "Output type"
+
+                    Heading2 {
+                        text: qsTr("Output type")
+                    }
+
+                    GridLayout {
+                        columns: 2
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                        Layout.fillWidth: true
+
+                        RadioButton {
+                            id: selfSignBtn
+                            text: qsTr("Self-signed certificate")
+                            checked: true
+                            font.pixelSize: constants.h3
+                            Material.foreground: yubicoBlue
+                        }
+
+                        Label {
+                            text: qsTr("Create a key on the YubiKey, generate a self-signed certificate for that key, and store it on the YubiKey.")
+                            wrapMode: Text.WordWrap
+                            Layout.fillWidth: true
+                        }
+
+                        RadioButton {
+                            id: csrBtn
+                            text: qsTr("Certificate Signing Request")
+                            font.pixelSize: constants.h3
+                            Material.foreground: yubicoBlue
+                        }
+
+                        Label {
+                            text: qsTr("Create a key on the YubiKey and output a Certificate Signing Request (CSR) file. The CSR can be submitted to a Certificate Authority (CA) to receive a certificate signed by that CA.")
+                            wrapMode: Text.WordWrap
+                            Layout.fillWidth: true
+                        }
                     }
                 }
 
