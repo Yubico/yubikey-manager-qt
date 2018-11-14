@@ -134,8 +134,25 @@ ColumnLayout {
                 }
 
                 ColumnLayout {
-                    Label {
-                        text: "Subject"
+                    Heading2 {
+                        text: qsTr("Subject")
+                    }
+
+                    RowLayout {
+                        Label {
+                            text: qsTr("Name:")
+                            font.pixelSize: constants.h3
+                            color: yubicoBlue
+                        }
+
+                        TextField {
+                            id: subjectCommonName
+                            Layout.fillWidth: true
+                            ToolTip.delay: 1000
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("The common name (CN) for the subject Distinguished Name to write into the certificate.")
+                            selectionColor: yubicoGreen
+                        }
                     }
                 }
 
