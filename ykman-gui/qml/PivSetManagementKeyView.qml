@@ -200,6 +200,7 @@ ColumnLayout {
                 highlighted: true
                 onClicked: finish(currentManagementKey.text, newManagementKey.text)
                 enabled: validCurrentManagementKey && validNewManagementKey
+                toolTipText: qsTr("Finish and change the management key")
             }
         }
     }
