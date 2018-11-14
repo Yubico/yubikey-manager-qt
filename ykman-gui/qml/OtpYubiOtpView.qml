@@ -169,16 +169,12 @@ ColumnLayout {
 
             BackButton {
             }
-            CustomButton {
-                id: finnishBtn
-                text: qsTr("Finish")
-                highlighted: true
+            FinishButton {
                 onClicked: finish()
                 enabled: publicIdInput.acceptableInput
                          && privateIdInput.acceptableInput
                          && secretKeyInput.acceptableInput
                 toolTipText: qsTr("Finish and write the configuration to the YubiKey")
-                iconSource: "../images/finish.svg"
             }
         }
     }

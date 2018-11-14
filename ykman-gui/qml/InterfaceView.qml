@@ -276,13 +276,11 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            CustomButton {
+            FinishButton {
                 enabled: configurationHasChanged() && validCombination()
                 text: qsTr("Save Interfaces")
-                highlighted: true
                 onClicked: configureInterfaces()
                 toolTipText: qsTr("Finish and save interfaces configuration to YubiKey")
-                iconSource: "../images/finish.svg"
             }
         }
     }
