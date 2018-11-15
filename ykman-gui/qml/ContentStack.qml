@@ -125,6 +125,14 @@ StackView {
         replaceAtDepth(3, pivChangeManagementKeyView, 'pivChangeManagementKeyView')
     }
 
+    function pivGetPinOrManagementKey(pinCallback, keyCallback) {
+        if ((yubiKey.piv || {}).has_protected_key) {
+            pivPinPopup.getPinAndThen(pinCallback)
+        } else {
+            pivManagementKeyPopup.getKeyAndThen(keyCallback)
+        }
+    }
+
     function fido2() {
         replaceAtDepth(1, fido2View, 'fido2View')
     }
@@ -348,5 +356,9 @@ StackView {
 
     PivPinPopup {
         id: pivPinPopup
+    }
+
+    PivManagementKeyPopup {
+        id: pivManagementKeyPopup
     }
 }

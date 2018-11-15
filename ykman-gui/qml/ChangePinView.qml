@@ -152,13 +152,11 @@ ColumnLayout {
             Layout.fillWidth: true
             BackButton {
             }
-            CustomButton {
+            FinishButton {
                 enabled: validPin()
                 text: finishButtonText
-                highlighted: true
                 onClicked: triggerChangePin()
                 toolTipText: finishButtonTooltip
-                iconSource: "../images/finish.svg"
             }
         }
     }

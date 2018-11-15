@@ -196,13 +196,11 @@ ColumnLayout {
                 onClicked: views.pop()
                 iconSource: "../images/back.svg"
             }
-            CustomButton {
-                id: nextBtn
-                text: qsTr("Finish")
+            FinishButton {
                 highlighted: true
                 onClicked: finish(currentManagementKey.text, newManagementKey.text)
-                iconSource: "../images/next.svg"
                 enabled: validCurrentManagementKey && validNewManagementKey
+                toolTipText: qsTr("Finish and change the management key")
             }
         }
     }

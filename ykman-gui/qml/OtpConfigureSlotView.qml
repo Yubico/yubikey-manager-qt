@@ -83,12 +83,8 @@ ColumnLayout {
 
             BackButton {
             }
-            CustomButton {
-                id: nextBtn
-                text: qsTr("Next")
-                highlighted: true
+            NextButton {
                 onClicked: views.push(configViewOptions.checkedButton.view)
-                iconSource: "../images/next.svg"
             }
         }
     }

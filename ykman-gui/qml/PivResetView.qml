@@ -71,11 +71,9 @@ ColumnLayout {
                 onClicked: views.pop()
                 iconSource: "../images/back.svg"
             }
-            CustomButton {
+            FinishButton {
                 text: qsTr("Reset")
-                highlighted: true
                 toolTipText: qsTr("Finish and perform the PIV Reset")
-                iconSource: "../images/finish.svg"
                 onClicked: pivResetConfirmationPopup.open()
             }
         }
