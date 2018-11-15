@@ -186,26 +186,32 @@ ColumnLayout {
                 id: expirationDateView
 
                 ColumnLayout {
-                    Heading2 {
-                        text: qsTr("Expiry date:")
+
+                    RowLayout {
+                        spacing: constants.contentMargins / 2
+                        Layout.topMargin: constants.contentTopMargin
+
+                        Heading2 {
+                            text: qsTr("Expiry date:")
+                        }
+
+                        TextField {
+                            text: expirationDate
+                            Layout.alignment: Qt.AlignLeft
+                            ToolTip.delay: 1000
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("The expiry date for the certificate, in YYYY-MM-DD format.")
+                            selectionColor: yubicoGreen
+                            validator: RegExpValidator {
+                                regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
+                            }
+                            onTextChanged: expirationDate = text
+                        }
                     }
 
-                    TextField {
-                        text: expirationDate
-                        Layout.alignment: Qt.AlignLeft
-                        Layout.fillWidth: true
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("The expiry date for the certificate, in YYYY-MM-DD format.")
-                        selectionColor: yubicoGreen
-                        validator: RegExpValidator {
-                            regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
-                        }
-                        onTextChanged: expirationDate = text
-                    }
 
                     CalendarWidget {
-                        Layout.alignment: Qt.AlignHCenter
+                        Layout.alignment: Qt.AlignVTop
                         onDateClicked: expirationDate = formatDate(date)
                     }
 
