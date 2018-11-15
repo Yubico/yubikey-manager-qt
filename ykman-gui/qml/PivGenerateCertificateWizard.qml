@@ -51,9 +51,10 @@ ColumnLayout {
                         }
                         views.pop()
                     } else {
-                        console.log(resp.success, resp.error, resp.message, resp.failure)
                         if (resp.message) {
-                            pivError.show(resp.message)
+                            pivError.show(qsTr("Failed to generate certificate: %1").arg(resp.message))
+                        } else {
+                            pivError.show(qsTr("Failed to generate certificate for an unknown reason."))
                         }
                     }
                 },
