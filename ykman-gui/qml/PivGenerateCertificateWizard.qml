@@ -80,6 +80,15 @@ ColumnLayout {
         finish()
     }
 
+    function isInputValid() {
+        switch (currentStep) {
+        case 1:
+            return !!subjectCommonName
+        case 2:
+            return expirationDate.length === 10
+        }
+    }
+
     function previous() {
         wizardStack.pop()
     }
@@ -304,6 +313,7 @@ ColumnLayout {
             NextButton {
                 onClicked: next()
                 visible: currentStep < numSteps
+                enabled: isInputValid()
             }
             FinishButton {
                 text: qsTr("Generate")
