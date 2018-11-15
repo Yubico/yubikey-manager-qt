@@ -71,12 +71,24 @@ ColumnLayout {
         );
     }
 
+    function formatDate(date) {
+        var isoMonth = date.getMonth() + 1
+        return date.getFullYear() + "-" + (isoMonth < 10 ? "0" : "") + isoMonth + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate()
+    }
+
     function isInputValid() {
         switch (currentStep) {
         case 1:
             return !!subjectCommonName
         case 2:
-            return expirationDate.length === 10
+            if (expirationDate.length !== 10) {
+                return false
+            }
+            try {
+                return new Date(expirationDate).toISOString().substring(0, 10) === expirationDate
+            } catch (e) {
+                return false
+            }
         case 3:
             return selfSign || csrFileUrl
         }
@@ -180,7 +192,7 @@ ColumnLayout {
 
                     TextField {
                         text: expirationDate
-                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                        Layout.alignment: Qt.AlignLeft
                         Layout.fillWidth: true
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
@@ -191,6 +203,12 @@ ColumnLayout {
                         }
                         onTextChanged: expirationDate = text
                     }
+
+                    CalendarWidget {
+                        Layout.alignment: Qt.AlignHCenter
+                        onDateClicked: expirationDate = formatDate(date)
+                    }
+
                 }
             }
 
