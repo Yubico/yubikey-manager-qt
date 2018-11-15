@@ -424,7 +424,17 @@ Python {
     }
 
     function pivListCertificates(cb) {
-        doCall('yubikey.controller.piv_list_certificates', [], cb)
+        doCall('yubikey.controller.piv_list_certificates', [], function(resp) {
+            if (resp.success) {
+                var certs = {};
+                for (var i = 0; i < resp.certs.length; i++) {
+                    var cert = resp.certs[i]
+                    certs[cert.slot] = cert;
+                }
+                pivCerts = Utils.extend(yubiKey.pivCerts, certs);
+            }
+            cb(resp)
+        })
     }
 
     function pivReadCertificate(slot, cb) {
