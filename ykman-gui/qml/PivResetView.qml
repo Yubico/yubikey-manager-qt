@@ -9,7 +9,7 @@ ColumnLayout {
 
     function resetPiv() {
         isBusy = true
-        yubiKey.piv_reset(function (resp) {
+        yubiKey.pivReset(function (resp) {
             isBusy = false
             if (resp.success) {
                 pivSuccessPopup.open()

@@ -25,7 +25,7 @@ ColumnLayout {
     }
 
     function generateManagementKey() {
-        yubiKey.piv_generate_random_mgm_key(function(key) {
+        yubiKey.pivGenerateRandomMgmKey(function(key) {
             newManagementKey.text = key
         })
     }
@@ -51,7 +51,7 @@ ColumnLayout {
 
         function _finish(pin) {
             isBusy = true
-            yubiKey.piv_change_mgm_key(
+            yubiKey.pivChangeMgmKey(
                 function(resp) {
                     isBusy = false
                     touchYubiKey.close()

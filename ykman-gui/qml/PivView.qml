@@ -14,7 +14,7 @@ ColumnLayout {
 
     function load() {
         isBusy = true
-        yubiKey.piv_list_certificates(function (resp) {
+        yubiKey.pivListCertificates(function (resp) {
             if (resp.success) {
                 for (var i = 0; i < resp.certs.length; i++) {
                     var cert = resp.certs[i]

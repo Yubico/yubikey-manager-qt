@@ -244,7 +244,7 @@ Python {
 
     function refreshPiv(doneCallback) {
         if (hasDevice) {
-            do_call('yubikey.controller.refresh_piv', [], function (pivData) {
+            doCall('yubikey.controller.refresh_piv', [], function (pivData) {
                 piv = pivData
                 doneCallback()
             })
@@ -351,67 +351,67 @@ Python {
         doCall('yubikey.controller.fido_pin_retries', [], cb)
     }
 
-    function piv_change_pin(old_pin, new_pin, cb) {
-        do_call('yubikey.controller.piv_change_pin', [old_pin, new_pin],
-                _refreshPivBefore(cb))
+    function pivChangePin(oldPin, newPin, cb) {
+        doCall('yubikey.controller.piv_change_pin', [oldPin, newPin],
+               _refreshPivBefore(cb))
     }
 
-    function piv_change_puk(old_puk, new_puk, cb) {
-        do_call('yubikey.controller.piv_change_puk', [old_puk, new_puk],
-                _refreshPivBefore(function (resp) {
-                    if (resp.success) {
-                        pivPukBlocked = false
-                    } else if (resp.error === 'blocked') {
-                        pivPukBlocked = true
-                    }
-                    cb(resp)
-                }))
+    function pivChangePuk(oldPuk, newPuk, cb) {
+        doCall('yubikey.controller.piv_change_puk', [oldPuk, newPuk],
+               _refreshPivBefore(function (resp) {
+                   if (resp.success) {
+                       pivPukBlocked = false
+                   } else if (resp.error === 'blocked') {
+                       pivPukBlocked = true
+                   }
+                   cb(resp)
+               }))
     }
 
-    function piv_generate_random_mgm_key(cb) {
-        do_call('yubikey.controller.piv_generate_random_mgm_key', [], cb)
+    function pivGenerateRandomMgmKey(cb) {
+        doCall('yubikey.controller.piv_generate_random_mgm_key', [], cb)
     }
 
-    function piv_change_mgm_key(cb, pin, currentMgmKey, newKey, touchCallback, storeOnDevice) {
+    function pivChangeMgmKey(cb, pin, currentMgmKey, newKey, touchCallback, storeOnDevice) {
         var touchPromptTimer = Utils.delay(touchCallback, 500)
 
         // PyOtherSide doesn't seem to support passing through functions as arguments
-        do_call('yubikey.controller.piv_change_mgm_key',
-                [pin, currentMgmKey, newKey, storeOnDevice], function (result) {
-                    touchPromptTimer.stop()
-                    refreshPiv(function () {
-                        cb(result)
-                    })
-                })
+        doCall('yubikey.controller.piv_change_mgm_key',
+               [pin, currentMgmKey, newKey, storeOnDevice], function (result) {
+                   touchPromptTimer.stop()
+                   refreshPiv(function () {
+                       cb(result)
+                   })
+               })
     }
 
-    function piv_reset(cb) {
-        do_call('yubikey.controller.piv_reset', [],
-                _refreshPivBefore(function (resp) {
-                    if (resp.success) {
-                        pivPukBlocked = false
-                    }
-                    cb(resp)
-                }))
+    function pivReset(cb) {
+        doCall('yubikey.controller.piv_reset', [],
+               _refreshPivBefore(function (resp) {
+                   if (resp.success) {
+                       pivPukBlocked = false
+                   }
+                   cb(resp)
+               }))
     }
 
-    function piv_unblock_pin(puk, newPin, cb) {
-        do_call('yubikey.controller.piv_unblock_pin', [puk, newPin],
-                _refreshPivBefore(function (resp) {
-                    if (resp.success) {
-                        pivPukBlocked = false
-                    } else if (resp.error === 'blocked') {
-                        pivPukBlocked = true
-                    }
-                    cb(resp)
-                }))
+    function pivUnblockPin(puk, newPin, cb) {
+        doCall('yubikey.controller.piv_unblock_pin', [puk, newPin],
+               _refreshPivBefore(function (resp) {
+                   if (resp.success) {
+                       pivPukBlocked = false
+                   } else if (resp.error === 'blocked') {
+                       pivPukBlocked = true
+                   }
+                   cb(resp)
+               }))
     }
 
-    function piv_list_certificates(cb) {
-        do_call('yubikey.controller.piv_list_certificates', [], cb)
+    function pivListCertificates(cb) {
+        doCall('yubikey.controller.piv_list_certificates', [], cb)
     }
 
-    function piv_read_certificate(slot, cb) {
-        do_call('yubikey.controller.piv_read_certificate', [slot], cb)
+    function pivReadCertificate(slot, cb) {
+        doCall('yubikey.controller.piv_read_certificate', [slot], cb)
     }
 }
