@@ -9,6 +9,7 @@ ColumnLayout {
     property string slot
 
     property bool isBusy: false
+    property string busyMessage: ""
 
     property string algorithm: "ECCP256"
     property string csrFileUrl: ""
@@ -29,8 +30,27 @@ ColumnLayout {
             .name
     }
 
+    function deleteCertificate(pin, managementKey) {
+        busyMessage = qsTr("Deleting existing certificate...")
+        isBusy = true
+        yubiKey.pivDeleteCertificate(slot, pin, managementKey, function(resp) {
+            isBusy = false
+            if (resp.success) {
+                pivSuccessPopup.show(qsTr("CSR successfully written to %1").arg(csrFileUrl))
+            } else {
+                if (resp.message) {
+                    pivError.show(qsTr("Failed to delete existing certificate: %1").arg(resp.message))
+                } else {
+                    pivError.show(qsTr("Failed to delete existing certificate for an unknown reason."))
+                }
+            }
+            views.pop()
+        })
+    }
+
     function finish() {
         function _finish(pin, managementKey) {
+            busyMessage = qsTr("Generating...")
             isBusy = true
             yubiKey.pivGenerateCertificate({
                 slotName: slot,
@@ -42,15 +62,16 @@ ColumnLayout {
                 pin: pin,
                 keyHex: managementKey,
                 callback: function(resp) {
-                    isBusy = false
                     if (resp.success) {
                         if (selfSign) {
+                            isBusy = false
                             pivSuccessPopup.open()
+                            views.pop()
                         } else {
-                            pivSuccessPopup.show(qsTr("CSR successfully written to %1").arg(csrFileUrl))
+                            deleteCertificate(pin, managementKey)
                         }
-                        views.pop()
                     } else {
+                        isBusy = false
                         if (resp.message) {
                             pivError.show(qsTr("Failed to generate certificate: %1").arg(resp.message))
                         } else {
@@ -130,7 +151,7 @@ ColumnLayout {
 
         Heading2 {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            text: qsTr("Generating...")
+            text: busyMessage
         }
     }
 
@@ -293,7 +314,7 @@ ColumnLayout {
                                     Material.foreground: yubicoBlue
                                     ToolTip.delay: 1000
                                     ToolTip.visible: hovered
-                                    ToolTip.text: qsTr("Create a key on the YubiKey and output a Certificate Signing Request (CSR) file.\nThe CSR must be submitted to a Certificate Authority (CA) to receive a certificate file in return, which must then be imported onto the YubiKey.")
+                                    ToolTip.text: qsTr("Create a key on the YubiKey and output a Certificate Signing Request (CSR) file.\nAny existing certificate in this slot will be deleted.\nThe CSR must be submitted to a Certificate Authority (CA) to receive a certificate file in return, which must then be imported onto the YubiKey.")
                                     ButtonGroup.group: outputTypeGroup
                                 }
 
