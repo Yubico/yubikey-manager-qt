@@ -19,7 +19,7 @@ ChangePinView {
                        minLength)
 
     onChangePin: {
-        yubiKey.fido_change_pin(currentPin, newPin, function (resp) {
+        yubiKey.fidoChangePin(currentPin, newPin, function (resp) {
             if (resp.success) {
                 fido2SuccessPopup.open()
             } else {

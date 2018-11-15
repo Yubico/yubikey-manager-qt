@@ -17,11 +17,11 @@ ColumnLayout {
     objectName: "fido2View"
     function load() {
         isBusy = true
-        yubiKey.fido_has_pin(function (resp) {
+        yubiKey.fidoHasPin(function (resp) {
             if (resp.success) {
                 hasPin = resp.hasPin
                 if (hasPin) {
-                    yubiKey.fido_pin_retries(function (resp) {
+                    yubiKey.fidoPinRetries(function (resp) {
                         if (resp.success) {
                             pinRetries = resp.retries
                         } else {

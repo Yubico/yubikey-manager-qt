@@ -28,7 +28,7 @@ ColumnLayout {
     }
 
     function configureInterfaces() {
-        yubiKey.set_mode(getEnabledInterfaces(), function (error) {
+        yubiKey.setMode(getEnabledInterfaces(), function (error) {
             if (error) {
                 legacyInterfacesErrorPopup.open()
             } else {

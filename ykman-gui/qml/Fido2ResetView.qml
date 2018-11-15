@@ -16,7 +16,7 @@ ColumnLayout {
             if (loadedReset) {
                 loadedReset = false
                 touchYubiKey.open()
-                yubiKey.fido_reset(function (resp) {
+                yubiKey.fidoReset(function (resp) {
                     touchYubiKey.close()
                     if (resp.success) {
                         fido2SuccessPopup.open()

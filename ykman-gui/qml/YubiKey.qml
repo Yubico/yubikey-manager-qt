@@ -50,13 +50,13 @@ Python {
     }
 
     onEnableLogging: {
-        do_call('yubikey.init_with_logging',
-                [logLevel || 'DEBUG', logFile || null], function () {
-                    yubikeyReady = true
-                })
+        doCall('yubikey.init_with_logging',
+               [logLevel || 'DEBUG', logFile || null], function () {
+                   yubikeyReady = true
+               })
     }
     onDisableLogging: {
-        do_call('yubikey.init', [], function () {
+        doCall('yubikey.init', [], function () {
             yubikeyReady = true
         })
     }
@@ -90,11 +90,11 @@ Python {
         var oldQueue = queue
         queue = []
         for (var i in oldQueue) {
-            do_call(oldQueue[i][0], oldQueue[i][1], oldQueue[i][2])
+            doCall(oldQueue[i][0], oldQueue[i][1], oldQueue[i][2])
         }
     }
 
-    function do_call(func, args, cb) {
+    function doCall(func, args, cb) {
         if (!isPythonReady(func)) {
             queue.push([func, args, cb])
         } else {
@@ -206,15 +206,15 @@ Python {
         function hasCert(cert) {
             return !!cert
         }
-        return [yubiKey.authenticationCert, yubiKey.signatureCert, yubiKey.keyManagementCert,
-                yubiKey.cardAuthenticationCert].filter(hasCert).length
+        return [yubiKey.authenticationCert, yubiKey.signatureCert, yubiKey.keyManagementCert, yubiKey.cardAuthenticationCert].filter(
+                    hasCert).length
     }
 
     function refresh(doneCallback) {
-        do_call('yubikey.controller.count_devices', [], function (n) {
+        doCall('yubikey.controller.count_devices', [], function (n) {
             nDevices = n
             if (nDevices == 1) {
-                do_call('yubikey.controller.refresh', [], function (resp) {
+                doCall('yubikey.controller.refresh', [], function (resp) {
                     if (resp.success && resp.dev) {
                         hasDevice = true
                         name = resp.dev.name
@@ -242,11 +242,6 @@ Python {
         })
     }
 
-    function write_config(usbApplications, nfcApplications, lockCode, cb) {
-        do_call('yubikey.controller.write_config',
-                [usbApplications, nfcApplications, lockCode], cb)
-    }
-
     function refreshPiv(doneCallback) {
         if (hasDevice) {
             do_call('yubikey.controller.refresh_piv', [], function (pivData) {
@@ -257,7 +252,6 @@ Python {
             doneCallback()
         }
     }
-
 
     /**
      * Transform a `callback` into one that will first call `refreshPiv` and then
@@ -281,79 +275,80 @@ Python {
         }
     }
 
-    function set_mode(connections, cb) {
-        do_call('yubikey.controller.set_mode', [connections], cb)
+    function writeConfig(usbApplications, nfcApplications, lockCode, cb) {
+        doCall('yubikey.controller.write_config',
+               [usbApplications, nfcApplications, lockCode], cb)
     }
 
-    function slots_status(cb) {
-        do_call('yubikey.controller.slots_status', [], cb)
+    function setMode(connections, cb) {
+        doCall('yubikey.controller.set_mode', [connections], cb)
     }
 
-    function erase_slot(slot, cb) {
-        do_call('yubikey.controller.erase_slot', [slot], cb)
+    function slotsStatus(cb) {
+        doCall('yubikey.controller.slots_status', [], cb)
     }
 
-    function swap_slots(cb) {
-        do_call('yubikey.controller.swap_slots', [], cb)
+    function eraseSlot(slot, cb) {
+        doCall('yubikey.controller.erase_slot', [slot], cb)
     }
 
-    function serial_modhex(cb) {
-        do_call('yubikey.controller.serial_modhex', [], cb)
+    function swapSlots(cb) {
+        doCall('yubikey.controller.swap_slots', [], cb)
     }
 
-    function random_uid(cb) {
-        do_call('yubikey.controller.random_uid', [], cb)
+    function serialModhex(cb) {
+        doCall('yubikey.controller.serial_modhex', [], cb)
     }
 
-    function random_key(bytes, cb) {
-        do_call('yubikey.controller.random_key', [bytes], cb)
+    function randomUid(cb) {
+        doCall('yubikey.controller.random_uid', [], cb)
     }
 
-    function generate_static_pw(keyboard_layout, cb) {
-        do_call('yubikey.controller.generate_static_pw', [keyboard_layout], cb)
+    function randomKey(bytes, cb) {
+        doCall('yubikey.controller.random_key', [bytes], cb)
     }
 
-    function program_otp(slot, public_id, private_id, key, cb) {
-        do_call('yubikey.controller.program_otp',
-                [slot, public_id, private_id, key], cb)
+    function generateStaticPw(keyboardLayout, cb) {
+        doCall('yubikey.controller.generate_static_pw', [keyboardLayout], cb)
     }
 
-    function program_challenge_response(slot, key, touch, cb) {
-        do_call('yubikey.controller.program_challenge_response',
-                [slot, key, touch], cb)
+    function programOtp(slot, publicId, privateId, key, cb) {
+        doCall('yubikey.controller.program_otp',
+               [slot, publicId, privateId, key], cb)
     }
 
-    function program_static_password(slot, password, keyboard_layout, cb) {
-        do_call('yubikey.controller.program_static_password',
-                [slot, password, keyboard_layout], cb)
+    function programChallengeResponse(slot, key, touch, cb) {
+        doCall('yubikey.controller.program_challenge_response',
+               [slot, key, touch], cb)
     }
 
-    function program_oath_hotp(slot, key, digits, cb) {
-        do_call('yubikey.controller.program_oath_hotp', [slot, key, digits], cb)
+    function programStaticPassword(slot, password, keyboardLayout, cb) {
+        doCall('yubikey.controller.program_static_password',
+               [slot, password, keyboardLayout], cb)
     }
 
-    function fido_support_ctap(cb) {
-        do_call('yubikey.controller.fido_support_ctap', [], cb)
+    function programOathHotp(slot, key, digits, cb) {
+        doCall('yubikey.controller.program_oath_hotp', [slot, key, digits], cb)
     }
 
-    function fido_has_pin(cb) {
-        do_call('yubikey.controller.fido_has_pin', [], cb)
+    function fidoHasPin(cb) {
+        doCall('yubikey.controller.fido_has_pin', [], cb)
     }
 
-    function fido_set_pin(newPin, cb) {
-        do_call('yubikey.controller.fido_set_pin', [newPin], cb)
+    function fidoSetPin(newPin, cb) {
+        doCall('yubikey.controller.fido_set_pin', [newPin], cb)
     }
 
-    function fido_change_pin(currentPin, newPin, cb) {
-        do_call('yubikey.controller.fido_change_pin', [currentPin, newPin], cb)
+    function fidoChangePin(currentPin, newPin, cb) {
+        doCall('yubikey.controller.fido_change_pin', [currentPin, newPin], cb)
     }
 
-    function fido_reset(cb) {
-        do_call('yubikey.controller.fido_reset', [], cb)
+    function fidoReset(cb) {
+        doCall('yubikey.controller.fido_reset', [], cb)
     }
 
-    function fido_pin_retries(cb) {
-        do_call('yubikey.controller.fido_pin_retries', [], cb)
+    function fidoPinRetries(cb) {
+        doCall('yubikey.controller.fido_pin_retries', [], cb)
     }
 
     function piv_change_pin(old_pin, new_pin, cb) {
@@ -382,10 +377,9 @@ Python {
 
         // PyOtherSide doesn't seem to support passing through functions as arguments
         do_call('yubikey.controller.piv_change_mgm_key',
-                [pin, currentMgmKey, newKey, storeOnDevice],
-                function (result) {
+                [pin, currentMgmKey, newKey, storeOnDevice], function (result) {
                     touchPromptTimer.stop()
-                    refreshPiv(function() {
+                    refreshPiv(function () {
                         cb(result)
                     })
                 })
