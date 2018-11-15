@@ -125,7 +125,7 @@ StackView {
         replaceAtDepth(3, pivChangeManagementKeyView, 'pivChangeManagementKeyView')
     }
 
-    function pivGetManagementKeyAndThen(pinCallback, keyCallback) {
+    function pivGetPinOrManagementKey(pinCallback, keyCallback) {
         if ((yubiKey.piv || {}).has_protected_key) {
             pivPinPopup.getPinAndThen(pinCallback)
         } else {
