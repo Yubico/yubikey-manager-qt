@@ -61,23 +61,14 @@ ColumnLayout {
             })
         }
 
-        if (!selfSign && !csrFileUrl) {
-            selectCsrOutputDialog.open()
-        } else {
-            views.pivGetPinOrManagementKey(
-                function(pin) {
-                    _finish(pin, false)
-                },
-                function(key) {
-                    _finish(false, key)
-                }
-            );
-        }
-    }
-
-    function finishCsr(fileUrl) {
-        csrFileUrl = fileUrl
-        finish()
+        views.pivGetPinOrManagementKey(
+            function(pin) {
+                _finish(pin, false)
+            },
+            function(key) {
+                _finish(false, key)
+            }
+        );
     }
 
     function isInputValid() {
@@ -86,6 +77,8 @@ ColumnLayout {
             return !!subjectCommonName
         case 2:
             return expirationDate.length === 10
+        case 3:
+            return selfSign || csrFileUrl
         }
     }
 
@@ -110,7 +103,7 @@ ColumnLayout {
         defaultSuffix: "csr"
         folder: shortcuts.documents
         selectExisting: false
-        onAccepted: finishCsr(fileUrl.toString())
+        onAccepted: csrFileUrl = fileUrl.toString()
     }
 
     ColumnLayout {
@@ -252,6 +245,10 @@ ColumnLayout {
                         }
 
                         ColumnLayout {
+                            ButtonGroup {
+                                id: outputTypeGroup
+                            }
+
                             RadioButton {
                                 text: qsTr("Self-signed certificate on YubiKey")
                                 checked: true
@@ -261,16 +258,26 @@ ColumnLayout {
                                 ToolTip.delay: 1000
                                 ToolTip.visible: hovered
                                 ToolTip.text: qsTr("Create a key on the YubiKey, generate a self-signed certificate for that key, and store it on the YubiKey.")
+                                ButtonGroup.group: outputTypeGroup
                             }
 
-                            RadioButton {
-                                id: csrBtn
-                                text: qsTr("CSR file")
-                                font.pixelSize: constants.h3
-                                Material.foreground: yubicoBlue
-                                ToolTip.delay: 1000
-                                ToolTip.visible: hovered
-                                ToolTip.text: qsTr("Create a key on the YubiKey and output a Certificate Signing Request (CSR) file.\nThe CSR must be submitted to a Certificate Authority (CA) to receive a certificate file in return, which must then be imported onto the YubiKey.")
+                            RowLayout {
+                                RadioButton {
+                                    id: csrBtn
+                                    text: qsTr("CSR file")
+                                    font.pixelSize: constants.h3
+                                    Material.foreground: yubicoBlue
+                                    ToolTip.delay: 1000
+                                    ToolTip.visible: hovered
+                                    ToolTip.text: qsTr("Create a key on the YubiKey and output a Certificate Signing Request (CSR) file.\nThe CSR must be submitted to a Certificate Authority (CA) to receive a certificate file in return, which must then be imported onto the YubiKey.")
+                                    ButtonGroup.group: outputTypeGroup
+                                }
+
+                                CustomButton {
+                                    text: csrFileUrl ? csrFileUrl.match(/[^/\\]+$/)[0] : qsTr("Choose...")
+                                    onClicked: selectCsrOutputDialog.open()
+                                    enabled: csrBtn.checked
+                                }
                             }
                         }
 
@@ -322,6 +329,7 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Finish and generate the key and %1").arg(selfSign ? qsTr("certificate") : qsTr("CSR"))
+                enabled: isInputValid()
             }
         }
     }
