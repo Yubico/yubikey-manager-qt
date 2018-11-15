@@ -150,7 +150,7 @@ ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
-            BackPopButton {
+            BackButton {
             }
             FinishButton {
                 enabled: validPin()

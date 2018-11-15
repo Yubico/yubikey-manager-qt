@@ -81,7 +81,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            BackPopButton {
+            BackButton {
             }
             NextButton {
                 onClicked: views.push(configViewOptions.checkedButton.view)

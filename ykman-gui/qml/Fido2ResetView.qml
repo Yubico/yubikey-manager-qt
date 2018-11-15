@@ -81,7 +81,7 @@ ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
-            BackPopButton {
+            BackButton {
             }
             FinishButton {
                 text: qsTr("Reset")
