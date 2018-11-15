@@ -6,6 +6,9 @@ InlinePopup {
     property string message: qsTr("Success!")
     property string bodyMessage: ""
 
+    standardButtons: Dialog.Ok
+    onClosed: bodyMessage = ""
+
     function show(msg) {
         bodyMessage = msg
         open()
@@ -33,7 +36,4 @@ InlinePopup {
             wrapMode: Text.WordWrap
         }
     }
-
-    standardButtons: Dialog.Ok
-    onClosed: bodyMessage = ""
 }
