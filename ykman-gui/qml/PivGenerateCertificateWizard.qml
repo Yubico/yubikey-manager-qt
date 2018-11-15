@@ -267,6 +267,7 @@ ColumnLayout {
 
             BackButton {
                 text: qsTr("Cancel")
+                iconSource: "../images/clear.svg"
             }
             Item {
                 Layout.fillWidth: true
