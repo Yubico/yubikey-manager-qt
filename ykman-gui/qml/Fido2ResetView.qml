@@ -83,12 +83,10 @@ ColumnLayout {
             Layout.fillWidth: true
             BackButton {
             }
-            CustomButton {
+            FinishButton {
                 text: qsTr("Reset")
-                highlighted: true
                 onClicked: fido2ResetConfirmationPopup.open()
                 toolTipText: qsTr("Finish and perform the FIDO Reset")
-                iconSource: "../images/finish.svg"
             }
         }
     }
