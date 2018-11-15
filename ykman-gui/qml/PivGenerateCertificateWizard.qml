@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
+import QtQuick.Dialogs 1.2
 
 ColumnLayout {
 
@@ -10,6 +11,7 @@ ColumnLayout {
     property bool isBusy: false
 
     property string algorithm: "ECCP256"
+    property string csrFileUrl: ""
     property string expirationDate: ""
     property bool selfSign: true
     property string subjectCommonName: ""
@@ -36,13 +38,17 @@ ColumnLayout {
                 commonName: subjectCommonName,
                 expirationDate: expirationDate,
                 selfSign: selfSign,
-                csrFileUrl: false,
+                csrFileUrl: csrFileUrl,
                 pin: pin,
                 keyHex: managementKey,
                 callback: function(resp) {
                     isBusy = false
                     if (resp.success) {
-                        pivSuccessPopup.open()
+                        if (selfSign) {
+                            pivSuccessPopup.open()
+                        } else {
+                            pivSuccessPopup.show(qsTr("CSR successfully written to %1").arg(csrFileUrl))
+                        }
                         views.pop()
                     } else {
                         console.log(resp.success, resp.error, resp.message, resp.failure)
@@ -54,14 +60,23 @@ ColumnLayout {
             })
         }
 
-        views.pivGetPinOrManagementKey(
-            function(pin) {
-                _finish(pin, false)
-            },
-            function(key) {
-                _finish(false, key)
-            }
-        );
+        if (!selfSign && !csrFileUrl) {
+            selectCsrOutputDialog.open()
+        } else {
+            views.pivGetPinOrManagementKey(
+                function(pin) {
+                    _finish(pin, false)
+                },
+                function(key) {
+                    _finish(false, key)
+                }
+            );
+        }
+    }
+
+    function finishCsr(fileUrl) {
+        csrFileUrl = fileUrl
+        finish()
     }
 
     function previous() {
@@ -77,6 +92,15 @@ ColumnLayout {
             wizardStack.push(finishView)
             break
         }
+    }
+
+    FileDialog {
+        id: selectCsrOutputDialog
+        title: "Please choose a destination"
+        defaultSuffix: "csr"
+        folder: shortcuts.documents
+        selectExisting: false
+        onAccepted: finishCsr(fileUrl.toString())
     }
 
     ColumnLayout {
