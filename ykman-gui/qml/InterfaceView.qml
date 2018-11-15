@@ -44,7 +44,7 @@ ColumnLayout {
 
     function writeInterfaces() {
         views.lock()
-        yubiKey.write_config(newApplicationsEnabledOverUsb,
+        yubiKey.writeConfig(newApplicationsEnabledOverUsb,
                              newApplicationsEnabledOverNfc, lockCode,
                              function (resp) {
                                  if (resp.success) {

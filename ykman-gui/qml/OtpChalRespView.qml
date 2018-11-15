@@ -7,7 +7,7 @@ import QtQuick.Controls.Material 2.2
 ColumnLayout {
 
     function generateKey() {
-        yubiKey.random_key(20, function (res) {
+        yubiKey.randomKey(20, function (res) {
             secretKeyInput.text = res
         })
     }
@@ -21,7 +21,7 @@ ColumnLayout {
     }
 
     function programChallengeResponse() {
-        yubiKey.program_challenge_response(views.selectedSlot,
+        yubiKey.programChallengeResponse(views.selectedSlot,
                                            secretKeyInput.text,
                                            requireTouchCb.checked,
                                            function (resp) {

@@ -15,7 +15,7 @@ ColumnLayout {
 
     function load() {
         isBusy = true
-        yubiKey.slots_status(function (resp) {
+        yubiKey.slotsStatus(function (resp) {
             if (resp.success) {
                 views.slot1Configured = resp.status[0]
                 views.slot2Configured = resp.status[1]
@@ -42,7 +42,7 @@ ColumnLayout {
     }
 
     function deleteSelectedSlot() {
-        yubiKey.erase_slot(views.selectedSlot, function (resp) {
+        yubiKey.eraseSlot(views.selectedSlot, function (resp) {
             if (resp.success) {
                 views.otpSuccess()
                 load()
@@ -57,7 +57,7 @@ ColumnLayout {
     }
 
     function swapConfigurations() {
-        yubiKey.swap_slots(function (resp) {
+        yubiKey.swapSlots(function (resp) {
             if (resp.success) {
                 views.otpSuccess()
                 load()

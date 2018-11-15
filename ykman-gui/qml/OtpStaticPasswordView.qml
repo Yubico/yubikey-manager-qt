@@ -17,7 +17,7 @@ ColumnLayout {
     }
 
     function programStaticPassword() {
-        yubiKey.program_static_password(views.selectedSlot, passwordInput.text,
+        yubiKey.programStaticPassword(views.selectedSlot, passwordInput.text,
                                         keyboardLayout, function (resp) {
                                             if (resp.success) {
                                                 views.otpSuccess()
@@ -33,7 +33,7 @@ ColumnLayout {
     }
 
     function generatePassword() {
-        yubiKey.generate_static_pw(keyboardLayout, function (res) {
+        yubiKey.generateStaticPw(keyboardLayout, function (res) {
             passwordInput.text = res
         })
     }

@@ -15,7 +15,7 @@ ColumnLayout {
     }
 
     function programOathHotp() {
-        yubiKey.program_oath_hotp(views.selectedSlot, secretKeyInput.text,
+        yubiKey.programOathHotp(views.selectedSlot, secretKeyInput.text,
                                   digits.currentText, function (resp) {
                                       if (resp.success) {
                                           views.otpSuccess()

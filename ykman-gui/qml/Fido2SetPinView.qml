@@ -13,7 +13,7 @@ ColumnLayout {
     }
 
     function setPin() {
-        yubiKey.fido_set_pin(chosenPin, function (resp) {
+        yubiKey.fidoSetPin(chosenPin, function (resp) {
             if (resp.success) {
                 fido2SuccessPopup.open()
             } else {

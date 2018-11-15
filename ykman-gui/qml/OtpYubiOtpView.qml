@@ -8,20 +8,20 @@ ColumnLayout {
 
     function useSerial() {
         if (useSerialCb.checked) {
-            yubiKey.serial_modhex(function (res) {
+            yubiKey.serialModhex(function (res) {
                 publicIdInput.text = res
             })
         }
     }
 
     function generatePrivateId() {
-        yubiKey.random_uid(function (res) {
+        yubiKey.randomUid(function (res) {
             privateIdInput.text = res
         })
     }
 
     function generateKey() {
-        yubiKey.random_key(16, function (res) {
+        yubiKey.randomKey(16, function (res) {
             secretKeyInput.text = res
         })
     }
@@ -35,7 +35,7 @@ ColumnLayout {
     }
 
     function programYubiOtp() {
-        yubiKey.program_otp(views.selectedSlot, publicIdInput.text,
+        yubiKey.programOtp(views.selectedSlot, publicIdInput.text,
                             privateIdInput.text, secretKeyInput.text,
                             function (resp) {
                                 if (resp.success) {

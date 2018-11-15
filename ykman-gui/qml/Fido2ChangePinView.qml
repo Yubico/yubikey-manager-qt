@@ -14,7 +14,7 @@ ColumnLayout {
     }
 
     function changePin() {
-        yubiKey.fido_change_pin(chosenCurrentPin, chosenPin, function (resp) {
+        yubiKey.fidoChangePin(chosenCurrentPin, chosenPin, function (resp) {
             if (resp.success) {
                 fido2SuccessPopup.open()
             } else {
