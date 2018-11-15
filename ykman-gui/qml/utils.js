@@ -103,6 +103,26 @@ function extend(objA, objB) {
 }
 
 /**
+ * Build an object from `arr` by using each item's `name` property as the key
+ *
+ * @param arr an array of objects
+ * @param name a property name
+ *
+ * @return a new object with the items in `arr` as the values, where the key
+ * for each value is `item[name]`. If the `item[name]`s are not unique, the
+ * last occurrence overwrites the others.
+ */
+function indexBy(arr, name) {
+    return arr.reduce(
+        function(result, next) {
+            result[next[name]] = next
+            return result
+        },
+        {}
+    )
+}
+
+/**
  * @param lst a QML basic type `list` value
  * @return the `lst` converted to a JavaScript Array value
  */
