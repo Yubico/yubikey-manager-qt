@@ -269,6 +269,7 @@ Python {
         }
     }
 
+
     /**
      * Transform a `callback` into one that will first call `refreshPiv` and then
      * itself when `refresh` is done.
@@ -424,14 +425,16 @@ Python {
     }
 
     function pivListCertificates(cb) {
-        doCall('yubikey.controller.piv_list_certificates', [], function(resp) {
+        doCall('yubikey.controller.piv_list_certificates', [], function (resp) {
             if (resp.success) {
-                var certs = {};
+                var certs = {
+
+                }
                 for (var i = 0; i < resp.certs.length; i++) {
                     var cert = resp.certs[i]
-                    certs[cert.slot] = cert;
+                    certs[cert.slot] = cert
                 }
-                pivCerts = Utils.extend(yubiKey.pivCerts, certs);
+                pivCerts = Utils.extend(yubiKey.pivCerts, certs)
             }
             cb(resp)
         })
