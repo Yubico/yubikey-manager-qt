@@ -283,10 +283,6 @@ Python {
         doCall('yubikey.controller.program_oath_hotp', [slot, key, digits], cb)
     }
 
-    function fidoSupportCtap(cb) {
-        doCall('yubikey.controller.fido_support_ctap', [], cb)
-    }
-
     function fidoHasPin(cb) {
         doCall('yubikey.controller.fido_has_pin', [], cb)
     }
