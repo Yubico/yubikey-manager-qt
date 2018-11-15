@@ -29,10 +29,27 @@ Python {
     property var piv
     property bool pivPukBlocked: false
 
-    property var authenticationCert
-    property var signatureCert
-    property var keyManagementCert
-    property var cardAuthenticationCert
+    property var pivSlots: [{
+            "id": "AUTHENTICATION",
+            "name": qsTr("Authentication"),
+            "hex": "9a"
+        }, {
+            "id": "SIGNATURE",
+            "name": qsTr("Digital Signature"),
+            "hex": "9c"
+        }, {
+            "id": "KEY_MANAGEMENT",
+            "name": qsTr("Key Management"),
+            "hex": "9d"
+        }, {
+            "id": "CARD_AUTH",
+            "name": qsTr("Card Authentication"),
+            "hex": "9e"
+        }]
+
+    property var pivCerts: ({
+
+                            })
 
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
@@ -203,11 +220,10 @@ Python {
     }
 
     function numberOfPivCertificates() {
-        function hasCert(cert) {
-            return !!cert
+        function hasCert(slotObj) {
+            return !!pivCerts[slotObj.id]
         }
-        return [yubiKey.authenticationCert, yubiKey.signatureCert, yubiKey.keyManagementCert, yubiKey.cardAuthenticationCert].filter(
-                    hasCert).length
+        return pivSlots.filter(hasCert).length
     }
 
     function refresh(doneCallback) {
@@ -252,6 +268,7 @@ Python {
             doneCallback()
         }
     }
+
 
     /**
      * Transform a `callback` into one that will first call `refreshPiv` and then
@@ -408,7 +425,12 @@ Python {
     }
 
     function pivListCertificates(cb) {
-        doCall('yubikey.controller.piv_list_certificates', [], cb)
+        doCall('yubikey.controller.piv_list_certificates', [], function (resp) {
+            if (resp.success) {
+                pivCerts = Utils.indexBy(resp.certs, "slot")
+            }
+            cb(resp)
+        })
     }
 
     function pivReadCertificate(slot, cb) {

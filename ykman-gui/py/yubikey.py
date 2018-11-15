@@ -647,12 +647,12 @@ controller = None
 
 
 def _piv_serialise_cert(slot, cert):
-    issuer_common_names = cert.issuer.get_attributes_for_oid(x509.NameOID.COMMON_NAME)
-    subject_common_names = cert.subject.get_attributes_for_oid(x509.NameOID.COMMON_NAME)
+    issuer_cns = cert.issuer.get_attributes_for_oid(x509.NameOID.COMMON_NAME)
+    subject_cns = cert.subject.get_attributes_for_oid(x509.NameOID.COMMON_NAME)
     return {
         'slot': SLOT(slot).name,
-        'issuedFrom': issuer_common_names[0].value if issuer_common_names else '',
-        'issuedTo': subject_common_names[0].value if subject_common_names else '',
+        'issuedFrom': issuer_cns[0].value if issuer_cns else '',
+        'issuedTo': subject_cns[0].value if subject_cns else '',
         'validFrom': cert.not_valid_before.date().isoformat(),
         'validTo': cert.not_valid_after.date().isoformat()
     }

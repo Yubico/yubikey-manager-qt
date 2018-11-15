@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 import QtQuick.Controls.Material 2.2
+import "utils.js" as Utils
 
 ColumnLayout {
     id: pivView
@@ -15,23 +16,7 @@ ColumnLayout {
     function load() {
         isBusy = true
         yubiKey.pivListCertificates(function (resp) {
-            if (resp.success) {
-                for (var i = 0; i < resp.certs.length; i++) {
-                    var cert = resp.certs[i]
-                    if (cert.slot === 'AUTHENTICATION') {
-                        yubiKey.authenticationCert = cert
-                    }
-                    if (cert.slot === 'SIGNATURE') {
-                        yubiKey.signatureCert = cert
-                    }
-                    if (cert.slot === 'KEY_MANAGEMENT') {
-                        yubiKey.keyManagementCert = cert
-                    }
-                    if (cert.slot === 'CARD_AUTH') {
-                        yubiKey.cardAuthenticationCert = cert
-                    }
-                }
-            } else {
+            if (!resp.success) {
                 if (resp.error) {
                     pivError.show(resp.error)
                 } else {
@@ -68,7 +53,7 @@ ColumnLayout {
 
             BreadCrumbRow {
                 items: [{
-                        text: qsTr("PIV")
+                        "text": qsTr("PIV")
                     }]
             }
             RowLayout {

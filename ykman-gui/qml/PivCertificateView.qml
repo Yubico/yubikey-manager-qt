@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
+import "utils.js" as Utils
 
 ColumnLayout {
     id: pivCertificatesView
@@ -27,12 +28,7 @@ ColumnLayout {
             id: bar
             Layout.fillWidth: true
             Repeater {
-                model: [
-                    qsTr("Authentication"),
-                    qsTr("Digital Signature"),
-                    qsTr("Key Management"),
-                    qsTr("Card Authentication"),
-                ]
+                model: Utils.pick(yubiKey.pivSlots, "name")
 
                 TabButton {
                     text: modelData
@@ -48,25 +44,16 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             currentIndex: bar.currentIndex
-            PivCertificateInfo {
-                title: qsTr("Authentication (Slot 9a)")
-                slot: 'AUTHENTICATION'
-                certificate: yubiKey.authenticationCert
-            }
-            PivCertificateInfo {
-                title: qsTr("Digital Signature (Slot 9c)")
-                slot: 'SIGNATURE'
-                certificate: yubiKey.signatureCert
-            }
-            PivCertificateInfo {
-                title: qsTr("Key Management (Slot 9d)")
-                slot: 'KEY_MANAGEMENT'
-                certificate: yubiKey.keyManagementCert
-            }
-            PivCertificateInfo {
-                title: qsTr("Card Authentication (Slot 9e)")
-                slot: 'CARD_AUTH'
-                certificate: yubiKey.cardAuthenticationCert
+
+            Repeater {
+                model: yubiKey.pivSlots
+
+                PivCertificateInfo {
+                    title: qsTr("%1 (Slot %2)").arg(modelData.name).arg(
+                               modelData.hex)
+                    slot: modelData.id
+                    certificate: yubiKey.pivCerts[modelData.id]
+                }
             }
         }
         RowLayout {
