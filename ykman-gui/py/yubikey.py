@@ -437,6 +437,25 @@ class Controller(object):
             logger.error('Failed to read PIV certificates', exc_info=e)
             return {'success': False, 'error': str(e)}
 
+    def piv_delete_certificate(self, slot_name, pin=None, mgm_key_hex=None):
+        logger.debug('piv_delete_certificate %s', slot_name)
+
+        with self._open_piv() as piv_controller:
+            try:
+                auth_failed = self._piv_ensure_authenticated(
+                    piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+                if auth_failed:
+                    return auth_failed
+
+                piv_controller.delete_certificate(SLOT[slot_name])
+                return {'success': True}
+            except Exception as e:
+                logger.error('Failed', exc_info=e)
+                return {
+                    'success': False,
+                    'message': str(e),
+                }
+
     def piv_generate_certificate(
             self, slot_name, algorithm, common_name, expiration_date,
             self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None,
