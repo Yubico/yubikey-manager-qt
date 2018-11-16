@@ -19,7 +19,7 @@ ChangePinView {
     minLength: constants.pivPukMinLength
 
     onChangePin: {
-        yubiKey.piv_change_puk(currentPin, newPin, function (resp) {
+        yubiKey.pivChangePuk(currentPin, newPin, function (resp) {
             if (resp.success) {
                 pivSuccessPopup.open()
                 views.pop()
