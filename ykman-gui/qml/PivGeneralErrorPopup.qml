@@ -9,31 +9,31 @@ InlinePopup {
 
     function getDefaultMessage(resp) {
         switch (resp.error) {
-        case 'wrong_key':
-            return qsTr("Wrong management key.")
+        case 'bad_format':
+            return qsTr('Management key must be exactly %1 hexadecimal characters.'.arg(constants.pivManagementKeyHexLength))
+
+        case 'blocked':
+            return qsTr('PIN is blocked.')
 
         case 'key_required':
             return qsTr("Management key is required.")
+
+        case 'new_key_bad_length':
+        case 'new_key_bad_hex':
+            return qsTr('New management key must be exactly %1 hexadecimal characters.')
+                .arg(constants.pivManagementKeyHexLength)
+
+        case 'pin_required':
+            return qsTr("PIN is required.")
+
+        case 'wrong_key':
+            return qsTr("Wrong management key.")
 
         case 'wrong_pin':
             return qsTr('Wrong PIN, %1 tries left.'.arg(resp.tries_left))
 
         case 'wrong_puk':
             return qsTr("Wrong PUK. Tries remaning: %1".arg(resp.tries_left))
-
-        case 'blocked':
-            return qsTr('PIN is blocked.')
-
-        case 'bad_format':
-            return qsTr('Management key must be exactly %1 hexadecimal characters.'.arg(constants.pivManagementKeyHexLength))
-
-        case 'pin_required':
-            return qsTr("PIN is required.")
-
-        case 'new_key_bad_length':
-        case 'new_key_bad_hex':
-            return qsTr('New management key must be exactly %1 hexadecimal characters.')
-                .arg(constants.pivManagementKeyHexLength)
         }
     }
 
