@@ -12,9 +12,12 @@ InlinePopup {
         open()
     }
 
-    function showResponseError(resp, genericErrorMessageTemplate, unknownErrorMessage) {
+    function showResponseError(resp, genericErrorMessageTemplate, unknownErrorMessage, messages) {
         if (!resp.success) {
-            if (resp.error === 'wrong_key') {
+            if (messages && messages[resp.error]) {
+                show(messages[resp.error])
+
+            } else if (resp.error === 'wrong_key') {
                 show(qsTr("Wrong management key."))
 
             } else if (resp.error === 'key_required') {
@@ -23,14 +26,21 @@ InlinePopup {
             } else if (resp.error === 'wrong_pin') {
                 show(qsTr('Wrong PIN, %1 tries left.').arg(resp.tries_left))
 
+            } else if (resp.error === 'wrong_puk') {
+                show(qsTr("Wrong PUK. Tries remaning: %1").arg(resp.tries_left))
+
             } else if (resp.error === 'blocked') {
                 show(qsTr('PIN is blocked.'))
 
             } else if (resp.error === 'bad_format') {
-                show(qsTr('Bad management key format.'))
+                show(qsTr('Management key must be exactly %1 hexadecimal characters.').arg(constants.pivManagementKeyHexLength))
 
             } else if (resp.error === 'pin_required') {
                 show(qsTr("PIN is required."))
+
+            } else if (resp.error === 'new_key_bad_length' || resp.error === 'new_key_bad_hex') {
+                show(qsTr('New management key must be exactly %1 hexadecimal characters.')
+                    .arg(constants.pivManagementKeyHexLength))
 
             } else if (genericErrorMessageTemplate && resp.message) {
                 console.log('PIV unmapped error:', resp.error, resp.message)

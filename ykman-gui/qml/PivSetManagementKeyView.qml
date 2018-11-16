@@ -60,43 +60,35 @@ ColumnLayout {
                         pivSuccessPopup.open()
                         views.pivPinManagement()
 
-                    } else if (resp.error === 'bad_format') {
-                        pivError.show(qsTr(
-                            "Current management key must be exactly %1 hexadecimal characters.")
-                                .arg(constants.pivManagementKeyHexLength))
-
-                    } else if (resp.error === 'new_key_bad_length' || resp.error === 'new_key_bad_hex') {
-                        pivError.show(qsTr(
-                            "New management key must be exactly %1 hexadecimal characters.")
-                                .arg(constants.pivManagementKeyHexLength))
-
-                    } else if (resp.error === 'wrong_key') {
-                        clearDefaultManagementKey()
-                        pivError.show(qsTr("Wrong current management key."))
-
-                    } else if (resp.error === 'key_required') {
-                        pivError.show(qsTr("Please enter the current management key."))
-
-                    } else if (resp.error === 'wrong_pin') {
-                        pivError.show(qsTr('Wrong PIN, %1 tries left.').arg(resp.tries_left))
-
-                    } else if (resp.error === 'blocked') {
-                        pivError.show(qsTr('PIN is blocked.'))
-                        if (hasProtectedKey) {
-                            views.pivPinManagement()
-                        } else {
-                            views.pop()
-                        }
-
-                    } else if (resp.error === 'pin_required') {
-                        pivError.show(qsTr("Please enter the PIN."))
-
-                    } else if (resp.message) {
-                        pivError.show(resp.message)
-
                     } else {
-                        console.log('Unknown failure:', resp.error)
-                        pivError.show(qsTr('Unknown failure.'))
+                        var badKeyFormat = qsTr("New management key must be exactly %1 hexadecimal characters.")
+                            .arg(constants.pivManagementKeyHexLength)
+
+                        pivError.showResponseError(
+                            resp,
+                            qsTr('Management key change failed. Error message: %1'),
+                            qsTr('Management key change failed for an unknown reason.'),
+                            {
+                                bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters.")
+                                    .arg(constants.pivManagementKeyHexLength),
+                                key_required: qsTr("Please enter the current management key."),
+                                new_key_bad_hex: badKeyFormat,
+                                new_key_bad_length: badKeyFormat,
+                                pin_required: qsTr("Please enter the PIN."),
+                                wrong_key: qsTr("Wrong current management key."),
+                            }
+                        )
+
+                        if (resp.error === 'wrong_key') {
+                            clearDefaultManagementKey()
+
+                        } else if (resp.error === 'blocked') {
+                            if (hasProtectedKey) {
+                                views.pivPinManagement()
+                            } else {
+                                views.pop()
+                            }
+                        }
                     }
                 },
                 pin,

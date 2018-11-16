@@ -15,8 +15,11 @@ ColumnLayout {
                 pivSuccessPopup.open()
                 views.pop()
             } else {
-                pivGeneralError.error = resp.error
-                pivGeneralError.open()
+                pivError.showResponseError(
+                    resp,
+                    qsTr("Reset failed for an unknown reason. Error message: %1"),
+                    qsTr("Reset failed for an unknown reason.")
+                )
             }
         })
     }
@@ -24,10 +27,6 @@ ColumnLayout {
     PivResetConfirmPopup {
         id: pivResetConfirmationPopup
         onAccepted: resetPiv()
-    }
-
-    PivGeneralErrorPopup {
-        id: pivGeneralError
     }
 
     BusyIndicator {

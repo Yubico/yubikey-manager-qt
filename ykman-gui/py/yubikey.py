@@ -450,7 +450,7 @@ class Controller(object):
             except WrongPin as e:
                 return {
                     'success': False,
-                    'error': 'wrong pin',
+                    'error': 'wrong_pin',
                     'tries_left': e.tries_left,
                 }
 
@@ -458,7 +458,7 @@ class Controller(object):
                 if e.sw == SW.INCORRECT_PARAMETERS:
                     return {
                         'success': False,
-                        'error': 'incorrect parameters',
+                        'error': 'incorrect_parameters',
                     }
 
                 tries_left = piv_controller.get_pin_tries()
@@ -494,7 +494,7 @@ class Controller(object):
             except WrongPuk as e:
                 return {
                     'success': False,
-                    'error': 'wrong puk',
+                    'error': 'wrong_puk',
                     'tries_left': e.tries_left,
                 }
 
@@ -567,7 +567,7 @@ class Controller(object):
             except WrongPuk as e:
                 return {
                     'success': False,
-                    'error': 'wrong puk',
+                    'error': 'wrong_puk',
                     'tries_left': e.tries_left,
                 }
 
