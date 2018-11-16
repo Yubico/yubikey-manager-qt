@@ -7,6 +7,7 @@ import logging
 import os
 import struct
 import types
+import urllib.parse
 import ykman.logging_setup
 
 from base64 import b32decode
@@ -25,7 +26,7 @@ from ykman.piv import (
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
-    generate_static_pw)
+    generate_static_pw, parse_certificate, parse_private_key)
 
 logger = logging.getLogger(__name__)
 
@@ -577,6 +578,46 @@ class Controller(object):
                     'success': False,
                     'message': str(e),
                 }
+
+    def piv_can_parse(self, file_url):
+        try:
+            file_path = urllib.parse.urlparse(file_url).path
+            with open(file_path, 'r+b') as file:
+                data = file.read()
+                try:
+                    cert = parse_certificate(data, password=None)
+                    return {'success': True, 'error': None}
+                except (ValueError, TypeError):
+                    pass
+                try:
+                    private_key = parse_private_key(data, password=None)
+                    return {'success': True, 'error': None}
+                except (ValueError, TypeError):
+                    pass
+            raise ValueError('Failed to parse certificate or key')
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    def piv_import_certificate(self, slot, file_url, password=None, pin=None, mgm_key=None):
+        try:
+            file_path = urllib.parse.urlparse(file_url).path
+            if password:
+                password = password.encode()
+            with open(file_path, 'r+b') as file:
+                data = file.read()
+                try:
+                    cert = parse_certificate(data, password)
+                except (ValueError, TypeError):
+                    return {'success': False, 'error': 'failed_parsing'}
+                with self._open_piv() as controller:
+                    auth_failed = self._piv_ensure_authenticated(controller, pin, mgm_key)
+                    if auth_failed:
+                        return auth_failed
+                    controller.import_certificate(SLOT[slot], cert)
+            return {'success': True, 'error': None}
+        except Exception as e:
+            logger.error('Failed to import PIV certificate', exc_info=e)
+            return {'success': False, 'error': str(e)}
 
     def _piv_verify_pin(self, piv_controller, pin=None):
         if pin:

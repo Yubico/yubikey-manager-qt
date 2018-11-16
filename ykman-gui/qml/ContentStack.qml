@@ -361,4 +361,8 @@ StackView {
     PivManagementKeyPopup {
         id: pivManagementKeyPopup
     }
+
+    PivPasswordPopup {
+        id: pivPasswordPopup
+    }
 }

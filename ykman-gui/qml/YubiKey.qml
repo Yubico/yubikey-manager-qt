@@ -436,4 +436,13 @@ Python {
     function pivReadCertificate(slot, cb) {
         doCall('yubikey.controller.piv_read_certificate', [slot], cb)
     }
+
+    function pivImportCertificate(slot, fileUrl, password, pin, managementKey, cb) {
+        doCall('yubikey.controller.piv_import_certificate',
+               [slot, fileUrl, password, pin, managementKey], cb)
+    }
+
+    function pivCanParse(fileUrl, cb) {
+        doCall('yubikey.controller.piv_can_parse', [fileUrl], cb)
+    }
 }
