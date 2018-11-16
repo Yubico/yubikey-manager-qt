@@ -43,6 +43,7 @@ Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#bu
       qml-module-qtquick-window2 \
       qml-module-qt-labs-platform \
       qml-module-qt-labs-settings \
+      qml-module-qt-labs-folderlistmodel \
       qml-module-qtgraphicaleffects \
       qml-module-io-thp-pyotherside
 

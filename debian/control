@@ -23,6 +23,7 @@ Build-Depends: debhelper (>= 9),
                qml-module-io-thp-pyotherside,
                qml-module-qt-labs-settings,
                qml-module-qt-labs-platform,
+               qml-module-qt-labs-folderlistmodel,
                libqt5svg5-dev,
 Homepage: https://developers.yubico.com/yubikey-manager-qt/
 
@@ -42,6 +43,7 @@ Depends: ${misc:Depends},
          qml-module-qtquick-dialogs,
          qml-module-qt-labs-settings,
          qml-module-qt-labs-platform,
+         qml-module-qt-labs-folderlistmodel,
          libqt5svg5,
          pcscd
 Recommends: yubikey-manager
