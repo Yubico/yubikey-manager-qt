@@ -378,14 +378,14 @@ Python {
 
     function pivChangePuk(oldPuk, newPuk, cb) {
         doPivCall('yubikey.controller.piv_change_puk', [oldPuk, newPuk],
-               function (resp) {
-                   if (resp.success) {
-                       pivPukBlocked = false
-                   } else if (resp.error === 'blocked') {
-                       pivPukBlocked = true
-                   }
-                   cb(resp)
-               })
+                  function (resp) {
+                      if (resp.success) {
+                          pivPukBlocked = false
+                      } else if (resp.error === 'blocked') {
+                          pivPukBlocked = true
+                      }
+                      cb(resp)
+                  })
     }
 
     function pivGenerateRandomMgmKey(cb) {
@@ -397,43 +397,44 @@ Python {
 
         // PyOtherSide doesn't seem to support passing through functions as arguments
         doPivCall('yubikey.controller.piv_change_mgm_key',
-               [pin, currentMgmKey, newKey, storeOnDevice], function (result) {
-                   touchPromptTimer.stop()
-                   refreshPiv(function () {
-                       cb(result)
-                   })
-               })
+                  [pin, currentMgmKey, newKey, storeOnDevice],
+                  function (result) {
+                      touchPromptTimer.stop()
+                      refreshPiv(function () {
+                          cb(result)
+                      })
+                  })
     }
 
     function pivReset(cb) {
-        doPivCall('yubikey.controller.piv_reset', [],
-               function (resp) {
-                   if (resp.success) {
-                       pivPukBlocked = false
-                   }
-                   cb(resp)
-               })
+        doPivCall('yubikey.controller.piv_reset', [], function (resp) {
+            if (resp.success) {
+                pivPukBlocked = false
+            }
+            cb(resp)
+        })
     }
 
     function pivUnblockPin(puk, newPin, cb) {
         doPivCall('yubikey.controller.piv_unblock_pin', [puk, newPin],
-               function (resp) {
-                   if (resp.success) {
-                       pivPukBlocked = false
-                   } else if (resp.error === 'blocked') {
-                       pivPukBlocked = true
-                   }
-                   cb(resp)
-               })
+                  function (resp) {
+                      if (resp.success) {
+                          pivPukBlocked = false
+                      } else if (resp.error === 'blocked') {
+                          pivPukBlocked = true
+                      }
+                      cb(resp)
+                  })
     }
 
     function pivListCertificates(cb) {
-        doPivCall('yubikey.controller.piv_list_certificates', [], function (resp) {
-            if (resp.success) {
-                pivCerts = Utils.indexBy(resp.certs, "slot")
-            }
-            cb(resp)
-        })
+        doPivCall('yubikey.controller.piv_list_certificates', [],
+                  function (resp) {
+                      if (resp.success) {
+                          pivCerts = Utils.indexBy(resp.certs, "slot")
+                      }
+                      cb(resp)
+                  })
     }
 
     function pivReadCertificate(slot, cb) {
