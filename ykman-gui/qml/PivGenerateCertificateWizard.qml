@@ -233,7 +233,7 @@ ColumnLayout {
 
 
                     CalendarWidget {
-                        Layout.alignment: Qt.AlignVTop
+                        Layout.alignment: Qt.AlignTop
                         onDateClicked: expirationDate = formatDate(date)
                     }
 
