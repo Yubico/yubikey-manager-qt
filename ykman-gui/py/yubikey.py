@@ -501,7 +501,7 @@ class Controller(object):
                         SLOT[slot_name], public_key, common_name, now,
                         valid_to)
                 except APDUError as e:
-                    if e.sw == SW.ACCESS_DENIED:
+                    if e.sw == SW.SECURITY_CONDITION_NOT_SATISFIED:
                         return {
                             'success': False,
                             'error_id': 'pin_required',
