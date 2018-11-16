@@ -414,20 +414,6 @@ class Controller(object):
             logger.error('Failed to reset PIV application', exc_info=e)
             return {'success': False, 'error': str(e)}
 
-    def piv_read_certificate(self, slot):
-        try:
-            with self._open_piv() as controller:
-                cert = controller.read_certificate(SLOT[slot])
-                cert = _piv_serialise_cert(SLOT[slot], cert)
-                return {'success': True, 'cert': cert, 'error': None}
-        except APDUError as e:
-            if e.sw == SW.NOT_FOUND:
-                return {'success': True, 'cert': None, 'error': None}
-            raise
-        except Exception as e:
-            logger.error('Failed to read PIV certificate', exc_info=e)
-            return {'success': False, 'error': str(e)}
-
     def _piv_list_certificates(self, controller):
         return {
             SLOT(slot).name: _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501

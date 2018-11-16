@@ -425,8 +425,4 @@ Python {
                       cb(resp)
                   })
     }
-
-    function pivReadCertificate(slot, cb) {
-        doPivCall('yubikey.controller.piv_read_certificate', [slot], cb)
-    }
 }
