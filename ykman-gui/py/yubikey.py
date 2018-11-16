@@ -468,20 +468,22 @@ class Controller(object):
             if auth_failed:
                 return auth_failed
 
-            now = datetime.datetime.now()
-            try:
-                year = int(expiration_date[0:4])
-                month = int(expiration_date[(4+1):(4+1+2)])
-                day = int(expiration_date[(4+1+2+1):(4+1+2+1+2)])
-                valid_to = datetime.datetime(year, month, day)
-            except ValueError as e:
-                logger.debug('Failed to parse date: ' + expiration_date,
-                             exc_info=e)
-                return {
-                    'success': False,
-                    'error_id': 'invalid_iso8601_date',
-                    'date': expiration_date,
-                }
+            if self_sign:
+                now = datetime.datetime.now()
+                try:
+                    year = int(expiration_date[0:4])
+                    month = int(expiration_date[(4+1):(4+1+2)])
+                    day = int(expiration_date[(4+1+2+1):(4+1+2+1+2)])
+                    valid_to = datetime.datetime(year, month, day)
+                except ValueError as e:
+                    logger.debug(
+                        'Failed to parse date: ' + expiration_date,
+                        exc_info=e)
+                    return {
+                        'success': False,
+                        'error_id': 'invalid_iso8601_date',
+                        'date': expiration_date,
+                    }
 
             unsupported_policy = self._piv_check_policies(
                 piv_controller, pin_policy=pin_policy,
