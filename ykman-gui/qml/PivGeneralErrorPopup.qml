@@ -7,6 +7,36 @@ InlinePopup {
 
     standardButtons: Dialog.Ok
 
+    function getDefaultMessage(resp) {
+        switch (resp.error) {
+        case 'wrong_key':
+            return qsTr("Wrong management key.")
+
+        case 'key_required':
+            return qsTr("Management key is required.")
+
+        case 'wrong_pin':
+            return qsTr('Wrong PIN, %1 tries left.'.arg(resp.tries_left))
+
+        case 'wrong_puk':
+            return qsTr("Wrong PUK. Tries remaning: %1".arg(resp.tries_left))
+
+        case 'blocked':
+            return qsTr('PIN is blocked.')
+
+        case 'bad_format':
+            return qsTr('Management key must be exactly %1 hexadecimal characters.'.arg(constants.pivManagementKeyHexLength))
+
+        case 'pin_required':
+            return qsTr("PIN is required.")
+
+        case 'new_key_bad_length':
+        case 'new_key_bad_hex':
+            return qsTr('New management key must be exactly %1 hexadecimal characters.')
+                .arg(constants.pivManagementKeyHexLength)
+        }
+    }
+
     function show(message) {
         error = message
         open()
@@ -17,34 +47,10 @@ InlinePopup {
             if (messages && messages[resp.error]) {
                 show(messages[resp.error])
             } else {
-                switch (resp.error) {
-                case 'wrong_key':
-                    return show(qsTr("Wrong management key."))
-
-                case 'key_required':
-                    return show(qsTr("Management key is required."))
-
-                case 'wrong_pin':
-                    return show(qsTr('Wrong PIN, %1 tries left.').arg(resp.tries_left))
-
-                case 'wrong_puk':
-                    return show(qsTr("Wrong PUK. Tries remaning: %1").arg(resp.tries_left))
-
-                case 'blocked':
-                    return show(qsTr('PIN is blocked.'))
-
-                case 'bad_format':
-                    return show(qsTr('Management key must be exactly %1 hexadecimal characters.').arg(constants.pivManagementKeyHexLength))
-
-                case 'pin_required':
-                    return show(qsTr("PIN is required."))
-
-                case 'new_key_bad_length':
-                case 'new_key_bad_hex':
-                    return show(qsTr('New management key must be exactly %1 hexadecimal characters.')
-                        .arg(constants.pivManagementKeyHexLength))
-
-                default:
+                var defaultMessage = getDefaultMessage(resp)
+                if (defaultMessage) {
+                    show(defaultMessage)
+                } else {
                     console.log('PIV unmapped error:', resp.error, resp.message)
 
                     if (genericErrorMessageTemplate && resp.message) {
