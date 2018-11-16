@@ -185,13 +185,18 @@ class Controller(object):
 
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
-            return {
-                'has_derived_key': piv_controller.has_derived_key,
-                'has_protected_key': piv_controller.has_protected_key,
-                'has_stored_key': piv_controller.has_stored_key,
-                'pin_tries': piv_controller.get_pin_tries(),
-                'puk_blocked': piv_controller.puk_blocked,
-            }
+            try:
+                return {
+                    'certs': self._piv_list_certificates(piv_controller),
+                    'has_derived_key': piv_controller.has_derived_key,
+                    'has_protected_key': piv_controller.has_protected_key,
+                    'has_stored_key': piv_controller.has_stored_key,
+                    'pin_tries': piv_controller.get_pin_tries(),
+                    'puk_blocked': piv_controller.puk_blocked,
+                }
+            except Exception as e:
+                logger.error('Failed to read PIV data', exc_info=e)
+                return {'success': False, 'message': str(e)}
 
     def set_mode(self, interfaces):
         try:
@@ -423,16 +428,10 @@ class Controller(object):
             logger.error('Failed to read PIV certificate', exc_info=e)
             return {'success': False, 'error': str(e)}
 
-    def piv_list_certificates(self):
-        try:
-            with self._open_piv() as controller:
-                certs = [
-                     _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
-                ]
-                return {'success': True, 'certs': certs, 'error': None}
-        except Exception as e:
-            logger.error('Failed to read PIV certificates', exc_info=e)
-            return {'success': False, 'error': str(e)}
+    def _piv_list_certificates(self, controller):
+        return {
+            SLOT(slot).name: _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
+        }
 
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:

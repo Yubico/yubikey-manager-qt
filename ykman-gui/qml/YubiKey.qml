@@ -47,9 +47,9 @@ Python {
             "hex": "9e"
         }]
 
-    property var pivCerts: ({
+    readonly property var pivCerts: piv && piv.certs || {
 
-                            })
+                                    }
 
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
@@ -266,17 +266,10 @@ Python {
         if (hasDevice) {
             doCall('yubikey.controller.refresh_piv', [], function (pivData) {
                 piv = pivData
-
-                doCall('yubikey.controller.piv_list_certificates', [],
-                    function (resp) {
-                        if (resp.success) {
-                            pivCerts = Utils.indexBy(resp.certs, "slot")
-                        }
-                        doneCallback(resp)
-                    })
+                doneCallback()
             })
         } else {
-            doneCallback({})
+            doneCallback()
         }
     }
 
@@ -431,10 +424,6 @@ Python {
                       }
                       cb(resp)
                   })
-    }
-
-    function pivListCertificates(cb) {
-        refreshPiv(cb)
     }
 
     function pivReadCertificate(slot, cb) {
