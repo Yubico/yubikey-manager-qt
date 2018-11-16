@@ -86,7 +86,9 @@ ColumnLayout {
                 _finish(pin, false)
             },
             function(key) {
-                _finish(false, key)
+                pivPinPopup.getPinAndThen(function(pin) {
+                    _finish(pin, key)
+                })
             }
         );
     }
