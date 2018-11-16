@@ -18,7 +18,7 @@ ColumnLayout {
     property string subjectCommonName: ""
 
     property alias currentStep: wizardStack.depth
-    readonly property int numSteps: 3
+    readonly property int numSteps: selfSign ? 5 : 4
 
     readonly property var algorithms: ["RSA1024", "RSA2048", "ECCP256", "ECCP384"]
 
@@ -101,20 +101,25 @@ ColumnLayout {
 
     function isInputValid() {
         switch (currentStep) {
-        case 1:
-            return !!subjectCommonName
-        case 2:
-            if (expirationDate.length !== 10) {
-                return false
-            }
-            try {
-                return new Date(expirationDate).toISOString().substring(0, 10) === expirationDate
-            } catch (e) {
-                return false
-            }
         case 3:
-            return selfSign || csrFileUrl
+            return !!subjectCommonName
+
+        case 4:
+            if (selfSign) {
+                if (expirationDate.length !== 10) {
+                    return false
+                }
+                try {
+                    return new Date(expirationDate).toISOString().substring(0, 10) === expirationDate
+                } catch (e) {
+                    return false
+                }
+            } else {
+                return true
+            }
         }
+
+        return true
     }
 
     function previous() {
@@ -124,9 +129,19 @@ ColumnLayout {
     function next() {
         switch (currentStep) {
         case 1:
-            wizardStack.push(expirationDateView)
+            wizardStack.push(algorithmView)
             break
         case 2:
+            wizardStack.push(subjectView)
+            break
+        case 3:
+            if (selfSign) {
+                wizardStack.push(expirationDateView)
+            } else {
+                wizardStack.push(finishView)
+            }
+            break
+        case 4:
             wizardStack.push(finishView)
             break
         }
@@ -181,7 +196,71 @@ ColumnLayout {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
-                initialItem: subjectView
+                initialItem: outputTypeView
+            }
+
+            Component {
+                id: outputTypeView
+
+                ColumnLayout {
+                    Heading2 {
+                        text: qsTr("Output format:")
+                    }
+
+                    ButtonGroup {
+                        id: outputTypeGroup
+                    }
+
+                    RadioButton {
+                        text: qsTr("Self-signed certificate on YubiKey")
+                        checked: true
+                        font.pixelSize: constants.h3
+                        Material.foreground: yubicoBlue
+                        onCheckedChanged: selfSign = checked
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Create a key on the YubiKey, generate a self-signed certificate for that key, and store it on the YubiKey.")
+                        ButtonGroup.group: outputTypeGroup
+                    }
+
+                    RowLayout {
+                        RadioButton {
+                            id: csrBtn
+                            text: qsTr("CSR file")
+                            font.pixelSize: constants.h3
+                            Material.foreground: yubicoBlue
+                            ToolTip.delay: 1000
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Create a key on the YubiKey and output a Certificate Signing Request (CSR) file.\nAny existing certificate in this slot will be deleted.\nThe CSR must be submitted to a Certificate Authority (CA) to receive a certificate file in return, which must then be imported onto the YubiKey.")
+                            ButtonGroup.group: outputTypeGroup
+                        }
+
+                        CustomButton {
+                            text: csrFileUrl ? csrFileUrl.match(/[^/\\]+$/)[0] : qsTr("Choose...")
+                            onClicked: selectCsrOutputDialog.open()
+                            enabled: csrBtn.checked
+                        }
+                    }
+                }
+            }
+
+            Component {
+                id: algorithmView
+
+                ColumnLayout {
+                    Heading2 {
+                        text: qsTr("Key algorithm:")
+                    }
+
+                    ComboBox {
+                        id: algorithmInput
+                        model: algorithms
+                        currentIndex: algorithms.findIndex(function(alg) { return alg === algorithm })
+                        Material.foreground: yubicoBlue
+                        onCurrentTextChanged: algorithm = currentText
+                        Layout.minimumWidth: implicitWidth + constants.contentMargins / 2
+                    }
+                }
             }
 
             Component {
@@ -244,105 +323,58 @@ ColumnLayout {
             Component {
                 id: finishView
 
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: constants.contentMargins
-
-                    GridLayout {
-                        columns: 2
-                        columnSpacing: constants.contentMargins / 2
-                        Layout.fillWidth: true
-                        Layout.topMargin: constants.contentTopMargin
-
-                        Label {
-                            text: qsTr("Subject name:")
-                            font.pixelSize: constants.h3
-                            font.bold: true
-                            color: yubicoBlue
-                        }
-                        Label {
-                            text: subjectCommonName
-                            font.pixelSize: constants.h3
-                            color: yubicoBlue
-                        }
-
-                        Label {
-                            text: qsTr("Expiry date:")
-                            font.pixelSize: constants.h3
-                            font.bold: true
-                            color: yubicoBlue
-                        }
-                        Label {
-                            text: expirationDate
-                            font.pixelSize: constants.h3
-                            color: yubicoBlue
-                        }
+                ColumnLayout {
+                    Heading2 {
+                        text: selfSign ? qsTr("About to create key and certificate:") : qsTr("About to create key and CSR:")
                     }
 
-
-                    ColumnLayout {
-                        // columns: 2
+                    RowLayout {
                         Layout.fillWidth: true
+                        spacing: constants.contentMargins
 
-                        Label {
-                            text: qsTr("Output format:")
-                            font.pixelSize: constants.h3
-                            font.bold: true
-                            color: yubicoBlue
-                        }
-
-                        ColumnLayout {
-                            ButtonGroup {
-                                id: outputTypeGroup
-                            }
-
-                            RadioButton {
-                                text: qsTr("Self-signed certificate on YubiKey")
-                                checked: true
-                                font.pixelSize: constants.h3
-                                Material.foreground: yubicoBlue
-                                onCheckedChanged: selfSign = checked
-                                ToolTip.delay: 1000
-                                ToolTip.visible: hovered
-                                ToolTip.text: qsTr("Create a key on the YubiKey, generate a self-signed certificate for that key, and store it on the YubiKey.")
-                                ButtonGroup.group: outputTypeGroup
-                            }
-
-                            RowLayout {
-                                RadioButton {
-                                    id: csrBtn
-                                    text: qsTr("CSR file")
-                                    font.pixelSize: constants.h3
-                                    Material.foreground: yubicoBlue
-                                    ToolTip.delay: 1000
-                                    ToolTip.visible: hovered
-                                    ToolTip.text: qsTr("Create a key on the YubiKey and output a Certificate Signing Request (CSR) file.\nAny existing certificate in this slot will be deleted.\nThe CSR must be submitted to a Certificate Authority (CA) to receive a certificate file in return, which must then be imported onto the YubiKey.")
-                                    ButtonGroup.group: outputTypeGroup
-                                }
-
-                                CustomButton {
-                                    text: csrFileUrl ? csrFileUrl.match(/[^/\\]+$/)[0] : qsTr("Choose...")
-                                    onClicked: selectCsrOutputDialog.open()
-                                    enabled: csrBtn.checked
-                                }
-                            }
-                        }
-
-                        Label {
-                            text: qsTr("Key algorithm:")
-                            font.pixelSize: constants.h3
-                            font.bold: true
-                            color: yubicoBlue
+                        GridLayout {
+                            columns: 2
+                            columnSpacing: constants.contentMargins / 2
+                            Layout.fillWidth: true
                             Layout.topMargin: constants.contentTopMargin
-                        }
 
-                        ComboBox {
-                            id: algorithmInput
-                            model: algorithms
-                            currentIndex: algorithms.findIndex(function(alg) { return alg === algorithm })
-                            Material.foreground: yubicoBlue
-                            onCurrentTextChanged: algorithm = currentText
-                            Layout.minimumWidth: implicitWidth + constants.contentMargins / 2
+                            Label {
+                                text: qsTr("Subject name:")
+                                font.pixelSize: constants.h3
+                                font.bold: true
+                                color: yubicoBlue
+                            }
+                            Label {
+                                text: subjectCommonName
+                                font.pixelSize: constants.h3
+                                color: yubicoBlue
+                            }
+
+                            Label {
+                                text: qsTr("Expiry date:")
+                                font.pixelSize: constants.h3
+                                font.bold: true
+                                color: yubicoBlue
+                                visible: selfSign
+                            }
+                            Label {
+                                text: expirationDate
+                                font.pixelSize: constants.h3
+                                color: yubicoBlue
+                                visible: selfSign
+                            }
+
+                            Label {
+                                text: qsTr("Key algorithm:")
+                                font.pixelSize: constants.h3
+                                font.bold: true
+                                color: yubicoBlue
+                            }
+                            Label {
+                                text: algorithm
+                                font.pixelSize: constants.h3
+                                color: yubicoBlue
+                            }
                         }
                     }
                 }
