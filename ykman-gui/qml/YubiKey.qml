@@ -54,6 +54,21 @@ Python {
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
 
+    onReceived: {
+        switch (data[0]) {
+        case 'touchRequired':
+            touchYubiKey.open()
+            break
+
+        case 'touchNotRequired':
+            touchYubiKey.close()
+            break
+
+        default:
+            console.log('Recevied event:', data)
+        }
+    }
+
     Component.onCompleted: {
         importModule('site', function () {
             call('site.addsitedir', [appDir + '/pymodules'], function () {
@@ -395,17 +410,9 @@ Python {
         doPivCall('yubikey.controller.piv_generate_random_mgm_key', [], cb)
     }
 
-    function pivChangeMgmKey(cb, pin, currentMgmKey, newKey, touchCallback, storeOnDevice) {
-        var touchPromptTimer = Utils.delay(touchCallback, 500)
-
+    function pivChangeMgmKey(cb, pin, currentMgmKey, newKey, storeOnDevice) {
         doPivCall('yubikey.controller.piv_change_mgm_key',
-                  [pin, currentMgmKey, newKey, storeOnDevice],
-                  function (result) {
-                      touchPromptTimer.stop()
-                      refreshPivData(function () {
-                          cb(result)
-                      })
-                  })
+                  [pin, currentMgmKey, newKey, storeOnDevice], cb)
     }
 
     function pivReset(cb) {

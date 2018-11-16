@@ -35,6 +35,9 @@ InlinePopup {
         case 'wrong_mgm_key':
             return qsTr("Wrong management key.")
 
+        case 'wrong_mgm_key_or_touch_required':
+            return qsTr("Wrong management key, or timeout while waiting for touch confirmation.")
+
         case 'wrong_pin':
             return qsTr('Wrong PIN, %1 tries left.'.arg(resp.tries_left))
 

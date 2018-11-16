@@ -6,6 +6,7 @@ import datetime
 import json
 import logging
 import os
+import pyotherside
 import struct
 import types
 import urllib.parse
@@ -695,9 +696,16 @@ class Controller(object):
         return {'success': True, 'error': None}
 
     def _piv_verify_pin(self, piv_controller, pin=None):
+        touch_required = False
+
+        def touch_callback():
+            nonlocal touch_required
+            touch_required = True
+            _touch_prompt()
+
         if pin:
             try:
-                piv_controller.verify(pin)
+                piv_controller.verify(pin, touch_callback=touch_callback)
 
             except AuthenticationBlocked as e:
                 return {
@@ -712,6 +720,23 @@ class Controller(object):
                     'tries_left': e.tries_left,
                 }
 
+            except AuthenticationFailed as e:
+                if touch_required:
+                    return {
+                        'success': False,
+                        'error': 'wrong_key_or_touch_required',
+                    }
+                else:
+                    return {
+                        'success': False,
+                        'error': 'wrong_key',
+                        'message': 'Incorrect management key.',
+                    }
+
+            finally:
+                if touch_required:
+                    _close_touch_prompt()
+
         else:
             return {
                 'success': False,
@@ -723,6 +748,13 @@ class Controller(object):
         if piv_controller.has_protected_key:
             return self._piv_verify_pin(piv_controller, pin)
         else:
+            touch_required = False
+
+            def touch_callback():
+                nonlocal touch_required
+                touch_required = True
+                _touch_prompt()
+
             if mgm_key_hex:
                 if len(mgm_key_hex) != 48:
                     return {
@@ -739,17 +771,33 @@ class Controller(object):
                     }
 
                 try:
-                    piv_controller.authenticate(mgm_key_bytes)
+                    piv_controller.authenticate(
+                        mgm_key_bytes,
+                        touch_callback
+                    )
+
                 except AuthenticationFailed:
-                    return {
-                        'success': False,
-                        'error_id': 'wrong_mgm_key'
-                    }
+                    if touch_required:
+                        return {
+                            'success': False,
+                            'error': 'wrong_mgm_key_or_touch_required',
+                        }
+                    else:
+                        return {
+                            'success': False,
+                            'error': 'wrong_mgm_key'
+                        }
+
                 except BadFormat:
                     return {
                         'success': False,
                         'error_id': 'mgm_key_bad_format',
                     }
+
+                finally:
+                    if touch_required:
+                        _close_touch_prompt()
+
             else:
                 return {
                     'success': False,
@@ -791,6 +839,14 @@ def _piv_serialise_cert(slot, cert):
         'validFrom': cert.not_valid_before.date().isoformat(),
         'validTo': cert.not_valid_after.date().isoformat()
     }
+
+
+def _touch_prompt():
+    pyotherside.send('touchRequired')
+
+
+def _close_touch_prompt():
+    pyotherside.send('touchNotRequired')
 
 
 def init_with_logging(log_level, log_file=None):
