@@ -356,6 +356,10 @@ StackView {
         }
     }
 
+    ConfirmationPopup {
+        id: confirmationPopup
+    }
+
     PivGeneralErrorPopup {
         id: pivError
     }

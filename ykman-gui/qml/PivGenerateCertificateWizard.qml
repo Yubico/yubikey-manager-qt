@@ -19,10 +19,18 @@ ColumnLayout {
 
     property alias currentStep: wizardStack.depth
     readonly property int numSteps: selfSign ? 5 : 4
+    readonly property string slotHex: getSlotHex(slot)
+    readonly property string slotName: getSlotName(slot)
 
     readonly property var algorithms: ["RSA1024", "RSA2048", "ECCP256", "ECCP384"]
 
     objectName: "pivGenerateCertificateWizard"
+
+    function getSlotHex(slotId) {
+        return yubiKey.pivSlots
+            .find(function(slotObj) { return slotObj.id === slotId })
+            .hex
+    }
 
     function getSlotName(slotId) {
         return yubiKey.pivSlots
@@ -48,7 +56,7 @@ ColumnLayout {
         })
     }
 
-    function finish() {
+    function finish(confirmOverwrite) {
         function _finish(pin, managementKey) {
             busyMessage = qsTr("Generating...")
             isBusy = true
@@ -82,16 +90,38 @@ ColumnLayout {
             })
         }
 
-        views.pivGetPinOrManagementKey(
-            function(pin) {
-                _finish(pin, false)
-            },
-            function(key) {
-                pivPinPopup.getPinAndThen(function(pin) {
-                    _finish(pin, key)
-                })
-            }
-        );
+        if (confirmOverwrite) {
+            views.pivGetPinOrManagementKey(
+                function(pin) {
+                    _finish(pin, false)
+                },
+                function(key) {
+                    pivPinPopup.getPinAndThen(function(pin) {
+                        _finish(pin, key)
+                    })
+                }
+            );
+        } else {
+            var firstMessageTemplate =
+                yubiKey.pivCerts[slot]
+                    ?
+                        selfSign
+                            ? qsTr('This will overwrite the key and certificate in the %1 (%2) slot.')
+                            : qsTr('This will overwrite the key and delete the certificate in the %1 (%2) slot.')
+                    : qsTr('This will overwrite the key in the %1 (%2) slot.')
+
+            confirmationPopup.show(
+                [
+                    firstMessageTemplate.arg(slotName).arg(slotHex),
+                    qsTr('This action cannot be undone!'),
+                    qsTr('Are you sure you want to continue?'),
+                ],
+                function() {
+                    finish(true)
+                }
+            )
+        }
+
     }
 
     function formatDate(date) {
@@ -187,7 +217,7 @@ ColumnLayout {
                     }, {
                         "text": qsTr("Certificates")
                     }, {
-                        "text": qsTr("Generate: %1 (%2/%3)").arg(getSlotName(slot)).arg(currentStep).arg(numSteps)
+                        "text": qsTr("Generate: %1 (%2/%3)").arg(slotName).arg(currentStep).arg(numSteps)
                     }]
             }
 
