@@ -16,39 +16,43 @@ InlinePopup {
         if (!resp.success) {
             if (messages && messages[resp.error]) {
                 show(messages[resp.error])
+            } else {
+                switch (resp.error) {
+                case 'wrong_key':
+                    return show(qsTr("Wrong management key."))
 
-            } else if (resp.error === 'wrong_key') {
-                show(qsTr("Wrong management key."))
+                case 'key_required':
+                    return show(qsTr("Management key is required."))
 
-            } else if (resp.error === 'key_required') {
-                show(qsTr("Management key is required."))
+                case 'wrong_pin':
+                    return show(qsTr('Wrong PIN, %1 tries left.').arg(resp.tries_left))
 
-            } else if (resp.error === 'wrong_pin') {
-                show(qsTr('Wrong PIN, %1 tries left.').arg(resp.tries_left))
+                case 'wrong_puk':
+                    return show(qsTr("Wrong PUK. Tries remaning: %1").arg(resp.tries_left))
 
-            } else if (resp.error === 'wrong_puk') {
-                show(qsTr("Wrong PUK. Tries remaning: %1").arg(resp.tries_left))
+                case 'blocked':
+                    return show(qsTr('PIN is blocked.'))
 
-            } else if (resp.error === 'blocked') {
-                show(qsTr('PIN is blocked.'))
+                case 'bad_format':
+                    return show(qsTr('Management key must be exactly %1 hexadecimal characters.').arg(constants.pivManagementKeyHexLength))
 
-            } else if (resp.error === 'bad_format') {
-                show(qsTr('Management key must be exactly %1 hexadecimal characters.').arg(constants.pivManagementKeyHexLength))
+                case 'pin_required':
+                    return show(qsTr("PIN is required."))
 
-            } else if (resp.error === 'pin_required') {
-                show(qsTr("PIN is required."))
+                case 'new_key_bad_length':
+                case 'new_key_bad_hex':
+                    return show(qsTr('New management key must be exactly %1 hexadecimal characters.')
+                        .arg(constants.pivManagementKeyHexLength))
 
-            } else if (resp.error === 'new_key_bad_length' || resp.error === 'new_key_bad_hex') {
-                show(qsTr('New management key must be exactly %1 hexadecimal characters.')
-                    .arg(constants.pivManagementKeyHexLength))
+                default:
+                    console.log('PIV unmapped error:', resp.error, resp.message)
 
-            } else if (genericErrorMessageTemplate && resp.message) {
-                console.log('PIV unmapped error:', resp.error, resp.message)
-                show(genericErrorMessageTemplate.arg(resp.message))
-
-            } else if (unknownErrorMessage) {
-                console.log('PIV error:', resp.error)
-                show(unknownErrorMessage)
+                    if (genericErrorMessageTemplate && resp.message) {
+                        show(genericErrorMessageTemplate.arg(resp.message))
+                    } else if (unknownErrorMessage) {
+                        show(unknownErrorMessage)
+                    }
+                }
             }
         }
     }
