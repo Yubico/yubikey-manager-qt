@@ -11,14 +11,10 @@ ColumnLayout {
 
     objectName: "pivView"
 
-    property int busyCount: 0
-    readonly property bool isBusy: busyCount > 0
+    property bool isBusy
 
     function load() {
-        busyCount = busyCount + 2
-        yubiKey.refreshPiv(function () {
-            busyCount = busyCount - 1
-        })
+        isBusy = true
         yubiKey.pivListCertificates(function (resp) {
             if (!resp.success) {
                 if (resp.error) {
@@ -27,7 +23,7 @@ ColumnLayout {
                     pivError.show('Failed to list certificates')
                 }
             }
-            busyCount = busyCount - 1
+            isBusy = false
         })
     }
 
