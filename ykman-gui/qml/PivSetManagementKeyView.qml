@@ -61,9 +61,6 @@ ColumnLayout {
                         views.pivPinManagement()
 
                     } else {
-                        var badKeyFormat = qsTr("New management key must be exactly %1 hexadecimal characters.")
-                            .arg(constants.pivManagementKeyHexLength)
-
                         pivError.showResponseError(
                             resp,
                             qsTr('Management key change failed. Error message: %1'),
@@ -72,8 +69,6 @@ ColumnLayout {
                                 bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters.")
                                     .arg(constants.pivManagementKeyHexLength),
                                 key_required: qsTr("Please enter the current management key."),
-                                new_key_bad_hex: badKeyFormat,
-                                new_key_bad_length: badKeyFormat,
                                 pin_required: qsTr("Please enter the PIN."),
                                 wrong_key: qsTr("Wrong current management key."),
                             }
