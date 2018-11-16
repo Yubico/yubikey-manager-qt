@@ -38,11 +38,11 @@ ColumnLayout {
             if (resp.success) {
                 pivSuccessPopup.show(qsTr("CSR successfully written to %1").arg(csrFileUrl))
             } else {
-                if (resp.message) {
-                    pivError.show(qsTr("Failed to delete existing certificate: %1").arg(resp.message))
-                } else {
-                    pivError.show(qsTr("Failed to delete existing certificate for an unknown reason."))
-                }
+                pivError.showResponseError(
+                    resp,
+                    qsTr("Failed to delete existing certificate: %1").arg(resp.message),
+                    qsTr("Failed to delete existing certificate for an unknown reason.")
+                )
             }
             views.pop()
         })
@@ -71,12 +71,11 @@ ColumnLayout {
                             deleteCertificate(pin, managementKey)
                         }
                     } else {
-                        isBusy = false
-                        if (resp.message) {
-                            pivError.show(qsTr("Failed to generate certificate: %1").arg(resp.message))
-                        } else {
-                            pivError.show(qsTr("Failed to generate certificate for an unknown reason."))
-                        }
+                        pivError.showResponseError(
+                            resp,
+                            qsTr("Failed to generate certificate: %1"),
+                            qsTr("Failed to generate certificate for an unknown reason.")
+                        )
                     }
                 },
             })
