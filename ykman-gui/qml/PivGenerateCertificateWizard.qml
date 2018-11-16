@@ -71,6 +71,7 @@ ColumnLayout {
                             deleteCertificate(pin, managementKey)
                         }
                     } else {
+                        isBusy = false
                         pivError.showResponseError(
                             resp,
                             qsTr("Failed to generate certificate: %1"),
