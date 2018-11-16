@@ -266,10 +266,17 @@ Python {
         if (hasDevice) {
             doCall('yubikey.controller.refresh_piv', [], function (pivData) {
                 piv = pivData
-                doneCallback()
+
+                doCall('yubikey.controller.piv_list_certificates', [],
+                    function (resp) {
+                        if (resp.success) {
+                            pivCerts = Utils.indexBy(resp.certs, "slot")
+                        }
+                        doneCallback(resp)
+                    })
             })
         } else {
-            doneCallback()
+            doneCallback({})
         }
     }
 
@@ -427,13 +434,7 @@ Python {
     }
 
     function pivListCertificates(cb) {
-        doPivCall('yubikey.controller.piv_list_certificates', [],
-                  function (resp) {
-                      if (resp.success) {
-                          pivCerts = Utils.indexBy(resp.certs, "slot")
-                      }
-                      cb(resp)
-                  })
+        refreshPiv(cb)
     }
 
     function pivReadCertificate(slot, cb) {
