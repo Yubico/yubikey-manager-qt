@@ -44,11 +44,11 @@ ColumnLayout {
 
         function _tryImport(password) {
             views.pivGetPinOrManagementKey(function (pin) {
-                yubiKey.pivImportCertificate(slot, fileUrl, password, pin,
-                                             null, handleResponse)
+                yubiKey.pivImportFile(slot, fileUrl, password, pin, null,
+                                      handleResponse)
             }, function (managementKey) {
-                yubiKey.pivImportCertificate(slot, fileUrl, password, null,
-                                             managementKey, handleResponse)
+                yubiKey.pivImportFile(slot, fileUrl, password, null,
+                                      managementKey, handleResponse)
             })
         }
 

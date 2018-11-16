@@ -437,8 +437,8 @@ Python {
         doCall('yubikey.controller.piv_read_certificate', [slot], cb)
     }
 
-    function pivImportCertificate(slot, fileUrl, password, pin, managementKey, cb) {
-        doCall('yubikey.controller.piv_import_certificate',
+    function pivImportFile(slot, fileUrl, password, pin, managementKey, cb) {
+        doCall('yubikey.controller.piv_import_file',
                [slot, fileUrl, password, pin, managementKey], cb)
     }
 
