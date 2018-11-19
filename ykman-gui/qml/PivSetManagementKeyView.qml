@@ -10,7 +10,7 @@ ColumnLayout {
     readonly property bool hasCurrentManagementKeyInput: !hasProtectedKey
     readonly property bool hasNewManagementKeyInput: true
     readonly property bool hasPinInput: hasProtectedKey || storeManagementKey
-    readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key
+    readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key || false
     readonly property bool storeManagementKey: storeManagementKeyCheckbox.checked
     readonly property bool validCurrentManagementKey: (!hasCurrentManagementKeyInput
         || currentManagementKey.text.length === constants.pivManagementKeyHexLength)
@@ -60,43 +60,28 @@ ColumnLayout {
                         pivSuccessPopup.open()
                         views.pivPinManagement()
 
-                    } else if (resp.error === 'bad_format') {
-                        pivError.show(qsTr(
-                            "Current management key must be exactly %1 hexadecimal characters.")
-                                .arg(constants.pivManagementKeyHexLength))
-
-                    } else if (resp.error === 'new_key_bad_length' || resp.error === 'new_key_bad_hex') {
-                        pivError.show(qsTr(
-                            "New management key must be exactly %1 hexadecimal characters.")
-                                .arg(constants.pivManagementKeyHexLength))
-
-                    } else if (resp.error === 'wrong_key') {
-                        clearDefaultManagementKey()
-                        pivError.show(qsTr("Wrong current management key."))
-
-                    } else if (resp.error === 'key_required') {
-                        pivError.show(qsTr("Please enter the current management key."))
-
-                    } else if (resp.error === 'wrong_pin') {
-                        pivError.show(qsTr('Wrong PIN, %1 tries left.').arg(resp.tries_left))
-
-                    } else if (resp.error === 'blocked') {
-                        pivError.show(qsTr('PIN is blocked.'))
-                        if (hasProtectedKey) {
-                            views.pivPinManagement()
-                        } else {
-                            views.pop()
-                        }
-
-                    } else if (resp.error === 'pin_required') {
-                        pivError.show(qsTr("Please enter the PIN."))
-
-                    } else if (resp.message) {
-                        pivError.show(resp.message)
-
                     } else {
-                        console.log('Unknown failure:', resp.error)
-                        pivError.show(qsTr('Unknown failure.'))
+                        pivError.showResponseError(
+                            resp,
+                            {
+                                mgm_key_bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters.")
+                                    .arg(constants.pivManagementKeyHexLength),
+                                mgm_key_required: qsTr("Please enter the current management key."),
+                                pin_required: qsTr("Please enter the PIN."),
+                                wrong_mgm_key: qsTr("Wrong current management key."),
+                            }
+                        )
+
+                        if (resp.error_id === 'wrong_mgm_key') {
+                            clearDefaultManagementKey()
+
+                        } else if (resp.error_id === 'pin_blocked') {
+                            if (hasProtectedKey) {
+                                views.pivPinManagement()
+                            } else {
+                                views.pop()
+                            }
+                        }
                     }
                 },
                 pin,

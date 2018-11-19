@@ -17,11 +17,7 @@ ColumnLayout {
             if (resp.success) {
                 certificate = resp.cert
             } else {
-                if (resp.error) {
-                    pivError.show(resp.error)
-                } else {
-                    pivError.show('Failed to read certificate')
-                }
+                pivError.showResponseError(resp)
             }
         })
     }

@@ -39,6 +39,20 @@ def as_json(f):
     return wrapped
 
 
+def piv_catch_error(f):
+    def wrapped(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except Exception as e:
+            logger.error('PIV operation failed', exc_info=e)
+            return {
+                'success': False,
+                'error_id': None,
+                'error_message': str(e),
+            }
+    return wrapped
+
+
 class OtpContextManager(object):
     def __init__(self, dev):
         self._dev = dev
@@ -186,6 +200,7 @@ class Controller(object):
             logger.error('Failed to write config', exc_info=e)
             return {'success': False, 'error': str(e)}
 
+    @piv_catch_error
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
             return {
@@ -194,6 +209,7 @@ class Controller(object):
                 'has_stored_key': piv_controller.has_stored_key,
                 'pin_tries': piv_controller.get_pin_tries(),
                 'puk_blocked': piv_controller.puk_blocked,
+                'success': True,
             }
 
     def set_mode(self, interfaces):
@@ -403,59 +419,46 @@ class Controller(object):
             logger.error('Reset throwed an exception', exc_info=e)
             return {'success': False, 'error': str(e)}
 
+    @piv_catch_error
     def piv_reset(self):
-        try:
-            with self._open_piv() as controller:
-                controller.reset()
-                return {'success': True, 'error': None}
-        except Exception as e:
-            logger.error('Failed to reset PIV application', exc_info=e)
-            return {'success': False, 'error': str(e)}
+        with self._open_piv() as controller:
+            controller.reset()
+            return {'success': True}
 
+    @piv_catch_error
     def piv_read_certificate(self, slot):
         try:
             with self._open_piv() as controller:
                 cert = controller.read_certificate(SLOT[slot])
                 cert = _piv_serialise_cert(SLOT[slot], cert)
-                return {'success': True, 'cert': cert, 'error': None}
+                return {'success': True, 'cert': cert}
         except APDUError as e:
             if e.sw == SW.NOT_FOUND:
-                return {'success': True, 'cert': None, 'error': None}
+                return {'success': True, 'cert': None}
             raise
-        except Exception as e:
-            logger.error('Failed to read PIV certificate', exc_info=e)
-            return {'success': False, 'error': str(e)}
 
+    @piv_catch_error
     def piv_list_certificates(self):
-        try:
-            with self._open_piv() as controller:
-                certs = [
-                     _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
-                ]
-                return {'success': True, 'certs': certs, 'error': None}
-        except Exception as e:
-            logger.error('Failed to read PIV certificates', exc_info=e)
-            return {'success': False, 'error': str(e)}
+        with self._open_piv() as controller:
+            certs = [
+                 _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
+            ]
+            return {'success': True, 'certs': certs}
 
+    @piv_catch_error
     def piv_delete_certificate(self, slot_name, pin=None, mgm_key_hex=None):
         logger.debug('piv_delete_certificate %s', slot_name)
 
         with self._open_piv() as piv_controller:
-            try:
-                auth_failed = self._piv_ensure_authenticated(
-                    piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
-                if auth_failed:
-                    return auth_failed
+            auth_failed = self._piv_ensure_authenticated(
+                piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+            if auth_failed:
+                return auth_failed
 
-                piv_controller.delete_certificate(SLOT[slot_name])
-                return {'success': True}
-            except Exception as e:
-                logger.error('Failed', exc_info=e)
-                return {
-                    'success': False,
-                    'message': str(e),
-                }
+            piv_controller.delete_certificate(SLOT[slot_name])
+            return {'success': True}
 
+    @piv_catch_error
     def piv_generate_certificate(
             self, slot_name, algorithm, common_name, expiration_date,
             self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None,
@@ -469,86 +472,59 @@ class Controller(object):
         file_path = urllib.parse.urlparse(csr_file_url).path
 
         with self._open_piv() as piv_controller:
+            auth_failed = self._piv_ensure_authenticated(
+                piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+            if auth_failed:
+                return auth_failed
+
+            now = datetime.datetime.now()
             try:
-                auth_failed = self._piv_ensure_authenticated(
-                    piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
-                if auth_failed:
-                    return auth_failed
+                year = int(expiration_date[0:4])
+                month = int(expiration_date[(4+1):(4+1+2)])
+                day = int(expiration_date[(4+1+2+1):(4+1+2+1+2)])
+                valid_to = datetime.datetime(year, month, day)
+            except ValueError as e:
+                logger.debug('Failed to parse date: ' + expiration_date,
+                             exc_info=e)
+                return {
+                    'success': False,
+                    'error_id': 'invalid_iso8601_date',
+                    'date': expiration_date,
+                }
 
-                now = datetime.datetime.now()
-                try:
-                    year = int(expiration_date[0:4])
-                    month = int(expiration_date[(4+1):(4+1+2)])
-                    day = int(expiration_date[(4+1+2+1):(4+1+2+1+2)])
-                    valid_to = datetime.datetime(year, month, day)
-                except ValueError as e:
-                    logger.debug('Failed to parse date: ' + expiration_date,
-                                 exc_info=e)
-                    return {
-                        'success': False,
-                        'message': 'Invalid date: ' + expiration_date,
-                        'failure': {'invalidDate': True},
-                    }
+            unsupported_policy = self._piv_check_policies(
+                piv_controller, pin_policy=pin_policy,
+                touch_policy=touch_policy)
+            if unsupported_policy:
+                return unsupported_policy
 
-                unsupported_policy = self._piv_check_policies(
-                    piv_controller, pin_policy=pin_policy,
-                    touch_policy=touch_policy)
-                if unsupported_policy:
-                    return unsupported_policy
+            public_key = piv_controller.generate_key(
+                SLOT[slot_name], ALGO[algorithm],
+                pin_policy=(PIN_POLICY.from_string(pin_policy)
+                            if pin_policy else PIN_POLICY.DEFAULT),
+                touch_policy=(TOUCH_POLICY.from_string(touch_policy)
+                              if touch_policy else TOUCH_POLICY.DEFAULT))
 
-                public_key = piv_controller.generate_key(
-                    SLOT[slot_name], ALGO[algorithm],
-                    pin_policy=(PIN_POLICY.from_string(pin_policy)
-                                if pin_policy else PIN_POLICY.DEFAULT),
-                    touch_policy=(TOUCH_POLICY.from_string(touch_policy)
-                                  if touch_policy else TOUCH_POLICY.DEFAULT))
+            if pin:
+                pin_failed = self._piv_verify_pin(piv_controller, pin)
+                if pin_failed:
+                    return pin_failed
 
-                if pin:
-                    pin_failed = self._piv_verify_pin(piv_controller, pin)
-                    if pin_failed:
-                        return pin_failed
+            if self_sign:
+                piv_controller.generate_self_signed_certificate(
+                    SLOT[slot_name], public_key, common_name, now,
+                    valid_to)
+            else:
+                csr = piv_controller.generate_certificate_signing_request(
+                    SLOT[slot_name], public_key, common_name)
 
-                if self_sign:
-                    try:
-                        piv_controller.generate_self_signed_certificate(
-                            SLOT[slot_name], public_key, common_name, now,
-                            valid_to)
-                    except APDUError as e:
-                        if e.sw == SW.ACCESS_DENIED:
-                            return {
-                                'success': False,
-                                'failure': {'pinRequired': True}
-                            }
-                        else:
-                            logger.error(
-                                'Failed to generate self signed certificate',
-                                exc_info=e)
-                            return {
-                                'success': False,
-                                'message': str(e),
-                                'failure': {'unknown': True}
-                            }
-                else:
-                    csr = piv_controller.generate_certificate_signing_request(
-                        SLOT[slot_name], public_key, common_name)
-                    try:
-                        with open(file_path, 'w+b') as csr_file:
-                            csr_file.write(csr.public_bytes(
-                                encoding=serialization.Encoding.PEM))
-                    except Exception as e:
-                        logger.error('Failed to write CSR file to %s',
-                                     csr_file_url, exc_info=e)
-                        return {
-                            'success': False,
-                            'message': str(e),
-                            'failure': {'writeFile': True},
-                        }
+                with open(file_path, 'w+b') as csr_file:
+                    csr_file.write(csr.public_bytes(
+                        encoding=serialization.Encoding.PEM))
 
-                return {'success': True}
-            except APDUError as e:
-                logger.error('Failed', exc_info=e)
-                return {'success': False}
+            return {'success': True}
 
+    @piv_catch_error
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -559,13 +535,13 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error': 'blocked',
+                    'error_id': 'pin_blocked',
                 }
 
             except WrongPin as e:
                 return {
                     'success': False,
-                    'error': 'wrong pin',
+                    'error_id': 'wrong_pin',
                     'tries_left': e.tries_left,
                 }
 
@@ -573,7 +549,7 @@ class Controller(object):
                 if e.sw == SW.INCORRECT_PARAMETERS:
                     return {
                         'success': False,
-                        'error': 'incorrect parameters',
+                        'error_id': 'incorrect_parameters',
                     }
 
                 tries_left = piv_controller.get_pin_tries()
@@ -584,16 +560,7 @@ class Controller(object):
                     'tries_left': tries_left,
                 }
 
-            except Exception as e:
-                tries_left = piv_controller.get_pin_tries()
-                logger.error('PIN change failed. %s tries left.',
-                             tries_left, exc_info=e)
-                return {
-                    'success': False,
-                    'tries_left': tries_left,
-                    'message': str(e),
-                }
-
+    @piv_catch_error
     def piv_change_puk(self, old_puk, new_puk):
         with self._open_piv() as piv_controller:
             try:
@@ -603,27 +570,22 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error': 'blocked',
+                    'error_id': 'puk_blocked',
                 }
 
             except WrongPuk as e:
                 return {
                     'success': False,
-                    'error': 'wrong puk',
+                    'error_id': 'wrong_puk',
                     'tries_left': e.tries_left,
                 }
 
-            except Exception as e:
-                logger.error('PUK change failed.', exc_info=e)
-                return {
-                    'success': False,
-                    'message': str(e),
-                }
-
+    @piv_catch_error
     def piv_generate_random_mgm_key(self):
         return b2a_hex(ykman.piv.generate_random_management_key()).decode(
             'utf-8')
 
+    @piv_catch_error
     def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
                            store_on_device=False):
         with self._open_piv() as piv_controller:
@@ -645,7 +607,7 @@ class Controller(object):
                 logger.debug('Failed to parse new management key', exc_info=e)
                 return {
                     'success': False,
-                    'error': 'new_key_bad_hex'
+                    'error_id': 'new_mgm_key_bad_hex'
                   }
 
             if new_key is not None and len(new_key) != 24:
@@ -653,20 +615,14 @@ class Controller(object):
                              len(new_key))
                 return {
                     'success': False,
-                    'error': 'new_key_bad_length'
+                    'error_id': 'new_mgm_key_bad_length'
                 }
 
-            try:
-                piv_controller.set_mgm_key(
-                    new_key, touch=False, store_on_device=store_on_device)
-                return {'success': True}
-            except Exception as e:
-                logger.error('Failed to change management key', exc_info=e)
-                return {
-                    'success': False,
-                    'message': str(e),
-                }
+            piv_controller.set_mgm_key(
+                new_key, touch=False, store_on_device=store_on_device)
+            return {'success': True}
 
+    @piv_catch_error
     def piv_unblock_pin(self, puk, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -676,21 +632,14 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error': 'blocked',
+                    'error_id': 'puk_blocked',
                 }
 
             except WrongPuk as e:
                 return {
                     'success': False,
-                    'error': 'wrong puk',
+                    'error_id': 'wrong_puk',
                     'tries_left': e.tries_left,
-                }
-
-            except Exception as e:
-                logger.error('PIN unblock failed.', exc_info=e)
-                return {
-                    'success': False,
-                    'message': str(e),
                 }
 
     def _piv_verify_pin(self, piv_controller, pin=None):
@@ -701,29 +650,20 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error': 'blocked',
+                    'error_id': 'pin_blocked',
                 }
 
             except WrongPin as e:
                 return {
                     'success': False,
-                    'error': 'wrong_pin',
+                    'error_id': 'wrong_pin',
                     'tries_left': e.tries_left,
-                }
-
-            except Exception as e:
-                tries_left = piv_controller.get_pin_tries()
-                logger.debug('PIN verification failed. %s tries left.',
-                             tries_left, exc_info=e)
-                return {
-                    'success': False,
-                    'tries_left': tries_left,
                 }
 
         else:
             return {
                 'success': False,
-                'error': 'pin_required'
+                'error_id': 'pin_required'
             }
 
     def _piv_ensure_authenticated(self, piv_controller, pin=None,
@@ -732,29 +672,36 @@ class Controller(object):
             return self._piv_verify_pin(piv_controller, pin)
         else:
             if mgm_key_hex:
+                if len(mgm_key_hex) != 48:
+                    return {
+                        'success': False,
+                        'error_id': 'mgm_key_bad_format',
+                    }
+
                 try:
-                    piv_controller.authenticate(a2b_hex(mgm_key_hex))
+                    mgm_key_bytes = a2b_hex(mgm_key_hex)
+                except Exception:
+                    return {
+                        'success': False,
+                        'error_id': 'mgm_key_bad_format',
+                    }
+
+                try:
+                    piv_controller.authenticate(mgm_key_bytes)
                 except AuthenticationFailed as e:
                     return {
                         'success': False,
-                        'error': 'wrong_key'
+                        'error_id': 'wrong_mgm_key'
                     }
                 except BadFormat as e:
                     return {
                         'success': False,
-                        'error': 'bad_format'
-                    }
-                except Exception as e:
-                    logger.debug('Failed to authenticate with management key',
-                                 exc_info=e)
-                    return {
-                        'success': False,
-                        'message': str(e)
+                        'error_id': 'mgm_key_bad_format',
                     }
             else:
                 return {
                     'success': False,
-                    'error': 'key_required'
+                    'error_id': 'mgm_key_required'
                 }
 
     def _piv_check_policies(self, piv_controller, pin_policy=None,
@@ -762,7 +709,8 @@ class Controller(object):
         if pin_policy and not piv_controller.supports_pin_policies:
             return {
                 'success': False,
-                'failure': {'supportedPinPolicies': []}
+                'error_id': 'unsupported_pin_policy',
+                'supported_pin_policies': [],
             }
 
         if touch_policy and not (
@@ -770,11 +718,11 @@ class Controller(object):
                 in piv_controller.supported_touch_policies):
             return {
                 'success': False,
-                'failure': {
-                    'supportedTouchPolicies': [
-                        policy.name for policy in
-                        piv_controller.supported_touch_policies],
-                }
+                'error_id': 'unsupported_touch_policy',
+                'supported_touch_policies': [
+                    policy.name for policy in
+                    piv_controller.supported_touch_policies
+                ],
             }
 
 
