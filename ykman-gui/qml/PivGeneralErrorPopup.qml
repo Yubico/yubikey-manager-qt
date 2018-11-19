@@ -8,7 +8,7 @@ InlinePopup {
     standardButtons: Dialog.Ok
 
     function getDefaultMessage(resp) {
-        switch (resp.error) {
+        switch (resp.error_id) {
         case 'bad_format':
             return qsTr('Management key must be exactly %1 hexadecimal characters.'.arg(constants.pivManagementKeyHexLength))
 
@@ -44,14 +44,14 @@ InlinePopup {
 
     function showResponseError(resp, genericErrorMessageTemplate, unknownErrorMessage, messages) {
         if (!resp.success) {
-            if (messages && messages[resp.error]) {
-                show(messages[resp.error])
+            if (messages && messages[resp.error_id]) {
+                show(messages[resp.error_id])
             } else {
                 var defaultMessage = getDefaultMessage(resp)
                 if (defaultMessage) {
                     show(defaultMessage)
                 } else {
-                    console.log('PIV unmapped error:', resp.error, resp.error_message)
+                    console.log('PIV unmapped error:', resp.error_id, resp.error_message)
 
                     if (resp.error_message) {
                         show(resp.error_message)

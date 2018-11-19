@@ -35,9 +35,9 @@ ChangePinView {
                     }
                 )
 
-                if (resp.error === 'blocked') {
+                if (resp.error_id === 'blocked') {
                     views.pop()
-                } else if (resp.error === 'wrong_puk') {
+                } else if (resp.error_id === 'wrong_puk') {
                     clearCurrentPinInput()
                 }
             }

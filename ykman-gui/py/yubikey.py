@@ -44,7 +44,7 @@ def piv_catch_error(f):
             logger.error('PIV operation failed', exc_info=e)
             return {
                 'success': False,
-                'error': None,
+                'error_id': None,
                 'error_message': str(e),
             }
     return wrapped
@@ -420,7 +420,7 @@ class Controller(object):
     def piv_reset(self):
         with self._open_piv() as controller:
             controller.reset()
-            return {'success': True, 'error': None}
+            return {'success': True}
 
     @piv_catch_error
     def piv_read_certificate(self, slot):
@@ -428,10 +428,10 @@ class Controller(object):
             with self._open_piv() as controller:
                 cert = controller.read_certificate(SLOT[slot])
                 cert = _piv_serialise_cert(SLOT[slot], cert)
-                return {'success': True, 'cert': cert, 'error': None}
+                return {'success': True, 'cert': cert}
         except APDUError as e:
             if e.sw == SW.NOT_FOUND:
-                return {'success': True, 'cert': None, 'error': None}
+                return {'success': True, 'cert': None}
             raise
 
     @piv_catch_error
@@ -440,7 +440,7 @@ class Controller(object):
             certs = [
                  _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
             ]
-            return {'success': True, 'certs': certs, 'error': None}
+            return {'success': True, 'certs': certs}
 
     @piv_catch_error
     def piv_change_pin(self, old_pin, new_pin):
@@ -453,13 +453,13 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error': 'blocked',
+                    'error_id': 'blocked',
                 }
 
             except WrongPin as e:
                 return {
                     'success': False,
-                    'error': 'wrong_pin',
+                    'error_id': 'wrong_pin',
                     'tries_left': e.tries_left,
                 }
 
@@ -467,7 +467,7 @@ class Controller(object):
                 if e.sw == SW.INCORRECT_PARAMETERS:
                     return {
                         'success': False,
-                        'error': 'incorrect_parameters',
+                        'error_id': 'incorrect_parameters',
                     }
 
                 tries_left = piv_controller.get_pin_tries()
@@ -488,13 +488,13 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error': 'blocked',
+                    'error_id': 'blocked',
                 }
 
             except WrongPuk as e:
                 return {
                     'success': False,
-                    'error': 'wrong_puk',
+                    'error_id': 'wrong_puk',
                     'tries_left': e.tries_left,
                 }
 
@@ -525,7 +525,7 @@ class Controller(object):
                 logger.debug('Failed to parse new management key', exc_info=e)
                 return {
                     'success': False,
-                    'error': 'new_key_bad_hex'
+                    'error_id': 'new_key_bad_hex'
                   }
 
             if new_key is not None and len(new_key) != 24:
@@ -533,7 +533,7 @@ class Controller(object):
                              len(new_key))
                 return {
                     'success': False,
-                    'error': 'new_key_bad_length'
+                    'error_id': 'new_key_bad_length'
                 }
 
             piv_controller.set_mgm_key(
@@ -550,13 +550,13 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error': 'blocked',
+                    'error_id': 'blocked',
                 }
 
             except WrongPuk as e:
                 return {
                     'success': False,
-                    'error': 'wrong_puk',
+                    'error_id': 'wrong_puk',
                     'tries_left': e.tries_left,
                 }
 
@@ -568,20 +568,20 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error': 'blocked',
+                    'error_id': 'blocked',
                 }
 
             except WrongPin as e:
                 return {
                     'success': False,
-                    'error': 'wrong_pin',
+                    'error_id': 'wrong_pin',
                     'tries_left': e.tries_left,
                 }
 
         else:
             return {
                 'success': False,
-                'error': 'pin_required'
+                'error_id': 'pin_required'
             }
 
     def _piv_ensure_authenticated(self, piv_controller, pin=None,
@@ -595,17 +595,17 @@ class Controller(object):
                 except AuthenticationFailed as e:
                     return {
                         'success': False,
-                        'error': 'wrong_key'
+                        'error_id': 'wrong_key'
                     }
                 except BadFormat as e:
                     return {
                         'success': False,
-                        'error': 'bad_format'
+                        'error_id': 'bad_format'
                     }
             else:
                 return {
                     'success': False,
-                    'error': 'key_required'
+                    'error_id': 'key_required'
                 }
 
 

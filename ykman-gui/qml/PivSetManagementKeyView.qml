@@ -74,10 +74,10 @@ ColumnLayout {
                             }
                         )
 
-                        if (resp.error === 'wrong_key') {
+                        if (resp.error_id === 'wrong_key') {
                             clearDefaultManagementKey()
 
-                        } else if (resp.error === 'blocked') {
+                        } else if (resp.error_id === 'blocked') {
                             if (hasProtectedKey) {
                                 views.pivPinManagement()
                             } else {

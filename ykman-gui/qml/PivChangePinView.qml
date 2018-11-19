@@ -34,11 +34,11 @@ ChangePinView {
                     }
                 )
 
-                if (resp.error === 'wrong_pin') {
+                if (resp.error_id === 'wrong_pin') {
                     clearCurrentPinInput()
-                } else if (resp.error === 'blocked') {
+                } else if (resp.error_id === 'blocked') {
                     views.pop()
-                } else if (resp.error === 'incorrect_parameters') {
+                } else if (resp.error_id === 'incorrect_parameters') {
                     clearNewPinInputs()
                 }
             }
