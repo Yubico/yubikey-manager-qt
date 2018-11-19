@@ -441,11 +441,11 @@ Python {
     }
 
     function pivImportFile(slot, fileUrl, password, pin, managementKey, cb) {
-        doCall('yubikey.controller.piv_import_file',
-               [slot, fileUrl, password, pin, managementKey], cb)
+        doPivCall('yubikey.controller.piv_import_file',
+                  [slot, fileUrl, password, pin, managementKey], cb)
     }
 
     function pivCanParse(fileUrl, cb) {
-        doCall('yubikey.controller.piv_can_parse', [fileUrl], cb)
+        doPivCall('yubikey.controller.piv_can_parse', [fileUrl], cb)
     }
 }
