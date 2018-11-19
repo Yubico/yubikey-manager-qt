@@ -30,21 +30,22 @@ Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#bu
     $ sudo add-apt-repository -y ppa:yubico/stable
     $ sudo apt update
     $ sudo apt install \
-      python3-yubikey-manager
-      qt5-default \
-      qtbase5-dev \
-      qtdeclarative5-dev \
-      qtquickcontrols2-5-dev \
       libqt5svg5-dev \
-      qml-module-qtquick2 \
-      qml-module-qtquick-dialogs \
-      qml-module-qtquick-controls2 \
-      qml-module-qtquick-layouts \
-      qml-module-qtquick-window2 \
+      python3-yubikey-manager \
+      qml-module-io-thp-pyothersidei \
+      qml-module-qt-labs-folderlistmodel \
       qml-module-qt-labs-platform \
       qml-module-qt-labs-settings \
       qml-module-qtgraphicaleffects \
-      qml-module-io-thp-pyotherside
+      qml-module-qtquick-controls2 \
+      qml-module-qtquick-dialogs \
+      qml-module-qtquick-layouts \
+      qml-module-qtquick-window2 \
+      qml-module-qtquick2 \
+      qt5-default \
+      qtbase5-dev \
+      qtdeclarative5-dev \
+      qtquickcontrols2-5-dev
 
 === Setup the repository
 
