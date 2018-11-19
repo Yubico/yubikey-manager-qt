@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 import QtQuick.Dialogs 1.2
+import Qt.labs.platform 1.0
 
 ColumnLayout {
     property string title
@@ -63,10 +64,11 @@ ColumnLayout {
 
     FileDialog {
         id: selectCertificateDialog
-        title: "Import from file.."
-        folder: shortcuts.documents
+        title: "Import from file..."
+        acceptLabel: "Import"
+        fileMode: FileDialog.OpenFile
         nameFilters: ["Certificate/Key files (*.pem *.der *.pfx *.p12 *.key *.crt)"]
-        onAccepted: importCertificate(fileUrl.toString())
+        onAccepted: importCertificate(file.toString())
     }
 
     Heading2 {
