@@ -17,11 +17,7 @@ ColumnLayout {
         isBusy = true
         yubiKey.pivListCertificates(function (resp) {
             if (!resp.success) {
-                if (resp.error) {
-                    pivError.show(resp.error)
-                } else {
-                    pivError.show('Failed to list certificates')
-                }
+                pivError.showResponseError(resp)
             }
             isBusy = false
         })

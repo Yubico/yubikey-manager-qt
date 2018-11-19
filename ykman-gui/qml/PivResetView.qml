@@ -15,8 +15,7 @@ ColumnLayout {
                 pivSuccessPopup.open()
                 views.pop()
             } else {
-                pivGeneralError.error = resp.error
-                pivGeneralError.open()
+                pivError.showResponseError(resp)
             }
         })
     }
@@ -24,10 +23,6 @@ ColumnLayout {
     PivResetConfirmPopup {
         id: pivResetConfirmationPopup
         onAccepted: resetPiv()
-    }
-
-    PivGeneralErrorPopup {
-        id: pivGeneralError
     }
 
     BusyIndicator {
