@@ -590,8 +590,22 @@ class Controller(object):
             return self._piv_verify_pin(piv_controller, pin)
         else:
             if mgm_key_hex:
+                if len(mgm_key_hex) != 48:
+                    return {
+                        'success': False,
+                        'error_id': 'mgm_key_bad_format',
+                    }
+
                 try:
-                    piv_controller.authenticate(a2b_hex(mgm_key_hex))
+                    mgm_key_bytes = a2b_hex(mgm_key_hex)
+                except Exception:
+                    return {
+                        'success': False,
+                        'error_id': 'mgm_key_bad_format',
+                    }
+
+                try:
+                    piv_controller.authenticate(mgm_key_bytes)
                 except AuthenticationFailed as e:
                     return {
                         'success': False,
