@@ -1,49 +1,48 @@
 Source: yubikey-manager-qt
 Maintainer: Debian Authentication Maintainers <pkg-auth-maintainers@lists.alioth.debian.org>
-Uploaders: Dag Heyman <dag@yubico.com>,
-           Dain Nilsson <dain@yubico.com>
+Uploaders: Dag Heyman <dag@yubico.com>, Dain Nilsson <dain@yubico.com>
 Section: utils
 Priority: optional
 Standards-Version: 3.9.7
 Build-Depends: debhelper (>= 9),
-               python3-pip,
-               swig,
-               python,
-               libpcsclite-dev,
-               libssl-dev,
                libffi-dev,
+               libpcsclite-dev,
+               libqt5svg5-dev,
+               libssl-dev,
+               python,
+               python3-pip,
+               qml-module-io-thp-pyotherside,
+               qml-module-qt-labs-platform,
+               qml-module-qt-labs-settings,
+               qml-module-qtquick-controls2,
+               qml-module-qtquick-dialogs,
+               qml-module-qtquick-layouts,
+               qml-module-qtquick-window2,
+               qml-module-qtquick2,
                qtbase5-dev,
                qtdeclarative5-dev,
                qtquickcontrols2-5-dev,
-               qml-module-qtquick2,
-               qml-module-qtquick-layouts,
-               qml-module-qtquick-window2,
-               qml-module-qtquick-controls2,
-               qml-module-qtquick-dialogs,
-               qml-module-io-thp-pyotherside,
-               qml-module-qt-labs-settings,
-               qml-module-qt-labs-platform,
-               libqt5svg5-dev,
+               swig
 Homepage: https://developers.yubico.com/yubikey-manager-qt/
 
 Package: yubikey-manager-qt
 Architecture: any
-Depends: ${misc:Depends},
-         ${shlibs:Depends},
-         python3-yubikey-manager (>= 0.7.0~dev),
+Depends: libqt5svg5,
+         pcscd,
          python3-yubikey-manager (< 2),
+         python3-yubikey-manager (>= 0.7.0~dev),
          qml-module-io-thp-pyotherside,
          qml-module-qt-labs-folderlistmodel,
+         qml-module-qt-labs-platform,
+         qml-module-qt-labs-settings,
+         qml-module-qtgraphicaleffects,
+         qml-module-qtquick-controls2,
+         qml-module-qtquick-dialogs,
          qml-module-qtquick-layouts,
          qml-module-qtquick-window2,
          qml-module-qtquick2,
-         qml-module-qtquick-controls2,
-         qml-module-qtgraphicaleffects,
-         qml-module-qtquick-dialogs,
-         qml-module-qt-labs-settings,
-         qml-module-qt-labs-platform,
-         libqt5svg5,
-         pcscd
+         ${misc:Depends},
+         ${shlibs:Depends}
 Recommends: yubikey-manager
 Description: Graphical application for configuring a YubiKey
  A graphical application for configuring a YubiKey over all transport modes.
