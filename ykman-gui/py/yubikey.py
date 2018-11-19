@@ -525,7 +525,7 @@ class Controller(object):
                 logger.debug('Failed to parse new management key', exc_info=e)
                 return {
                     'success': False,
-                    'error_id': 'new_key_bad_hex'
+                    'error_id': 'new_mgm_key_bad_hex'
                   }
 
             if new_key is not None and len(new_key) != 24:
@@ -533,7 +533,7 @@ class Controller(object):
                              len(new_key))
                 return {
                     'success': False,
-                    'error_id': 'new_key_bad_length'
+                    'error_id': 'new_mgm_key_bad_length'
                 }
 
             piv_controller.set_mgm_key(
@@ -595,7 +595,7 @@ class Controller(object):
                 except AuthenticationFailed as e:
                     return {
                         'success': False,
-                        'error_id': 'wrong_key'
+                        'error_id': 'wrong_mgm_key'
                     }
                 except BadFormat as e:
                     return {
@@ -605,7 +605,7 @@ class Controller(object):
             else:
                 return {
                     'success': False,
-                    'error_id': 'key_required'
+                    'error_id': 'mgm_key_required'
                 }
 
 

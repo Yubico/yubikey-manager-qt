@@ -66,13 +66,13 @@ ColumnLayout {
                             {
                                 bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters.")
                                     .arg(constants.pivManagementKeyHexLength),
-                                key_required: qsTr("Please enter the current management key."),
+                                mgm_key_required: qsTr("Please enter the current management key."),
                                 pin_required: qsTr("Please enter the PIN."),
-                                wrong_key: qsTr("Wrong current management key."),
+                                wrong_mgm_key: qsTr("Wrong current management key."),
                             }
                         )
 
-                        if (resp.error_id === 'wrong_key') {
+                        if (resp.error_id === 'wrong_mgm_key') {
                             clearDefaultManagementKey()
 
                         } else if (resp.error_id === 'pin_blocked') {
