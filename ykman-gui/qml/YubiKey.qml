@@ -385,7 +385,7 @@ Python {
                   function (resp) {
                       if (resp.success) {
                           pivPukBlocked = false
-                      } else if (resp.error === 'blocked') {
+                      } else if (resp.error_id === 'pin_blocked') {
                           pivPukBlocked = true
                       }
                       cb(resp)
@@ -423,7 +423,7 @@ Python {
                   function (resp) {
                       if (resp.success) {
                           pivPukBlocked = false
-                      } else if (resp.error === 'blocked') {
+                      } else if (resp.error_id === 'puk_blocked') {
                           pivPukBlocked = true
                       }
                       cb(resp)
