@@ -9,7 +9,7 @@ InlinePopup {
 
     function getDefaultMessage(resp) {
         switch (resp.error_id) {
-        case 'bad_format':
+        case 'mgm_key_bad_format':
             return qsTr('Management key must be exactly %1 hexadecimal characters.'.arg(constants.pivManagementKeyHexLength))
 
         case 'mgm_key_required':

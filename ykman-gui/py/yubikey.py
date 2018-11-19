@@ -600,7 +600,7 @@ class Controller(object):
                 except BadFormat as e:
                     return {
                         'success': False,
-                        'error_id': 'bad_format'
+                        'error_id': 'mgm_key_bad_format',
                     }
             else:
                 return {
