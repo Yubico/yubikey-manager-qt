@@ -453,7 +453,7 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error_id': 'blocked',
+                    'error_id': 'pin_blocked',
                 }
 
             except WrongPin as e:
@@ -488,7 +488,7 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error_id': 'blocked',
+                    'error_id': 'puk_blocked',
                 }
 
             except WrongPuk as e:
@@ -550,7 +550,7 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error_id': 'blocked',
+                    'error_id': 'puk_blocked',
                 }
 
             except WrongPuk as e:
@@ -568,7 +568,7 @@ class Controller(object):
             except AuthenticationBlocked as e:
                 return {
                     'success': False,
-                    'error_id': 'blocked',
+                    'error_id': 'pin_blocked',
                 }
 
             except WrongPin as e:

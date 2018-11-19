@@ -29,13 +29,12 @@ ChangePinView {
                     qsTr("PUK change failed for an unknown reason. Error message: %1"),
                     qsTr("PUK change failed for an unknown reason."),
                     {
-                        blocked: qsTr("PUK is blocked."),
                         wrong_puk: qsTr("Wrong current PUK. Tries remaning: %1")
                             .arg(resp.tries_left),
                     }
                 )
 
-                if (resp.error_id === 'blocked') {
+                if (resp.error_id === 'puk_blocked') {
                     views.pop()
                 } else if (resp.error_id === 'wrong_puk') {
                     clearCurrentPinInput()

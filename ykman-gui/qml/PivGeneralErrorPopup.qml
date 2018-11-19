@@ -12,9 +12,6 @@ InlinePopup {
         case 'bad_format':
             return qsTr('Management key must be exactly %1 hexadecimal characters.'.arg(constants.pivManagementKeyHexLength))
 
-        case 'blocked':
-            return qsTr('PIN is blocked.')
-
         case 'key_required':
             return qsTr("Management key is required.")
 
@@ -23,8 +20,14 @@ InlinePopup {
             return qsTr('New management key must be exactly %1 hexadecimal characters.')
                 .arg(constants.pivManagementKeyHexLength)
 
+        case 'pin_blocked':
+            return qsTr('PIN is blocked.')
+
         case 'pin_required':
             return qsTr("PIN is required.")
+
+        case 'puk_blocked':
+            return qsTr('PUK is blocked.')
 
         case 'wrong_key':
             return qsTr("Wrong management key.")

@@ -30,13 +30,10 @@ ChangePinView {
                 pivError.showResponseError(
                     resp,
                     qsTr("PIN unblock failed for an unknown reason. Error message: %1").arg(resp.message),
-                    qsTr("PIN unblock failed for an unknown reason."),
-                    {
-                        blocked: qsTr("PUK is blocked."),
-                    }
+                    qsTr("PIN unblock failed for an unknown reason.")
                 )
 
-                if (resp.error_id === 'blocked') {
+                if (resp.error_id === 'puk_blocked') {
                     views.pop()
                 } else if (resp.error_id === 'wrong_puk') {
                     clearCurrentPinInput()
