@@ -597,7 +597,7 @@ class Controller(object):
                         'success': False,
                         'error_id': 'wrong_mgm_key'
                     }
-                except BadFormat as e:
+                except BadFormat:
                     return {
                         'success': False,
                         'error_id': 'mgm_key_bad_format',
