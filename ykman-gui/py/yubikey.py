@@ -606,12 +606,12 @@ class Controller(object):
 
                 try:
                     piv_controller.authenticate(mgm_key_bytes)
-                except AuthenticationFailed as e:
+                except AuthenticationFailed:
                     return {
                         'success': False,
                         'error_id': 'wrong_mgm_key'
                     }
-                except BadFormat as e:
+                except BadFormat:
                     return {
                         'success': False,
                         'error_id': 'mgm_key_bad_format',
