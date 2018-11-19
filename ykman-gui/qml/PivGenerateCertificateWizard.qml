@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
-import QtQuick.Dialogs 1.2
+import Qt.labs.platform 1.0
 
 ColumnLayout {
 
@@ -179,11 +179,11 @@ ColumnLayout {
 
     FileDialog {
         id: selectCsrOutputDialog
-        title: "Please choose a destination"
-        defaultSuffix: "csr"
-        folder: shortcuts.documents
-        selectExisting: false
-        onAccepted: csrFileUrl = fileUrl.toString()
+        title: "Select certificate export location"
+        acceptLabel: "Select"
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["Certificate signing request files (*.pem *.csr)", "All files (*)"]
+        onAccepted: csrFileUrl = file.toString()
     }
 
     ColumnLayout {
