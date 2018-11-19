@@ -36,6 +36,20 @@ def as_json(f):
     return wrapped
 
 
+def piv_catch_error(f):
+    def wrapped(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except Exception as e:
+            logger.error('PIV operation failed', exc_info=e)
+            return {
+                'success': False,
+                'error': None,
+                'error_message': str(e),
+            }
+    return wrapped
+
+
 class OtpContextManager(object):
     def __init__(self, dev):
         self._dev = dev
@@ -183,6 +197,7 @@ class Controller(object):
             logger.error('Failed to write config', exc_info=e)
             return {'success': False, 'error': str(e)}
 
+    @piv_catch_error
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
             return {
@@ -191,6 +206,7 @@ class Controller(object):
                 'has_stored_key': piv_controller.has_stored_key,
                 'pin_tries': piv_controller.get_pin_tries(),
                 'puk_blocked': piv_controller.puk_blocked,
+                'success': True,
             }
 
     def set_mode(self, interfaces):
@@ -400,15 +416,13 @@ class Controller(object):
             logger.error('Reset throwed an exception', exc_info=e)
             return {'success': False, 'error': str(e)}
 
+    @piv_catch_error
     def piv_reset(self):
-        try:
-            with self._open_piv() as controller:
-                controller.reset()
-                return {'success': True, 'error': None}
-        except Exception as e:
-            logger.error('Failed to reset PIV application', exc_info=e)
-            return {'success': False, 'error': str(e)}
+        with self._open_piv() as controller:
+            controller.reset()
+            return {'success': True, 'error': None}
 
+    @piv_catch_error
     def piv_read_certificate(self, slot):
         try:
             with self._open_piv() as controller:
@@ -419,21 +433,16 @@ class Controller(object):
             if e.sw == SW.NOT_FOUND:
                 return {'success': True, 'cert': None, 'error': None}
             raise
-        except Exception as e:
-            logger.error('Failed to read PIV certificate', exc_info=e)
-            return {'success': False, 'error': str(e)}
 
+    @piv_catch_error
     def piv_list_certificates(self):
-        try:
-            with self._open_piv() as controller:
-                certs = [
-                     _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
-                ]
-                return {'success': True, 'certs': certs, 'error': None}
-        except Exception as e:
-            logger.error('Failed to read PIV certificates', exc_info=e)
-            return {'success': False, 'error': str(e)}
+        with self._open_piv() as controller:
+            certs = [
+                 _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
+            ]
+            return {'success': True, 'certs': certs, 'error': None}
 
+    @piv_catch_error
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -469,16 +478,7 @@ class Controller(object):
                     'tries_left': tries_left,
                 }
 
-            except Exception as e:
-                tries_left = piv_controller.get_pin_tries()
-                logger.error('PIN change failed. %s tries left.',
-                             tries_left, exc_info=e)
-                return {
-                    'success': False,
-                    'tries_left': tries_left,
-                    'message': str(e),
-                }
-
+    @piv_catch_error
     def piv_change_puk(self, old_puk, new_puk):
         with self._open_piv() as piv_controller:
             try:
@@ -498,17 +498,12 @@ class Controller(object):
                     'tries_left': e.tries_left,
                 }
 
-            except Exception as e:
-                logger.error('PUK change failed.', exc_info=e)
-                return {
-                    'success': False,
-                    'message': str(e),
-                }
-
+    @piv_catch_error
     def piv_generate_random_mgm_key(self):
         return b2a_hex(ykman.piv.generate_random_management_key()).decode(
             'utf-8')
 
+    @piv_catch_error
     def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
                            store_on_device=False):
         with self._open_piv() as piv_controller:
@@ -541,17 +536,11 @@ class Controller(object):
                     'error': 'new_key_bad_length'
                 }
 
-            try:
-                piv_controller.set_mgm_key(
-                    new_key, touch=False, store_on_device=store_on_device)
-                return {'success': True}
-            except Exception as e:
-                logger.error('Failed to change management key', exc_info=e)
-                return {
-                    'success': False,
-                    'message': str(e),
-                }
+            piv_controller.set_mgm_key(
+                new_key, touch=False, store_on_device=store_on_device)
+            return {'success': True}
 
+    @piv_catch_error
     def piv_unblock_pin(self, puk, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -571,13 +560,6 @@ class Controller(object):
                     'tries_left': e.tries_left,
                 }
 
-            except Exception as e:
-                logger.error('PIN unblock failed.', exc_info=e)
-                return {
-                    'success': False,
-                    'message': str(e),
-                }
-
     def _piv_verify_pin(self, piv_controller, pin=None):
         if pin:
             try:
@@ -594,15 +576,6 @@ class Controller(object):
                     'success': False,
                     'error': 'wrong_pin',
                     'tries_left': e.tries_left,
-                }
-
-            except Exception as e:
-                tries_left = piv_controller.get_pin_tries()
-                logger.debug('PIN verification failed. %s tries left.',
-                             tries_left, exc_info=e)
-                return {
-                    'success': False,
-                    'tries_left': tries_left,
                 }
 
         else:
@@ -628,13 +601,6 @@ class Controller(object):
                     return {
                         'success': False,
                         'error': 'bad_format'
-                    }
-                except Exception as e:
-                    logger.debug('Failed to authenticate with management key',
-                                 exc_info=e)
-                    return {
-                        'success': False,
-                        'message': str(e)
                     }
             else:
                 return {

@@ -51,12 +51,12 @@ InlinePopup {
                 if (defaultMessage) {
                     show(defaultMessage)
                 } else {
-                    console.log('PIV unmapped error:', resp.error, resp.message)
+                    console.log('PIV unmapped error:', resp.error, resp.error_message)
 
-                    if (genericErrorMessageTemplate && resp.message) {
-                        show(genericErrorMessageTemplate.arg(resp.message))
-                    } else if (unknownErrorMessage) {
-                        show(unknownErrorMessage)
+                    if (resp.error_message) {
+                        show(resp.error_message)
+                    } else {
+                        show('Unknown error. Please see the logs for details.')
                     }
                 }
             }
