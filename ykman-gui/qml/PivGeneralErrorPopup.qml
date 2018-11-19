@@ -59,7 +59,7 @@ InlinePopup {
                     if (resp.error_message) {
                         show(resp.error_message)
                     } else {
-                        show('Unknown error. Please see the logs for details.')
+                        show(qsTr('Unknown error. Please see the logs for details.'))
                     }
                 }
             }
