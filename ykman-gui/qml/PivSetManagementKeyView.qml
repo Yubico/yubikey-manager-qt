@@ -10,7 +10,7 @@ ColumnLayout {
     readonly property bool hasCurrentManagementKeyInput: !hasProtectedKey
     readonly property bool hasNewManagementKeyInput: true
     readonly property bool hasPinInput: hasProtectedKey || storeManagementKey
-    readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key
+    readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key || false
     readonly property bool storeManagementKey: storeManagementKeyCheckbox.checked
     readonly property bool validCurrentManagementKey: (!hasCurrentManagementKeyInput
         || currentManagementKey.text.length === constants.pivManagementKeyHexLength)
