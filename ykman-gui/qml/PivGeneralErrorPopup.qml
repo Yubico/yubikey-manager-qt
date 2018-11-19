@@ -57,7 +57,7 @@ InlinePopup {
                     console.log('PIV unmapped error:', resp.error_id, resp.error_message)
 
                     if (resp.error_message) {
-                        show(resp.error_message)
+                        show(qsTr('Unknown error: %1').arg(resp.error_message))
                     } else {
                         show(qsTr('Unknown error. Please see the logs for details.'))
                     }
