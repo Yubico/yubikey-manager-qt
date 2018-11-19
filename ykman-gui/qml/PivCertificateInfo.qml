@@ -13,7 +13,7 @@ ColumnLayout {
 
     onVisibleChanged: visible ? load() : ''
     function load() {
-        yubiKey.refreshPiv(function () {})
+        yubiKey.refreshPiv()
     }
 
     Heading2 {

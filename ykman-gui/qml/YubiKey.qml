@@ -266,10 +266,14 @@ Python {
         if (hasDevice) {
             doCall('yubikey.controller.refresh_piv', [], function (pivData) {
                 piv = pivData
-                doneCallback()
+                if (doneCallback) {
+                    doneCallback()
+                }
             })
         } else {
-            doneCallback()
+            if (doneCallback) {
+                doneCallback()
+            }
         }
     }
 
