@@ -63,8 +63,6 @@ ColumnLayout {
                     } else {
                         pivError.showResponseError(
                             resp,
-                            qsTr('Management key change failed. Error message: %1'),
-                            qsTr('Management key change failed for an unknown reason.'),
                             {
                                 bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters.")
                                     .arg(constants.pivManagementKeyHexLength),

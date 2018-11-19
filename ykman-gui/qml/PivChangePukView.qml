@@ -26,8 +26,6 @@ ChangePinView {
             } else {
                 pivError.showResponseError(
                     resp,
-                    qsTr("PUK change failed for an unknown reason. Error message: %1"),
-                    qsTr("PUK change failed for an unknown reason."),
                     {
                         wrong_puk: qsTr("Wrong current PUK. Tries remaning: %1")
                             .arg(resp.tries_left),

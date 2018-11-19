@@ -25,8 +25,6 @@ ChangePinView {
             } else {
                 pivError.showResponseError(
                     resp,
-                    qsTr("PIN change failed for an unknown reason. Error message: %1"),
-                    qsTr("PIN change failed for an unknown reason."),
                     {
                         wrong_pin: qsTr("Wrong current PIN. Tries remaining: %1").arg(resp.tries_left),
                         pin_blocked: qsTr("PIN is blocked. Use the PUK to unlock it, or reset the PIV application."),

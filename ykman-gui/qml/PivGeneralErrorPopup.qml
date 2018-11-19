@@ -45,10 +45,10 @@ InlinePopup {
         open()
     }
 
-    function showResponseError(resp, genericErrorMessageTemplate, unknownErrorMessage, messages) {
+    function showResponseError(resp, override_messages) {
         if (!resp.success) {
-            if (messages && messages[resp.error_id]) {
-                show(messages[resp.error_id])
+            if (override_messages && override_messages[resp.error_id]) {
+                show(override_messages[resp.error_id])
             } else {
                 var defaultMessage = getDefaultMessage(resp)
                 if (defaultMessage) {

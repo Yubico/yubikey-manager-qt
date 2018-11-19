@@ -27,11 +27,7 @@ ChangePinView {
                 pivSuccessPopup.open()
                 views.pop()
             } else {
-                pivError.showResponseError(
-                    resp,
-                    qsTr("PIN unblock failed for an unknown reason. Error message: %1").arg(resp.message),
-                    qsTr("PIN unblock failed for an unknown reason.")
-                )
+                pivError.showResponseError(resp)
 
                 if (resp.error_id === 'puk_blocked') {
                     views.pop()

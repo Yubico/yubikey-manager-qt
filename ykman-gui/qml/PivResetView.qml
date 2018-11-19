@@ -15,11 +15,7 @@ ColumnLayout {
                 pivSuccessPopup.open()
                 views.pop()
             } else {
-                pivError.showResponseError(
-                    resp,
-                    qsTr("Reset failed for an unknown reason. Error message: %1"),
-                    qsTr("Reset failed for an unknown reason.")
-                )
+                pivError.showResponseError(resp)
             }
         })
     }
