@@ -23,6 +23,9 @@ InlinePopup {
             return qsTr('New management key must be exactly %1 hexadecimal characters.')
                 .arg(constants.pivManagementKeyHexLength)
 
+        case 'no_device':
+            return qsTr('No YubiKey present.')
+
         case 'pin_blocked':
             return qsTr('PIN is blocked.')
 

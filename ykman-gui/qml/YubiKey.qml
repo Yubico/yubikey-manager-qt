@@ -279,15 +279,17 @@ Python {
 
     function refreshPivData(doneCallback) {
         if (hasDevice) {
-            doCall('yubikey.controller.refresh_piv', [], function (pivData) {
-                piv = pivData
+            doCall('yubikey.controller.refresh_piv', [], function (resp) {
+                if (resp.success) {
+                    piv = resp.piv_data
+                }
                 if (doneCallback) {
-                    doneCallback()
+                    doneCallback(resp)
                 }
             })
         } else {
             if (doneCallback) {
-                doneCallback()
+                doneCallback({ success: false, error_id: 'no_device' })
             }
         }
     }
