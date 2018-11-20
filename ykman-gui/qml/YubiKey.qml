@@ -461,7 +461,7 @@ Python {
 
     function pivDeleteCertificate(slotName, pin, keyHex, cb) {
         doPivCall('yubikey.controller.piv_delete_certificate',
-               [slotName, pin, keyHex], cb)
+                  [slotName, pin, keyHex], cb)
     }
 
     function pivGenerateCertificate(args) {
