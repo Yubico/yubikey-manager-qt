@@ -497,9 +497,18 @@ class Controller(object):
                     return pin_failed
 
             if self_sign:
-                piv_controller.generate_self_signed_certificate(
-                    SLOT[slot_name], public_key, common_name, now,
-                    valid_to)
+                try:
+                    piv_controller.generate_self_signed_certificate(
+                        SLOT[slot_name], public_key, common_name, now,
+                        valid_to)
+                except APDUError as e:
+                    if e.sw == SW.ACCESS_DENIED:
+                        return {
+                            'success': False,
+                            'error_id': 'pin_required',
+                        }
+                    raise
+
             else:
                 csr = piv_controller.generate_certificate_signing_request(
                     SLOT[slot_name], public_key, common_name)
