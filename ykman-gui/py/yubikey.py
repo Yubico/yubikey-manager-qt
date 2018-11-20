@@ -782,12 +782,12 @@ class Controller(object):
                     if touch_required:
                         return {
                             'success': False,
-                            'error': 'wrong_mgm_key_or_touch_required',
+                            'error_id': 'wrong_mgm_key_or_touch_required',
                         }
                     else:
                         return {
                             'success': False,
-                            'error': 'wrong_mgm_key'
+                            'error_id': 'wrong_mgm_key'
                         }
 
                 except BadFormat:
