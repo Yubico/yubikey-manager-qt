@@ -459,14 +459,14 @@ class Controller(object):
         file_path = urllib.parse.urlparse(csr_file_url).path
 
         with self._open_piv() as piv_controller:
-            pin_failed = self._piv_verify_pin(piv_controller, pin)
-            if pin_failed:
-                return pin_failed
-
             auth_failed = self._piv_ensure_authenticated(
                 piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
             if auth_failed:
                 return auth_failed
+
+            pin_failed = self._piv_verify_pin(piv_controller, pin)
+            if pin_failed:
+                return pin_failed
 
             if self_sign:
                 now = datetime.datetime.now()
