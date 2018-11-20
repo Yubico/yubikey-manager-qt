@@ -547,13 +547,6 @@ class Controller(object):
                     'tries_left': e.tries_left,
                 }
 
-            except Exception as e:
-                logger.error('PIN unblock failed.', exc_info=e)
-                return {
-                    'success': False,
-                    'message': str(e),
-                }
-
     @piv_catch_error
     def piv_can_parse(self, file_url):
         file_path = urllib.parse.urlparse(file_url).path
