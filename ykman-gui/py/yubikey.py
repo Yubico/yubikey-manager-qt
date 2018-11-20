@@ -604,6 +604,9 @@ class Controller(object):
         is_private_key = False
         try:
             file_path = urllib.parse.urlparse(file_url).path
+            file_path_windows = file_path[1:]
+            if os.name == 'nt':
+                file_path = file_path_windows
             if password:
                 password = password.encode()
             with open(file_path, 'r+b') as file:
