@@ -103,7 +103,7 @@ ColumnLayout {
             })
         }
 
-        if (confirmOverwrite) {
+        if (confirmOverwrite || !yubiKey.pivCerts[slot]) {
             if (selfSign || csrFileUrl) {
                 _prompt_for_pin_and_key()
             } else {
@@ -112,12 +112,9 @@ ColumnLayout {
 
         } else {
             var firstMessageTemplate =
-                yubiKey.pivCerts[slot]
-                    ?
-                        selfSign
-                            ? qsTr('This will overwrite the key and certificate in the %1 (%2) slot.')
-                            : qsTr('This will overwrite the key and delete the certificate in the %1 (%2) slot.')
-                    : qsTr('This will overwrite the key in the %1 (%2) slot.')
+                selfSign
+                    ? qsTr('This will overwrite the key and certificate in the %1 (%2) slot.')
+                    : qsTr('This will overwrite the key and delete the certificate in the %1 (%2) slot.')
 
             confirmationPopup.show(
                 [
