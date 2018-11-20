@@ -20,7 +20,7 @@ ColumnLayout {
 
     function load() {
         isBusy = true
-        yubiKey.refreshPiv(function () {
+        yubiKey.refreshPivData(function () {
             isBusy = false
         })
     }
