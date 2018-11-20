@@ -13,13 +13,7 @@ ColumnLayout {
 
     onVisibleChanged: visible ? load() : ''
     function load() {
-        yubiKey.pivReadCertificate(slot, function (resp) {
-            if (resp.success) {
-                certificate = resp.cert
-            } else {
-                pivError.showResponseError(resp)
-            }
-        })
+        yubiKey.refreshPivData()
     }
 
     Heading2 {

@@ -201,6 +201,7 @@ class Controller(object):
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
             return {
+                'certs': self._piv_list_certificates(piv_controller),
                 'has_derived_key': piv_controller.has_derived_key,
                 'has_protected_key': piv_controller.has_protected_key,
                 'has_stored_key': piv_controller.has_stored_key,
@@ -422,25 +423,10 @@ class Controller(object):
             controller.reset()
             return {'success': True}
 
-    @piv_catch_error
-    def piv_read_certificate(self, slot):
-        try:
-            with self._open_piv() as controller:
-                cert = controller.read_certificate(SLOT[slot])
-                cert = _piv_serialise_cert(SLOT[slot], cert)
-                return {'success': True, 'cert': cert}
-        except APDUError as e:
-            if e.sw == SW.NOT_FOUND:
-                return {'success': True, 'cert': None}
-            raise
-
-    @piv_catch_error
-    def piv_list_certificates(self):
-        with self._open_piv() as controller:
-            certs = [
-                 _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
-            ]
-            return {'success': True, 'certs': certs}
+    def _piv_list_certificates(self, controller):
+        return {
+            SLOT(slot).name: _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
+        }
 
     @piv_catch_error
     def piv_change_pin(self, old_pin, new_pin):

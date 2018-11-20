@@ -47,9 +47,9 @@ Python {
             "hex": "9e"
         }]
 
-    property var pivCerts: ({
+    readonly property var pivCerts: piv && piv.certs || {
 
-                            })
+                                    }
 
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
@@ -262,35 +262,39 @@ Python {
         })
     }
 
-    function refreshPiv(doneCallback) {
+    function refreshPivData(doneCallback) {
         if (hasDevice) {
             doCall('yubikey.controller.refresh_piv', [], function (pivData) {
                 piv = pivData
-                doneCallback()
+                if (doneCallback) {
+                    doneCallback()
+                }
             })
         } else {
-            doneCallback()
+            if (doneCallback) {
+                doneCallback()
+            }
         }
     }
 
 
     /**
-     * Transform a `callback` into one that will first call `refreshPiv` and then
-     * itself when `refresh` is done.
+     * Transform a `callback` into one that will first call `refreshPivData`
+     * and then itself when `refresh` is done.
      *
      * The arguments and `this` context of the call to the `callback` are
      * preseved.
      *
      * @param callback a function
      *
-     * @return a function which will call `refreshPiv()` and delay the execution of
-     *          the `callback` until the `refreshPiv()` is done.
+     * @return a function which will call `refreshPivData()` and delay the
+     *      execution of the `callback` until the `refreshPivData()` is done.
      */
     function _refreshPivBefore(callback) {
         return function (/* ...arguments */ ) {
             var callbackThis = this
             var callbackArguments = arguments
-            refreshPiv(function () {
+            refreshPivData(function () {
                 callback.apply(callbackThis, callbackArguments)
             })
         }
@@ -399,7 +403,7 @@ Python {
                   [pin, currentMgmKey, newKey, storeOnDevice],
                   function (result) {
                       touchPromptTimer.stop()
-                      refreshPiv(function () {
+                      refreshPivData(function () {
                           cb(result)
                       })
                   })
@@ -424,19 +428,5 @@ Python {
                       }
                       cb(resp)
                   })
-    }
-
-    function pivListCertificates(cb) {
-        doPivCall('yubikey.controller.piv_list_certificates', [],
-                  function (resp) {
-                      if (resp.success) {
-                          pivCerts = Utils.indexBy(resp.certs, "slot")
-                      }
-                      cb(resp)
-                  })
-    }
-
-    function pivReadCertificate(slot, cb) {
-        doPivCall('yubikey.controller.piv_read_certificate', [slot], cb)
     }
 }
