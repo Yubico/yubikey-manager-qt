@@ -12,7 +12,7 @@ ColumnLayout {
     property string busyMessage: ""
 
     property string algorithm: "ECCP256"
-    property string expirationDate: ""
+    property string expirationDate: formatDate(getDefaultExpirationDate())
     property bool selfSign: true
     property string subjectCommonName: ""
 
@@ -133,6 +133,12 @@ ColumnLayout {
     function formatDate(date) {
         var isoMonth = date.getMonth() + 1
         return date.getFullYear() + "-" + (isoMonth < 10 ? "0" : "") + isoMonth + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate()
+    }
+
+    function getDefaultExpirationDate() {
+        var date = new Date()
+        date.setFullYear(date.getFullYear() + 1)
+        return date
     }
 
     function isInputValid() {
@@ -320,6 +326,8 @@ ColumnLayout {
 
                 ColumnLayout {
 
+                    Component.onCompleted: calendarWidget.goToMonth(new Date(expirationDate))
+
                     RowLayout {
                         spacing: constants.contentMargins / 2
                         Layout.topMargin: constants.contentTopMargin
@@ -344,6 +352,7 @@ ColumnLayout {
 
 
                     CalendarWidget {
+                        id: calendarWidget
                         Layout.alignment: Qt.AlignTop
                         onDateClicked: expirationDate = formatDate(date)
                     }

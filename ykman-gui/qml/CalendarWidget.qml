@@ -15,11 +15,14 @@ ListView {
     width: 275
     height: 200
 
-    signal dateClicked(date date)
-
     model: CalendarModel {
         from: new Date()
     }
+
+    signal dateClicked(date date)
+    signal goToMonth(date date)
+
+    onGoToMonth: currentIndex = model.indexOf(date)
 
     delegate: ColumnLayout {
         width: listview.width
