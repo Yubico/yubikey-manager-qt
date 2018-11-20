@@ -14,6 +14,7 @@ from base64 import b32decode
 from binascii import b2a_hex, a2b_hex
 from fido2.ctap import CtapError
 from cryptography import x509
+from cryptography.hazmat.primitives import serialization
 from ykman.descriptor import get_descriptors
 from ykman.device import device_config
 from ykman.otp import OtpController
@@ -603,6 +604,20 @@ class Controller(object):
                     controller.import_certificate(SLOT[slot], cert)
                 if is_private_key:
                     controller.import_key(SLOT[slot], private_key)
+        return {'success': True, 'error': None}
+
+    @piv_catch_error
+    def piv_export_certificate(self, slot, file_url):
+        file_path = urllib.parse.urlparse(file_url).path
+        file_path_windows = file_path[1:]
+        if os.name == 'nt':
+            file_path = file_path_windows
+        with self._open_piv() as controller:
+            cert = controller.read_certificate(SLOT[slot])
+            with open(file_path, 'wb') as file:
+                file.write(
+                    cert.public_bytes(
+                        encoding=serialization.Encoding.PEM))
         return {'success': True, 'error': None}
 
     def _piv_verify_pin(self, piv_controller, pin=None):
