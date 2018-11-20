@@ -15,10 +15,7 @@ ColumnLayout {
 
     function load() {
         isBusy = true
-        yubiKey.pivListCertificates(function (resp) {
-            if (!resp.success) {
-                pivError.showResponseError(resp)
-            }
+        yubiKey.refreshPivData(function () {
             isBusy = false
         })
     }

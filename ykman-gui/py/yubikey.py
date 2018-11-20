@@ -28,7 +28,7 @@ from ykman.piv import (
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
-    generate_static_pw)
+    generate_static_pw, parse_certificate, parse_private_key)
 
 logger = logging.getLogger(__name__)
 
@@ -204,6 +204,7 @@ class Controller(object):
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
             return {
+                'certs': self._piv_list_certificates(piv_controller),
                 'has_derived_key': piv_controller.has_derived_key,
                 'has_protected_key': piv_controller.has_protected_key,
                 'has_stored_key': piv_controller.has_stored_key,
@@ -425,25 +426,10 @@ class Controller(object):
             controller.reset()
             return {'success': True}
 
-    @piv_catch_error
-    def piv_read_certificate(self, slot):
-        try:
-            with self._open_piv() as controller:
-                cert = controller.read_certificate(SLOT[slot])
-                cert = _piv_serialise_cert(SLOT[slot], cert)
-                return {'success': True, 'cert': cert}
-        except APDUError as e:
-            if e.sw == SW.NOT_FOUND:
-                return {'success': True, 'cert': None}
-            raise
-
-    @piv_catch_error
-    def piv_list_certificates(self):
-        with self._open_piv() as controller:
-            certs = [
-                 _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
-            ]
-            return {'success': True, 'certs': certs}
+    def _piv_list_certificates(self, controller):
+        return {
+            SLOT(slot).name: _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
+        }
 
     @piv_catch_error
     def piv_delete_certificate(self, slot_name, pin=None, mgm_key_hex=None):
@@ -642,6 +628,64 @@ class Controller(object):
                     'tries_left': e.tries_left,
                 }
 
+            except Exception as e:
+                logger.error('PIN unblock failed.', exc_info=e)
+                return {
+                    'success': False,
+                    'message': str(e),
+                }
+
+    @piv_catch_error
+    def piv_can_parse(self, file_url):
+        file_path = urllib.parse.urlparse(file_url).path
+        with open(file_path, 'r+b') as file:
+            data = file.read()
+            try:
+                parse_certificate(data, password=None)
+                return {'success': True, 'error': None}
+            except (ValueError, TypeError):
+                pass
+            try:
+                parse_private_key(data, password=None)
+                return {'success': True, 'error': None}
+            except (ValueError, TypeError):
+                pass
+        raise ValueError('Failed to parse certificate or key')
+
+    @piv_catch_error
+    def piv_import_file(self, slot, file_url, password=None,
+                        pin=None, mgm_key=None):
+        is_cert = False
+        is_private_key = False
+        file_path = urllib.parse.urlparse(file_url).path
+        file_path_windows = file_path[1:]
+        if os.name == 'nt':
+            file_path = file_path_windows
+        if password:
+            password = password.encode()
+        with open(file_path, 'r+b') as file:
+            data = file.read()
+            try:
+                cert = parse_certificate(data, password)
+                is_cert = True
+            except (ValueError, TypeError):
+                pass
+            try:
+                private_key = parse_private_key(data, password)
+                is_private_key = True
+            except (ValueError, TypeError):
+                pass
+            with self._open_piv() as controller:
+                auth_failed = self._piv_ensure_authenticated(
+                    controller, pin, mgm_key)
+                if auth_failed:
+                    return auth_failed
+                if is_cert:
+                    controller.import_certificate(SLOT[slot], cert)
+                if is_private_key:
+                    controller.import_key(SLOT[slot], private_key)
+        return {'success': True, 'error': None}
+
     def _piv_verify_pin(self, piv_controller, pin=None):
         if pin:
             try:
@@ -688,12 +732,12 @@ class Controller(object):
 
                 try:
                     piv_controller.authenticate(mgm_key_bytes)
-                except AuthenticationFailed as e:
+                except AuthenticationFailed:
                     return {
                         'success': False,
                         'error_id': 'wrong_mgm_key'
                     }
-                except BadFormat as e:
+                except BadFormat:
                     return {
                         'success': False,
                         'error_id': 'mgm_key_bad_format',

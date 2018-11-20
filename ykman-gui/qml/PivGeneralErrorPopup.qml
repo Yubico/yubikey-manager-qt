@@ -48,10 +48,10 @@ InlinePopup {
         open()
     }
 
-    function showResponseError(resp, override_messages) {
+    function showResponseError(resp, overrideMessages) {
         if (!resp.success) {
-            if (override_messages && override_messages[resp.error_id]) {
-                show(override_messages[resp.error_id])
+            if (overrideMessages && overrideMessages[resp.error_id]) {
+                show(overrideMessages[resp.error_id])
             } else {
                 var defaultMessage = getDefaultMessage(resp)
                 if (defaultMessage) {
@@ -60,9 +60,9 @@ InlinePopup {
                     console.log('PIV unmapped error:', resp.error_id, resp.error_message)
 
                     if (resp.error_message) {
-                        show(resp.error_message)
+                        show(qsTr('Unknown error: %1').arg(resp.error_message))
                     } else {
-                        show('Unknown error. Please see the logs for details.')
+                        show(qsTr('Unknown error. Please see the logs for details.'))
                     }
                 }
             }

@@ -30,26 +30,26 @@ Python {
     property bool pivPukBlocked: false
 
     property var pivSlots: [{
-            "id": "AUTHENTICATION",
-            "name": qsTr("Authentication"),
-            "hex": "9a"
+            id: "AUTHENTICATION",
+            name: qsTr("Authentication"),
+            hex: "9a"
         }, {
-            "id": "SIGNATURE",
-            "name": qsTr("Digital Signature"),
-            "hex": "9c"
+            id: "SIGNATURE",
+            name: qsTr("Digital Signature"),
+            hex: "9c"
         }, {
-            "id": "KEY_MANAGEMENT",
-            "name": qsTr("Key Management"),
-            "hex": "9d"
+            id: "KEY_MANAGEMENT",
+            name: qsTr("Key Management"),
+            hex: "9d"
         }, {
-            "id": "CARD_AUTH",
-            "name": qsTr("Card Authentication"),
-            "hex": "9e"
+            id: "CARD_AUTH",
+            name: qsTr("Card Authentication"),
+            hex: "9e"
         }]
 
-    property var pivCerts: ({
+    readonly property var pivCerts: piv && piv.certs || {
 
-                            })
+                                    }
 
     signal enableLogging(string logLevel, string logFile)
     signal disableLogging
@@ -262,35 +262,38 @@ Python {
         })
     }
 
-    function refreshPiv(doneCallback) {
+    function refreshPivData(doneCallback) {
         if (hasDevice) {
             doCall('yubikey.controller.refresh_piv', [], function (pivData) {
                 piv = pivData
-                doneCallback()
+                if (doneCallback) {
+                    doneCallback()
+                }
             })
         } else {
-            doneCallback()
+            if (doneCallback) {
+                doneCallback()
+            }
         }
     }
 
-
     /**
-     * Transform a `callback` into one that will first call `refreshPiv` and then
-     * itself when `refresh` is done.
+     * Transform a `callback` into one that will first call `refreshPivData`
+     * and then itself when `refresh` is done.
      *
      * The arguments and `this` context of the call to the `callback` are
      * preseved.
      *
      * @param callback a function
      *
-     * @return a function which will call `refreshPiv()` and delay the execution of
-     *          the `callback` until the `refreshPiv()` is done.
+     * @return a function which will call `refreshPivData()` and delay the
+     *      execution of the `callback` until the `refreshPivData()` is done.
      */
     function _refreshPivBefore(callback) {
         return function (/* ...arguments */ ) {
             var callbackThis = this
             var callbackArguments = arguments
-            refreshPiv(function () {
+            refreshPivData(function () {
                 callback.apply(callbackThis, callbackArguments)
             })
         }
@@ -399,7 +402,7 @@ Python {
                   [pin, currentMgmKey, newKey, storeOnDevice],
                   function (result) {
                       touchPromptTimer.stop()
-                      refreshPiv(function () {
+                      refreshPivData(function () {
                           cb(result)
                       })
                   })
@@ -440,13 +443,22 @@ Python {
         doPivCall('yubikey.controller.piv_read_certificate', [slot], cb)
     }
 
+    function pivImportFile(slot, fileUrl, password, pin, managementKey, cb) {
+        doPivCall('yubikey.controller.piv_import_file',
+                  [slot, fileUrl, password, pin, managementKey], cb)
+    }
+
+    function pivCanParse(fileUrl, cb) {
+        doPivCall('yubikey.controller.piv_can_parse', [fileUrl], cb)
+    }
+
     function pivDeleteCertificate(slotName, pin, keyHex, cb) {
-        doCall('yubikey.controller.piv_delete_certificate',
-               [slotName, pin, keyHex], _refreshPivBefore(cb))
+        doPivCall('yubikey.controller.piv_delete_certificate',
+               [slotName, pin, keyHex], cb)
     }
 
     function pivGenerateCertificate(args) {
-        doCall('yubikey.controller.piv_generate_certificate',
+        doPivCall('yubikey.controller.piv_generate_certificate',
             [
                 args.slotName,
                 args.algorithm,
@@ -457,8 +469,7 @@ Python {
                 args.pin,
                 args.keyHex,
             ],
-            _refreshPivBefore(args.callback)
+            args.callback
         )
     }
-
 }
