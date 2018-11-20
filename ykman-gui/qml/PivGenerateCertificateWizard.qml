@@ -12,7 +12,6 @@ ColumnLayout {
     property string busyMessage: ""
 
     property string algorithm: "ECCP256"
-    property string csrFileUrl: ""
     property string expirationDate: ""
     property bool selfSign: true
     property string subjectCommonName: ""
@@ -44,7 +43,7 @@ ColumnLayout {
         yubiKey.pivDeleteCertificate(slot, pin, managementKey, function(resp) {
             isBusy = false
             if (resp.success) {
-                pivSuccessPopup.show(qsTr("CSR successfully written to %1").arg(csrFileUrl))
+                pivSuccessPopup.open()
             } else {
                 pivError.showResponseError(
                     resp,
@@ -56,7 +55,25 @@ ColumnLayout {
         })
     }
 
-    function finish(confirmOverwrite) {
+    function finish(confirmOverwrite, csrFileUrl) {
+
+        function _prompt_for_pin_and_key(pin, key) {
+            if (key) {
+                pivPinPopup.getPinAndThen(function(pin) {
+                    _finish(pin, key)
+                })
+            } else {
+                views.pivGetPinOrManagementKey(
+                    function(pin) {
+                        _finish(pin, false)
+                    },
+                    function(key) {
+                        _prompt_for_pin_and_key(false, key)
+                    }
+                );
+            }
+        }
+
         function _finish(pin, managementKey) {
             busyMessage = qsTr("Generating...")
             isBusy = true
@@ -70,6 +87,7 @@ ColumnLayout {
                 pin: pin,
                 keyHex: managementKey,
                 callback: function(resp) {
+                    pivError.showResponseError(resp)
                     if (resp.success) {
                         if (selfSign) {
                             isBusy = false
@@ -80,27 +98,18 @@ ColumnLayout {
                         }
                     } else {
                         isBusy = false
-                        pivError.showResponseError(
-                            resp,
-                            qsTr("Failed to generate certificate: %1"),
-                            qsTr("Failed to generate certificate for an unknown reason.")
-                        )
                     }
                 },
             })
         }
 
         if (confirmOverwrite) {
-            views.pivGetPinOrManagementKey(
-                function(pin) {
-                    _finish(pin, false)
-                },
-                function(key) {
-                    pivPinPopup.getPinAndThen(function(pin) {
-                        _finish(pin, key)
-                    })
-                }
-            );
+            if (selfSign || csrFileUrl) {
+                _prompt_for_pin_and_key()
+            } else {
+                selectCsrOutputDialog.open()
+            }
+
         } else {
             var firstMessageTemplate =
                 yubiKey.pivCerts[slot]
@@ -183,7 +192,7 @@ ColumnLayout {
         acceptLabel: "Select"
         fileMode: FileDialog.OpenFile
         nameFilters: ["Certificate signing request files (*.pem *.csr)", "All files (*)"]
-        onAccepted: csrFileUrl = file.toString()
+        onAccepted: finish(true, file.toString())
     }
 
     ColumnLayout {
@@ -233,6 +242,7 @@ ColumnLayout {
                 id: outputTypeView
 
                 ColumnLayout {
+
                     Heading2 {
                         text: qsTr("Output format:")
                     }
@@ -263,12 +273,6 @@ ColumnLayout {
                             ToolTip.visible: hovered
                             ToolTip.text: qsTr("Create a key on the YubiKey and output a Certificate Signing Request (CSR) file.\nAny existing certificate in this slot will be deleted.\nThe CSR must be submitted to a Certificate Authority (CA) to receive a certificate file in return, which must then be imported onto the YubiKey.")
                             ButtonGroup.group: outputTypeGroup
-                        }
-
-                        CustomButton {
-                            text: csrFileUrl ? csrFileUrl.match(/[^/\\]+$/)[0] : qsTr("Choose...")
-                            onClicked: selectCsrOutputDialog.open()
-                            enabled: csrBtn.checked
                         }
                     }
                 }
