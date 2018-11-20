@@ -554,61 +554,56 @@ class Controller(object):
                     'message': str(e),
                 }
 
+    @piv_catch_error
     def piv_can_parse(self, file_url):
-        try:
-            file_path = urllib.parse.urlparse(file_url).path
-            with open(file_path, 'r+b') as file:
-                data = file.read()
-                try:
-                    parse_certificate(data, password=None)
-                    return {'success': True, 'error': None}
-                except (ValueError, TypeError):
-                    pass
-                try:
-                    parse_private_key(data, password=None)
-                    return {'success': True, 'error': None}
-                except (ValueError, TypeError):
-                    pass
-            raise ValueError('Failed to parse certificate or key')
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
+        file_path = urllib.parse.urlparse(file_url).path
+        with open(file_path, 'r+b') as file:
+            data = file.read()
+            try:
+                parse_certificate(data, password=None)
+                return {'success': True, 'error': None}
+            except (ValueError, TypeError):
+                pass
+            try:
+                parse_private_key(data, password=None)
+                return {'success': True, 'error': None}
+            except (ValueError, TypeError):
+                pass
+        raise ValueError('Failed to parse certificate or key')
 
+    @piv_catch_error
     def piv_import_file(self, slot, file_url, password=None,
                         pin=None, mgm_key=None):
         is_cert = False
         is_private_key = False
-        try:
-            file_path = urllib.parse.urlparse(file_url).path
-            file_path_windows = file_path[1:]
-            if os.name == 'nt':
-                file_path = file_path_windows
-            if password:
-                password = password.encode()
-            with open(file_path, 'r+b') as file:
-                data = file.read()
-                try:
-                    cert = parse_certificate(data, password)
-                    is_cert = True
-                except (ValueError, TypeError):
-                    pass
-                try:
-                    private_key = parse_private_key(data, password)
-                    is_private_key = True
-                except (ValueError, TypeError):
-                    pass
-                with self._open_piv() as controller:
-                    auth_failed = self._piv_ensure_authenticated(
-                        controller, pin, mgm_key)
-                    if auth_failed:
-                        return auth_failed
-                    if is_cert:
-                        controller.import_certificate(SLOT[slot], cert)
-                    if is_private_key:
-                        controller.import_key(SLOT[slot], private_key)
-            return {'success': True, 'error': None}
-        except Exception as e:
-            logger.error('Failed to import PIV certificate', exc_info=e)
-            return {'success': False, 'error': str(e)}
+        file_path = urllib.parse.urlparse(file_url).path
+        file_path_windows = file_path[1:]
+        if os.name == 'nt':
+            file_path = file_path_windows
+        if password:
+            password = password.encode()
+        with open(file_path, 'r+b') as file:
+            data = file.read()
+            try:
+                cert = parse_certificate(data, password)
+                is_cert = True
+            except (ValueError, TypeError):
+                pass
+            try:
+                private_key = parse_private_key(data, password)
+                is_private_key = True
+            except (ValueError, TypeError):
+                pass
+            with self._open_piv() as controller:
+                auth_failed = self._piv_ensure_authenticated(
+                    controller, pin, mgm_key)
+                if auth_failed:
+                    return auth_failed
+                if is_cert:
+                    controller.import_certificate(SLOT[slot], cert)
+                if is_private_key:
+                    controller.import_key(SLOT[slot], private_key)
+        return {'success': True, 'error': None}
 
     def _piv_verify_pin(self, piv_controller, pin=None):
         if pin:
