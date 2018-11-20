@@ -72,6 +72,7 @@ ListView {
             id: grid
             month: model.month
             year: model.year
+            locale: Qt.locale('en_US')
             Layout.fillWidth: true
 
             onClicked: dateClicked(date)
