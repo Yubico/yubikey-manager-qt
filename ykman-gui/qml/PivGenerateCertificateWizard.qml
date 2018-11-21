@@ -26,30 +26,30 @@ ColumnLayout {
     objectName: "pivGenerateCertificateWizard"
 
     function getSlotHex(slotId) {
-        return yubiKey.pivSlots
-            .find(function(slotObj) { return slotObj.id === slotId })
-            .hex
+        return yubiKey.pivSlots.find(function (slotObj) {
+            return slotObj.id === slotId
+        }).hex
     }
 
     function getSlotName(slotId) {
-        return yubiKey.pivSlots
-            .find(function(slotObj) { return slotObj.id === slotId })
-            .name
+        return yubiKey.pivSlots.find(function (slotObj) {
+            return slotObj.id === slotId
+        }).name
     }
 
     function deleteCertificate(pin, managementKey) {
         busyMessage = qsTr("Deleting existing certificate...")
         isBusy = true
-        yubiKey.pivDeleteCertificate(slot, pin, managementKey, function(resp) {
+        yubiKey.pivDeleteCertificate(slot, pin, managementKey, function (resp) {
             isBusy = false
             if (resp.success) {
                 pivSuccessPopup.open()
             } else {
                 pivError.showResponseError(
-                    resp,
-                    qsTr("Failed to delete existing certificate: %1").arg(resp.message),
-                    qsTr("Failed to delete existing certificate for an unknown reason.")
-                )
+                            resp, qsTr(
+                                "Failed to delete existing certificate: %1").arg(
+                                resp.message), qsTr(
+                                "Failed to delete existing certificate for an unknown reason."))
             }
             views.pop()
         })
@@ -59,18 +59,15 @@ ColumnLayout {
 
         function _prompt_for_pin_and_key(pin, key) {
             if (key) {
-                pivPinPopup.getPinAndThen(function(pin) {
+                pivPinPopup.getPinAndThen(function (pin) {
                     _finish(pin, key)
                 })
             } else {
-                views.pivGetPinOrManagementKey(
-                    function(pin) {
-                        _finish(pin, false)
-                    },
-                    function(key) {
-                        _prompt_for_pin_and_key(false, key)
-                    }
-                );
+                views.pivGetPinOrManagementKey(function (pin) {
+                    _finish(pin, false)
+                }, function (key) {
+                    _prompt_for_pin_and_key(false, key)
+                })
             }
         }
 
@@ -78,29 +75,33 @@ ColumnLayout {
             busyMessage = qsTr("Generating...")
             isBusy = true
             yubiKey.pivGenerateCertificate({
-                slotName: slot,
-                algorithm: algorithm,
-                commonName: subjectCommonName,
-                expirationDate: expirationDate,
-                selfSign: selfSign,
-                csrFileUrl: csrFileUrl,
-                pin: pin,
-                keyHex: managementKey,
-                callback: function(resp) {
-                    pivError.showResponseError(resp)
-                    if (resp.success) {
-                        if (selfSign) {
-                            isBusy = false
-                            pivSuccessPopup.open()
-                            views.pop()
-                        } else {
-                            deleteCertificate(pin, managementKey)
-                        }
-                    } else {
-                        isBusy = false
-                    }
-                },
-            })
+                                               slotName: slot,
+                                               algorithm: algorithm,
+                                               commonName: subjectCommonName,
+                                               expirationDate: expirationDate,
+                                               selfSign: selfSign,
+                                               csrFileUrl: csrFileUrl,
+                                               pin: pin,
+                                               keyHex: managementKey,
+                                               callback: function (resp) {
+                                                   pivError.showResponseError(
+                                                               resp)
+                                                   if (resp.success) {
+                                                       if (selfSign) {
+                                                           isBusy = false
+                                                           pivSuccessPopup.open(
+                                                                       )
+                                                           views.pop()
+                                                       } else {
+                                                           deleteCertificate(
+                                                                       pin,
+                                                                       managementKey)
+                                                       }
+                                                   } else {
+                                                       isBusy = false
+                                                   }
+                                               }
+                                           })
         }
 
         if (confirmOverwrite || !yubiKey.pivCerts[slot]) {
@@ -109,30 +110,23 @@ ColumnLayout {
             } else {
                 selectCsrOutputDialog.open()
             }
-
         } else {
-            var firstMessageTemplate =
-                selfSign
-                    ? qsTr('This will overwrite the key and certificate in the %1 (%2) slot.')
-                    : qsTr('This will overwrite the key and delete the certificate in the %1 (%2) slot.')
+            var firstMessageTemplate = selfSign ? qsTr('This will overwrite the key and certificate in the %1 (%2) slot.') : qsTr('This will overwrite the key and delete the certificate in the %1 (%2) slot.')
 
-            confirmationPopup.show(
-                [
-                    firstMessageTemplate.arg(slotName).arg(slotHex),
-                    qsTr('This action cannot be undone!'),
-                    qsTr('Are you sure you want to continue?'),
-                ],
-                function() {
-                    finish(true)
-                }
-            )
+            confirmationPopup.show([firstMessageTemplate.arg(slotName).arg(
+                                        slotHex), qsTr(
+                                        'This action cannot be undone!'), qsTr(
+                                        'Are you sure you want to continue?')],
+                                   function () {
+                                       finish(true)
+                                   })
         }
-
     }
 
     function formatDate(date) {
         var isoMonth = date.getMonth() + 1
-        return date.getFullYear() + "-" + (isoMonth < 10 ? "0" : "") + isoMonth + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate()
+        return date.getFullYear() + "-" + (isoMonth < 10 ? "0" : "") + isoMonth
+                + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate()
     }
 
     function getDefaultExpirationDate() {
@@ -145,14 +139,14 @@ ColumnLayout {
         switch (currentStep) {
         case 3:
             return !!subjectCommonName
-
         case 4:
             if (selfSign) {
                 if (expirationDate.length !== 10) {
                     return false
                 }
                 try {
-                    return new Date(expirationDate).toISOString().substring(0, 10) === expirationDate
+                    return new Date(expirationDate).toISOString().substring(
+                                0, 10) === expirationDate
                 } catch (e) {
                     return false
                 }
@@ -225,11 +219,12 @@ ColumnLayout {
 
             BreadCrumbRow {
                 items: [{
-                        "text": qsTr("PIV")
+                        text: qsTr("PIV")
                     }, {
-                        "text": qsTr("Certificates")
+                        text: qsTr("Certificates")
                     }, {
-                        "text": qsTr("Generate: %1 (%2/%3)").arg(slotName).arg(currentStep).arg(numSteps)
+                        text: qsTr("Generate: %1 (%2/%3)").arg(slotName).arg(
+                                  currentStep).arg(numSteps)
                     }]
             }
 
@@ -292,7 +287,9 @@ ColumnLayout {
                     ComboBox {
                         id: algorithmInput
                         model: algorithms
-                        currentIndex: algorithms.findIndex(function(alg) { return alg === algorithm })
+                        currentIndex: algorithms.findIndex(function (alg) {
+                            return alg === algorithm
+                        })
                         Material.foreground: yubicoBlue
                         onCurrentTextChanged: algorithm = currentText
                         Layout.minimumWidth: implicitWidth + constants.contentMargins / 2
@@ -326,7 +323,8 @@ ColumnLayout {
 
                 ColumnLayout {
 
-                    Component.onCompleted: calendarWidget.goToMonth(new Date(expirationDate))
+                    Component.onCompleted: calendarWidget.goToMonth(
+                                               new Date(expirationDate))
 
                     RowLayout {
                         spacing: constants.contentMargins / 2
@@ -350,13 +348,11 @@ ColumnLayout {
                         }
                     }
 
-
                     CalendarWidget {
                         id: calendarWidget
                         Layout.alignment: Qt.AlignTop
                         onDateClicked: expirationDate = formatDate(date)
                     }
-
                 }
             }
 
@@ -365,7 +361,8 @@ ColumnLayout {
 
                 ColumnLayout {
                     Heading2 {
-                        text: selfSign ? qsTr("About to create key and certificate:") : qsTr("About to create key and CSR:")
+                        text: selfSign ? qsTr("About to create key and certificate:") : qsTr(
+                                             "About to create key and CSR:")
                     }
 
                     RowLayout {
@@ -447,10 +444,10 @@ ColumnLayout {
                 visible: currentStep === numSteps
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and generate the key and %1").arg(selfSign ? qsTr("certificate") : qsTr("CSR"))
+                ToolTip.text: qsTr("Finish and generate the key and %1").arg(
+                                  selfSign ? qsTr("certificate") : qsTr("CSR"))
                 enabled: isInputValid()
             }
         }
     }
-
 }
