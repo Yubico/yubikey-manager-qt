@@ -451,4 +451,9 @@ Python {
     function pivCanParse(fileUrl, cb) {
         doPivCall('yubikey.controller.piv_can_parse', [fileUrl], cb)
     }
+
+    function pivExportCertificate(slot, fileUrl, cb) {
+        doPivCall('yubikey.controller.piv_export_certificate',
+                  [slot, fileUrl], cb)
+    }
 }
