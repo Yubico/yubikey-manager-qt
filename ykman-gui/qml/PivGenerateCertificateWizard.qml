@@ -361,8 +361,7 @@ ColumnLayout {
 
                 ColumnLayout {
                     Heading2 {
-                        text: selfSign ? qsTr("About to create key and certificate:") : qsTr(
-                                             "About to create key and CSR:")
+                        text: qsTr("Confirm selected options:")
                     }
 
                     RowLayout {
@@ -374,6 +373,41 @@ ColumnLayout {
                             columnSpacing: constants.contentMargins / 2
                             Layout.fillWidth: true
                             Layout.topMargin: constants.contentTopMargin
+                            Label {
+                                text: qsTr("Slot:")
+                                font.pixelSize: constants.h3
+                                font.bold: true
+                                color: yubicoBlue
+                            }
+                            Label {
+                                text: getSlotName(slot) + ' (' + getSlotHex(
+                                          slot) + ')'
+                                font.pixelSize: constants.h3
+                                color: yubicoBlue
+                            }
+                            Label {
+                                text: qsTr("Output format:")
+                                font.pixelSize: constants.h3
+                                font.bold: true
+                                color: yubicoBlue
+                            }
+                            Label {
+                                text: selfSign ? qsTr("Self-signed certificate") : qsTr(
+                                                     "Certificate Signing Request (CSR)")
+                                font.pixelSize: constants.h3
+                                color: yubicoBlue
+                            }
+                            Label {
+                                text: qsTr("Algorithm:")
+                                font.pixelSize: constants.h3
+                                font.bold: true
+                                color: yubicoBlue
+                            }
+                            Label {
+                                text: algorithm
+                                font.pixelSize: constants.h3
+                                color: yubicoBlue
+                            }
 
                             Label {
                                 text: qsTr("Subject name:")
@@ -388,7 +422,7 @@ ColumnLayout {
                             }
 
                             Label {
-                                text: qsTr("Expiry date:")
+                                text: qsTr("Expiration date:")
                                 font.pixelSize: constants.h3
                                 font.bold: true
                                 color: yubicoBlue
@@ -399,18 +433,6 @@ ColumnLayout {
                                 font.pixelSize: constants.h3
                                 color: yubicoBlue
                                 visible: selfSign
-                            }
-
-                            Label {
-                                text: qsTr("Key algorithm:")
-                                font.pixelSize: constants.h3
-                                font.bold: true
-                                color: yubicoBlue
-                            }
-                            Label {
-                                text: algorithm
-                                font.pixelSize: constants.h3
-                                color: yubicoBlue
                             }
                         }
                     }
