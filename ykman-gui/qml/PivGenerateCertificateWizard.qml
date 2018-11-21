@@ -250,26 +250,26 @@ ColumnLayout {
                     }
 
                     RadioButton {
-                        text: qsTr("Self-signed certificate on YubiKey")
+                        text: qsTr("Self-signed certificate")
                         checked: true
                         font.pixelSize: constants.h3
                         Material.foreground: yubicoBlue
                         onCheckedChanged: selfSign = checked
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Create a key on the YubiKey, generate a self-signed certificate for that key, and store it on the YubiKey.")
+                        ToolTip.text: qsTr("Generate a self-signed certficate and store it on the YubiKey.")
                         ButtonGroup.group: outputTypeGroup
                     }
 
                     RowLayout {
                         RadioButton {
                             id: csrBtn
-                            text: qsTr("CSR file")
+                            text: qsTr("Certificate Signing Request (CSR)")
                             font.pixelSize: constants.h3
                             Material.foreground: yubicoBlue
                             ToolTip.delay: 1000
                             ToolTip.visible: hovered
-                            ToolTip.text: qsTr("Create a key on the YubiKey and output a Certificate Signing Request (CSR) file.\nAny existing certificate in this slot will be deleted.\nThe CSR must be submitted to a Certificate Authority (CA) to receive a certificate file in return, which must then be imported onto the YubiKey.")
+                            ToolTip.text: qsTr("Generate a private key on the YubiKey and output a Certificate Signing Request (CSR) to a file.")
                             ButtonGroup.group: outputTypeGroup
                         }
                     }
@@ -281,7 +281,7 @@ ColumnLayout {
 
                 ColumnLayout {
                     Heading2 {
-                        text: qsTr("Key algorithm:")
+                        text: qsTr("Algorithm:")
                     }
 
                     ComboBox {
@@ -311,7 +311,7 @@ ColumnLayout {
                         Layout.fillWidth: true
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("The common name (CN) for the subject Distinguished Name to write into the certificate.")
+                        ToolTip.text: qsTr("The subject common name (CN) for the certificate.")
                         selectionColor: yubicoGreen
                         onTextChanged: subjectCommonName = text
                     }
@@ -331,7 +331,7 @@ ColumnLayout {
                         Layout.topMargin: constants.contentTopMargin
 
                         Heading2 {
-                            text: qsTr("Expiry date:")
+                            text: qsTr("Expiration date:")
                         }
 
                         TextField {
@@ -339,7 +339,7 @@ ColumnLayout {
                             Layout.alignment: Qt.AlignLeft
                             ToolTip.delay: 1000
                             ToolTip.visible: hovered
-                            ToolTip.text: qsTr("The expiry date for the certificate, in YYYY-MM-DD format.")
+                            ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format.")
                             selectionColor: yubicoGreen
                             validator: RegExpValidator {
                                 regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
@@ -444,7 +444,7 @@ ColumnLayout {
                 visible: currentStep === numSteps
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and generate the key and %1").arg(
+                ToolTip.text: qsTr("Finish and generate the private key and %1").arg(
                                   selfSign ? qsTr("certificate") : qsTr("CSR"))
                 enabled: isInputValid()
             }
