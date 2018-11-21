@@ -23,7 +23,7 @@ ColumnLayout {
             if (resp.success) {
                 pivSuccessPopup.open()
             } else {
-                pivError.show(resp.error)
+                pivError.showResponseError(resp)
             }
         })
     }
