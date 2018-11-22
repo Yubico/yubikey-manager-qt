@@ -240,28 +240,26 @@ ColumnLayout {
                 id: outputTypeView
 
                 ColumnLayout {
-
-                    Heading2 {
-                        text: qsTr("Output format:")
-                    }
-
                     ButtonGroup {
                         id: outputTypeGroup
                     }
 
-                    RadioButton {
-                        text: qsTr("Self-signed certificate")
-                        checked: true
-                        font.pixelSize: constants.h3
-                        Material.foreground: yubicoBlue
-                        onCheckedChanged: selfSign = checked
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Generate a self-signed certficate and store it on the YubiKey.")
-                        ButtonGroup.group: outputTypeGroup
-                    }
-
                     RowLayout {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                        RadioButton {
+                            text: qsTr("Self-signed certificate")
+                            checked: true
+                            font.pixelSize: constants.h3
+                            Material.foreground: yubicoBlue
+                            onCheckedChanged: selfSign = checked
+                            ToolTip.delay: 1000
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("Generate a self-signed certficate and store it on the YubiKey.")
+                            ButtonGroup.group: outputTypeGroup
+                        }
+
                         RadioButton {
                             id: csrBtn
                             text: qsTr("Certificate Signing Request (CSR)")
@@ -278,21 +276,25 @@ ColumnLayout {
 
             Component {
                 id: algorithmView
-
                 ColumnLayout {
-                    Heading2 {
-                        text: qsTr("Algorithm:")
-                    }
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Label {
+                            text: qsTr("Algorithm")
+                            color: yubicoBlue
+                            font.pixelSize: constants.h3
+                        }
 
-                    ComboBox {
-                        id: algorithmInput
-                        model: algorithms
-                        currentIndex: algorithms.findIndex(function (alg) {
-                            return alg === algorithm
-                        })
-                        Material.foreground: yubicoBlue
-                        onCurrentTextChanged: algorithm = currentText
-                        Layout.minimumWidth: implicitWidth + constants.contentMargins / 2
+                        ComboBox {
+                            id: algorithmInput
+                            model: algorithms
+                            currentIndex: algorithms.findIndex(function (alg) {
+                                return alg === algorithm
+                            })
+                            Material.foreground: yubicoBlue
+                            onCurrentTextChanged: algorithm = currentText
+                        }
                     }
                 }
             }
@@ -301,19 +303,25 @@ ColumnLayout {
                 id: subjectView
 
                 ColumnLayout {
-                    Heading2 {
-                        text: qsTr("Subject name:")
-                    }
-
-                    TextField {
-                        text: subjectCommonName
-                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                    RowLayout {
                         Layout.fillWidth: true
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("The subject common name (CN) for the certificate.")
-                        selectionColor: yubicoGreen
-                        onTextChanged: subjectCommonName = text
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Label {
+                            text: qsTr("Subject name")
+                            font.pixelSize: constants.h3
+                            color: yubicoBlue
+                        }
+
+                        TextField {
+                            text: subjectCommonName
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                            Layout.fillWidth: true
+                            ToolTip.delay: 1000
+                            ToolTip.visible: hovered
+                            ToolTip.text: qsTr("The subject common name (CN) for the certificate.")
+                            selectionColor: yubicoGreen
+                            onTextChanged: subjectCommonName = text
+                        }
                     }
                 }
             }
@@ -327,16 +335,17 @@ ColumnLayout {
                                                new Date(expirationDate))
 
                     RowLayout {
-                        spacing: constants.contentMargins / 2
-                        Layout.topMargin: constants.contentTopMargin
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                        Heading2 {
-                            text: qsTr("Expiration date:")
+                        Label {
+                            font.pixelSize: constants.h3
+                            color: yubicoBlue
+                            text: qsTr("Expiration date")
                         }
 
                         TextField {
                             text: expirationDate
-                            Layout.alignment: Qt.AlignLeft
                             ToolTip.delay: 1000
                             ToolTip.visible: hovered
                             ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format.")
@@ -346,12 +355,11 @@ ColumnLayout {
                             }
                             onTextChanged: expirationDate = text
                         }
-                    }
 
-                    CalendarWidget {
-                        id: calendarWidget
-                        Layout.alignment: Qt.AlignTop
-                        onDateClicked: expirationDate = formatDate(date)
+                        CalendarWidget {
+                            id: calendarWidget
+                            onDateClicked: expirationDate = formatDate(date)
+                        }
                     }
                 }
             }
@@ -452,7 +460,7 @@ ColumnLayout {
                 Layout.fillWidth: true
             }
             BackButton {
-                onClickedHandler: previous
+                onClickedCallback: previous
                 visible: currentStep > 1
             }
             NextButton {

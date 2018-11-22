@@ -49,7 +49,8 @@ ListView {
             }
 
             Label {
-                text: qsTr("%1 %2").arg(grid.locale.monthName(model.month)).arg(model.year)
+                text: qsTr("%1 %2").arg(grid.locale.monthName(model.month)).arg(
+                          model.year)
                 horizontalAlignment: Qt.AlignHCenter
                 Layout.fillWidth: true
             }
