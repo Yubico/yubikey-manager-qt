@@ -481,6 +481,7 @@ Python {
             ],
             args.callback
         )
+    }
 
     function pivExportCertificate(slot, fileUrl, cb) {
         doPivCall('yubikey.controller.piv_export_certificate',
