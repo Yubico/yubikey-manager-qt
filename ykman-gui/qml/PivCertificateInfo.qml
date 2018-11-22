@@ -18,6 +18,16 @@ ColumnLayout {
         yubiKey.refreshPivData()
     }
 
+    function exportCertificate(fileUrl) {
+        yubiKey.pivExportCertificate(slot, fileUrl, function (resp) {
+            if (resp.success) {
+                pivSuccessPopup.open()
+            } else {
+                pivError.showResponseError(resp)
+            }
+        })
+    }
+
     function importCertificate(fileUrl) {
 
         function handleResponse(resp) {
@@ -57,8 +67,20 @@ ColumnLayout {
         title: "Import from file..."
         acceptLabel: "Import"
         fileMode: FileDialog.OpenFile
+        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
         nameFilters: ["Certificate/Key files (*.pem *.der *.pfx *.p12 *.key *.crt)"]
         onAccepted: importCertificate(file.toString())
+    }
+
+    FileDialog {
+        id: exportCertificateDialog
+        title: "Export certificate to file..."
+        acceptLabel: "Export"
+        defaultSuffix: ".crt"
+        nameFilters: ["Certificate files (*.crt *.pem)"]
+        fileMode: FileDialog.SaveFile
+        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        onAccepted: exportCertificate(file.toString())
     }
 
     Heading2 {
@@ -78,16 +100,9 @@ ColumnLayout {
             Layout.fillWidth: true
 
             Repeater {
-                model: [
-                    qsTr("Issued from:"),
-                    certificate ? certificate.issuedFrom : '',
-                    qsTr("Issued to:"),
-                    certificate ? certificate.issuedTo : '',
-                    qsTr("Valid from:"),
-                    certificate ? certificate.validFrom : '',
-                    qsTr("Valid to:"),
-                    certificate ? certificate.validTo : '',
-                ]
+                model: [qsTr(
+                        "Issued from:"), certificate ? certificate.issuedFrom : '', qsTr(
+                                                           "Issued to:"), certificate ? certificate.issuedTo : '', qsTr("Valid from:"), certificate ? certificate.validFrom : '', qsTr("Valid to:"), certificate ? certificate.validTo : '']
 
                 Label {
                     text: modelData
@@ -120,7 +135,8 @@ ColumnLayout {
                 text: qsTr("Export")
                 iconSource: "../images/export.svg"
                 highlighted: true
-                toolTipText: qsTr("Export certificate")
+                toolTipText: qsTr("Export certificate to a file")
+                onClicked: exportCertificateDialog.open()
             }
             CustomButton {
                 text: qsTr("Generate")

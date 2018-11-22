@@ -461,6 +461,7 @@ Python {
         doPivCall('yubikey.controller.piv_can_parse', [fileUrl], cb)
     }
 
+
     function pivDeleteCertificate(slotName, pin, keyHex, cb) {
         doPivCall('yubikey.controller.piv_delete_certificate',
                   [slotName, pin, keyHex], cb)
@@ -480,5 +481,10 @@ Python {
             ],
             args.callback
         )
+
+    function pivExportCertificate(slot, fileUrl, cb) {
+        doPivCall('yubikey.controller.piv_export_certificate',
+                  [slot, fileUrl], cb)
+
     }
 }
