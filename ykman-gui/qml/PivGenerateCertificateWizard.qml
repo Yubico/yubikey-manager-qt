@@ -244,7 +244,7 @@ ColumnLayout {
                 id: outputTypeView
 
                 ColumnLayout {
-                    RowLayout {
+                    ColumnLayout {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
