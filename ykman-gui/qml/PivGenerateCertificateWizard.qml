@@ -333,7 +333,9 @@ ColumnLayout {
                     Component.onCompleted: calendarWidget.goToMonth(
                                                new Date(expirationDate))
 
-                    RowLayout {
+                    GridLayout {
+                        columns: 2
+
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
@@ -375,6 +377,9 @@ ColumnLayout {
                                     expirationDate = formatted
                                 }
                             }
+
+                            Layout.column: 1
+                            Layout.row: 1
                         }
                     }
                 }
