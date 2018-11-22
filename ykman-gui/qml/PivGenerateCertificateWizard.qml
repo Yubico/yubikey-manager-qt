@@ -135,21 +135,25 @@ ColumnLayout {
         return date
     }
 
+    function isExpirationDateValid() {
+        if (expirationDate.length !== 10) {
+            return false
+        }
+        try {
+            return new Date(expirationDate).toISOString().substring(
+                        0, 10) === expirationDate
+        } catch (e) {
+            return false
+        }
+    }
+
     function isInputValid() {
         switch (currentStep) {
         case 3:
             return !!subjectCommonName
         case 4:
             if (selfSign) {
-                if (expirationDate.length !== 10) {
-                    return false
-                }
-                try {
-                    return new Date(expirationDate).toISOString().substring(
-                                0, 10) === expirationDate
-                } catch (e) {
-                    return false
-                }
+                return isExpirationDateValid()
             } else {
                 return true
             }
