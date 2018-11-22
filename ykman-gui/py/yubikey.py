@@ -213,6 +213,8 @@ class Controller(object):
                     'has_stored_key': piv_controller.has_stored_key,
                     'pin_tries': piv_controller.get_pin_tries(),
                     'puk_blocked': piv_controller.puk_blocked,
+                    'supported_algorithms':
+                        [a.name for a in piv_controller.supported_algorithms],
                 },
             }
 

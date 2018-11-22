@@ -21,7 +21,7 @@ ColumnLayout {
     readonly property string slotHex: getSlotHex(slot)
     readonly property string slotName: getSlotName(slot)
 
-    readonly property var algorithms: ["RSA1024", "RSA2048", "ECCP256", "ECCP384"]
+    readonly property var algorithms: yubiKey.piv ? yubiKey.piv.supported_algorithms : ["RSA1024", "RSA2048", "ECCP256", "ECCP384"]
 
     objectName: "pivGenerateCertificateWizard"
 
