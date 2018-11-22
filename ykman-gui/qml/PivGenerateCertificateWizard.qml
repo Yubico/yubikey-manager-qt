@@ -378,8 +378,7 @@ ColumnLayout {
                                 }
                             }
 
-                            Layout.column: 1
-                            Layout.row: 1
+                            Layout.columnSpan: 2
                         }
                     }
                 }
