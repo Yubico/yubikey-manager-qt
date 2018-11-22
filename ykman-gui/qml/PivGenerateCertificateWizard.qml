@@ -349,7 +349,14 @@ ColumnLayout {
                                 regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
                             }
                             onTextChanged: {
+                                var previousValue = expirationDate
                                 expirationDate = text
+
+                                if ((expirationDate.length > previousValue.length)
+                                    && (expirationDate.length === 4 || expirationDate.length === 7)
+                                ) {
+                                    expirationDate = expirationDate + "-"
+                                }
                                 if (isExpirationDateValid()) {
                                     calendarWidget.goToMonth(new Date(expirationDate))
                                 }
