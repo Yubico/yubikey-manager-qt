@@ -292,6 +292,7 @@ ColumnLayout {
                             })
                             Material.foreground: yubicoBlue
                             onCurrentTextChanged: algorithm = currentText
+                            Layout.minimumWidth: implicitWidth + constants.contentMargins / 2
                         }
                     }
                 }
