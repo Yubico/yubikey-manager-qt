@@ -348,7 +348,12 @@ ColumnLayout {
                             validator: RegExpValidator {
                                 regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
                             }
-                            onTextChanged: expirationDate = text
+                            onTextChanged: {
+                                expirationDate = text
+                                if (isExpirationDateValid()) {
+                                    calendarWidget.goToMonth(new Date(expirationDate))
+                                }
+                            }
                         }
                     }
 
