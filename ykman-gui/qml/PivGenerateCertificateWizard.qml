@@ -244,10 +244,6 @@ ColumnLayout {
                 id: outputTypeView
 
                 ColumnLayout {
-                    ButtonGroup {
-                        id: outputTypeGroup
-                    }
-
                     RowLayout {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -261,7 +257,6 @@ ColumnLayout {
                             ToolTip.delay: 1000
                             ToolTip.visible: hovered
                             ToolTip.text: qsTr("Generate a self-signed certficate and store it on the YubiKey.")
-                            ButtonGroup.group: outputTypeGroup
                         }
 
                         RadioButton {
@@ -272,7 +267,6 @@ ColumnLayout {
                             ToolTip.delay: 1000
                             ToolTip.visible: hovered
                             ToolTip.text: qsTr("Generate a private key on the YubiKey and output a Certificate Signing Request (CSR) to a file.")
-                            ButtonGroup.group: outputTypeGroup
                         }
                     }
                 }
