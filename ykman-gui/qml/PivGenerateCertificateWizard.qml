@@ -135,13 +135,13 @@ ColumnLayout {
         return date
     }
 
-    function isExpirationDateValid() {
-        if (expirationDate.length !== 10) {
+    function isExpirationDateValid(expDate) {
+        if (expDate.length !== 10) {
             return false
         }
         try {
-            return new Date(expirationDate).toISOString().substring(
-                        0, 10) === expirationDate
+            var parsedDate = new Date(expDate)
+            return parsedDate.toISOString().substring(0, 10) === expDate && expDate >= formatDate(new Date())
         } catch (e) {
             return false
         }
@@ -153,7 +153,7 @@ ColumnLayout {
             return !!subjectCommonName
         case 4:
             if (selfSign) {
-                return isExpirationDateValid()
+                return isExpirationDateValid(expirationDate)
             } else {
                 return true
             }
@@ -366,7 +366,7 @@ ColumnLayout {
                                 ) {
                                     expirationDate = expirationDate + "-"
                                 }
-                                if (isExpirationDateValid()) {
+                                if (isExpirationDateValid(expirationDate)) {
                                     calendarWidget.goToMonth(new Date(expirationDate))
                                 }
                             }
@@ -374,7 +374,12 @@ ColumnLayout {
 
                         CalendarWidget {
                             id: calendarWidget
-                            onDateClicked: expirationDate = formatDate(date)
+                            onDateClicked: {
+                                var formatted = formatDate(date)
+                                if (isExpirationDateValid(formatted)) {
+                                    expirationDate = formatted
+                                }
+                            }
                         }
                     }
                 }
