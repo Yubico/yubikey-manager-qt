@@ -284,15 +284,23 @@ ColumnLayout {
                             font.pixelSize: constants.h3
                         }
 
-                        ComboBox {
-                            id: algorithmInput
-                            model: algorithms
-                            currentIndex: algorithms.findIndex(function (alg) {
-                                return alg === algorithm
-                            })
-                            Material.foreground: yubicoBlue
-                            onCurrentTextChanged: algorithm = currentText
-                            Layout.minimumWidth: implicitWidth + constants.contentMargins / 2
+                        ColumnLayout {
+                            Repeater {
+                                model: algorithms
+
+                                RadioButton {
+                                    checked: algorithm === modelData
+                                    onCheckedChanged: {
+                                        if (checked) {
+                                            algorithm = modelData
+                                        }
+                                    }
+
+                                    text: modelData
+                                    font.pixelSize: constants.h3
+                                    Material.foreground: yubicoBlue
+                                }
+                            }
                         }
                     }
                 }
