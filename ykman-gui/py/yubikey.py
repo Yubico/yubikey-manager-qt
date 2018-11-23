@@ -9,6 +9,7 @@ import os
 import pyotherside
 import struct
 import types
+import getpass
 import urllib.parse
 import ykman.logging_setup
 
@@ -226,6 +227,13 @@ class Controller(object):
         except Exception as e:
             logger.error('Failed to set mode', exc_info=e)
             return str(e)
+
+    def get_username(self):
+        try:
+            username = getpass.getuser()
+            return {'success': True, 'username': username}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     def slots_status(self):
         try:

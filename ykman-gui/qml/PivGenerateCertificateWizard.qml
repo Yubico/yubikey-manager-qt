@@ -300,8 +300,18 @@ ColumnLayout {
 
             Component {
                 id: subjectView
-
                 ColumnLayout {
+                    Component.onCompleted: {
+                        yubiKey.getUserName(function (resp) {
+                            if (resp.success) {
+                                if (!subjectCommonName) {
+                                    subjectNameInput.text = resp.username
+                                } else {
+                                    subjectNameInput.text = subjectCommonName
+                                }
+                            }
+                        })
+                    }
                     RowLayout {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -312,7 +322,7 @@ ColumnLayout {
                         }
 
                         TextField {
-                            text: subjectCommonName
+                            id: subjectNameInput
                             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                             Layout.fillWidth: true
                             ToolTip.delay: 1000
