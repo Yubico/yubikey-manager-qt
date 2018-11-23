@@ -38,6 +38,7 @@ InlinePopup {
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
                 selectionColor: yubicoGreen
+                onAccepted: accept()
             }
         }
     }

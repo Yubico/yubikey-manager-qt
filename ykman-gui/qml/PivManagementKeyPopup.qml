@@ -36,6 +36,7 @@ InlinePopup {
             PivManagementKeyTextField {
                 id: keyInput
                 Layout.fillWidth: true
+                onAccepted: accept()
             }
         }
     }
