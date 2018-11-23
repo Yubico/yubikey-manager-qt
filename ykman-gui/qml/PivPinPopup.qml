@@ -7,6 +7,7 @@ InlinePopup {
     property var doneCallback
 
     closePolicy: Popup.NoAutoClose
+    focus: true
     standardButtons: Dialog.Cancel | Dialog.Ok
 
     onAccepted: doneCallback(pinInput.text)
@@ -15,6 +16,7 @@ InlinePopup {
     function getPinAndThen(cb) {
         doneCallback = cb
         open()
+        pinInput.focus = true
     }
 
     ColumnLayout {
