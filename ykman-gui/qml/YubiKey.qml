@@ -325,6 +325,10 @@ Python {
         doCall('yubikey.controller.set_mode', [connections], cb)
     }
 
+    function getUserName(cb) {
+        doCall('yubikey.controller.get_username', [], cb)
+    }
+
     function slotsStatus(cb) {
         doCall('yubikey.controller.slots_status', [], cb)
     }
