@@ -194,7 +194,7 @@ ColumnLayout {
         defaultSuffix: ".csr"
         fileMode: FileDialog.SaveFile
         folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
-        nameFilters: ["CSR files (*.csr, *.pem)"]
+        nameFilters: ["CSR files (*.csr *.pem)"]
         onAccepted: finish(true, file.toString())
     }
 
