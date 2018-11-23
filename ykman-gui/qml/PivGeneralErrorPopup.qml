@@ -9,6 +9,9 @@ InlinePopup {
 
     function getDefaultMessage(resp) {
         switch (resp.error_id) {
+        case 'invalid_iso8601_date':
+            return qsTr('Invalid date: %1').arg(resp.date)
+
         case 'mgm_key_bad_format':
             return qsTr('Management key must be exactly %1 hexadecimal characters.'.arg(constants.pivManagementKeyHexLength))
 
@@ -19,6 +22,9 @@ InlinePopup {
         case 'new_mgm_key_bad_hex':
             return qsTr('New management key must be exactly %1 hexadecimal characters.')
                 .arg(constants.pivManagementKeyHexLength)
+
+        case 'no_device':
+            return qsTr('No YubiKey present.')
 
         case 'pin_blocked':
             return qsTr('PIN is blocked.')
@@ -31,6 +37,9 @@ InlinePopup {
 
         case 'wrong_mgm_key':
             return qsTr("Wrong management key.")
+
+        case 'wrong_mgm_key_or_touch_required':
+            return qsTr("Wrong management key, or timeout while waiting for touch confirmation.")
 
         case 'wrong_pin':
             return qsTr('Wrong PIN, %1 tries left.'.arg(resp.tries_left))

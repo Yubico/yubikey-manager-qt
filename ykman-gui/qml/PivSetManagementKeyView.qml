@@ -54,7 +54,6 @@ ColumnLayout {
             yubiKey.pivChangeMgmKey(
                 function(resp) {
                     isBusy = false
-                    touchYubiKey.close()
 
                     if (resp.success) {
                         pivSuccessPopup.open()
@@ -87,7 +86,6 @@ ColumnLayout {
                 pin,
                 currentManagementKey,
                 newManagementKey,
-                touchYubiKey.open,
                 storeManagementKey
             )
         }

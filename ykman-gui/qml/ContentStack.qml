@@ -320,6 +320,13 @@ StackView {
     }
 
     Component {
+        id: pivGenerateCertificateWizard
+
+        PivGenerateCertificateWizard {
+        }
+    }
+
+    Component {
         id: legacyInterfaces
         LegacyInterfaceView {
         }
@@ -347,6 +354,10 @@ StackView {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
+    }
+
+    ConfirmationPopup {
+        id: confirmationPopup
     }
 
     PivGeneralErrorPopup {

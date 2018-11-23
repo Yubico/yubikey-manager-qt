@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 
 
+import datetime
 import json
 import logging
 import os
+import pyotherside
 import struct
 import types
+import getpass
 import urllib.parse
 import ykman.logging_setup
 
@@ -22,8 +25,8 @@ from ykman.fido import Fido2Controller
 from ykman.driver_ccid import APDUError, SW
 from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.piv import (
-    PivController, SLOT, AuthenticationBlocked, AuthenticationFailed,
-    BadFormat, WrongPin, WrongPuk)
+    PivController, ALGO, PIN_POLICY, SLOT, TOUCH_POLICY, AuthenticationBlocked,
+    AuthenticationFailed, BadFormat, WrongPin, WrongPuk)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
@@ -203,13 +206,17 @@ class Controller(object):
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
             return {
-                'certs': self._piv_list_certificates(piv_controller),
-                'has_derived_key': piv_controller.has_derived_key,
-                'has_protected_key': piv_controller.has_protected_key,
-                'has_stored_key': piv_controller.has_stored_key,
-                'pin_tries': piv_controller.get_pin_tries(),
-                'puk_blocked': piv_controller.puk_blocked,
                 'success': True,
+                'piv_data': {
+                    'certs': self._piv_list_certificates(piv_controller),
+                    'has_derived_key': piv_controller.has_derived_key,
+                    'has_protected_key': piv_controller.has_protected_key,
+                    'has_stored_key': piv_controller.has_stored_key,
+                    'pin_tries': piv_controller.get_pin_tries(),
+                    'puk_blocked': piv_controller.puk_blocked,
+                    'supported_algorithms':
+                        [a.name for a in piv_controller.supported_algorithms],
+                },
             }
 
     def set_mode(self, interfaces):
@@ -220,6 +227,13 @@ class Controller(object):
         except Exception as e:
             logger.error('Failed to set mode', exc_info=e)
             return str(e)
+
+    def get_username(self):
+        try:
+            username = getpass.getuser()
+            return {'success': True, 'username': username}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     def slots_status(self):
         try:
@@ -431,6 +445,95 @@ class Controller(object):
         }
 
     @piv_catch_error
+    def piv_delete_certificate(self, slot_name, pin=None, mgm_key_hex=None):
+        logger.debug('piv_delete_certificate %s', slot_name)
+
+        with self._open_piv() as piv_controller:
+            auth_failed = self._piv_ensure_authenticated(
+                piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+            if auth_failed:
+                return auth_failed
+
+            piv_controller.delete_certificate(SLOT[slot_name])
+            return {'success': True}
+
+    @piv_catch_error
+    def piv_generate_certificate(
+            self, slot_name, algorithm, common_name, expiration_date,
+            self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None,
+            pin_policy=None, touch_policy=None):
+        logger.debug('slot_name=%s algorithm=%s common_name=%s '
+                     'expiration_date=%s self_sign=%s csr_file_url=%s '
+                     'pin_policy=%s touch_policy=%s',
+                     slot_name, algorithm, common_name, expiration_date,
+                     self_sign, csr_file_url, pin_policy, touch_policy)
+
+        file_path = urllib.parse.urlparse(csr_file_url).path
+
+        with self._open_piv() as piv_controller:
+            auth_failed = self._piv_ensure_authenticated(
+                piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+            if auth_failed:
+                return auth_failed
+
+            pin_failed = self._piv_verify_pin(piv_controller, pin)
+            if pin_failed:
+                return pin_failed
+
+            if self_sign:
+                now = datetime.datetime.now()
+                try:
+                    year = int(expiration_date[0:4])
+                    month = int(expiration_date[(4+1):(4+1+2)])
+                    day = int(expiration_date[(4+1+2+1):(4+1+2+1+2)])
+                    valid_to = datetime.datetime(year, month, day)
+                except ValueError as e:
+                    logger.debug(
+                        'Failed to parse date: ' + expiration_date,
+                        exc_info=e)
+                    return {
+                        'success': False,
+                        'error_id': 'invalid_iso8601_date',
+                        'date': expiration_date,
+                    }
+
+            unsupported_policy = self._piv_check_policies(
+                piv_controller, pin_policy=pin_policy,
+                touch_policy=touch_policy)
+            if unsupported_policy:
+                return unsupported_policy
+
+            public_key = piv_controller.generate_key(
+                SLOT[slot_name], ALGO[algorithm],
+                pin_policy=(PIN_POLICY.from_string(pin_policy)
+                            if pin_policy else PIN_POLICY.DEFAULT),
+                touch_policy=(TOUCH_POLICY.from_string(touch_policy)
+                              if touch_policy else TOUCH_POLICY.DEFAULT))
+
+            if self_sign:
+                try:
+                    piv_controller.generate_self_signed_certificate(
+                        SLOT[slot_name], public_key, common_name, now,
+                        valid_to)
+                except APDUError as e:
+                    if e.sw == SW.SECURITY_CONDITION_NOT_SATISFIED:
+                        return {
+                            'success': False,
+                            'error_id': 'pin_required',
+                        }
+                    raise
+
+            else:
+                csr = piv_controller.generate_certificate_signing_request(
+                    SLOT[slot_name], public_key, common_name)
+
+                with open(file_path, 'w+b') as csr_file:
+                    csr_file.write(csr.public_bytes(
+                        encoding=serialization.Encoding.PEM))
+
+            return {'success': True}
+
+    @piv_catch_error
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -614,9 +717,16 @@ class Controller(object):
         return {'success': True, 'error': None}
 
     def _piv_verify_pin(self, piv_controller, pin=None):
+        touch_required = False
+
+        def touch_callback():
+            nonlocal touch_required
+            touch_required = True
+            _touch_prompt()
+
         if pin:
             try:
-                piv_controller.verify(pin)
+                piv_controller.verify(pin, touch_callback=touch_callback)
 
             except AuthenticationBlocked as e:
                 return {
@@ -631,6 +741,23 @@ class Controller(object):
                     'tries_left': e.tries_left,
                 }
 
+            except AuthenticationFailed as e:
+                if touch_required:
+                    return {
+                        'success': False,
+                        'error': 'wrong_key_or_touch_required',
+                    }
+                else:
+                    return {
+                        'success': False,
+                        'error': 'wrong_key',
+                        'message': 'Incorrect management key.',
+                    }
+
+            finally:
+                if touch_required:
+                    _close_touch_prompt()
+
         else:
             return {
                 'success': False,
@@ -642,6 +769,13 @@ class Controller(object):
         if piv_controller.has_protected_key:
             return self._piv_verify_pin(piv_controller, pin)
         else:
+            touch_required = False
+
+            def touch_callback():
+                nonlocal touch_required
+                touch_required = True
+                _touch_prompt()
+
             if mgm_key_hex:
                 if len(mgm_key_hex) != 48:
                     return {
@@ -658,22 +792,59 @@ class Controller(object):
                     }
 
                 try:
-                    piv_controller.authenticate(mgm_key_bytes)
+                    piv_controller.authenticate(
+                        mgm_key_bytes,
+                        touch_callback
+                    )
+
                 except AuthenticationFailed:
-                    return {
-                        'success': False,
-                        'error_id': 'wrong_mgm_key'
-                    }
+                    if touch_required:
+                        return {
+                            'success': False,
+                            'error_id': 'wrong_mgm_key_or_touch_required',
+                        }
+                    else:
+                        return {
+                            'success': False,
+                            'error_id': 'wrong_mgm_key'
+                        }
+
                 except BadFormat:
                     return {
                         'success': False,
                         'error_id': 'mgm_key_bad_format',
                     }
+
+                finally:
+                    if touch_required:
+                        _close_touch_prompt()
+
             else:
                 return {
                     'success': False,
                     'error_id': 'mgm_key_required'
                 }
+
+    def _piv_check_policies(self, piv_controller, pin_policy=None,
+                            touch_policy=None):
+        if pin_policy and not piv_controller.supports_pin_policies:
+            return {
+                'success': False,
+                'error_id': 'unsupported_pin_policy',
+                'supported_pin_policies': [],
+            }
+
+        if touch_policy and not (
+                TOUCH_POLICY[touch_policy]
+                in piv_controller.supported_touch_policies):
+            return {
+                'success': False,
+                'error_id': 'unsupported_touch_policy',
+                'supported_touch_policies': [
+                    policy.name for policy in
+                    piv_controller.supported_touch_policies
+                ],
+            }
 
 
 controller = None
@@ -689,6 +860,14 @@ def _piv_serialise_cert(slot, cert):
         'validFrom': cert.not_valid_before.date().isoformat(),
         'validTo': cert.not_valid_after.date().isoformat()
     }
+
+
+def _touch_prompt():
+    pyotherside.send('touchRequired')
+
+
+def _close_touch_prompt():
+    pyotherside.send('touchNotRequired')
 
 
 def init_with_logging(log_level, log_file=None):

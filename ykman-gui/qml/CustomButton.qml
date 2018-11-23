@@ -9,7 +9,9 @@ Button {
 
     property string iconSource
     property string toolTipText
+
     property string foregroundColor: getForegroundColor()
+    property bool iconOnRight: false
 
     font.capitalization: Font.MixedCase
     font.family: constants.fontFamily
@@ -37,22 +39,39 @@ Button {
     // which was introduced in Qt 5.10.
     contentItem: RowLayout {
         Image {
-            visible: iconSource !== null
-            id: icon
+            visible: iconSource !== null && !iconOnRight
+            id: iconLeft
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             fillMode: Image.PreserveAspectFit
             sourceSize.height: 16
             sourceSize.width: 16
             source: iconSource
 
             ColorOverlay {
-                anchors.fill: icon
-                source: icon
+                anchors.fill: iconLeft
+                source: iconLeft
                 color: foregroundColor
             }
         }
         Label {
+            visible: !!button.text
             text: button.text
             font: button.font
+        }
+        Image {
+            visible: iconSource !== null && iconOnRight
+            id: iconRight
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            fillMode: Image.PreserveAspectFit
+            sourceSize.height: 16
+            sourceSize.width: 16
+            source: iconSource
+
+            ColorOverlay {
+                anchors.fill: iconRight
+                source: iconRight
+                color: foregroundColor
+            }
         }
     }
 }

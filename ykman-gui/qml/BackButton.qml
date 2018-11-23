@@ -1,5 +1,9 @@
 CustomButton {
+    property var onClickedCallback: function () {
+        views.pop()
+    }
+
     text: qsTr("Back")
-    onClicked: views.pop()
+    onClicked: onClickedCallback()
     iconSource: "../images/back.svg"
 }

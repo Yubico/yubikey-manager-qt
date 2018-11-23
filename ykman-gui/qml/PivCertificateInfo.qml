@@ -163,6 +163,7 @@ ColumnLayout {
                 text: qsTr("Generate")
                 highlighted: true
                 toolTipText: qsTr("Generate a new private key")
+                onClicked: views.push(pivGenerateCertificateWizard, { slot: slot })
             }
             CustomButton {
                 text: qsTr("Import")
