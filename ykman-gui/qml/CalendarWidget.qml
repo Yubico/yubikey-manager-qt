@@ -14,7 +14,7 @@ ListView {
     highlightRangeMode: ListView.StrictlyEnforceRange
     width: 275
     height: 200
-
+    interactive: false
     model: CalendarModel {
         from: new Date()
     }
