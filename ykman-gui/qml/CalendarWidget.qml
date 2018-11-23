@@ -34,18 +34,11 @@ ListView {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
 
-            Button {
+            CustomButton {
                 onClicked: listview.decrementCurrentIndex()
+                flat: true
                 enabled: currentIndex > 0
-                Material.background: yubicoWhite
-                Material.foreground: yubicoBlue
-
-                contentItem: Image {
-                    fillMode: Image.PreserveAspectFit
-                    sourceSize.height: 16
-                    sourceSize.width: 16
-                    source: "../images/back.svg"
-                }
+                iconSource: "../images/back.svg"
             }
 
             Label {
@@ -55,17 +48,10 @@ ListView {
                 Layout.fillWidth: true
             }
 
-            Button {
+            CustomButton {
                 onClicked: listview.incrementCurrentIndex()
-                Material.background: yubicoWhite
-                Material.foreground: yubicoBlue
-
-                contentItem: Image {
-                    fillMode: Image.PreserveAspectFit
-                    sourceSize.height: 16
-                    sourceSize.width: 16
-                    source: "../images/next.svg"
-                }
+                flat: true
+                iconSource: "../images/next.svg"
             }
         }
 

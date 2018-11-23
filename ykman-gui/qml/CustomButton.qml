@@ -39,6 +39,7 @@ Button {
         Image {
             visible: iconSource !== null
             id: icon
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             fillMode: Image.PreserveAspectFit
             sourceSize.height: 16
             sourceSize.width: 16
@@ -51,6 +52,7 @@ Button {
             }
         }
         Label {
+            visible: !!button.text
             text: button.text
             font: button.font
         }
