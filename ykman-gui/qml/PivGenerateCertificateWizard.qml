@@ -189,10 +189,12 @@ ColumnLayout {
 
     FileDialog {
         id: selectCsrOutputDialog
-        title: "Select certificate export location"
-        acceptLabel: "Select"
-        fileMode: FileDialog.OpenFile
-        nameFilters: ["Certificate signing request files (*.pem *.csr)", "All files (*)"]
+        title: "Save CSR to file..."
+        acceptLabel: "Save"
+        defaultSuffix: ".csr"
+        fileMode: FileDialog.SaveFile
+        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        nameFilters: ["CSR files (*.csr *.pem)"]
         onAccepted: finish(true, file.toString())
     }
 
