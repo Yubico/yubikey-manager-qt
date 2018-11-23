@@ -49,8 +49,6 @@ ColumnLayout {
                 model: yubiKey.pivSlots
 
                 PivCertificateInfo {
-                    title: qsTr("%1 (Slot %2)").arg(modelData.name).arg(
-                               modelData.hex)
                     slot: modelData
                     certificate: yubiKey.pivCerts[modelData.id]
                 }

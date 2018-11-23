@@ -6,9 +6,10 @@ import QtQuick.Dialogs 1.2
 import Qt.labs.platform 1.0
 
 ColumnLayout {
-    property string title
     property var slot
     property var certificate
+
+    property string title: qsTr("%1 (Slot %2)").arg(slot.name).arg(slot.hex)
 
     spacing: 15
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
