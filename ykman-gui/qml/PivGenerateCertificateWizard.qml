@@ -45,11 +45,7 @@ ColumnLayout {
             if (resp.success) {
                 pivSuccessPopup.open()
             } else {
-                pivError.showResponseError(
-                            resp, qsTr(
-                                "Failed to delete existing certificate: %1").arg(
-                                resp.message), qsTr(
-                                "Failed to delete existing certificate for an unknown reason."))
+                pivError.showResponseError(resp)
             }
             views.pop()
         })
