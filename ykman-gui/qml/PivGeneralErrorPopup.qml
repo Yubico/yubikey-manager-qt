@@ -32,6 +32,9 @@ InlinePopup {
         case 'pin_required':
             return qsTr("PIN is required.")
 
+        case 'piv_open_failed':
+            return qsTr("Failed to open the PIV application on the YubiKey. The driver may be locked by another application.")
+
         case 'puk_blocked':
             return qsTr('PUK is blocked.')
 
