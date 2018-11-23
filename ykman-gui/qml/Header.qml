@@ -64,15 +64,6 @@ ColumnLayout {
             Layout.maximumWidth: 150
             fillMode: Image.PreserveAspectFit
             source: "../images/yubico-logo.svg"
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                onClicked: Qt.openUrlExternally("https://www.yubico.com/")
-                ToolTip.delay: 1000
-                ToolTip.visible: containsMouse
-                ToolTip.text: qsTr("Visit yubico.com in your web browser")
-            }
         }
         TopMenuButton {
             text: qsTr("Home")
