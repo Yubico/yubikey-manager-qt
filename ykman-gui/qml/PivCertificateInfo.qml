@@ -15,7 +15,12 @@ ColumnLayout {
 
     onVisibleChanged: visible ? load() : ''
     function load() {
-        yubiKey.refreshPivData()
+        yubiKey.refreshPivData(function (resp) {
+            if (!resp.success) {
+                pivError.showResponseError(resp)
+                views.home()
+            }
+        })
     }
 
     function exportCertificate(fileUrl) {
