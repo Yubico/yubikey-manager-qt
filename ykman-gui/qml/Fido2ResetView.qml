@@ -9,6 +9,18 @@ ColumnLayout {
     property bool loadedReset
     onHasDeviceChanged: resetOnReInsert()
 
+    function initiateReset() {
+        confirmationPopup.show(
+            [
+                qsTr("Are you sure you want to reset FIDO? This will delete all FIDO credentials, including FIDO U2F credentials."),
+                qsTr("This action cannot be undone!"),
+            ],
+            function () {
+                reInsertYubiKey.open()
+            }
+        )
+    }
+
     function resetOnReInsert() {
         if (!hasDevice && reInsertYubiKey.visible) {
             loadedReset = true
@@ -35,11 +47,6 @@ ColumnLayout {
 
     TouchYubiKeyPopup {
         id: touchYubiKey
-    }
-
-    Fido2ResetConfirmPopup {
-        id: fido2ResetConfirmationPopup
-        onAccepted: reInsertYubiKey.open()
     }
 
     Fido2GeneralErrorPopup {
@@ -85,7 +92,7 @@ ColumnLayout {
             }
             FinishButton {
                 text: qsTr("Reset")
-                onClicked: fido2ResetConfirmationPopup.open()
+                onClicked: initiateReset()
                 toolTipText: qsTr("Finish and perform the FIDO Reset")
             }
         }
