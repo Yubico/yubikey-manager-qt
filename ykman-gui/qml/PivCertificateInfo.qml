@@ -9,8 +9,6 @@ ColumnLayout {
     property var slot
     property var certificate
 
-    property string title: qsTr("%1 (Slot %2)").arg(slot.name).arg(slot.hex)
-
     spacing: 15
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
     Layout.fillWidth: true
@@ -86,7 +84,7 @@ ColumnLayout {
     }
 
     Heading2 {
-        text: title
+        text: qsTr("%1 (Slot %2)").arg(slot.name).arg(slot.hex)
         Layout.preferredWidth: constants.contentWidth
     }
 
