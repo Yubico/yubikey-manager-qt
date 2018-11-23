@@ -236,6 +236,12 @@ ColumnLayout {
                 Layout.fillWidth: true
 
                 initialItem: outputTypeView
+
+                onCurrentItemChanged: {
+                    if (currentItem && currentItem.focusItem) {
+                        currentItem.focusItem.forceActiveFocus()
+                    }
+                }
             }
 
             Component {
@@ -299,6 +305,8 @@ ColumnLayout {
             Component {
                 id: subjectView
                 ColumnLayout {
+                    property var focusItem: subjectNameInput
+
                     Component.onCompleted: {
                         yubiKey.getUserName(function (resp) {
                             if (resp.success) {
@@ -337,6 +345,7 @@ ColumnLayout {
                 id: expirationDateView
 
                 ColumnLayout {
+                    property var focusItem: expirationDateInput
 
                     Component.onCompleted: calendarWidget.goToMonth(
                                                new Date(expirationDate))
@@ -354,6 +363,7 @@ ColumnLayout {
                         }
 
                         TextField {
+                            id: expirationDateInput
                             text: expirationDate
                             ToolTip.delay: 1000
                             ToolTip.visible: hovered
