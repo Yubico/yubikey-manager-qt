@@ -98,17 +98,38 @@ ColumnLayout {
             visible: !!certificate
             columns: 2
             Layout.fillWidth: true
-
-            Repeater {
-                model: [qsTr(
-                        "Issued from:"), certificate ? certificate.issuedFrom : '', qsTr(
-                                                           "Issued to:"), certificate ? certificate.issuedTo : '', qsTr("Valid from:"), certificate ? certificate.validFrom : '', qsTr("Valid to:"), certificate ? certificate.validTo : '']
-
-                Label {
-                    text: modelData
-                    color: yubicoBlue
-                    font.pixelSize: constants.h3
-                }
+            Label {
+                text: qsTr("Issuer:")
+                color: yubicoBlue
+                font.bold: true
+                font.pixelSize: constants.h3
+            }
+            Label {
+                text: certificate ? certificate.issuedFrom : ''
+                color: yubicoBlue
+                font.pixelSize: constants.h3
+            }
+            Label {
+                text: qsTr("Subject name:")
+                color: yubicoBlue
+                font.bold: true
+                font.pixelSize: constants.h3
+            }
+            Label {
+                text: certificate ? certificate.issuedTo : ''
+                color: yubicoBlue
+                font.pixelSize: constants.h3
+            }
+            Label {
+                text: qsTr("Expiration date:")
+                color: yubicoBlue
+                font.bold: true
+                font.pixelSize: constants.h3
+            }
+            Label {
+                text: certificate ? certificate.validTo : ''
+                color: yubicoBlue
+                font.pixelSize: constants.h3
             }
         }
 
