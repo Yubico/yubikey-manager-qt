@@ -6,7 +6,7 @@ InlinePopup {
 
     property var doneCallback
 
-    closePolicy: Popup.NoAutoClose
+    closePolicy: Popup.CloseOnEscape
     focus: true
     standardButtons: Dialog.Cancel | Dialog.Ok
 
