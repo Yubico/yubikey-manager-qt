@@ -517,5 +517,27 @@ ColumnLayout {
                 enabled: isInputValid()
             }
         }
+
+        Shortcut {
+            sequence: "Return"
+            onActivated: {
+                if (currentStep === numSteps) {
+                    finish()
+                } else {
+                    next()
+                }
+            }
+        }
+
+        Shortcut {
+            sequence: "Escape"
+            onActivated: {
+                if (currentStep === 1) {
+                    views.pop()
+                } else {
+                    previous()
+                }
+            }
+        }
     }
 }
