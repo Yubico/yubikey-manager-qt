@@ -181,5 +181,12 @@ ColumnLayout {
                 }
             }
         }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+            BackButton {
+            }
+        }
     }
 }
