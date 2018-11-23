@@ -510,6 +510,10 @@ class Controller(object):
                 touch_policy=(TOUCH_POLICY.from_string(touch_policy)
                               if touch_policy else TOUCH_POLICY.DEFAULT))
 
+            pin_failed = self._piv_verify_pin(piv_controller, pin)
+            if pin_failed:
+                return pin_failed
+
             try:
                 if self_sign:
                     piv_controller.generate_self_signed_certificate(
