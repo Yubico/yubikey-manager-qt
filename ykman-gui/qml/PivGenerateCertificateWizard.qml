@@ -335,7 +335,6 @@ ColumnLayout {
 
                     GridLayout {
                         columns: 2
-                        rowSpacing: constants.contentTopMargin * 2
 
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
