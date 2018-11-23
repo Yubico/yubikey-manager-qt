@@ -6,7 +6,7 @@ import Qt.labs.platform 1.0
 
 ColumnLayout {
 
-    property string slot
+    property var slot
 
     property bool isBusy: false
     property string busyMessage: ""
@@ -18,24 +18,11 @@ ColumnLayout {
 
     property alias currentStep: wizardStack.depth
     readonly property int numSteps: selfSign ? 5 : 4
-    readonly property string slotHex: getSlotHex(slot)
-    readonly property string slotName: getSlotName(slot)
 
     readonly property var algorithms: yubiKey.piv ? yubiKey.piv.supported_algorithms : ["RSA1024", "RSA2048", "ECCP256", "ECCP384"]
 
     objectName: "pivGenerateCertificateWizard"
 
-    function getSlotHex(slotId) {
-        return yubiKey.pivSlots.find(function (slotObj) {
-            return slotObj.id === slotId
-        }).hex
-    }
-
-    function getSlotName(slotId) {
-        return yubiKey.pivSlots.find(function (slotObj) {
-            return slotObj.id === slotId
-        }).name
-    }
 
     function deleteCertificate(pin, managementKey) {
         busyMessage = qsTr("Deleting existing certificate...")
@@ -71,7 +58,7 @@ ColumnLayout {
             busyMessage = qsTr("Generating...")
             isBusy = true
             yubiKey.pivGenerateCertificate({
-                                               slotName: slot,
+                                               slotName: slot.id,
                                                algorithm: algorithm,
                                                commonName: subjectCommonName,
                                                expirationDate: expirationDate,
@@ -100,7 +87,7 @@ ColumnLayout {
                                            })
         }
 
-        if (confirmOverwrite || !yubiKey.pivCerts[slot]) {
+        if (confirmOverwrite || !yubiKey.pivCerts[slot.id]) {
             if (selfSign || csrFileUrl) {
                 _prompt_for_pin_and_key()
             } else {
@@ -109,8 +96,8 @@ ColumnLayout {
         } else {
             var firstMessageTemplate = selfSign ? qsTr('This will overwrite the key and certificate in the %1 (%2) slot.') : qsTr('This will overwrite the key and delete the certificate in the %1 (%2) slot.')
 
-            confirmationPopup.show([firstMessageTemplate.arg(slotName).arg(
-                                        slotHex), qsTr(
+            confirmationPopup.show([firstMessageTemplate.arg(slot.name).arg(
+                                        slot.hex), qsTr(
                                         'This action cannot be undone!'), qsTr(
                                         'Are you sure you want to continue?')],
                                    function () {
@@ -225,7 +212,7 @@ ColumnLayout {
                     }, {
                         text: qsTr("Certificates")
                     }, {
-                        text: qsTr("Generate: %1 (%2/%3)").arg(slotName).arg(
+                        text: qsTr("Generate: %1 (%2/%3)").arg(slot.name).arg(
                                   currentStep).arg(numSteps)
                     }]
             }
@@ -416,8 +403,7 @@ ColumnLayout {
                                 color: yubicoBlue
                             }
                             Label {
-                                text: getSlotName(slot) + ' (' + getSlotHex(
-                                          slot) + ')'
+                                text: slot.name + ' (' + slot.hex + ')'
                                 font.pixelSize: constants.h3
                                 color: yubicoBlue
                             }

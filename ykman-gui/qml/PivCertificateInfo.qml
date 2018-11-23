@@ -7,8 +7,9 @@ import Qt.labs.platform 1.0
 
 ColumnLayout {
     property string title
-    property string slot
+    property var slot
     property var certificate
+
     spacing: 15
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
     Layout.fillWidth: true
@@ -19,7 +20,7 @@ ColumnLayout {
     }
 
     function exportCertificate(fileUrl) {
-        yubiKey.pivExportCertificate(slot, fileUrl, function (resp) {
+        yubiKey.pivExportCertificate(slot.id, fileUrl, function (resp) {
             if (resp.success) {
                 pivSuccessPopup.open()
             } else {
@@ -45,10 +46,10 @@ ColumnLayout {
 
         function _tryImport(password) {
             views.pivGetPinOrManagementKey(function (pin) {
-                yubiKey.pivImportFile(slot, fileUrl, password, pin, null,
+                yubiKey.pivImportFile(slot.id, fileUrl, password, pin, null,
                                       handleResponse)
             }, function (managementKey) {
-                yubiKey.pivImportFile(slot, fileUrl, password, null,
+                yubiKey.pivImportFile(slot.id, fileUrl, password, null,
                                       managementKey, handleResponse)
             })
         }
