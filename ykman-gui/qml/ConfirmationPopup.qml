@@ -13,7 +13,7 @@ InlinePopup {
 
     function show(msg, cb) {
         acceptCallback = cb
-        if (msg instanceof String) {
+        if (typeof msg === "string") {
             messageParagraphs = [msg]
         } else {
             messageParagraphs = msg
