@@ -7,6 +7,7 @@ InlinePopup {
     property var doneCallback
 
     closePolicy: Popup.NoAutoClose
+    focus: true
     standardButtons: Dialog.Cancel | Dialog.Ok
 
     onAccepted: doneCallback(keyInput.text)
@@ -15,6 +16,7 @@ InlinePopup {
     function getKeyAndThen(cb) {
         doneCallback = cb
         open()
+        keyInput.focus = true
     }
 
     ColumnLayout {
