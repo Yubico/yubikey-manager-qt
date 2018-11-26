@@ -6,9 +6,9 @@ import QtQuick.Dialogs 1.2
 import Qt.labs.platform 1.0
 
 ColumnLayout {
-    property string title
-    property string slot
+    property var slot
     property var certificate
+
     spacing: 15
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
     Layout.fillWidth: true
@@ -18,8 +18,34 @@ ColumnLayout {
         yubiKey.refreshPivData()
     }
 
+    function deleteCertificate() {
+        confirmationPopup.show(
+            qsTr("This will delete the certificate stored in slot '%1' of your YubiKey, and cannot be undone. Note that the private key is not deleted." ).arg(slot.hex),
+            function() {
+                function _finish(pin, managementKey) {
+                    yubiKey.pivDeleteCertificate(slot.id, pin, managementKey, function (resp) {
+                        if (resp.success) {
+                            pivSuccessPopup.open()
+                        } else {
+                            pivError.showResponseError(resp)
+                        }
+                    })
+                }
+
+                views.pivGetPinOrManagementKey(
+                    function (pin) {
+                        _finish(pin, false)
+                    },
+                    function (managementKey) {
+                        _finish(false, managementKey)
+                    }
+                )
+            }
+        )
+    }
+
     function exportCertificate(fileUrl) {
-        yubiKey.pivExportCertificate(slot, fileUrl, function (resp) {
+        yubiKey.pivExportCertificate(slot.id, fileUrl, function (resp) {
             if (resp.success) {
                 pivSuccessPopup.open()
             } else {
@@ -45,10 +71,10 @@ ColumnLayout {
 
         function _tryImport(password) {
             views.pivGetPinOrManagementKey(function (pin) {
-                yubiKey.pivImportFile(slot, fileUrl, password, pin, null,
+                yubiKey.pivImportFile(slot.id, fileUrl, password, pin, null,
                                       handleResponse)
             }, function (managementKey) {
-                yubiKey.pivImportFile(slot, fileUrl, password, null,
+                yubiKey.pivImportFile(slot.id, fileUrl, password, null,
                                       managementKey, handleResponse)
             })
         }
@@ -84,7 +110,7 @@ ColumnLayout {
     }
 
     Heading2 {
-        text: title
+        text: qsTr("%1 (Slot %2)").arg(slot.name).arg(slot.hex)
         Layout.preferredWidth: constants.contentWidth
     }
 
@@ -150,6 +176,7 @@ ColumnLayout {
                 text: qsTr("Delete")
                 iconSource: "../images/delete.svg"
                 toolTipText: qsTr("Delete certificate")
+                onClicked: deleteCertificate()
             }
             CustomButton {
                 enabled: !!certificate
