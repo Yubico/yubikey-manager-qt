@@ -18,7 +18,7 @@ from binascii import b2a_hex, a2b_hex
 from fido2.ctap import CtapError
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
-from ykman.descriptor import get_descriptors
+from ykman.descriptor import FailedOpeningDeviceException, get_descriptors
 from ykman.device import device_config
 from ykman.otp import OtpController
 from ykman.fido import Fido2Controller
@@ -45,6 +45,12 @@ def piv_catch_error(f):
     def wrapped(*args, **kwargs):
         try:
             return f(*args, **kwargs)
+        except FailedOpeningDeviceException as e:
+            return {
+                'success': False,
+                'error_id': 'piv_open_failed',
+                'error_message': str(e),
+            }
         except Exception as e:
             logger.error('PIV operation failed', exc_info=e)
             return {

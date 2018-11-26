@@ -14,8 +14,12 @@ ColumnLayout {
 
     function load() {
         isBusy = true
-        yubiKey.refreshPivData(function () {
+        yubiKey.refreshPivData(function (resp) {
             isBusy = false
+            if (!resp.success) {
+                pivError.showResponseError(resp)
+                views.home()
+            }
         })
     }
 
