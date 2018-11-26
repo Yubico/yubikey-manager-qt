@@ -6,7 +6,8 @@ InlinePopup {
 
     property var doneCallback
 
-    closePolicy: Popup.NoAutoClose
+    closePolicy: Popup.CloseOnEscape
+    focus: true
     standardButtons: Dialog.Cancel | Dialog.Ok
 
     onAccepted: doneCallback(keyInput.text)
@@ -15,6 +16,7 @@ InlinePopup {
     function getKeyAndThen(cb) {
         doneCallback = cb
         open()
+        keyInput.focus = true
     }
 
     ColumnLayout {
@@ -34,6 +36,7 @@ InlinePopup {
             PivManagementKeyTextField {
                 id: keyInput
                 Layout.fillWidth: true
+                onAccepted: accept()
             }
         }
     }
