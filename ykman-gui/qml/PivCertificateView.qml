@@ -55,8 +55,7 @@ ColumnLayout {
             }
         }
         BackButton {
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
+            Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             flat: true
         }
     }

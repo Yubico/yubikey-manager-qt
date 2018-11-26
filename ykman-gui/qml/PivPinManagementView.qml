@@ -88,7 +88,6 @@ ColumnLayout {
             Layout.fillWidth: true
             id: mainRow
             spacing: 30
-            anchors.horizontalCenter: parent.horizontalCenter
 
             ColumnLayout {
 
@@ -194,8 +193,7 @@ ColumnLayout {
             }
         }
         BackButton {
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
+            Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             flat: true
         }
     }
