@@ -47,15 +47,15 @@ ColumnLayout {
 
     function getManagementKeyMessage() {
         if (pivData.has_derived_key) {
-            return qsTr("Management key is derived from PIN.")
+            return qsTr("Derived from PIN")
         } else if (pivData.has_stored_key) {
             if (pinBlocked) {
-                return qsTr("Management key is inaccessible because PIN is blocked.")
+                return qsTr("Not readable, PIN is blocked")
             } else {
-                return qsTr("Management key is stored, protected by PIN.")
+                return qsTr("Protected by PIN")
             }
         }
-        return qsTr("Management key is not stored.")
+        return qsTr("Not protected by PIN")
     }
 
     BusyIndicator {
@@ -83,23 +83,25 @@ ColumnLayout {
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.fillWidth: true
-            spacing: 60
             id: mainRow
+            spacing: 30
+            anchors.horizontalCenter: parent.horizontalCenter
 
             ColumnLayout {
-                Layout.fillWidth: true
 
                 Heading2 {
                     text: qsTr("PIN")
                     font.pixelSize: constants.h2
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 Label {
                     text: getPinMessage()
                     font.pixelSize: constants.h3
-                    color: yubicoBlue
+                    color: yubicoGrey
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CustomButton {
                     text: qsTr("Change PIN")
@@ -107,6 +109,7 @@ ColumnLayout {
                     onClicked: views.pivChangePin()
                     iconSource: "../images/lock.svg"
                     visible: !pinBlocked
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CustomButton {
                     text: qsTr("Unblock PIN")
@@ -116,6 +119,7 @@ ColumnLayout {
                     iconSource: "../images/reset.svg"
                     visible: pinBlocked
                     enabled: !pukBlocked
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
 
@@ -131,16 +135,17 @@ ColumnLayout {
             }
 
             ColumnLayout {
-                Layout.fillWidth: true
 
                 Heading2 {
                     text: qsTr("PUK")
                     font.pixelSize: constants.h2
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 Label {
                     text: getPukMessage()
                     font.pixelSize: constants.h3
-                    color: yubicoBlue
+                    color: yubicoGrey
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CustomButton {
                     text: qsTr("Change PUK")
@@ -148,6 +153,7 @@ ColumnLayout {
                     onClicked: views.pivChangePuk()
                     iconSource: "../images/lock.svg"
                     enabled: !pukBlocked
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
 
@@ -163,17 +169,18 @@ ColumnLayout {
             }
 
             ColumnLayout {
-                Layout.fillWidth: true
 
                 Heading2 {
                     text: qsTr("Management Key")
                     font.pixelSize: constants.h2
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 Label {
                     text: getManagementKeyMessage()
                     font.pixelSize: constants.h3
-                    color: yubicoBlue
+                    color: yubicoGrey
                     wrapMode: Text.WordWrap
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CustomButton {
                     text: qsTr("Change Management Key")
@@ -182,15 +189,14 @@ ColumnLayout {
                     toolTipText: qsTr("Change the PIV management key")
                     iconSource: "../images/lock.svg"
                     enabled: !(hasProtectedKey && pinBlocked)
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
         }
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-            BackButton {
-            }
+        BackButton {
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            flat: true
         }
     }
 }

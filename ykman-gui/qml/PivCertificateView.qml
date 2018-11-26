@@ -54,11 +54,10 @@ ColumnLayout {
                 }
             }
         }
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-            BackButton {
-            }
+        BackButton {
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            flat: true
         }
     }
 }

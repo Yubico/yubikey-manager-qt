@@ -275,7 +275,8 @@ ColumnLayout {
         RowLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-
+            BackButton {
+            }
             FinishButton {
                 enabled: configurationHasChanged() && validCombination()
                 text: qsTr("Save Interfaces")

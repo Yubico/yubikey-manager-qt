@@ -104,25 +104,28 @@ ColumnLayout {
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.fillWidth: true
-            spacing: 60
+            spacing: 30
             id: mainRow
+            anchors.horizontalCenter: parent.horizontalCenter
 
             ColumnLayout {
                 Heading2 {
                     text: qsTr("Short Touch (Slot 1)")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.pixelSize: constants.h2
                     color: slot1Configured ? yubicoBlue : yubicoGrey
                 }
                 Label {
                     text: slot1StatusTxt()
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.pixelSize: constants.h3
-                    color: slot1Configured ? yubicoBlue : yubicoGrey
+                    color: yubicoGrey
                 }
                 RowLayout {
-                    Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     spacing: 10
                     CustomButton {
                         text: qsTr("Delete")
@@ -148,6 +151,8 @@ ColumnLayout {
             }
 
             ColumnLayout {
+
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Rectangle {
                     Layout.minimumWidth: 1
                     Layout.maximumWidth: 1
@@ -181,16 +186,18 @@ ColumnLayout {
                 Heading2 {
                     id: slot2Heading
                     text: qsTr("Long Touch (Slot 2)")
-                    color: slot2Configured ? yubicoBlue : yubicoGrey
+                    color: slot2configured ? yubicoBlue : yubicoGrey
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 Label {
                     text: slot2StatusTxt()
                     font.pixelSize: constants.h3
-                    color: slot2Configured ? yubicoBlue : yubicoGrey
+                    color: yubicoGrey
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 RowLayout {
                     spacing: 10
-                    Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     CustomButton {
                         text: qsTr("Delete")
                         enabled: views.slot2Configured
@@ -213,6 +220,11 @@ ColumnLayout {
                     }
                 }
             }
+        }
+        BackButton {
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            flat: true
         }
     }
 }

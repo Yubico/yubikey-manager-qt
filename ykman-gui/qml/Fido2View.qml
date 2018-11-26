@@ -75,21 +75,24 @@ ColumnLayout {
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.fillWidth: true
-            spacing: 60
+            spacing: 30
             id: mainRow
+            anchors.horizontalCenter: parent.horizontalCenter
 
             ColumnLayout {
                 Heading2 {
                     text: qsTr("FIDO2 PIN")
                     font.pixelSize: constants.h2
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 Label {
                     text: getPinMessage() || ''
                     font.pixelSize: constants.h3
-                    color: yubicoBlue
+                    color: yubicoGrey
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CustomButton {
                     text: hasPin ? qsTr("Change PIN") : qsTr("Set PIN")
@@ -99,6 +102,7 @@ ColumnLayout {
                     toolTipText: hasPin ? qsTr("Change the FIDO2 PIN") : qsTr(
                                               "Configure a FIDO2 PIN")
                     iconSource: "../images/lock.svg"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
 
@@ -115,21 +119,29 @@ ColumnLayout {
 
             ColumnLayout {
                 Heading2 {
-                    text: qsTr("FIDO Reset")
+                    text: qsTr("Reset")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 Label {
-                    text: qsTr("Reset all FIDO applications")
+                    text: qsTr("Restore defaults")
                     font.pixelSize: constants.h3
-                    color: yubicoBlue
+                    color: yubicoGrey
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CustomButton {
-                    text: qsTr("Reset")
+                    text: qsTr("Reset FIDO")
                     highlighted: true
                     onClicked: views.fido2Reset()
-                    toolTipText: qsTr("Reset all FIDO applications")
+                    toolTipText: qsTr("Reset FIDO2 and FIDO U2F applications")
                     iconSource: "../images/reset.svg"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
+        }
+        BackButton {
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            flat: true
         }
     }
 }
