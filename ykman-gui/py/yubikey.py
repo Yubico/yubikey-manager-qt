@@ -510,26 +510,31 @@ class Controller(object):
                 touch_policy=(TOUCH_POLICY.from_string(touch_policy)
                               if touch_policy else TOUCH_POLICY.DEFAULT))
 
-            if self_sign:
-                try:
+            pin_failed = self._piv_verify_pin(piv_controller, pin)
+            if pin_failed:
+                return pin_failed
+
+            try:
+                if self_sign:
                     piv_controller.generate_self_signed_certificate(
                         SLOT[slot_name], public_key, common_name, now,
                         valid_to)
-                except APDUError as e:
-                    if e.sw == SW.SECURITY_CONDITION_NOT_SATISFIED:
-                        return {
-                            'success': False,
-                            'error_id': 'pin_required',
-                        }
-                    raise
 
-            else:
-                csr = piv_controller.generate_certificate_signing_request(
-                    SLOT[slot_name], public_key, common_name)
+                else:
+                    csr = piv_controller.generate_certificate_signing_request(
+                        SLOT[slot_name], public_key, common_name)
 
-                with open(file_path, 'w+b') as csr_file:
-                    csr_file.write(csr.public_bytes(
-                        encoding=serialization.Encoding.PEM))
+                    with open(file_path, 'w+b') as csr_file:
+                        csr_file.write(csr.public_bytes(
+                            encoding=serialization.Encoding.PEM))
+
+            except APDUError as e:
+                if e.sw == SW.SECURITY_CONDITION_NOT_SATISFIED:
+                    return {
+                        'success': False,
+                        'error_id': 'pin_required',
+                    }
+                raise
 
             return {'success': True}
 
