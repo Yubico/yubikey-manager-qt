@@ -41,16 +41,28 @@ ColumnLayout {
     CustomContentColumn {
         visible: !isBusy
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("PIV")
-            }
+        RowLayout {
+            ColumnLayout {
+                Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                Heading1 {
+                    id: heading
+                    text: qsTr("PIV")
+                }
 
-            BreadCrumbRow {
-                items: [{
-                        text: qsTr("PIV")
-                    }]
+                BreadCrumbRow {
+                    Layout.fillWidth: true
+                    items: [{
+                            text: qsTr("PIV")
+                        }]
+                }
+            }
+            CustomButton {
+                text: qsTr("Setup for macOS")
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                highlighted: true
+                toolTipText: qsTr("Setup PIV for pairing with macOS")
+                flat: true
+                iconSource: "../images/mac.svg"
             }
         }
 
