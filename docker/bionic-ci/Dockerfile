@@ -6,7 +6,6 @@ RUN apt-get update -qq && apt-get install -qq \
   qtdeclarative5-dev-tools
 RUN pip3 install pre-commit flake8
 
-VOLUME /sources
 WORKDIR /sources/yubikey-manager-qt
 
 COPY qmllint-qt5.sh  /usr/local/bin/qmllint
