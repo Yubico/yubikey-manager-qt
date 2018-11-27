@@ -168,3 +168,10 @@ function startsWith(string, search, pos) {
 function sum(arr) {
     return arr.reduce(function(sum, next) { return sum + next }, 0)
 }
+
+function formatDate(date) {
+    var isoMonth = date.getMonth() + 1
+    return date.getFullYear() + "-" + (isoMonth < 10 ? "0" : "") + isoMonth
+            + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate()
+}
+

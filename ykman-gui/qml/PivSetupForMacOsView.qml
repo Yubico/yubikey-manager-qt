@@ -2,22 +2,18 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 import QtQuick.Controls.Material 2.2
+import "utils.js" as Utils
 
 ColumnLayout {
 
     readonly property string authenticationName: 'Yubico PIV Authentication'
     readonly property string encryptionName: 'Yubico PIV Encryption'
     readonly property string algoritm: 'ECCP256'
-    property string expirationDate: formatDate(getDefaultExpirationDate())
+    property string expirationDate: Utils.formatDate(
+                                        getExpirationDateIn30years())
     property bool isBusy
 
-    function formatDate(date) {
-        var isoMonth = date.getMonth() + 1
-        return date.getFullYear() + "-" + (isoMonth < 10 ? "0" : "") + isoMonth
-                + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate()
-    }
-
-    function getDefaultExpirationDate() {
+    function getExpirationDateIn30years() {
         var date = new Date()
         date.setFullYear(date.getFullYear() + 30)
         return date
