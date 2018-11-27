@@ -1,6 +1,6 @@
 FROM ubuntu:bionic
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update -qq && apt-get install -qq \
   git \
   python3-pip \
   qtdeclarative5-dev-tools
