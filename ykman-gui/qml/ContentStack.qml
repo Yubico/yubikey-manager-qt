@@ -100,6 +100,10 @@ StackView {
         replaceAtDepth(2, pivCertificatesView, 'pivCertificatesView')
     }
 
+    function pivSetupForMacOs() {
+        replaceAtDepth(2, pivSetupForMacOsView, 'pivSetupForMacOs')
+    }
+
     function pivReset() {
         replaceAtDepth(2, pivResetView, 'pivResetView')
     }
@@ -275,6 +279,12 @@ StackView {
     Component {
         id: pivCertificatesView
         PivCertificateView {
+        }
+    }
+
+    Component {
+        id: pivSetupForMacOsView
+        PivSetupForMacOsView {
         }
     }
 

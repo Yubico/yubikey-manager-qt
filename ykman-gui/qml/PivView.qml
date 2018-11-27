@@ -63,6 +63,7 @@ ColumnLayout {
                 toolTipText: qsTr("Setup PIV for pairing with macOS")
                 flat: true
                 iconSource: "../images/mac.svg"
+                onClicked: views.pivSetupForMacOs()
             }
         }
 
