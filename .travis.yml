@@ -55,24 +55,15 @@ install:
       sudo make install
       cd ../../
     fi
-  # Install linting tools
-  - sudo pip install --upgrade pip
-  - sudo pip install pre-commit flake8
-
-before_script:
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]
-    then
-        # qmllint does not exist on Travis's linux machines
-        pre-commit run --all-files
-    fi
 
 script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      docker build -t bionic-deb -f docker/bionic-deb/Dockerfile .
-      docker build -t xenial-appimage -f docker/xenial-appimage/Dockerfile .
+      docker build -t bionic-ci docker/bionic-ci && \
+        docker run --rm -v $(pwd):/sources/yubikey-manager-qt:ro bionic-ci && \
+        docker build -t bionic-deb -f docker/bionic-deb/Dockerfile . && \
+        docker build -t xenial-appimage -f docker/xenial-appimage/Dockerfile .
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
