@@ -552,7 +552,7 @@ class Controller(object):
                 logger.debug('PIN change successful!')
                 return {'success': True}
 
-            except AuthenticationBlocked as e:
+            except AuthenticationBlocked:
                 return {
                     'success': False,
                     'error_id': 'pin_blocked',
@@ -587,7 +587,7 @@ class Controller(object):
                 piv_controller.change_puk(old_puk, new_puk)
                 return {'success': True}
 
-            except AuthenticationBlocked as e:
+            except AuthenticationBlocked:
                 return {
                     'success': False,
                     'error_id': 'puk_blocked',
@@ -649,7 +649,7 @@ class Controller(object):
                 piv_controller.unblock_pin(puk, new_pin)
                 return {'success': True}
 
-            except AuthenticationBlocked as e:
+            except AuthenticationBlocked:
                 return {
                     'success': False,
                     'error_id': 'puk_blocked',
@@ -739,7 +739,7 @@ class Controller(object):
             try:
                 piv_controller.verify(pin, touch_callback=touch_callback)
 
-            except AuthenticationBlocked as e:
+            except AuthenticationBlocked:
                 return {
                     'success': False,
                     'error_id': 'pin_blocked',
@@ -752,7 +752,7 @@ class Controller(object):
                     'tries_left': e.tries_left,
                 }
 
-            except AuthenticationFailed as e:
+            except AuthenticationFailed:
                 if touch_required:
                     return {
                         'success': False,
