@@ -36,43 +36,39 @@ ColumnLayout {
 
         function _finish(pin, managementKey) {
             isBusy = true
-            yubiKey.pivGenerateCertificate({
-                                               slotName: 'AUTHENTICATION',
-                                               algorithm: algoritm,
-                                               commonName: authenticationName,
-                                               expirationDate: expirationDate,
-                                               selfSign: true,
-                                               pin: pin,
-                                               keyHex: managementKey,
-                                               callback: function (resp) {
-                                                   pivError.showResponseError(
-                                                               resp)
-                                                   if (resp.success) {
-                                                       yubiKey.pivGenerateCertificate({
-                                                                                          slotName: 'KEY_MANAGEMENT',
-                                                                                          algorithm: algoritm,
-                                                                                          commonName: encryptionName,
-                                                                                          expirationDate: expirationDate,
-                                                                                          selfSign: true,
-                                                                                          pin: pin,
-                                                                                          keyHex: managementKey,
-                                                                                          callback: function (resp) {
-                                                                                              pivError.showResponseError(resp)
-                                                                                              if (resp.success) {
-                                                                                                  isBusy = false
-                                                                                                  pivSuccessPopup.show("Remove and re-insert your YubiKey to start the macOS pairing setup.")
-                                                                                                  views.pop()
-                                                                                              } else {
-                                                                                                  isBusy = false
-                                                                                              }
-                                                                                          }
-                                                                                      })
-                                                   } else {
-                                                       isBusy = false
-                                                   }
-                                               }
-                                           })
+
+            function _generateCertificate(slot, cb) {
+                yubiKey.pivGenerateCertificate({
+                                                   slotName: slot,
+                                                   algorithm: algoritm,
+                                                   commonName: authenticationName,
+                                                   expirationDate: expirationDate,
+                                                   selfSign: true,
+                                                   pin: pin,
+                                                   keyHex: managementKey,
+                                                   callback: cb
+                                               })
+            }
+
+            _generateCertificate('AUTHENTICATION', function (resp) {
+                if (resp.success) {
+                    _generateCertificate('KEY_MANAGEMENT', function (resp) {
+                        if (resp.success) {
+                            isBusy = false
+                            pivSuccessPopup.show(
+                                        "Remove and re-insert your YubiKey to start the macOS pairing setup.")
+                            views.pop()
+                        } else {
+                            pivError.showResponseError(resp)
+                            isBusy = false
+                        }
+                    })
+                } else {
+                    pivError.showResponseError(resp)
+                }
+            })
         }
+
         if (confirmedOverwrite || (!yubiKey.pivCerts['AUTHENTICATION']
                                    && !yubiKey.pivCerts['KEY_MANAGEMENT'])) {
             _prompt_for_pin_and_key()
