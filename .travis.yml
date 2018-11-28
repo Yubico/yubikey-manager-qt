@@ -60,7 +60,8 @@ script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      docker build -t bionic-ci docker/bionic-ci && \
+      docker build -t yubikey-manager-qt-ci-base docker/bionic-base && \
+        docker build -t bionic-ci docker/bionic-ci && \
         docker run --rm -v $(pwd):/sources/yubikey-manager-qt:ro bionic-ci && \
         docker build -t bionic-deb docker/bionic-deb && \
         docker run --name bionic-deb -v $(pwd):/sources/yubikey-manager-qt:ro bionic-deb && \
