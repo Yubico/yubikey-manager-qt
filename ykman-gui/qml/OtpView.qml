@@ -185,7 +185,7 @@ ColumnLayout {
                 Heading2 {
                     id: slot2Heading
                     text: qsTr("Long Touch (Slot 2)")
-                    color: slot2configured ? yubicoBlue : yubicoGrey
+                    color: slot2Configured ? yubicoBlue : yubicoGrey
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 Label {
