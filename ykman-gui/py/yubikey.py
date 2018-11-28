@@ -6,6 +6,7 @@ import datetime
 import json
 import logging
 import os
+import sys
 import pyotherside
 import struct
 import types
@@ -238,6 +239,12 @@ class Controller(object):
         try:
             username = getpass.getuser()
             return {'success': True, 'username': username}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    def is_macos(self):
+        try:
+            return {'success': True, 'macos': sys.platform == 'darwin'}
         except Exception as e:
             return {'success': False, 'error': str(e)}
 

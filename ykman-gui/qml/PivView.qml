@@ -11,6 +11,7 @@ ColumnLayout {
     objectName: "pivView"
 
     property bool isBusy
+    property bool macOs
 
     function load() {
         isBusy = true
@@ -20,6 +21,11 @@ ColumnLayout {
                 pivError.showResponseError(resp)
                 views.home()
             }
+            yubiKey.isMacOs(function (resp) {
+                if (resp.success) {
+                    macOs = resp.macos
+                }
+            })
         })
     }
 
@@ -64,6 +70,7 @@ ColumnLayout {
                 flat: true
                 iconSource: "../images/mac.svg"
                 onClicked: views.pivSetupForMacOs()
+                visible: macOs
             }
         }
 

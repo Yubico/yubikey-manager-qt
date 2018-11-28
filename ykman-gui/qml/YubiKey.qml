@@ -329,6 +329,9 @@ Python {
         doCall('yubikey.controller.get_username', [], cb)
     }
 
+    function isMacOs(cb) {
+        doCall('yubikey.controller.is_macos', [], cb)
+    }
     function slotsStatus(cb) {
         doCall('yubikey.controller.slots_status', [], cb)
     }
