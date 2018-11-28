@@ -114,95 +114,105 @@ ColumnLayout {
         onAccepted: exportCertificate(file.toString())
     }
 
-    Heading2 {
-        text: qsTr("%1 (Slot %2)").arg(slot.name).arg(slot.hex)
-        Layout.preferredWidth: constants.contentWidth
-    }
-
-    RowLayout {
-
-        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+    ColumnLayout {
+        Layout.topMargin: 10
+        Layout.fillHeight: true
         Layout.fillWidth: true
         Layout.preferredWidth: constants.contentWidth
-        id: mainRow
-        GridLayout {
-            visible: !!certificate
-            columns: 2
-            Layout.fillWidth: true
-            Label {
-                text: qsTr("Issuer:")
-                color: yubicoBlue
-                font.bold: true
-                font.pixelSize: constants.h3
-            }
-            Label {
-                text: certificate ? certificate.issuedFrom : ''
-                color: yubicoBlue
-                font.pixelSize: constants.h3
-            }
-            Label {
-                text: qsTr("Subject name:")
-                color: yubicoBlue
-                font.bold: true
-                font.pixelSize: constants.h3
-            }
-            Label {
-                text: certificate ? certificate.issuedTo : ''
-                color: yubicoBlue
-                font.pixelSize: constants.h3
-            }
-            Label {
-                text: qsTr("Expiration date:")
-                color: yubicoBlue
-                font.bold: true
-                font.pixelSize: constants.h3
-            }
-            Label {
-                text: certificate ? certificate.validTo : ''
-                color: yubicoBlue
-                font.pixelSize: constants.h3
-            }
-        }
-
+        Layout.bottomMargin: -30
         Label {
-            visible: !certificate
-            text: qsTr("No certificate loaded.")
             color: yubicoBlue
-            font.pixelSize: constants.h3
+            font.pixelSize: constants.h2
+            text: qsTr("%1 (Slot %2)").arg(slot.name).arg(slot.hex)
+            Layout.preferredWidth: constants.contentWidth
         }
 
-        GridLayout {
-            columnSpacing: 10
-            Layout.fillWidth: false
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            columns: 2
-            CustomButton {
-                enabled: !!certificate
-                text: qsTr("Delete")
-                iconSource: "../images/delete.svg"
-                toolTipText: qsTr("Delete certificate")
-                onClicked: deleteCertificate()
+        RowLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            Layout.fillWidth: true
+            Layout.preferredWidth: constants.contentWidth
+            id: mainRow
+            GridLayout {
+                visible: !!certificate
+                columns: 2
+                Layout.fillWidth: true
+                Label {
+                    text: qsTr("Issuer:")
+                    color: yubicoBlue
+                    font.bold: true
+                    font.pixelSize: constants.h3
+                }
+                Label {
+                    text: certificate ? certificate.issuedFrom : ''
+                    color: yubicoBlue
+                    font.pixelSize: constants.h3
+                }
+                Label {
+                    text: qsTr("Subject name:")
+                    color: yubicoBlue
+                    font.bold: true
+                    font.pixelSize: constants.h3
+                }
+                Label {
+                    text: certificate ? certificate.issuedTo : ''
+                    color: yubicoBlue
+                    font.pixelSize: constants.h3
+                }
+                Label {
+                    text: qsTr("Expiration date:")
+                    color: yubicoBlue
+                    font.bold: true
+                    font.pixelSize: constants.h3
+                }
+                Label {
+                    text: certificate ? certificate.validTo : ''
+                    color: yubicoBlue
+                    font.pixelSize: constants.h3
+                }
             }
-            CustomButton {
-                enabled: !!certificate
-                text: qsTr("Export")
-                iconSource: "../images/export.svg"
-                highlighted: true
-                toolTipText: qsTr("Export certificate to a file")
-                onClicked: exportCertificateDialog.open()
+
+            Label {
+                visible: !certificate
+                text: qsTr("No certificate loaded.")
+                color: yubicoGrey
+                font.pixelSize: constants.h3
             }
-            CustomButton {
-                text: qsTr("Generate")
-                highlighted: true
-                toolTipText: qsTr("Generate a new private key")
-                onClicked: views.push(pivGenerateCertificateWizard, { slot: slot })
-            }
-            CustomButton {
-                text: qsTr("Import")
-                highlighted: true
-                iconSource: "../images/import.svg"
-                toolTipText: qsTr("Import certificate from a file")
-                onClicked: selectCertificateDialog.open()
+
+            GridLayout {
+                columnSpacing: 10
+                rowSpacing: 0
+                Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                columns: 2
+                CustomButton {
+                    enabled: !!certificate
+                    text: qsTr("Delete")
+                    iconSource: "../images/delete.svg"
+                    toolTipText: qsTr("Delete certificate")
+                    onClicked: deleteCertificate()
+                }
+                CustomButton {
+                    enabled: !!certificate
+                    text: qsTr("Export")
+                    iconSource: "../images/export.svg"
+                    highlighted: true
+                    toolTipText: qsTr("Export certificate to a file")
+                    onClicked: exportCertificateDialog.open()
+                }
+                CustomButton {
+                    text: qsTr("Generate")
+                    highlighted: true
+                    toolTipText: qsTr("Generate a new private key")
+                    onClicked: views.push(pivGenerateCertificateWizard, {
+                                              slot: slot
+                                          })
+                }
+                CustomButton {
+                    text: qsTr("Import")
+                    highlighted: true
+                    iconSource: "../images/import.svg"
+                    toolTipText: qsTr("Import certificate from a file")
+                    onClicked: selectCertificateDialog.open()
+                }
             }
         }
     }
