@@ -60,7 +60,7 @@ ColumnLayout {
                                                                                               pivError.showResponseError(resp)
                                                                                               if (resp.success) {
                                                                                                   isBusy = false
-                                                                                                  pivSuccessPopup.open()
+                                                                                                  pivSuccessPopup.show("Remove and re-insert your YubiKey to start the macOS pairing setup.")
                                                                                                   views.pop()
                                                                                               } else {
                                                                                                   isBusy = false
