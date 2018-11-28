@@ -54,16 +54,16 @@ ColumnLayout {
                 if (resp.success) {
                     _generateCertificate('KEY_MANAGEMENT', function (resp) {
                         if (resp.success) {
-                            isBusy = false
                             pivSuccessPopup.show(
                                         "Remove and re-insert your YubiKey to start the macOS pairing setup.")
                             views.pop()
                         } else {
                             pivError.showResponseError(resp)
-                            isBusy = false
                         }
+                        isBusy = false
                     })
                 } else {
+                    isBusy = false
                     pivError.showResponseError(resp)
                 }
             })
