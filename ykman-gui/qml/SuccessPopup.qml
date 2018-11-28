@@ -34,6 +34,8 @@ InlinePopup {
             Layout.fillWidth: true
             Layout.topMargin: constants.contentTopMargin
             wrapMode: Text.WordWrap
+            color: yubicoBlue
+            font.pixelSize: constants.h2
         }
     }
 }

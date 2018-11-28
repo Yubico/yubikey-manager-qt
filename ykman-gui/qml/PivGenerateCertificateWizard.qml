@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 import Qt.labs.platform 1.0
+import "utils.js" as Utils
 
 ColumnLayout {
 
@@ -11,7 +12,7 @@ ColumnLayout {
     property bool isBusy: false
 
     property string algorithm: "ECCP256"
-    property string expirationDate: formatDate(getDefaultExpirationDate())
+    property string expirationDate: Utils.formatDate(getDefaultExpirationDate())
     property bool selfSign: true
     property string subjectCommonName: ""
 
@@ -102,12 +103,6 @@ ColumnLayout {
         }
     }
 
-    function formatDate(date) {
-        var isoMonth = date.getMonth() + 1
-        return date.getFullYear() + "-" + (isoMonth < 10 ? "0" : "") + isoMonth
-                + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate()
-    }
-
     function getDefaultExpirationDate() {
         var date = new Date()
         date.setFullYear(date.getFullYear() + 1)
@@ -120,7 +115,8 @@ ColumnLayout {
         }
         try {
             var parsedDate = new Date(expDate)
-            return parsedDate.toISOString().substring(0, 10) === expDate && expDate >= formatDate(new Date())
+            return parsedDate.toISOString().substring(0, 10) === expDate
+                    && expDate >= Utils.formatDate(new Date())
         } catch (e) {
             return false
         }
@@ -353,7 +349,7 @@ ColumnLayout {
                         CalendarWidget {
                             id: calendarWidget
                             onDateClicked: {
-                                var formatted = formatDate(date)
+                                var formatted = Utils.formatDate(date)
                                 if (isExpirationDateValid(formatted)) {
                                     expirationDate = formatted
                                 }

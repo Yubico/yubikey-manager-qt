@@ -11,6 +11,7 @@ ColumnLayout {
     objectName: "pivView"
 
     property bool isBusy
+    property bool isMacOs
 
     function load() {
         isBusy = true
@@ -20,6 +21,11 @@ ColumnLayout {
                 pivError.showResponseError(resp)
                 views.home()
             }
+            yubiKey.isMacOs(function (resp) {
+                if (resp.success) {
+                    isMacOs = resp.is_macos
+                }
+            })
         })
     }
 
@@ -63,6 +69,8 @@ ColumnLayout {
                 toolTipText: qsTr("Setup PIV for pairing with macOS")
                 flat: true
                 iconSource: "../images/mac.svg"
+                onClicked: views.pivSetupForMacOs()
+                visible: isMacOs
             }
         }
 
