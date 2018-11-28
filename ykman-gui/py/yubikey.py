@@ -244,7 +244,7 @@ class Controller(object):
 
     def is_macos(self):
         try:
-            return {'success': True, 'macos': sys.platform == 'darwin'}
+            return {'success': True, 'is_macos': sys.platform == 'darwin'}
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
