@@ -10,7 +10,6 @@ ColumnLayout {
     property var slot
 
     property bool isBusy: false
-    property string busyMessage: ""
 
     property string algorithm: "ECCP256"
     property string expirationDate: Utils.formatDate(getDefaultExpirationDate())
@@ -24,9 +23,7 @@ ColumnLayout {
 
     objectName: "pivGenerateCertificateWizard"
 
-
     function deleteCertificate(pin, managementKey) {
-        busyMessage = qsTr("Deleting existing certificate...")
         isBusy = true
         yubiKey.pivDeleteCertificate(slot, pin, managementKey, function (resp) {
             isBusy = false
@@ -56,7 +53,6 @@ ColumnLayout {
         }
 
         function _finish(pin, managementKey) {
-            busyMessage = qsTr("Generating...")
             isBusy = true
             yubiKey.pivGenerateCertificate({
                                                slotName: slot.id,
@@ -177,20 +173,10 @@ ColumnLayout {
         onAccepted: finish(true, file.toString())
     }
 
-    ColumnLayout {
-        visible: isBusy
+    BusyIndicator {
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        spacing: constants.contentMargins
-
-        BusyIndicator {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            running: visible
-        }
-
-        Heading2 {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            text: busyMessage
-        }
+        running: isBusy
+        visible: running
     }
 
     CustomContentColumn {
