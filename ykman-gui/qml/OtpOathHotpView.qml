@@ -93,12 +93,15 @@ ColumnLayout {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            Layout.preferredWidth: constants.contentWidth
             BackButton {
+                flat: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             }
             FinishButton {
                 onClicked: finish()
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 enabled: secretKeyInput.acceptableInput
                 toolTipText: qsTr("Finish and write the configuration to the YubiKey")
             }

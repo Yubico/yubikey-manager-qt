@@ -148,11 +148,15 @@ ColumnLayout {
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            Layout.preferredWidth: constants.contentWidth
             BackButton {
+                flat: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             }
             FinishButton {
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 enabled: validPin()
                 text: finishButtonText
                 onClicked: triggerChangePin()

@@ -166,22 +166,21 @@ ColumnLayout {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Store the management key on the YubiKey, protected by PIN.")
             }
-
         }
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-
-            CustomButton {
-                id: backBtn
-                text: qsTr("Back")
-                onClicked: views.pop()
-                iconSource: "../images/back.svg"
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            Layout.preferredWidth: constants.contentWidth
+            BackButton {
+                flat: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             }
             FinishButton {
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 highlighted: true
-                onClicked: finish(currentManagementKey.text, newManagementKey.text)
+                onClicked: finish(currentManagementKey.text,
+                                  newManagementKey.text)
                 enabled: validCurrentManagementKey && validNewManagementKey
                 toolTipText: qsTr("Finish and change the management key")
             }

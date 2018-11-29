@@ -165,11 +165,14 @@ ColumnLayout {
         }
         RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            Layout.preferredWidth: constants.contentWidth
             BackButton {
+                flat: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             }
             FinishButton {
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 onClicked: finish()
                 enabled: publicIdInput.acceptableInput
                          && privateIdInput.acceptableInput
