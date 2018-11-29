@@ -384,16 +384,13 @@ class Controller(object):
                 return success()
         except CtapError as e:
             if e.code == CtapError.ERR.INVALID_LENGTH:
-                return {'success': False,
-                        'error': 'too long'}
+                return failure('too long')
             if e.code == CtapError.ERR.PIN_INVALID:
-                return {'success': False,
-                        'error': 'wrong pin'}
+                return failure('wrong pin')
             if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
-                return {'success': False,
-                        'error': 'currently blocked'}
+                return failure('currently blocked')
             if e.code == CtapError.ERR.PIN_BLOCKED:
-                return {'success': False, 'error': 'blocked'}
+                return failure('blocked')
             logger.error('Failed to set PIN', exc_info=e)
             raise
         except Exception as e:

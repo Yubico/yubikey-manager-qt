@@ -23,17 +23,17 @@ ChangePinView {
             if (resp.success) {
                 fido2SuccessPopup.open()
             } else {
-                if (resp.error === 'too long') {
+                if (resp.error_id === 'too long') {
                     fido2TooLongError.open()
-                } else if (resp.error === 'wrong pin') {
+                } else if (resp.error_id === 'wrong pin') {
                     clearCurrentPinInput()
                     fido2WrongPinError.open()
-                } else if (resp.error === 'currently blocked') {
+                } else if (resp.error_id === 'currently blocked') {
                     fido2CurrentlyBlockedError.open()
-                } else if (resp.error === 'blocked') {
+                } else if (resp.error_id === 'blocked') {
                     fido2BlockedError.open()
                 } else {
-                    fido2GeneralError.error = resp.error
+                    fido2GeneralError.error = resp.error_id
                     fido2GeneralError.open()
                 }
             }
