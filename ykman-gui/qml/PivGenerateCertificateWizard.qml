@@ -445,7 +445,7 @@ ColumnLayout {
         }
 
         ButtonsBar {
-            backCallback: currentStep == 1 ? views.pop : previous
+            backCallback: currentStep > 1 && previous
 
             nextCallback: currentStep < numSteps && next
             nextEnabled: isInputValid()
