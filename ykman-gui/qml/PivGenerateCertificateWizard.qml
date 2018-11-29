@@ -444,32 +444,17 @@ ColumnLayout {
             }
         }
 
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-            Layout.preferredWidth: constants.contentWidth
-            BackButton {
-                onClickedCallback: currentStep == 1 ? views.pop : previous
-                flat: true
-                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
-            }
-            NextButton {
-                onClicked: next()
-                visible: currentStep < numSteps
-                enabled: isInputValid()
-                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-            }
-            FinishButton {
-                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                text: qsTr("Generate")
-                onClicked: finish()
-                visible: currentStep === numSteps
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and generate the private key and %1").arg(
-                                  selfSign ? qsTr("certificate") : qsTr("CSR"))
-                enabled: isInputValid()
-            }
+        ButtonsBar {
+            backCallback: currentStep == 1 ? views.pop : previous
+
+            nextCallback: currentStep < numSteps && next
+            nextEnabled: isInputValid()
+
+            finishCallback: currentStep === numSteps && finish
+            finishEnabled: isInputValid()
+            finishText: qsTr("Generate")
+            finishTooltip: qsTr("Finish and generate the private key and %1").arg(
+                              selfSign ? qsTr("certificate") : qsTr("CSR"))
         }
     }
 }

@@ -163,22 +163,13 @@ ColumnLayout {
                 toolTipText: qsTr("Generate a random Secret Key")
             }
         }
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-            Layout.preferredWidth: constants.contentWidth
-            BackButton {
-                flat: true
-                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
-            }
-            FinishButton {
-                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                onClicked: finish()
-                enabled: publicIdInput.acceptableInput
-                         && privateIdInput.acceptableInput
-                         && secretKeyInput.acceptableInput
-                toolTipText: qsTr("Finish and write the configuration to the YubiKey")
-            }
+
+        ButtonsBar {
+            finishCallback: finish
+            finishEnabled: publicIdInput.acceptableInput
+                && privateIdInput.acceptableInput
+                && secretKeyInput.acceptableInput
+            finishTooltip: qsTr("Finish and write the configuration to the YubiKey")
         }
     }
 }
