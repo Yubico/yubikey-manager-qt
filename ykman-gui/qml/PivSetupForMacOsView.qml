@@ -116,19 +116,10 @@ ColumnLayout {
             font.pixelSize: constants.h3
         }
 
-        RowLayout {
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-            Layout.fillWidth: true
-            CustomButton {
-                text: qsTr("Back")
-                onClicked: views.pop()
-                iconSource: "../images/back.svg"
-            }
-            FinishButton {
-                text: qsTr("Setup for macOS")
-                toolTipText: qsTr("Finish and setup for macOS")
-                onClicked: setupForMacOs()
-            }
+        ButtonsBar {
+            finishCallback: setupForMacOs
+            finishText: qsTr("Setup for macOS")
+            finishTooltip: qsTr("Finish and setup for macOS")
         }
     }
 }
