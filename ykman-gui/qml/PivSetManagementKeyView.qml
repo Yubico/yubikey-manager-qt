@@ -42,7 +42,7 @@ ColumnLayout {
         }
     }
 
-    function finish(currentManagementKey, newManagementKey, pin) {
+    function finish() {
         if (hasProtectedKey || storeManagementKey) {
             pivPinPopup.getPinAndThen(_finish)
         } else {
@@ -84,8 +84,8 @@ ColumnLayout {
                     }
                 },
                 pin,
-                currentManagementKey,
-                newManagementKey,
+                currentManagementKey.text,
+                newManagementKey.text,
                 storeManagementKey
             )
         }
@@ -179,8 +179,7 @@ ColumnLayout {
             FinishButton {
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 highlighted: true
-                onClicked: finish(currentManagementKey.text,
-                                  newManagementKey.text)
+                onClicked: finish()
                 enabled: validCurrentManagementKey && validNewManagementKey
                 toolTipText: qsTr("Finish and change the management key")
             }
