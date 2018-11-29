@@ -79,11 +79,14 @@ ColumnLayout {
         }
         RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            Layout.preferredWidth: constants.contentWidth
             BackButton {
+                flat: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             }
             NextButton {
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 onClicked: views.push(configViewOptions.checkedButton.view)
             }
         }

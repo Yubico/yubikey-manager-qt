@@ -62,15 +62,16 @@ ColumnLayout {
         }
 
         RowLayout {
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.fillWidth: true
-            CustomButton {
-                text: qsTr("Back")
-                onClicked: views.pop()
-                iconSource: "../images/back.svg"
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            Layout.preferredWidth: constants.contentWidth
+            BackButton {
+                flat: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             }
             FinishButton {
                 text: qsTr("Reset")
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 toolTipText: qsTr("Finish and perform the PIV Reset")
                 onClicked: resetPiv()
             }

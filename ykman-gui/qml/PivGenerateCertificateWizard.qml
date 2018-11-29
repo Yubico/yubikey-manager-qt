@@ -446,25 +446,21 @@ ColumnLayout {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignBottom
-
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            Layout.preferredWidth: constants.contentWidth
             BackButton {
-                text: qsTr("Cancel")
-                iconSource: "../images/clear.svg"
-            }
-            Item {
-                Layout.fillWidth: true
-            }
-            BackButton {
-                onClickedCallback: previous
-                visible: currentStep > 1
+                onClickedCallback: currentStep == 1 ? views.pop : previous
+                flat: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             }
             NextButton {
                 onClicked: next()
                 visible: currentStep < numSteps
                 enabled: isInputValid()
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             }
             FinishButton {
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 text: qsTr("Generate")
                 onClicked: finish()
                 visible: currentStep === numSteps

@@ -131,11 +131,15 @@ ColumnLayout {
         }
         RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            Layout.preferredWidth: constants.contentWidth
             BackButton {
+                flat: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             }
             FinishButton {
                 enabled: configurationHasChanged() && validCombination()
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 text: qsTr("Save Interfaces")
                 onClicked: configureInterfaces()
                 toolTipText: qsTr("Finish and save interfaces configuration to YubiKey")
