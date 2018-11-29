@@ -404,9 +404,9 @@ class Controller(object):
                 return success()
         except CtapError as e:
             if e.code == CtapError.ERR.NOT_ALLOWED:
-                return {'success': False, 'error': 'not allowed'}
+                return failure('not allowed')
             if e.code == CtapError.ERR.ACTION_TIMEOUT:
-                return {'success': False, 'error': 'touch timeout'}
+                return failure('touch timeout')
             raise
 
     def piv_reset(self):
