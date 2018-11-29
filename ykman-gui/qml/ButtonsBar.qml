@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.2
 
 RowLayout {
 
-    property bool backButton: true
     property var backCallback: false
 
     property var nextCallback: false
@@ -29,7 +28,7 @@ RowLayout {
 
     BackButton {
         flat: true
-        visible: backButton && !nonDefaultBackButton.visible
+        visible: !nonDefaultBackButton.visible
         Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
     }
 
