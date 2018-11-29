@@ -314,7 +314,7 @@ class Controller(object):
             return success()
         except YkpersError as e:
             if e.errno == 3:
-                return {'success': False, 'error': 'write error'}
+                return failure('write error')
             raise
 
     def program_static_password(self, slot, key, keyboard_layout):
