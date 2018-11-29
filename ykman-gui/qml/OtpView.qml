@@ -22,11 +22,11 @@ ColumnLayout {
                 views.selectedSlot = 0
                 isBusy = false
             } else {
-                if (resp.error === 'timeout') {
+                if (resp.error_id === 'timeout') {
                     views.otpGeneralError(qsTr(
                                               "Failed to load OTP application"))
                 } else {
-                    views.otpGeneralError(resp.error)
+                    views.otpGeneralError(resp.error_id)
                 }
                 views.home()
             }

@@ -252,7 +252,7 @@ class Controller(object):
                 return success({'status': controller.slot_status})
         except YkpersError as e:
             if e.errno == 4:
-                return {'success': False, 'status': None, 'error': 'timeout'}
+                return failure('timeout')
             logger.error('Failed to read slot status', exc_info=e)
             raise
         except Exception as e:
