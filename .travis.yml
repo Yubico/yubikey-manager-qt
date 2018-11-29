@@ -20,6 +20,10 @@ osx_image: xcode9.2
 services:
   - docker
 
+cache:
+  directories:
+    - $HOME/docker-images
+
 before_install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
@@ -60,13 +64,23 @@ script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
+      ls -la $HOME/docker-images
+      if [[ -f $HOME/docker-images/images.tar ]]; then
+        time docker load -i $HOME/docker-images/images.tar
+      else
+        echo "Image cache file $HOME/docker-images/images.tar not found"
+      fi
+
       time docker build -t yubikey-manager-qt-ci-base docker/bionic-base && \
         time docker build -t bionic-ci docker/bionic-ci && \
         time docker run --rm -v $(pwd):/sources/yubikey-manager-qt:ro bionic-ci && \
         time docker build -t bionic-deb docker/bionic-deb && \
         time docker run --name bionic-deb -v $(pwd):/sources/yubikey-manager-qt:ro bionic-deb && \
         time docker build -t xenial-appimage docker/xenial-appimage && \
-        time docker run --name xenial-appimage -v $(pwd):/sources/yubikey-manager-qt:ro --privileged xenial-appimage
+        time docker run --name xenial-appimage -v $(pwd):/sources/yubikey-manager-qt:ro --privileged xenial-appimage && \
+        mkdir -p $HOME/docker-images && \
+        time docker save -o $HOME/docker-images/images.tar yubikey-manager-qt-ci-base bionic-ci bionic-deb xenial-appimage && \
+        ls -la $HOME/docker-images
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
