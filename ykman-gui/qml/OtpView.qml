@@ -47,10 +47,10 @@ ColumnLayout {
                 views.otpSuccess()
                 load()
             } else {
-                if (resp.error === 'write error') {
+                if (resp.error_id === 'write error') {
                     views.otpWriteError()
                 } else {
-                    views.otpFailedToConfigureErrorPopup(resp.error)
+                    views.otpFailedToConfigureErrorPopup(resp.error_id)
                 }
             }
         })
