@@ -62,10 +62,10 @@ ColumnLayout {
                 views.otpSuccess()
                 load()
             } else {
-                if (resp.error === 'write error') {
+                if (resp.error_id === 'write error') {
                     views.otpWriteError()
                 } else {
-                    views.otpGeneralError(resp.error)
+                    views.otpGeneralError(resp.error_id)
                 }
             }
         })
