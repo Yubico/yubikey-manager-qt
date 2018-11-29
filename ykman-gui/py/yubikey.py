@@ -355,16 +355,10 @@ class Controller(object):
                 return success({'retries': controller.get_pin_retries()})
         except CtapError as e:
             if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
-                return {
-                    'success': False,
-                    'retries': None,
-                    'error': 'PIN authentication is currently blocked. '
-                             'Remove and re-insert the YubiKey.'}
+                return failure('PIN authentication is currently blocked. '
+                               'Remove and re-insert the YubiKey.')
             if e.code == CtapError.ERR.PIN_BLOCKED:
-                return {
-                    'success': False,
-                    'retries': None,
-                    'error': 'PIN is blocked.'}
+                return failure('PIN is blocked.')
         except Exception as e:
             logger.error('Failed to read PIN retries', exc_info=e)
             raise
