@@ -62,6 +62,11 @@ def catch_error(f):
     return wrapped
 
 
+def success(result={}):
+    result['success'] = True
+    return result
+
+
 def failure(err_id, result={}):
     result['success'] = False
     result['error_id'] = err_id
@@ -146,7 +151,7 @@ class Controller(object):
         if self._descriptor:
             # Same device, return
             if desc.fingerprint == self._descriptor.fingerprint:
-                return {'success': True, 'error': None, 'dev': self._dev_info}
+                return success({'dev': self._dev_info})
 
         self._descriptor = desc
 
@@ -182,7 +187,7 @@ class Controller(object):
                         'can_write_config': dev.can_write_config,
                         'configuration_locked': dev.config.configuration_locked
                     }
-                return {'success': True, 'error': None, 'dev': self._dev_info}
+                return success({'dev': self._dev_info})
 
         except Exception as e:
             logger.error('Failed to open device', exc_info=e)
@@ -210,15 +215,14 @@ class Controller(object):
                         ),
                     reboot=True,
                     lock_key=lock_code)
-                return {'success': True, 'error': None}
+                return success()
         except Exception as e:
             logger.error('Failed to write config', exc_info=e)
             raise
 
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
-            return {
-                'success': True,
+            return success({
                 'piv_data': {
                     'certs': self._piv_list_certificates(piv_controller),
                     'has_derived_key': piv_controller.has_derived_key,
@@ -229,7 +233,7 @@ class Controller(object):
                     'supported_algorithms':
                         [a.name for a in piv_controller.supported_algorithms],
                 },
-            }
+            })
 
     def set_mode(self, interfaces):
         try:
@@ -242,18 +246,15 @@ class Controller(object):
 
     def get_username(self):
         username = getpass.getuser()
-        return {'success': True, 'username': username}
+        return success({'username': username})
 
     def is_macos(self):
-        return {'success': True, 'is_macos': sys.platform == 'darwin'}
+        return success({'is_macos': sys.platform == 'darwin'})
 
     def slots_status(self):
         try:
             with self._open_otp_controller() as controller:
-                return {
-                    'success': True,
-                    'status': controller.slot_status,
-                    'error': None}
+                return success({'status': controller.slot_status})
         except YkpersError as e:
             if e.errno == 4:
                 return {'success': False, 'status': None, 'error': 'timeout'}
@@ -267,7 +268,7 @@ class Controller(object):
         try:
             with self._open_otp_controller() as controller:
                 controller.zap_slot(slot)
-            return {'success': True, 'error': None}
+            return success()
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
@@ -277,7 +278,7 @@ class Controller(object):
         try:
             with self._open_otp_controller() as controller:
                 controller.swap_slots()
-            return {'success': True, 'error': None}
+            return success()
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
@@ -304,7 +305,7 @@ class Controller(object):
             private_id = a2b_hex(private_id)
             with self._open_otp_controller() as controller:
                 controller.program_otp(slot, key, public_id, private_id)
-            return {'success': True, 'error': None}
+            return success()
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
@@ -315,7 +316,7 @@ class Controller(object):
             key = a2b_hex(key)
             with self._open_otp_controller() as controller:
                 controller.program_chalresp(slot, key, touch)
-            return {'success': True, 'error': None}
+            return success()
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
@@ -327,7 +328,7 @@ class Controller(object):
                 controller.program_static(
                     slot, key,
                     keyboard_layout=KEYBOARD_LAYOUT[keyboard_layout])
-            return {'success': True, 'error': None}
+            return success()
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
@@ -339,7 +340,7 @@ class Controller(object):
             key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
             with self._open_otp_controller() as controller:
                 controller.program_hotp(slot, key, hotp8=(int(digits) == 8))
-            return {'success': True, 'error': None}
+            return success()
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
@@ -348,10 +349,7 @@ class Controller(object):
     def fido_has_pin(self):
         try:
             with self._open_fido2_controller() as controller:
-                return {
-                    'success': True,
-                    'hasPin': controller.has_pin,
-                    'error': None}
+                return success({'hasPin': controller.has_pin})
         except Exception as e:
             logger.error('Failed to read if PIN is set', exc_info=e)
             raise
@@ -359,10 +357,7 @@ class Controller(object):
     def fido_pin_retries(self):
         try:
             with self._open_fido2_controller() as controller:
-                return {
-                    'success': True,
-                    'retries': controller.get_pin_retries(),
-                    'error': None}
+                return success({'retries': controller.get_pin_retries()})
         except CtapError as e:
             if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
                 return {
@@ -383,7 +378,7 @@ class Controller(object):
         try:
             with self._open_fido2_controller() as controller:
                 controller.set_pin(new_pin)
-                return {'success': True, 'error': None}
+                return success()
         except CtapError as e:
             if e.code == CtapError.ERR.INVALID_LENGTH:
                 return {'success': False, 'error': 'too long'}
@@ -397,7 +392,7 @@ class Controller(object):
         try:
             with self._open_fido2_controller() as controller:
                 controller.change_pin(old_pin=current_pin, new_pin=new_pin)
-                return {'success': True, 'error': None}
+                return success()
         except CtapError as e:
             if e.code == CtapError.ERR.INVALID_LENGTH:
                 return {'success': False,
@@ -420,7 +415,7 @@ class Controller(object):
         try:
             with self._open_fido2_controller() as controller:
                 controller.reset()
-                return {'success': True, 'error': None}
+                return success()
         except CtapError as e:
             if e.code == CtapError.ERR.NOT_ALLOWED:
                 return {'success': False, 'error': 'not allowed'}
@@ -431,7 +426,7 @@ class Controller(object):
     def piv_reset(self):
         with self._open_piv() as controller:
             controller.reset()
-            return {'success': True}
+            return success()
 
     def _piv_list_certificates(self, controller):
         return {
@@ -448,7 +443,7 @@ class Controller(object):
                 return auth_failed
 
             piv_controller.delete_certificate(SLOT[slot_name])
-            return {'success': True}
+            return success()
 
     def piv_generate_certificate(
             self, slot_name, algorithm, common_name, expiration_date,
@@ -523,14 +518,14 @@ class Controller(object):
                     return failure('pin_required')
                 raise
 
-            return {'success': True}
+            return success()
 
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:
             try:
                 piv_controller.change_pin(old_pin, new_pin)
                 logger.debug('PIN change successful!')
-                return {'success': True}
+                return success()
 
             except AuthenticationBlocked:
                 return failure('pin_blocked')
@@ -554,7 +549,7 @@ class Controller(object):
         with self._open_piv() as piv_controller:
             try:
                 piv_controller.change_puk(old_puk, new_puk)
-                return {'success': True}
+                return success()
 
             except AuthenticationBlocked:
                 return failure('puk_blocked')
@@ -594,13 +589,13 @@ class Controller(object):
 
             piv_controller.set_mgm_key(
                 new_key, touch=False, store_on_device=store_on_device)
-            return {'success': True}
+            return success()
 
     def piv_unblock_pin(self, puk, new_pin):
         with self._open_piv() as piv_controller:
             try:
                 piv_controller.unblock_pin(puk, new_pin)
-                return {'success': True}
+                return success()
 
             except AuthenticationBlocked:
                 return failure('puk_blocked')
@@ -614,12 +609,12 @@ class Controller(object):
             data = file.read()
             try:
                 parse_certificate(data, password=None)
-                return {'success': True, 'error': None}
+                return success()
             except (ValueError, TypeError):
                 pass
             try:
                 parse_private_key(data, password=None)
-                return {'success': True, 'error': None}
+                return success()
             except (ValueError, TypeError):
                 pass
         raise ValueError('Failed to parse certificate or key')
@@ -655,7 +650,7 @@ class Controller(object):
                     controller.import_certificate(SLOT[slot], cert)
                 if is_private_key:
                     controller.import_key(SLOT[slot], private_key)
-        return {'success': True, 'error': None}
+        return success()
 
     def piv_export_certificate(self, slot, file_url):
         file_path = urllib.parse.urlparse(file_url).path
@@ -668,7 +663,7 @@ class Controller(object):
                 file.write(
                     cert.public_bytes(
                         encoding=serialization.Encoding.PEM))
-        return {'success': True, 'error': None}
+        return success()
 
     def _piv_verify_pin(self, piv_controller, pin=None):
         touch_required = False
