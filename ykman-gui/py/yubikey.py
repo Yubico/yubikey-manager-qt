@@ -326,7 +326,7 @@ class Controller(object):
             return success()
         except YkpersError as e:
             if e.errno == 3:
-                return {'success': False, 'error': 'write error'}
+                failure('write error')
             raise
 
     def program_oath_hotp(self, slot, key, digits):
