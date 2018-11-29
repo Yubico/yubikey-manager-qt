@@ -46,6 +46,14 @@ def catch_error(f):
     def wrapped(*args, **kwargs):
         try:
             return f(*args, **kwargs)
+
+        except YkpersError as e:
+            if e.errno == 3:
+                return failure('write error')
+
+            logger.error('Uncaught exception', exc_info=e)
+            return unknown_failure(e)
+
         except FailedOpeningDeviceException as e:
             return failure('open_device_failed')
 
@@ -258,24 +266,14 @@ class Controller(object):
             raise
 
     def erase_slot(self, slot):
-        try:
-            with self._open_otp_controller() as controller:
-                controller.zap_slot(slot)
-            return success()
-        except YkpersError as e:
-            if e.errno == 3:
-                return failure('write error')
-            raise
+        with self._open_otp_controller() as controller:
+            controller.zap_slot(slot)
+        return success()
 
     def swap_slots(self):
-        try:
-            with self._open_otp_controller() as controller:
-                controller.swap_slots()
-            return success()
-        except YkpersError as e:
-            if e.errno == 3:
-                return failure('write error')
-            raise
+        with self._open_otp_controller() as controller:
+            controller.swap_slots()
+        return success()
 
     def serial_modhex(self):
         with self._open_device(TRANSPORT.OTP) as dev:
@@ -292,52 +290,32 @@ class Controller(object):
         return b2a_hex(os.urandom(int(bytes))).decode('ascii')
 
     def program_otp(self, slot, public_id, private_id, key):
-        try:
-            key = a2b_hex(key)
-            public_id = modhex_decode(public_id)
-            private_id = a2b_hex(private_id)
-            with self._open_otp_controller() as controller:
-                controller.program_otp(slot, key, public_id, private_id)
-            return success()
-        except YkpersError as e:
-            if e.errno == 3:
-                return failure('write error')
-            raise
+        key = a2b_hex(key)
+        public_id = modhex_decode(public_id)
+        private_id = a2b_hex(private_id)
+        with self._open_otp_controller() as controller:
+            controller.program_otp(slot, key, public_id, private_id)
+        return success()
 
     def program_challenge_response(self, slot, key, touch):
-        try:
-            key = a2b_hex(key)
-            with self._open_otp_controller() as controller:
-                controller.program_chalresp(slot, key, touch)
-            return success()
-        except YkpersError as e:
-            if e.errno == 3:
-                return failure('write error')
-            raise
+        key = a2b_hex(key)
+        with self._open_otp_controller() as controller:
+            controller.program_chalresp(slot, key, touch)
+        return success()
 
     def program_static_password(self, slot, key, keyboard_layout):
-        try:
-            with self._open_otp_controller() as controller:
-                controller.program_static(
-                    slot, key,
-                    keyboard_layout=KEYBOARD_LAYOUT[keyboard_layout])
-            return success()
-        except YkpersError as e:
-            if e.errno == 3:
-                failure('write error')
-            raise
+        with self._open_otp_controller() as controller:
+            controller.program_static(
+                slot, key,
+                keyboard_layout=KEYBOARD_LAYOUT[keyboard_layout])
+        return success()
 
     def program_oath_hotp(self, slot, key, digits):
-        try:
-            unpadded = key.upper().rstrip('=').replace(' ', '')
-            key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
-            with self._open_otp_controller() as controller:
-                controller.program_hotp(slot, key, hotp8=(int(digits) == 8))
-            return success()
-        except YkpersError as e:
-            if e.errno == 3:
-                return failure('write error')
-            raise
+        unpadded = key.upper().rstrip('=').replace(' ', '')
+        key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
+        with self._open_otp_controller() as controller:
+            controller.program_hotp(slot, key, hotp8=(int(digits) == 8))
+        return success()
 
     def fido_has_pin(self):
         try:
