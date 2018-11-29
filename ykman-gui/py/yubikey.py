@@ -202,8 +202,7 @@ class Controller(object):
                 if lock_code:
                     lock_code = a2b_hex(lock_code)
                     if len(lock_code) != 16:
-                        return {'success': False,
-                                'error': 'Lock code not 16 bytes'}
+                        return failure('lock_code_not_16_bytes')
                 dev.write_config(
                     device_config(
                         usb_enabled=usb_enabled,
