@@ -370,7 +370,7 @@ class Controller(object):
                 return success()
         except CtapError as e:
             if e.code == CtapError.ERR.INVALID_LENGTH:
-                return {'success': False, 'error': 'too long'}
+                return failure('too long')
             logger.error('Failed to set PIN', exc_info=e)
             raise
         except Exception as e:

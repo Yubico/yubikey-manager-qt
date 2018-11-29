@@ -26,10 +26,10 @@ ChangePinView {
             if (resp.success) {
                 fido2SuccessPopup.open()
             } else {
-                if (resp.error === 'too long') {
+                if (resp.error_id === 'too long') {
                     fido2TooLongError.open()
                 } else {
-                    fido2GeneralError.error = resp.error
+                    fido2GeneralError.error = resp.error_id
                     fido2GeneralError.open()
                 }
             }
