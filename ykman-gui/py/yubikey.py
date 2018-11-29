@@ -51,11 +51,8 @@ def catch_error(f):
 
         except Exception as e:
             logger.error('Uncaught exception', exc_info=e)
-            return {
-                'success': False,
-                'error_id': None,
-                'error_message': str(e),
-            }
+            return unknown_failure(e)
+
     return wrapped
 
 
@@ -68,6 +65,10 @@ def failure(err_id, result={}):
     result['success'] = False
     result['error_id'] = err_id
     return result
+
+
+def unknown_failure(exception):
+    return failure(None, {'error_message': str(exception)})
 
 
 class OtpContextManager(object):
