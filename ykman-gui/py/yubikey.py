@@ -144,7 +144,7 @@ class Controller(object):
         descriptors = list(get_descriptors())
         if len(descriptors) != 1:
             self._descriptor = None
-            return {'success': False, 'error': 'Multiple devices', 'dev': None}
+            return failure('multiple_devices')
         desc = descriptors[0]
 
         # If we have a cached descriptor
@@ -158,11 +158,7 @@ class Controller(object):
         try:
             with self._open_device() as dev:
                 if not dev:
-                    return {
-                        'success': False,
-                        'error': 'No device',
-                        'dev': None
-                    }
+                    return failure('no_device')
 
                 self._dev_info = {
                         'name': dev.device_name,
