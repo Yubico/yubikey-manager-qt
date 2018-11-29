@@ -50,6 +50,8 @@ def catch_error(f):
         except YkpersError as e:
             if e.errno == 3:
                 return failure('write error')
+            if e.errno == 4:
+                return failure('timeout')
 
             logger.error('Uncaught exception', exc_info=e)
             return unknown_failure(e)
@@ -241,13 +243,8 @@ class Controller(object):
         return success({'is_macos': sys.platform == 'darwin'})
 
     def slots_status(self):
-        try:
-            with self._open_otp_controller() as controller:
-                return success({'status': controller.slot_status})
-        except YkpersError as e:
-            if e.errno == 4:
-                return failure('timeout')
-            raise
+        with self._open_otp_controller() as controller:
+            return success({'status': controller.slot_status})
 
     def erase_slot(self, slot):
         with self._open_otp_controller() as controller:
