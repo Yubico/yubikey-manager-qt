@@ -212,6 +212,14 @@ ColumnLayout {
                     iconSource: "../images/import.svg"
                     toolTipText: qsTr("Import certificate from a file")
                     onClicked: selectCertificateDialog.open()
+                    DropArea {
+                        anchors.fill: parent
+                        onDropped: {
+                            if (drop.hasUrls) {
+                                importCertificate(drop.urls[0])
+                            }
+                        }
+                    }
                 }
             }
         }
