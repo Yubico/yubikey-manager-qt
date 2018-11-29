@@ -62,6 +62,12 @@ def catch_error(f):
     return wrapped
 
 
+def failure(err_id, result={}):
+    result['success'] = False
+    result['error_id'] = err_id
+    return result
+
+
 class OtpContextManager(object):
     def __init__(self, dev):
         self._dev = dev
@@ -477,11 +483,9 @@ class Controller(object):
                     logger.debug(
                         'Failed to parse date: ' + expiration_date,
                         exc_info=e)
-                    return {
-                        'success': False,
-                        'error_id': 'invalid_iso8601_date',
-                        'date': expiration_date,
-                    }
+                    return failure(
+                        'invalid_iso8601_date',
+                        {'date': expiration_date})
 
             unsupported_policy = self._piv_check_policies(
                 piv_controller, pin_policy=pin_policy,
@@ -516,10 +520,7 @@ class Controller(object):
 
             except APDUError as e:
                 if e.sw == SW.SECURITY_CONDITION_NOT_SATISFIED:
-                    return {
-                        'success': False,
-                        'error_id': 'pin_required',
-                    }
+                    return failure('pin_required')
                 raise
 
             return {'success': True}
@@ -532,24 +533,14 @@ class Controller(object):
                 return {'success': True}
 
             except AuthenticationBlocked:
-                return {
-                    'success': False,
-                    'error_id': 'pin_blocked',
-                }
+                return failure('pin_blocked')
 
             except WrongPin as e:
-                return {
-                    'success': False,
-                    'error_id': 'wrong_pin',
-                    'tries_left': e.tries_left,
-                }
+                return failure('wrong_pin', {'tries_left': e.tries_left})
 
             except APDUError as e:
                 if e.sw == SW.INCORRECT_PARAMETERS:
-                    return {
-                        'success': False,
-                        'error_id': 'incorrect_parameters',
-                    }
+                    return failure('incorrect_parameters')
 
                 tries_left = piv_controller.get_pin_tries()
                 logger.debug('PIN change failed. %s tries left.',
@@ -566,17 +557,10 @@ class Controller(object):
                 return {'success': True}
 
             except AuthenticationBlocked:
-                return {
-                    'success': False,
-                    'error_id': 'puk_blocked',
-                }
+                return failure('puk_blocked')
 
             except WrongPuk as e:
-                return {
-                    'success': False,
-                    'error_id': 'wrong_puk',
-                    'tries_left': e.tries_left,
-                }
+                return failure('wrong_puk', {'tries_left': e.tries_left})
 
     def piv_generate_random_mgm_key(self):
         return b2a_hex(ykman.piv.generate_random_management_key()).decode(
@@ -601,18 +585,12 @@ class Controller(object):
                 new_key = a2b_hex(new_key_hex) if new_key_hex else None
             except Exception as e:
                 logger.debug('Failed to parse new management key', exc_info=e)
-                return {
-                    'success': False,
-                    'error_id': 'new_mgm_key_bad_hex'
-                  }
+                return failure('new_mgm_key_bad_hex')
 
             if new_key is not None and len(new_key) != 24:
                 logger.debug('Wrong length for new management key: %d',
                              len(new_key))
-                return {
-                    'success': False,
-                    'error_id': 'new_mgm_key_bad_length'
-                }
+                return failure('new_mgm_key_bad_length')
 
             piv_controller.set_mgm_key(
                 new_key, touch=False, store_on_device=store_on_device)
@@ -625,17 +603,10 @@ class Controller(object):
                 return {'success': True}
 
             except AuthenticationBlocked:
-                return {
-                    'success': False,
-                    'error_id': 'puk_blocked',
-                }
+                return failure('puk_blocked')
 
             except WrongPuk as e:
-                return {
-                    'success': False,
-                    'error_id': 'wrong_puk',
-                    'tries_left': e.tries_left,
-                }
+                return failure('wrong_puk', {'tries_left': e.tries_left})
 
     def piv_can_parse(self, file_url):
         file_path = urllib.parse.urlparse(file_url).path
@@ -712,40 +683,25 @@ class Controller(object):
                 piv_controller.verify(pin, touch_callback=touch_callback)
 
             except AuthenticationBlocked:
-                return {
-                    'success': False,
-                    'error_id': 'pin_blocked',
-                }
+                return failure('pin_blocked')
 
             except WrongPin as e:
-                return {
-                    'success': False,
-                    'error_id': 'wrong_pin',
-                    'tries_left': e.tries_left,
-                }
+                return failure(
+                    'wrong_pin',
+                    {'tries_left': e.tries_left})
 
             except AuthenticationFailed:
                 if touch_required:
-                    return {
-                        'success': False,
-                        'error_id': 'wrong_mgm_key_or_touch_required',
-                    }
+                    return failure('wrong_mgm_key_or_touch_required')
                 else:
-                    return {
-                        'success': False,
-                        'error_id': 'wrong_mgm_key',
-                        'message': 'Incorrect management key.',
-                    }
+                    return failure('wrong_mgm_key')
 
             finally:
                 if touch_required:
                     _close_touch_prompt()
 
         else:
-            return {
-                'success': False,
-                'error_id': 'pin_required'
-            }
+            return failure('pin_required')
 
     def _piv_ensure_authenticated(self, piv_controller, pin=None,
                                   mgm_key_hex=None):
@@ -761,18 +717,12 @@ class Controller(object):
 
             if mgm_key_hex:
                 if len(mgm_key_hex) != 48:
-                    return {
-                        'success': False,
-                        'error_id': 'mgm_key_bad_format',
-                    }
+                    return failure('mgm_key_bad_format')
 
                 try:
                     mgm_key_bytes = a2b_hex(mgm_key_hex)
                 except Exception:
-                    return {
-                        'success': False,
-                        'error_id': 'mgm_key_bad_format',
-                    }
+                    return failure('mgm_key_bad_format')
 
                 try:
                     piv_controller.authenticate(
@@ -782,52 +732,36 @@ class Controller(object):
 
                 except AuthenticationFailed:
                     if touch_required:
-                        return {
-                            'success': False,
-                            'error_id': 'wrong_mgm_key_or_touch_required',
-                        }
+                        return failure('wrong_mgm_key_or_touch_required')
                     else:
-                        return {
-                            'success': False,
-                            'error_id': 'wrong_mgm_key'
-                        }
+                        return failure('wrong_mgm_key')
 
                 except BadFormat:
-                    return {
-                        'success': False,
-                        'error_id': 'mgm_key_bad_format',
-                    }
+                    return failure('mgm_key_bad_format')
 
                 finally:
                     if touch_required:
                         _close_touch_prompt()
 
             else:
-                return {
-                    'success': False,
-                    'error_id': 'mgm_key_required'
-                }
+                return failure('mgm_key_required')
 
     def _piv_check_policies(self, piv_controller, pin_policy=None,
                             touch_policy=None):
         if pin_policy and not piv_controller.supports_pin_policies:
-            return {
-                'success': False,
-                'error_id': 'unsupported_pin_policy',
-                'supported_pin_policies': [],
-            }
+            return failure(
+                'unsupported_pin_policy',
+                {'supported_pin_policies': []})
 
         if touch_policy and not (
                 TOUCH_POLICY[touch_policy]
                 in piv_controller.supported_touch_policies):
-            return {
-                'success': False,
-                'error_id': 'unsupported_touch_policy',
-                'supported_touch_policies': [
+            return failure(
+                'unsupported_touch_policy',
+                {'supported_touch_policies': [
                     policy.name for policy in
                     piv_controller.supported_touch_policies
-                ],
-            }
+                ]})
 
 
 controller = None
