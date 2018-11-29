@@ -47,11 +47,8 @@ def catch_error(f):
         try:
             return f(*args, **kwargs)
         except FailedOpeningDeviceException as e:
-            return {
-                'success': False,
-                'error_id': 'open_device_failed',
-                'error_message': str(e),
-            }
+            return failure('open_device_failed')
+
         except Exception as e:
             logger.error('Uncaught exception', exc_info=e)
             return {
