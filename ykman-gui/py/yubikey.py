@@ -42,18 +42,18 @@ def as_json(f):
     return wrapped
 
 
-def piv_catch_error(f):
+def catch_error(f):
     def wrapped(*args, **kwargs):
         try:
             return f(*args, **kwargs)
         except FailedOpeningDeviceException as e:
             return {
                 'success': False,
-                'error_id': 'piv_open_failed',
+                'error_id': 'open_device_failed',
                 'error_message': str(e),
             }
         except Exception as e:
-            logger.error('PIV operation failed', exc_info=e)
+            logger.error('Uncaught exception', exc_info=e)
             return {
                 'success': False,
                 'error_id': None,
@@ -105,7 +105,7 @@ class Controller(object):
             if not f.startswith('_'):
                 func = getattr(self, f)
                 if isinstance(func, types.MethodType):
-                    setattr(self, f, as_json(func))
+                    setattr(self, f, as_json(catch_error(func)))
 
     def count_devices(self):
         return len(list(get_descriptors()))
@@ -209,7 +209,6 @@ class Controller(object):
             logger.error('Failed to write config', exc_info=e)
             return {'success': False, 'error': str(e)}
 
-    @piv_catch_error
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
             return {
@@ -446,7 +445,6 @@ class Controller(object):
             logger.error('Reset throwed an exception', exc_info=e)
             return {'success': False, 'error': str(e)}
 
-    @piv_catch_error
     def piv_reset(self):
         with self._open_piv() as controller:
             controller.reset()
@@ -457,7 +455,6 @@ class Controller(object):
             SLOT(slot).name: _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
         }
 
-    @piv_catch_error
     def piv_delete_certificate(self, slot_name, pin=None, mgm_key_hex=None):
         logger.debug('piv_delete_certificate %s', slot_name)
 
@@ -470,7 +467,6 @@ class Controller(object):
             piv_controller.delete_certificate(SLOT[slot_name])
             return {'success': True}
 
-    @piv_catch_error
     def piv_generate_certificate(
             self, slot_name, algorithm, common_name, expiration_date,
             self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None,
@@ -551,7 +547,6 @@ class Controller(object):
 
             return {'success': True}
 
-    @piv_catch_error
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -587,7 +582,6 @@ class Controller(object):
                     'tries_left': tries_left,
                 }
 
-    @piv_catch_error
     def piv_change_puk(self, old_puk, new_puk):
         with self._open_piv() as piv_controller:
             try:
@@ -607,12 +601,10 @@ class Controller(object):
                     'tries_left': e.tries_left,
                 }
 
-    @piv_catch_error
     def piv_generate_random_mgm_key(self):
         return b2a_hex(ykman.piv.generate_random_management_key()).decode(
             'utf-8')
 
-    @piv_catch_error
     def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
                            store_on_device=False):
         with self._open_piv() as piv_controller:
@@ -649,7 +641,6 @@ class Controller(object):
                 new_key, touch=False, store_on_device=store_on_device)
             return {'success': True}
 
-    @piv_catch_error
     def piv_unblock_pin(self, puk, new_pin):
         with self._open_piv() as piv_controller:
             try:
@@ -669,7 +660,6 @@ class Controller(object):
                     'tries_left': e.tries_left,
                 }
 
-    @piv_catch_error
     def piv_can_parse(self, file_url):
         file_path = urllib.parse.urlparse(file_url).path
         with open(file_path, 'r+b') as file:
@@ -686,7 +676,6 @@ class Controller(object):
                 pass
         raise ValueError('Failed to parse certificate or key')
 
-    @piv_catch_error
     def piv_import_file(self, slot, file_url, password=None,
                         pin=None, mgm_key=None):
         is_cert = False
@@ -720,7 +709,6 @@ class Controller(object):
                     controller.import_key(SLOT[slot], private_key)
         return {'success': True, 'error': None}
 
-    @piv_catch_error
     def piv_export_certificate(self, slot, file_url):
         file_path = urllib.parse.urlparse(file_url).path
         file_path_windows = file_path[1:]
