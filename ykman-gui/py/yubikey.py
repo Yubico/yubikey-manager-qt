@@ -763,12 +763,12 @@ class Controller(object):
                 if touch_required:
                     return {
                         'success': False,
-                        'error': 'wrong_key_or_touch_required',
+                        'error_id': 'wrong_key_or_touch_required',
                     }
                 else:
                     return {
                         'success': False,
-                        'error': 'wrong_key',
+                        'error_id': 'wrong_key',
                         'message': 'Incorrect management key.',
                     }
 
