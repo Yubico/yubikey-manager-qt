@@ -180,7 +180,7 @@ class Controller(object):
 
         except Exception as e:
             logger.error('Failed to open device', exc_info=e)
-            return {'success': False, 'error': str(e), 'dev': None}
+            raise
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
         usb_enabled = 0x00
@@ -207,7 +207,7 @@ class Controller(object):
                 return {'success': True, 'error': None}
         except Exception as e:
             logger.error('Failed to write config', exc_info=e)
-            return {'success': False, 'error': str(e)}
+            raise
 
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
@@ -232,20 +232,14 @@ class Controller(object):
                 dev.mode = Mode(transports & TRANSPORT.usb_transports())
         except Exception as e:
             logger.error('Failed to set mode', exc_info=e)
-            return str(e)
+            raise
 
     def get_username(self):
-        try:
-            username = getpass.getuser()
-            return {'success': True, 'username': username}
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
+        username = getpass.getuser()
+        return {'success': True, 'username': username}
 
     def is_macos(self):
-        try:
-            return {'success': True, 'is_macos': sys.platform == 'darwin'}
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
+        return {'success': True, 'is_macos': sys.platform == 'darwin'}
 
     def slots_status(self):
         try:
@@ -258,10 +252,10 @@ class Controller(object):
             if e.errno == 4:
                 return {'success': False, 'status': None, 'error': 'timeout'}
             logger.error('Failed to read slot status', exc_info=e)
-            return {'success': False, 'status': None, 'error': str(e)}
+            raise
         except Exception as e:
             logger.error('Failed to read slot status', exc_info=e)
-            return {'success': False, 'status': None, 'error': str(e)}
+            raise
 
     def erase_slot(self, slot):
         try:
@@ -271,9 +265,7 @@ class Controller(object):
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
-            return {'success': False, 'error': str(e)}
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
+            raise
 
     def swap_slots(self):
         try:
@@ -283,9 +275,7 @@ class Controller(object):
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
-            return {'success': False, 'error': str(e)}
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
+            raise
 
     def serial_modhex(self):
         with self._open_device(TRANSPORT.OTP) as dev:
@@ -312,9 +302,7 @@ class Controller(object):
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
-            return {'success': False, 'error': str(e)}
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
+            raise
 
     def program_challenge_response(self, slot, key, touch):
         try:
@@ -325,9 +313,7 @@ class Controller(object):
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
-            return {'success': False, 'error': str(e)}
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
+            raise
 
     def program_static_password(self, slot, key, keyboard_layout):
         try:
@@ -339,9 +325,7 @@ class Controller(object):
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
-            return {'success': False, 'error': str(e)}
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
+            raise
 
     def program_oath_hotp(self, slot, key, digits):
         try:
@@ -353,9 +337,7 @@ class Controller(object):
         except YkpersError as e:
             if e.errno == 3:
                 return {'success': False, 'error': 'write error'}
-            return {'success': False, 'error': str(e)}
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
+            raise
 
     def fido_has_pin(self):
         try:
@@ -366,7 +348,7 @@ class Controller(object):
                     'error': None}
         except Exception as e:
             logger.error('Failed to read if PIN is set', exc_info=e)
-            return {'success': False, 'hasPin': None, 'error': str(e)}
+            raise
 
     def fido_pin_retries(self):
         try:
@@ -389,7 +371,7 @@ class Controller(object):
                     'error': 'PIN is blocked.'}
         except Exception as e:
             logger.error('Failed to read PIN retries', exc_info=e)
-            return {'success': False, 'retries': None, 'error': str(e)}
+            raise
 
     def fido_set_pin(self, new_pin):
         try:
@@ -400,10 +382,10 @@ class Controller(object):
             if e.code == CtapError.ERR.INVALID_LENGTH:
                 return {'success': False, 'error': 'too long'}
             logger.error('Failed to set PIN', exc_info=e)
-            return {'success': False, 'error': str(e)}
+            raise
         except Exception as e:
             logger.error('Failed to set PIN', exc_info=e)
-            return {'success': False, 'error': str(e)}
+            raise
 
     def fido_change_pin(self, current_pin, new_pin):
         try:
@@ -423,10 +405,10 @@ class Controller(object):
             if e.code == CtapError.ERR.PIN_BLOCKED:
                 return {'success': False, 'error': 'blocked'}
             logger.error('Failed to set PIN', exc_info=e)
-            return {'success': False, 'error': str(e)}
+            raise
         except Exception as e:
             logger.error('Failed to set PIN', exc_info=e)
-            return {'success': False, 'error': str(e)}
+            raise
 
     def fido_reset(self):
         try:
@@ -438,12 +420,7 @@ class Controller(object):
                 return {'success': False, 'error': 'not allowed'}
             if e.code == CtapError.ERR.ACTION_TIMEOUT:
                 return {'success': False, 'error': 'touch timeout'}
-            else:
-                logger.error('Reset throwed an exception', exc_info=e)
-                return {'success': False, 'error': str(e)}
-        except Exception as e:
-            logger.error('Reset throwed an exception', exc_info=e)
-            return {'success': False, 'error': str(e)}
+            raise
 
     def piv_reset(self):
         with self._open_piv() as controller:
