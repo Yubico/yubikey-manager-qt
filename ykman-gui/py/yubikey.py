@@ -161,39 +161,34 @@ class Controller(object):
 
         self._descriptor = desc
 
-        try:
-            with self._open_device() as dev:
-                if not dev:
-                    return failure('no_device')
+        with self._open_device() as dev:
+            if not dev:
+                return failure('no_device')
 
-                self._dev_info = {
-                        'name': dev.device_name,
-                        'version': '.'.join(str(x) for x in dev.version),
-                        'serial': dev.serial or '',
-                        'usb_enabled': [
-                            a.name for a in APPLICATION
-                            if a & dev.config.usb_enabled],
-                        'usb_supported': [
-                            a.name for a in APPLICATION
-                            if a & dev.config.usb_supported],
-                        'usb_interfaces_supported': [
-                            t.name for t in TRANSPORT
-                            if t & dev.config.usb_supported],
-                        'nfc_enabled': [
-                            a.name for a in APPLICATION
-                            if a & dev.config.nfc_enabled],
-                        'nfc_supported': [
-                            a.name for a in APPLICATION
-                            if a & dev.config.nfc_supported],
-                        'usb_interfaces_enabled': str(dev.mode).split('+'),
-                        'can_write_config': dev.can_write_config,
-                        'configuration_locked': dev.config.configuration_locked
-                    }
-                return success({'dev': self._dev_info})
-
-        except Exception as e:
-            logger.error('Failed to open device', exc_info=e)
-            raise
+            self._dev_info = {
+                    'name': dev.device_name,
+                    'version': '.'.join(str(x) for x in dev.version),
+                    'serial': dev.serial or '',
+                    'usb_enabled': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.usb_enabled],
+                    'usb_supported': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.usb_supported],
+                    'usb_interfaces_supported': [
+                        t.name for t in TRANSPORT
+                        if t & dev.config.usb_supported],
+                    'nfc_enabled': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.nfc_enabled],
+                    'nfc_supported': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.nfc_supported],
+                    'usb_interfaces_enabled': str(dev.mode).split('+'),
+                    'can_write_config': dev.can_write_config,
+                    'configuration_locked': dev.config.configuration_locked
+                }
+            return success({'dev': self._dev_info})
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
         usb_enabled = 0x00
@@ -202,24 +197,21 @@ class Controller(object):
             usb_enabled |= APPLICATION[app]
         for app in nfc_applications:
             nfc_enabled |= APPLICATION[app]
-        try:
-            with self._open_device() as dev:
 
-                if lock_code:
-                    lock_code = a2b_hex(lock_code)
-                    if len(lock_code) != 16:
-                        return failure('lock_code_not_16_bytes')
-                dev.write_config(
-                    device_config(
-                        usb_enabled=usb_enabled,
-                        nfc_enabled=nfc_enabled,
-                        ),
-                    reboot=True,
-                    lock_key=lock_code)
-                return success()
-        except Exception as e:
-            logger.error('Failed to write config', exc_info=e)
-            raise
+        with self._open_device() as dev:
+
+            if lock_code:
+                lock_code = a2b_hex(lock_code)
+                if len(lock_code) != 16:
+                    return failure('lock_code_not_16_bytes')
+            dev.write_config(
+                device_config(
+                    usb_enabled=usb_enabled,
+                    nfc_enabled=nfc_enabled,
+                    ),
+                reboot=True,
+                lock_key=lock_code)
+            return success()
 
     def refresh_piv(self):
         with self._open_piv() as piv_controller:
@@ -237,13 +229,9 @@ class Controller(object):
             })
 
     def set_mode(self, interfaces):
-        try:
-            with self._open_device() as dev:
-                transports = sum([TRANSPORT[i] for i in interfaces])
-                dev.mode = Mode(transports & TRANSPORT.usb_transports())
-        except Exception as e:
-            logger.error('Failed to set mode', exc_info=e)
-            raise
+        with self._open_device() as dev:
+            transports = sum([TRANSPORT[i] for i in interfaces])
+            dev.mode = Mode(transports & TRANSPORT.usb_transports())
 
     def get_username(self):
         username = getpass.getuser()
@@ -259,10 +247,6 @@ class Controller(object):
         except YkpersError as e:
             if e.errno == 4:
                 return failure('timeout')
-            logger.error('Failed to read slot status', exc_info=e)
-            raise
-        except Exception as e:
-            logger.error('Failed to read slot status', exc_info=e)
             raise
 
     def erase_slot(self, slot):
@@ -318,12 +302,8 @@ class Controller(object):
         return success()
 
     def fido_has_pin(self):
-        try:
-            with self._open_fido2_controller() as controller:
-                return success({'hasPin': controller.has_pin})
-        except Exception as e:
-            logger.error('Failed to read if PIN is set', exc_info=e)
-            raise
+        with self._open_fido2_controller() as controller:
+            return success({'hasPin': controller.has_pin})
 
     def fido_pin_retries(self):
         try:
@@ -335,8 +315,6 @@ class Controller(object):
                                'Remove and re-insert the YubiKey.')
             if e.code == CtapError.ERR.PIN_BLOCKED:
                 return failure('PIN is blocked.')
-        except Exception as e:
-            logger.error('Failed to read PIN retries', exc_info=e)
             raise
 
     def fido_set_pin(self, new_pin):
@@ -347,10 +325,6 @@ class Controller(object):
         except CtapError as e:
             if e.code == CtapError.ERR.INVALID_LENGTH:
                 return failure('too long')
-            logger.error('Failed to set PIN', exc_info=e)
-            raise
-        except Exception as e:
-            logger.error('Failed to set PIN', exc_info=e)
             raise
 
     def fido_change_pin(self, current_pin, new_pin):
@@ -367,10 +341,6 @@ class Controller(object):
                 return failure('currently blocked')
             if e.code == CtapError.ERR.PIN_BLOCKED:
                 return failure('blocked')
-            logger.error('Failed to set PIN', exc_info=e)
-            raise
-        except Exception as e:
-            logger.error('Failed to set PIN', exc_info=e)
             raise
 
     def fido_reset(self):
