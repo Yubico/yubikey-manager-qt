@@ -20,11 +20,11 @@ ColumnLayout {
                                     if (resp.success) {
                                         views.otpSuccess()
                                     } else {
-                                        if (resp.error === 'write error') {
+                                        if (resp.error_id === 'write error') {
                                             views.otpWriteError()
                                         } else {
                                             views.otpFailedToConfigureErrorPopup(
-                                                        resp.error)
+                                                        resp.error_id)
                                         }
                                     }
                                 })
