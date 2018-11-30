@@ -160,7 +160,7 @@ StackView {
     }
 
     function otpSuccess() {
-        otpSuccessPopup.open()
+        successPopup.showAndThen(views.otp)
     }
 
     function otpWriteError() {
@@ -223,11 +223,6 @@ StackView {
 
     SuccessPopup {
         id: successPopup
-    }
-
-    SuccessPopup {
-        id: otpSuccessPopup
-        onClosed: views.otp()
     }
 
     SuccessPopup {
