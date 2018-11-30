@@ -9,15 +9,9 @@ ColumnLayout {
 
     CustomContentColumn {
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Certificates")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("PIV"), qsTr("Certificates")]
-            }
+        ViewHeader {
+            heading: qsTr("Certificates")
+            breadcrumbs: [qsTr("PIV"), qsTr("Certificates")]
         }
 
         TabBar {

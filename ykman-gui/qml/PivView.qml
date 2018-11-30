@@ -48,17 +48,9 @@ ColumnLayout {
         visible: !isBusy
 
         RowLayout {
-            ColumnLayout {
-                Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                Heading1 {
-                    id: heading
-                    text: qsTr("PIV")
-                }
-
-                BreadCrumbRow {
-                    Layout.fillWidth: true
-                    items: [qsTr("PIV")]
-                }
+            ViewHeader {
+                heading: qsTr("PIV")
+                breadcrumbs: [qsTr("PIV")]
             }
             CustomButton {
                 text: qsTr("Setup for macOS")

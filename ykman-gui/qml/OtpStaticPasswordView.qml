@@ -50,16 +50,10 @@ ColumnLayout {
 
     CustomContentColumn {
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Static Password")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
-                        views.selectedSlot), qsTr("Static Password")]
-            }
+        ViewHeader {
+            heading: qsTr("Static Password")
+            breadcrumbs: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
+                    views.selectedSlot), qsTr("Static Password")]
         }
 
         RowLayout {

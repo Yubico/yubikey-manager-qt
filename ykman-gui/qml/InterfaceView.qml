@@ -139,15 +139,9 @@ ColumnLayout {
 
     CustomContentColumn {
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Interfaces")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("Interfaces")]
-            }
+        ViewHeader {
+            heading: qsTr("Interfaces")
+            breadcrumbs: [qsTr("Interfaces")]
         }
 
         RowLayout {

@@ -91,15 +91,10 @@ ColumnLayout {
 
     CustomContentColumn {
         visible: !isBusy
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Setup for macOS")
-            }
 
-            BreadCrumbRow {
-                items: [qsTr("PIV"), qsTr("Setup for macOS")]
-            }
+        ViewHeader {
+            heading: qsTr("Setup for macOS")
+            breadcrumbs: [qsTr("PIV"), qsTr("Setup for macOS")]
         }
 
         Label {

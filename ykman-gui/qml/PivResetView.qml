@@ -32,15 +32,10 @@ ColumnLayout {
 
     CustomContentColumn {
         visible: !isBusy
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Reset PIV")
-            }
 
-            BreadCrumbRow {
-                items: [qsTr("PIV"), qsTr("Reset PIV")]
-            }
+        ViewHeader {
+            heading: qsTr("Reset PIV")
+            breadcrumbs: [qsTr("PIV"), qsTr("Reset PIV")]
         }
 
         Label {

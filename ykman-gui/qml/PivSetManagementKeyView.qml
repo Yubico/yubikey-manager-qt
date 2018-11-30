@@ -85,16 +85,10 @@ ColumnLayout {
 
     CustomContentColumn {
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Change Management Key")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("PIV"), qsTr("Configure PINs"), qsTr(
-                        "Set Management Key")]
-            }
+        ViewHeader {
+            heading: qsTr("Change Management Key")
+            breadcrumbs: [qsTr("PIV"), qsTr("Configure PINs"), qsTr(
+                    "Set Management Key")]
         }
 
         ColumnLayout {

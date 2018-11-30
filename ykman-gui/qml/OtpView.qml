@@ -97,16 +97,10 @@ ColumnLayout {
 
     CustomContentColumn {
         visible: !isBusy
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
-            Heading1 {
-                text: qsTr("OTP")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("OTP")]
-            }
+        ViewHeader {
+            heading: qsTr("OTP")
+            breadcrumbs: [qsTr("OTP")]
         }
 
         RowLayout {

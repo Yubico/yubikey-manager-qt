@@ -61,15 +61,9 @@ ColumnLayout {
     CustomContentColumn {
         visible: !isBusy
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("FIDO2")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("FIDO2")]
-            }
+        ViewHeader {
+            heading: qsTr("FIDO2")
+            breadcrumbs: [qsTr("FIDO2")]
         }
 
         RowLayout {

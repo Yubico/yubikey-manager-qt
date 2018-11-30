@@ -28,6 +28,9 @@ ColumnLayout {
     readonly property alias chosenPin: newPin.text
     readonly property bool pinMatches: newPin.text === confirmPin.text
 
+    // To resolve name clash in ViewHeader
+    readonly property var _breadcrumbs: breadcrumbs
+
     function validPin() {
         return (!hasCurrentPin || currentPin.length >= minLength)
                 && (pinMatches) && (chosenPin.length >= minLength)
@@ -69,15 +72,9 @@ ColumnLayout {
     }
 
     CustomContentColumn {
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: mainHeading
-            }
-
-            BreadCrumbRow {
-                items: breadcrumbs
-            }
+        ViewHeader {
+            heading: mainHeading
+            breadcrumbs: _breadcrumbs
         }
 
         GridLayout {

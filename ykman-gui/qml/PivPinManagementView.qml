@@ -70,15 +70,9 @@ ColumnLayout {
     CustomContentColumn {
         visible: !isBusy
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Configure PINs")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("PIV"), qsTr("Configure PINs")]
-            }
+        ViewHeader {
+            heading: qsTr("Configure PINs")
+            breadcrumbs: [qsTr("PIV"), qsTr("Configure PINs")]
         }
 
         RowLayout {

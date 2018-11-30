@@ -183,15 +183,11 @@ ColumnLayout {
     CustomContentColumn {
         visible: !isBusy
 
-        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-        Heading1 {
-            text: qsTr("Generate certificate")
-        }
-
-        BreadCrumbRow {
-            items: [qsTr("PIV"), qsTr("Certificates"), qsTr(
-                    "Generate: %1 (%2/%3)").arg(slot.name).arg(
-                    currentStep).arg(numSteps)]
+        ViewHeader {
+            heading: qsTr("Generate certificate")
+            breadcrumbs: [qsTr("PIV"), qsTr("Certificates"), qsTr(
+                    "Generate: %1 (%2/%3)").arg(slot.name).arg(currentStep).arg(
+                    numSteps)]
         }
 
         StackView {

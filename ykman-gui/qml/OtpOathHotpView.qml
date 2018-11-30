@@ -31,17 +31,12 @@ ColumnLayout {
     }
 
     CustomContentColumn {
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("OATH-HOTP")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
-                        views.selectedSlot), qsTr("OATH-HOTP")]
-            }
+        ViewHeader {
+            heading: qsTr("OATH-HOTP")
+            breadcrumbs: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
+                    views.selectedSlot), qsTr("OATH-HOTP")]
         }
+
         RowLayout {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Layout.fillHeight: true
