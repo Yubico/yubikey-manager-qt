@@ -48,7 +48,7 @@ ColumnLayout {
                             newApplicationsEnabledOverNfc, lockCode,
                             function (resp) {
                                 if (resp.success) {
-                                    interfacesSuccessPopup.open()
+                                    successPopup.showAndThen(views.home)
                                     views.unlock()
                                 } else {
                                     console.log(resp.error_id)

@@ -225,11 +225,6 @@ StackView {
         id: successPopup
     }
 
-    SuccessPopup {
-        id: interfacesSuccessPopup
-        onClosed: views.home()
-    }
-
     OtpGeneralErrorPopup {
         id: otpGeneralErrorPopup
     }
