@@ -22,12 +22,12 @@ InlinePopup {
                         constants.pivManagementKeyHexLength)
         case 'no_device':
             return qsTr('No YubiKey present.')
+        case 'open_device_failed':
+            return qsTr("Failed to open the application on the YubiKey.")
         case 'pin_blocked':
             return qsTr('PIN is blocked.')
         case 'pin_required':
             return qsTr("PIN is required.")
-        case 'piv_open_failed':
-            return qsTr("Failed to open the PIV application on the YubiKey.")
         case 'puk_blocked':
             return qsTr('PUK is blocked.')
         case 'wrong_mgm_key':

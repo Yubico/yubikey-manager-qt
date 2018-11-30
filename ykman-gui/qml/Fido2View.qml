@@ -25,8 +25,8 @@ ColumnLayout {
                         if (resp.success) {
                             pinRetries = resp.retries
                         } else {
-                            console.log(resp.error)
-                            pinBlocked = (resp.error === 'PIN is blocked.')
+                            console.log(resp.error_id)
+                            pinBlocked = (resp.error_id === 'PIN is blocked.')
                         }
                         isBusy = false
                     })

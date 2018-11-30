@@ -29,10 +29,10 @@ ColumnLayout {
                     if (resp.success) {
                         fido2SuccessPopup.open()
                     } else {
-                        if (resp.error === 'touch timeout') {
+                        if (resp.error_id === 'touch timeout') {
                             fido2ResetTouchError.open()
                         } else {
-                            fido2GeneralError.error = resp.error
+                            fido2GeneralError.error = resp.error_id
                             fido2GeneralError.open()
                         }
                     }

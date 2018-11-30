@@ -22,11 +22,11 @@ ColumnLayout {
                 views.selectedSlot = 0
                 isBusy = false
             } else {
-                if (resp.error === 'timeout') {
+                if (resp.error_id === 'timeout') {
                     views.otpGeneralError(qsTr(
                                               "Failed to load OTP application"))
                 } else {
-                    views.otpGeneralError(resp.error)
+                    views.otpGeneralError(resp.error_id)
                 }
                 views.home()
             }
@@ -47,10 +47,10 @@ ColumnLayout {
                 views.otpSuccess()
                 load()
             } else {
-                if (resp.error === 'write error') {
+                if (resp.error_id === 'write error') {
                     views.otpWriteError()
                 } else {
-                    views.otpFailedToConfigureErrorPopup(resp.error)
+                    views.otpFailedToConfigureErrorPopup(resp.error_id)
                 }
             }
         })
@@ -62,10 +62,12 @@ ColumnLayout {
                 views.otpSuccess()
                 load()
             } else {
-                if (resp.error === 'write error') {
-                    views.otpWriteError()
+                if (resp.error_id === 'write error') {
+                    views.otpGeneralError("Failed to swap slots. Make sure the YubiKey does not have restricted access.")
+                } else if (resp.error_message) {
+                    views.otpGeneralError(resp.error_message)
                 } else {
-                    views.otpGeneralError(resp.error)
+                    views.otpGeneralError("Unknown error.")
                 }
             }
         })

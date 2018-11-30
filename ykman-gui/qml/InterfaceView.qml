@@ -51,7 +51,7 @@ ColumnLayout {
                                     interfacesSuccessPopup.open()
                                     views.unlock()
                                 } else {
-                                    console.log(resp.error)
+                                    console.log(resp.error_id)
                                     views.unlock()
                                     errorLockCodePopup.open()
                                 }
