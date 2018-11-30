@@ -225,6 +225,10 @@ StackView {
         id: successPopup
     }
 
+    ErrorPopup {
+        id: errorPopup
+    }
+
     OtpGeneralErrorPopup {
         id: otpGeneralErrorPopup
     }

@@ -24,43 +24,21 @@ ChangePinView {
                 successPopup.showAndThen(views.pop)
             } else {
                 if (resp.error_id === 'too long') {
-                    fido2TooLongError.open()
+                    errorPopup.show(qsTr("Too long PIN, maximum size is 128 bytes"))
                 } else if (resp.error_id === 'wrong pin') {
                     clearCurrentPinInput()
-                    fido2WrongPinError.open()
+                    errorPopup.show(qsTr("The current PIN is wrong"))
                 } else if (resp.error_id === 'currently blocked') {
-                    fido2CurrentlyBlockedError.open()
+                    errorPopup.show(qsTr("PIN authentication is currently blocked - Remove and re-insert your YubiKey"))
                 } else if (resp.error_id === 'blocked') {
-                    fido2BlockedError.open()
+                    errorPopup.show(qsTr("PIN is blocked"))
+                } else if (resp.error_message) {
+                    errorPopup.show(resp.error_message)
                 } else {
-                    fido2GeneralError.error = resp.error_id
-                    fido2GeneralError.open()
+                    errorPopup.show(resp.error_id)
                 }
             }
         })
     }
 
-    Fido2GeneralErrorPopup {
-        id: fido2TooLongError
-        error: qsTr("Too long PIN, maximum size is 128 bytes")
-    }
-
-    Fido2GeneralErrorPopup {
-        id: fido2WrongPinError
-        error: qsTr("The current PIN is wrong")
-    }
-
-    Fido2GeneralErrorPopup {
-        id: fido2CurrentlyBlockedError
-        error: qsTr("PIN authentication is currently blocked - Remove and re-insert your YubiKey")
-    }
-
-    Fido2GeneralErrorPopup {
-        id: fido2BlockedError
-        error: qsTr("PIN is blocked")
-    }
-
-    Fido2GeneralErrorPopup {
-        id: fido2GeneralError
-    }
 }
