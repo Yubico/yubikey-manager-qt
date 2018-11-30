@@ -60,27 +60,34 @@ install:
       cd ../../
     fi
 
-script:
+before_script:
   - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "build-docker-images" ]]
     then
-      ls -la $HOME/docker-images
+      echo "Building Docker images"
+      time docker build -t yubikey-manager-qt-ci-base docker/bionic-base && \
+        time docker build -t bionic-ci docker/bionic-ci && \
+        time docker build -t bionic-deb docker/bionic-deb && \
+        time docker build -t xenial-appimage docker/xenial-appimage && \
+        mkdir -p $HOME/docker-images && \
+        time docker save -o $HOME/docker-images/images.tar yubikey-manager-qt-ci-base bionic-ci bionic-deb xenial-appimage
+
+    else
+      echo "Reading Docker images from file"
       if [[ -f $HOME/docker-images/images.tar ]]; then
         time docker load -i $HOME/docker-images/images.tar
       else
         echo "Image cache file $HOME/docker-images/images.tar not found"
       fi
+    fi
 
-      time docker build -t yubikey-manager-qt-ci-base docker/bionic-base && \
-        time docker build -t bionic-ci docker/bionic-ci && \
-        time docker run --rm -v $(pwd):/sources/yubikey-manager-qt:ro bionic-ci && \
-        time docker build -t bionic-deb docker/bionic-deb && \
+script:
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    then
+      time docker run --rm -v $(pwd):/sources/yubikey-manager-qt:ro bionic-ci && \
         time docker run --name bionic-deb -v $(pwd):/sources/yubikey-manager-qt:ro bionic-deb && \
-        time docker build -t xenial-appimage docker/xenial-appimage && \
-        time docker run --name xenial-appimage -v $(pwd):/sources/yubikey-manager-qt:ro --privileged xenial-appimage && \
-        mkdir -p $HOME/docker-images && \
-        time docker save -o $HOME/docker-images/images.tar yubikey-manager-qt-ci-base bionic-ci bionic-deb xenial-appimage && \
-        ls -la $HOME/docker-images
+        time docker run --name xenial-appimage -v $(pwd):/sources/yubikey-manager-qt:ro --privileged xenial-appimage
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
