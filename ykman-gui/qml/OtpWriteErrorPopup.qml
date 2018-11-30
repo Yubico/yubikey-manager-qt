@@ -3,19 +3,16 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 import "slotutils.js" as SlotUtils
 
-InlinePopup {
+StandardPopup {
 
-    Heading2 {
-        width: parent.width
-        text: qsTr("Error!
+    heading: qsTr("Error!")
 
-Failed to modify " + SlotUtils.slotNameCapitalized(views.selectedSlot) + ".
-
-Make sure the YubiKey does not have restricted access.")
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        wrapMode: Text.WordWrap
-        Layout.maximumWidth: parent.width
+    function show() {
+         messageParagraphs = [
+            qsTr("Failed to modify %1.").arg(SlotUtils.slotNameCapitalized(views.selectedSlot)),
+            qsTr("Make sure the YubiKey does not have restricted access."),
+         ]
+         open()
     }
 
-    standardButtons: Dialog.Ok
 }

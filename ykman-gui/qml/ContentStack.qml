@@ -164,7 +164,7 @@ StackView {
     }
 
     function otpWriteError() {
-        otpWriteErrorPopup.open()
+        otpWriteErrorPopup.show()
     }
 
     function otpFailedToConfigureErrorPopup(error) {
