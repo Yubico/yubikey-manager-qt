@@ -183,257 +183,255 @@ ColumnLayout {
     CustomContentColumn {
         visible: !isBusy
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Generate certificate")
-            }
+        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+        Heading1 {
+            text: qsTr("Generate certificate")
+        }
 
-            BreadCrumbRow {
-                items: [qsTr("PIV"), qsTr("Certificates"), qsTr(
-                        "Generate: %1 (%2/%3)").arg(slot.name).arg(
-                        currentStep).arg(numSteps)]
-            }
+        BreadCrumbRow {
+            items: [qsTr("PIV"), qsTr("Certificates"), qsTr(
+                    "Generate: %1 (%2/%3)").arg(slot.name).arg(
+                    currentStep).arg(numSteps)]
+        }
 
-            StackView {
-                id: wizardStack
-                Layout.fillHeight: true
-                Layout.fillWidth: true
+        StackView {
+            id: wizardStack
+            Layout.fillHeight: true
+            Layout.fillWidth: true
 
-                initialItem: outputTypeView
-            }
+            initialItem: outputTypeView
+        }
 
-            Component {
-                id: outputTypeView
+        Component {
+            id: outputTypeView
 
+            ColumnLayout {
                 ColumnLayout {
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                        RadioButton {
-                            text: qsTr("Self-signed certificate")
-                            checked: true
-                            font.pixelSize: constants.h3
-                            Material.foreground: yubicoBlue
-                            onCheckedChanged: selfSign = checked
-                            ToolTip.delay: 1000
-                            ToolTip.visible: hovered
-                            ToolTip.text: qsTr("Generate a self-signed certficate and store it on the YubiKey.")
-                        }
+                    RadioButton {
+                        text: qsTr("Self-signed certificate")
+                        checked: true
+                        font.pixelSize: constants.h3
+                        Material.foreground: yubicoBlue
+                        onCheckedChanged: selfSign = checked
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Generate a self-signed certficate and store it on the YubiKey.")
+                    }
 
-                        RadioButton {
-                            id: csrBtn
-                            text: qsTr("Certificate Signing Request (CSR)")
-                            font.pixelSize: constants.h3
-                            Material.foreground: yubicoBlue
-                            ToolTip.delay: 1000
-                            ToolTip.visible: hovered
-                            ToolTip.text: qsTr("Generate a private key on the YubiKey and output a Certificate Signing Request (CSR) to a file.")
-                        }
+                    RadioButton {
+                        id: csrBtn
+                        text: qsTr("Certificate Signing Request (CSR)")
+                        font.pixelSize: constants.h3
+                        Material.foreground: yubicoBlue
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Generate a private key on the YubiKey and output a Certificate Signing Request (CSR) to a file.")
                     }
                 }
             }
+        }
 
-            Component {
-                id: algorithmView
-                ColumnLayout {
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Label {
-                            text: qsTr("Algorithm")
-                            color: yubicoBlue
-                            font.pixelSize: constants.h3
-                        }
-
-                        ComboBox {
-                            id: algorithmInput
-                            model: algorithms
-                            currentIndex: algorithms.findIndex(function (alg) {
-                                return alg === algorithm
-                            })
-                            Material.foreground: yubicoBlue
-                            onCurrentTextChanged: algorithm = currentText
-                            Layout.minimumWidth: implicitWidth + constants.contentMargins / 2
-                        }
+        Component {
+            id: algorithmView
+            ColumnLayout {
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Label {
+                        text: qsTr("Algorithm")
+                        color: yubicoBlue
+                        font.pixelSize: constants.h3
                     }
-                }
-            }
 
-            Component {
-                id: subjectView
-                ColumnLayout {
-                    Component.onCompleted: {
-                        yubiKey.getUserName(function (resp) {
-                            if (resp.success) {
-                                if (!subjectCommonName) {
-                                    subjectNameInput.text = resp.username
-                                } else {
-                                    subjectNameInput.text = subjectCommonName
-                                }
-                            }
+                    ComboBox {
+                        id: algorithmInput
+                        model: algorithms
+                        currentIndex: algorithms.findIndex(function (alg) {
+                            return alg === algorithm
                         })
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Label {
-                            text: qsTr("Subject name")
-                            font.pixelSize: constants.h3
-                            color: yubicoBlue
-                        }
-
-                        TextField {
-                            id: subjectNameInput
-                            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                            Layout.fillWidth: true
-                            ToolTip.delay: 1000
-                            ToolTip.visible: hovered
-                            ToolTip.text: qsTr("The subject common name (CN) for the certificate.")
-                            selectionColor: yubicoGreen
-                            onTextChanged: subjectCommonName = text
-                        }
+                        Material.foreground: yubicoBlue
+                        onCurrentTextChanged: algorithm = currentText
+                        Layout.minimumWidth: implicitWidth + constants.contentMargins / 2
                     }
                 }
             }
+        }
 
-            Component {
-                id: expirationDateView
+        Component {
+            id: subjectView
+            ColumnLayout {
+                Component.onCompleted: {
+                    yubiKey.getUserName(function (resp) {
+                        if (resp.success) {
+                            if (!subjectCommonName) {
+                                subjectNameInput.text = resp.username
+                            } else {
+                                subjectNameInput.text = subjectCommonName
+                            }
+                        }
+                    })
+                }
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Label {
+                        text: qsTr("Subject name")
+                        font.pixelSize: constants.h3
+                        color: yubicoBlue
+                    }
 
-                ColumnLayout {
+                    TextField {
+                        id: subjectNameInput
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                        Layout.fillWidth: true
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("The subject common name (CN) for the certificate.")
+                        selectionColor: yubicoGreen
+                        onTextChanged: subjectCommonName = text
+                    }
+                }
+            }
+        }
 
-                    Component.onCompleted: calendarWidget.goToMonth(
-                                               new Date(expirationDate))
+        Component {
+            id: expirationDateView
+
+            ColumnLayout {
+
+                Component.onCompleted: calendarWidget.goToMonth(
+                                           new Date(expirationDate))
+
+                GridLayout {
+                    columns: 2
+
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                    Label {
+                        font.pixelSize: constants.h3
+                        color: yubicoBlue
+                        text: qsTr("Expiration date")
+                    }
+
+                    TextField {
+                        text: expirationDate
+                        ToolTip.delay: 1000
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format.")
+                        selectionColor: yubicoGreen
+                        validator: RegExpValidator {
+                            regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
+                        }
+                        onTextChanged: {
+                            var previousValue = expirationDate
+                            expirationDate = text
+
+                            if ((expirationDate.length > previousValue.length)
+                                && (expirationDate.length === 4 || expirationDate.length === 7)
+                            ) {
+                                expirationDate = expirationDate + "-"
+                            }
+                            if (isExpirationDateValid(expirationDate)) {
+                                calendarWidget.goToMonth(new Date(expirationDate))
+                            }
+                        }
+                    }
+
+                    CalendarWidget {
+                        id: calendarWidget
+                        onDateClicked: {
+                            var formatted = Utils.formatDate(date)
+                            if (isExpirationDateValid(formatted)) {
+                                expirationDate = formatted
+                            }
+                        }
+
+                        Layout.columnSpan: 2
+                    }
+                }
+            }
+        }
+
+        Component {
+            id: finishView
+
+            ColumnLayout {
+                Heading2 {
+                    text: qsTr("Confirm selected options:")
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: constants.contentMargins
 
                     GridLayout {
                         columns: 2
-
+                        columnSpacing: constants.contentMargins / 2
                         Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
+                        Layout.topMargin: constants.contentTopMargin
                         Label {
+                            text: qsTr("Slot:")
+                            font.pixelSize: constants.h3
+                            font.bold: true
+                            color: yubicoBlue
+                        }
+                        Label {
+                            text: slot.name + ' (' + slot.hex + ')'
                             font.pixelSize: constants.h3
                             color: yubicoBlue
-                            text: qsTr("Expiration date")
+                        }
+                        Label {
+                            text: qsTr("Output format:")
+                            font.pixelSize: constants.h3
+                            font.bold: true
+                            color: yubicoBlue
+                        }
+                        Label {
+                            text: selfSign ? qsTr("Self-signed certificate") : qsTr(
+                                                 "Certificate Signing Request (CSR)")
+                            font.pixelSize: constants.h3
+                            color: yubicoBlue
+                        }
+                        Label {
+                            text: qsTr("Algorithm:")
+                            font.pixelSize: constants.h3
+                            font.bold: true
+                            color: yubicoBlue
+                        }
+                        Label {
+                            text: algorithm
+                            font.pixelSize: constants.h3
+                            color: yubicoBlue
                         }
 
-                        TextField {
+                        Label {
+                            text: qsTr("Subject name:")
+                            font.pixelSize: constants.h3
+                            font.bold: true
+                            color: yubicoBlue
+                        }
+                        Label {
+                            text: subjectCommonName
+                            font.pixelSize: constants.h3
+                            color: yubicoBlue
+                        }
+
+                        Label {
+                            text: qsTr("Expiration date:")
+                            font.pixelSize: constants.h3
+                            font.bold: true
+                            color: yubicoBlue
+                            visible: selfSign
+                        }
+                        Label {
                             text: expirationDate
-                            ToolTip.delay: 1000
-                            ToolTip.visible: hovered
-                            ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format.")
-                            selectionColor: yubicoGreen
-                            validator: RegExpValidator {
-                                regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
-                            }
-                            onTextChanged: {
-                                var previousValue = expirationDate
-                                expirationDate = text
-
-                                if ((expirationDate.length > previousValue.length)
-                                    && (expirationDate.length === 4 || expirationDate.length === 7)
-                                ) {
-                                    expirationDate = expirationDate + "-"
-                                }
-                                if (isExpirationDateValid(expirationDate)) {
-                                    calendarWidget.goToMonth(new Date(expirationDate))
-                                }
-                            }
-                        }
-
-                        CalendarWidget {
-                            id: calendarWidget
-                            onDateClicked: {
-                                var formatted = Utils.formatDate(date)
-                                if (isExpirationDateValid(formatted)) {
-                                    expirationDate = formatted
-                                }
-                            }
-
-                            Layout.columnSpan: 2
-                        }
-                    }
-                }
-            }
-
-            Component {
-                id: finishView
-
-                ColumnLayout {
-                    Heading2 {
-                        text: qsTr("Confirm selected options:")
-                    }
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: constants.contentMargins
-
-                        GridLayout {
-                            columns: 2
-                            columnSpacing: constants.contentMargins / 2
-                            Layout.fillWidth: true
-                            Layout.topMargin: constants.contentTopMargin
-                            Label {
-                                text: qsTr("Slot:")
-                                font.pixelSize: constants.h3
-                                font.bold: true
-                                color: yubicoBlue
-                            }
-                            Label {
-                                text: slot.name + ' (' + slot.hex + ')'
-                                font.pixelSize: constants.h3
-                                color: yubicoBlue
-                            }
-                            Label {
-                                text: qsTr("Output format:")
-                                font.pixelSize: constants.h3
-                                font.bold: true
-                                color: yubicoBlue
-                            }
-                            Label {
-                                text: selfSign ? qsTr("Self-signed certificate") : qsTr(
-                                                     "Certificate Signing Request (CSR)")
-                                font.pixelSize: constants.h3
-                                color: yubicoBlue
-                            }
-                            Label {
-                                text: qsTr("Algorithm:")
-                                font.pixelSize: constants.h3
-                                font.bold: true
-                                color: yubicoBlue
-                            }
-                            Label {
-                                text: algorithm
-                                font.pixelSize: constants.h3
-                                color: yubicoBlue
-                            }
-
-                            Label {
-                                text: qsTr("Subject name:")
-                                font.pixelSize: constants.h3
-                                font.bold: true
-                                color: yubicoBlue
-                            }
-                            Label {
-                                text: subjectCommonName
-                                font.pixelSize: constants.h3
-                                color: yubicoBlue
-                            }
-
-                            Label {
-                                text: qsTr("Expiration date:")
-                                font.pixelSize: constants.h3
-                                font.bold: true
-                                color: yubicoBlue
-                                visible: selfSign
-                            }
-                            Label {
-                                text: expirationDate
-                                font.pixelSize: constants.h3
-                                color: yubicoBlue
-                                visible: selfSign
-                            }
+                            font.pixelSize: constants.h3
+                            color: yubicoBlue
+                            visible: selfSign
                         }
                     }
                 }
