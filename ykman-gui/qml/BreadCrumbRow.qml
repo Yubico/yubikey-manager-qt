@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.2
 RowLayout {
 
     /**
-     * Type: `[item]`, where `item` has the shape:
+     * Type: `[item]`, where `item` is a string or an object with the shape:
      *
      * {
      *   text: string,
@@ -14,6 +14,8 @@ RowLayout {
      * If `action` is not present, it defaults to popping the stack to the
      * depth of the breadcrumb item. The last breadcrumb item has no action by
      * default.
+     *
+     * If an `item` is a string, it is equivalent to `{ text: item }`.
      */
     property var items
 
