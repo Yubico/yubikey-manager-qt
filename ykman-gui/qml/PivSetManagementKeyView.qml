@@ -86,9 +86,8 @@ ColumnLayout {
     CustomContentColumn {
 
         ViewHeader {
-            heading: qsTr("Change Management Key")
             breadcrumbs: [qsTr("PIV"), qsTr("Configure PINs"), qsTr(
-                    "Set Management Key")]
+                    "Change Management Key")]
         }
 
         ColumnLayout {

@@ -10,7 +10,6 @@ ColumnLayout {
     CustomContentColumn {
 
         ViewHeader {
-            heading: qsTr("Certificates")
             breadcrumbs: [qsTr("PIV"), qsTr("Certificates")]
         }
 

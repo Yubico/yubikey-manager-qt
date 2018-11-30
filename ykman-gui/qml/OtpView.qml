@@ -99,7 +99,6 @@ ColumnLayout {
         visible: !isBusy
 
         ViewHeader {
-            heading: qsTr("OTP")
             breadcrumbs: [qsTr("OTP")]
         }
 

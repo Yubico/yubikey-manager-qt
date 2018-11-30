@@ -56,7 +56,6 @@ ColumnLayout {
     CustomContentColumn {
 
         ViewHeader {
-            heading: qsTr("Interfaces")
             breadcrumbs: [qsTr("Interfaces")]
         }
 

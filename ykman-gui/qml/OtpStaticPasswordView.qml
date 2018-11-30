@@ -51,7 +51,6 @@ ColumnLayout {
     CustomContentColumn {
 
         ViewHeader {
-            heading: qsTr("Static Password")
             breadcrumbs: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
                     views.selectedSlot), qsTr("Static Password")]
         }

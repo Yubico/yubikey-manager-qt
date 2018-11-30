@@ -45,7 +45,6 @@ ColumnLayout {
     CustomContentColumn {
 
         ViewHeader {
-            heading: qsTr("Reset FIDO")
             breadcrumbs: [qsTr("FIDO2"), qsTr("Reset FIDO")]
         }
 

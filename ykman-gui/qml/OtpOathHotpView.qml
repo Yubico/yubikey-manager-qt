@@ -32,7 +32,6 @@ ColumnLayout {
 
     CustomContentColumn {
         ViewHeader {
-            heading: qsTr("OATH-HOTP")
             breadcrumbs: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
                     views.selectedSlot), qsTr("OATH-HOTP")]
         }

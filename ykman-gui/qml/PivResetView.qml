@@ -34,7 +34,6 @@ ColumnLayout {
         visible: !isBusy
 
         ViewHeader {
-            heading: qsTr("Reset PIV")
             breadcrumbs: [qsTr("PIV"), qsTr("Reset PIV")]
         }
 

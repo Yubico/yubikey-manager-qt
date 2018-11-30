@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 ColumnLayout {
 
     property var breadcrumbs
-    property string heading
+    property string heading: breadcrumbs[breadcrumbs.length - 1]
 
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 

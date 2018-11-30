@@ -62,7 +62,6 @@ ColumnLayout {
         visible: !isBusy
 
         ViewHeader {
-            heading: qsTr("FIDO2")
             breadcrumbs: [qsTr("FIDO2")]
         }
 

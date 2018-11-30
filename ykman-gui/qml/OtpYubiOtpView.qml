@@ -54,7 +54,6 @@ ColumnLayout {
     CustomContentColumn {
 
         ViewHeader {
-            heading: qsTr("Yubico OTP")
             breadcrumbs: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
                     views.selectedSlot), qsTr("Yubico OTP")]
         }

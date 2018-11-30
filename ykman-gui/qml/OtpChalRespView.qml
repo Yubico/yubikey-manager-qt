@@ -40,7 +40,6 @@ ColumnLayout {
 
     CustomContentColumn {
         ViewHeader {
-            heading: qsTr("Challenge-response")
             breadcrumbs: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
                     views.selectedSlot), qsTr("Challenge-response")]
         }

@@ -93,7 +93,6 @@ ColumnLayout {
         visible: !isBusy
 
         ViewHeader {
-            heading: qsTr("Setup for macOS")
             breadcrumbs: [qsTr("PIV"), qsTr("Setup for macOS")]
         }
 

@@ -71,7 +71,6 @@ ColumnLayout {
         visible: !isBusy
 
         ViewHeader {
-            heading: qsTr("Configure PINs")
             breadcrumbs: [qsTr("PIV"), qsTr("Configure PINs")]
         }
 

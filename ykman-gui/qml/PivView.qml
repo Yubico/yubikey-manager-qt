@@ -49,7 +49,6 @@ ColumnLayout {
 
         RowLayout {
             ViewHeader {
-                heading: qsTr("PIV")
                 breadcrumbs: [qsTr("PIV")]
             }
             CustomButton {
