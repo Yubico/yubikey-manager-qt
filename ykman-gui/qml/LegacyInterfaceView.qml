@@ -30,7 +30,7 @@ ColumnLayout {
     function configureInterfaces() {
         yubiKey.setMode(getEnabledInterfaces(), function (error) {
             if (error) {
-                legacyInterfacesErrorPopup.open()
+                errorPopup.show(qsTr("Failed to configure interfaces. Make sure the YubiKey does not have restricted access."))
             } else {
                 if (!yubiKey.canWriteConfig) {
                     reInsertYubiKey.open()
@@ -51,10 +51,6 @@ ColumnLayout {
 
     function validCombination() {
         return otp.checked || fido.checked || ccid.checked
-    }
-
-    LegacyInterfaceErrorPopup {
-        id: legacyInterfacesErrorPopup
     }
 
     CustomContentColumn {
