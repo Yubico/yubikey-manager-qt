@@ -63,9 +63,11 @@ ColumnLayout {
                 load()
             } else {
                 if (resp.error_id === 'write error') {
-                    views.otpWriteError()
+                    views.otpGeneralError("Failed to swap slots. Make sure the YubiKey does not have restricted access.")
+                } else if (resp.error_message) {
+                    views.otpGeneralError(resp.error_message)
                 } else {
-                    views.otpGeneralError(resp.error_id)
+                    views.otpGeneralError("Unknown error.")
                 }
             }
         })
