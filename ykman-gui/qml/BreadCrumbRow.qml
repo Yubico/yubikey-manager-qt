@@ -25,7 +25,7 @@ RowLayout {
                         })
 
     function getAction(items, index) {
-        if (items[index].action) {
+        if (typeof items[index] === 'object' && typeof items[index].action === 'function') {
             return items[index].action
         } else if (index < items.length - 1) {
             return function () { popToDepth(index + 1) }
@@ -33,7 +33,11 @@ RowLayout {
     }
 
     function getText(item) {
-        return item.text
+        if (typeof item === 'string') {
+            return item
+        } else {
+            return item.text
+        }
     }
 
     BreadCrumb {
