@@ -70,7 +70,6 @@ ColumnLayout {
             Layout.fillHeight: true
             Layout.fillWidth: true
             spacing: 30
-            id: mainRow
 
             ColumnLayout {
                 Heading2 {
@@ -96,15 +95,7 @@ ColumnLayout {
                 }
             }
 
-            Rectangle {
-                id: separator
-                Layout.minimumWidth: 1
-                Layout.maximumWidth: 1
-                Layout.maximumHeight: mainRow.height * 0.7
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                color: yubicoGrey
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            ColumnSeparator {
             }
 
             ColumnLayout {

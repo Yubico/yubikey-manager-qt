@@ -148,7 +148,6 @@ ColumnLayout {
             Layout.fillHeight: true
             Layout.fillWidth: true
             spacing: 60
-            id: mainRow
 
             GridLayout {
                 visible: yubiKey.supportsUsbConfiguration()
@@ -195,17 +194,9 @@ ColumnLayout {
                 }
             }
 
-            Rectangle {
+            ColumnSeparator {
                 visible: yubiKey.supportsNfcConfiguration()
                          && yubiKey.supportsUsbConfiguration()
-                id: separator
-                Layout.minimumWidth: 1
-                Layout.maximumWidth: 1
-                Layout.maximumHeight: mainRow.height * 0.7
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                color: yubicoGrey
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
             GridLayout {

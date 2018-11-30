@@ -130,7 +130,6 @@ ColumnLayout {
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.fillWidth: true
             Layout.preferredWidth: constants.contentWidth
-            id: mainRow
             GridLayout {
                 visible: !!certificate
                 columns: 2

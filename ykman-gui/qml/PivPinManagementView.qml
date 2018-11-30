@@ -78,7 +78,6 @@ ColumnLayout {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.fillWidth: true
-            id: mainRow
             spacing: 30
 
             ColumnLayout {
@@ -114,15 +113,7 @@ ColumnLayout {
                 }
             }
 
-            Rectangle {
-                id: separator
-                Layout.minimumWidth: 1
-                Layout.maximumWidth: 1
-                Layout.maximumHeight: mainRow.height * 0.7
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                color: yubicoGrey
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            ColumnSeparator {
             }
 
             ColumnLayout {
@@ -148,15 +139,7 @@ ColumnLayout {
                 }
             }
 
-            Rectangle {
-                id: separator2
-                Layout.minimumWidth: 1
-                Layout.maximumWidth: 1
-                Layout.maximumHeight: mainRow.height * 0.7
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                color: yubicoGrey
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            ColumnSeparator {
             }
 
             ColumnLayout {

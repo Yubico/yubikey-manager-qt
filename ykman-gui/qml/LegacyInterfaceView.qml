@@ -63,7 +63,6 @@ ColumnLayout {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Layout.fillHeight: true
             Layout.fillWidth: true
-            id: mainRow
 
             GridLayout {
                 columns: 3

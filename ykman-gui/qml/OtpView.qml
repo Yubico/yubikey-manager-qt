@@ -107,7 +107,6 @@ ColumnLayout {
             Layout.fillHeight: true
             Layout.fillWidth: true
             spacing: 30
-            id: mainRow
 
             ColumnLayout {
                 Heading2 {
@@ -151,14 +150,8 @@ ColumnLayout {
             ColumnLayout {
 
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Rectangle {
-                    Layout.minimumWidth: 1
-                    Layout.maximumWidth: 1
-                    Layout.maximumHeight: mainRow.height * 0.3
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    color: yubicoGrey
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                ColumnSeparator {
+                    Layout.maximumHeight: parent.height * 0.3
                 }
                 CustomButton {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -169,14 +162,8 @@ ColumnLayout {
                     flat: true
                     toolTipText: qsTr("Swap the configurations between the two slots")
                 }
-                Rectangle {
-                    Layout.minimumWidth: 1
-                    Layout.maximumWidth: 1
-                    Layout.maximumHeight: mainRow.height * 0.3
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    color: yubicoGrey
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                ColumnSeparator {
+                    Layout.maximumHeight: parent.height * 0.3
                 }
             }
 
