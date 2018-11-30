@@ -62,7 +62,7 @@ install:
 
 before_script:
   - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_BRANCH" == "build-docker-images" ]]
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_EVENT_TYPE" == "cron" ]]
     then
       echo "Building Docker images"
       time docker build -t yubikey-manager-qt-ci-base docker/bionic-base && \
