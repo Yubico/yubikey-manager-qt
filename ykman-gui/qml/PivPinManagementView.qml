@@ -9,10 +9,13 @@ ColumnLayout {
     property bool isBusy
 
     readonly property bool hasProtectedKey: pivData.has_protected_key || false
-    readonly property var pivData: yubiKey.piv || {}
+    readonly property var pivData: yubiKey.piv || {
+
+                                   }
     readonly property bool pinBlocked: pinRetries < 1
     readonly property int pinRetries: pivData.pin_tries || 0
-    readonly property bool pukBlocked: yubiKey.pivPukBlocked || pivData.puk_blocked || false
+    readonly property bool pukBlocked: yubiKey.pivPukBlocked
+                                       || pivData.puk_blocked || false
 
     StackView.onActivating: load()
 

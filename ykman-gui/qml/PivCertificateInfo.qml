@@ -25,28 +25,27 @@ ColumnLayout {
 
     function deleteCertificate() {
         confirmationPopup.show(
-            qsTr("This will delete the certificate stored in slot '%1' of your YubiKey, and cannot be undone. Note that the private key is not deleted." ).arg(slot.hex),
-            function() {
-                function _finish(pin, managementKey) {
-                    yubiKey.pivDeleteCertificate(slot.id, pin, managementKey, function (resp) {
-                        if (resp.success) {
-                            pivSuccessPopup.open()
-                        } else {
-                            pivError.showResponseError(resp)
-                        }
-                    })
-                }
+                    qsTr("This will delete the certificate stored in slot '%1' of your YubiKey, and cannot be undone. Note that the private key is not deleted.").arg(
+                        slot.hex), function () {
+                            function _finish(pin, managementKey) {
+                                yubiKey.pivDeleteCertificate(slot.id, pin,
+                                                             managementKey,
+                                                             function (resp) {
+                                                                 if (resp.success) {
+                                                                     pivSuccessPopup.open()
+                                                                 } else {
+                                                                     pivError.showResponseError(
+                                                                                 resp)
+                                                                 }
+                                                             })
+                            }
 
-                views.pivGetPinOrManagementKey(
-                    function (pin) {
-                        _finish(pin, false)
-                    },
-                    function (managementKey) {
-                        _finish(false, managementKey)
-                    }
-                )
-            }
-        )
+                            views.pivGetPinOrManagementKey(function (pin) {
+                                _finish(pin, false)
+                            }, function (managementKey) {
+                                _finish(false, managementKey)
+                            })
+                        })
     }
 
     function exportCertificate(fileUrl) {

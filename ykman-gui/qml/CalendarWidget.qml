@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.2
 import Qt.labs.calendar 1.0
 
-
 ListView {
     id: listview
 

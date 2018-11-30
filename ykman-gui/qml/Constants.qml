@@ -16,7 +16,6 @@ QtObject {
     readonly property int h3: 18
     readonly property int h4: 14
     readonly property string fontFamily: "Helvetica Neue"
-
     readonly property int contentMargins: 40
     readonly property int contentTopMargin: 20
     readonly property int contentBottomMargin: 20

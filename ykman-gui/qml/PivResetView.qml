@@ -9,23 +9,19 @@ ColumnLayout {
 
     function resetPiv() {
         confirmationPopup.show(
-            [
-                qsTr("Are you sure you want to reset PIV? This will delete all PIV data, and restore all PINs to the default values."),
-                qsTr("This action cannot be undone!"),
-            ],
-            function () {
-                isBusy = true
-                yubiKey.pivReset(function (resp) {
-                    isBusy = false
-                    if (resp.success) {
-                        pivSuccessPopup.open()
-                        views.pop()
-                    } else {
-                        pivError.showResponseError(resp)
-                    }
-                })
-            }
-        )
+                    [qsTr("Are you sure you want to reset PIV? This will delete all PIV data, and restore all PINs to the default values."), qsTr(
+                         "This action cannot be undone!")], function () {
+                             isBusy = true
+                             yubiKey.pivReset(function (resp) {
+                                 isBusy = false
+                                 if (resp.success) {
+                                     pivSuccessPopup.open()
+                                     views.pop()
+                                 } else {
+                                     pivError.showResponseError(resp)
+                                 }
+                             })
+                         })
     }
 
     BusyIndicator {

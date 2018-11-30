@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.2
 
 RowLayout {
 
-
     /**
      * Type: `[item]`, where `item` has the shape:
      *
@@ -17,7 +16,6 @@ RowLayout {
      * default.
      */
     property var items
-
 
     /**
      * Type: `item` as described in `items` docstring

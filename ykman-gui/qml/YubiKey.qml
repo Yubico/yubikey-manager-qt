@@ -59,11 +59,9 @@ Python {
         case 'touchRequired':
             touchYubiKey.open()
             break
-
         case 'touchNotRequired':
             touchYubiKey.close()
             break
-
         default:
             console.log('Recevied event:', data)
         }
@@ -289,7 +287,10 @@ Python {
             })
         } else {
             if (doneCallback) {
-                doneCallback({ success: false, error_id: 'no_device' })
+                doneCallback({
+                                 success: false,
+                                 error_id: 'no_device'
+                             })
             }
         }
     }
@@ -468,7 +469,6 @@ Python {
         doPivCall('yubikey.controller.piv_can_parse', [fileUrl], cb)
     }
 
-
     function pivDeleteCertificate(slotName, pin, keyHex, cb) {
         doPivCall('yubikey.controller.piv_delete_certificate',
                   [slotName, pin, keyHex], cb)
@@ -476,23 +476,12 @@ Python {
 
     function pivGenerateCertificate(args) {
         doPivCall('yubikey.controller.piv_generate_certificate',
-            [
-                args.slotName,
-                args.algorithm,
-                args.commonName,
-                args.expirationDate,
-                !!args.selfSign,
-                args.csrFileUrl,
-                args.pin,
-                args.keyHex,
-            ],
-            args.callback
-        )
+                  [args.slotName, args.algorithm, args.commonName, args.expirationDate, !!args.selfSign, args.csrFileUrl, args.pin, args.keyHex],
+                  args.callback)
     }
 
     function pivExportCertificate(slot, fileUrl, cb) {
         doPivCall('yubikey.controller.piv_export_certificate',
                   [slot, fileUrl], cb)
-
     }
 }

@@ -18,18 +18,18 @@ ColumnLayout {
 
     function programStaticPassword() {
         yubiKey.programStaticPassword(views.selectedSlot, passwordInput.text,
-                                        keyboardLayout, function (resp) {
-                                            if (resp.success) {
-                                                views.otpSuccess()
-                                            } else {
-                                                if (resp.error === 'write error') {
-                                                    views.otpWriteError()
-                                                } else {
-                                                    views.otpFailedToConfigureErrorPopup(
-                                                                resp.error)
-                                                }
-                                            }
-                                        })
+                                      keyboardLayout, function (resp) {
+                                          if (resp.success) {
+                                              views.otpSuccess()
+                                          } else {
+                                              if (resp.error === 'write error') {
+                                                  views.otpWriteError()
+                                              } else {
+                                                  views.otpFailedToConfigureErrorPopup(
+                                                              resp.error)
+                                              }
+                                          }
+                                      })
     }
 
     function generatePassword() {
@@ -66,7 +66,7 @@ ColumnLayout {
                         text: qsTr("OTP")
                     }, {
                         text: SlotUtils.slotNameCapitalized(
-                                    views.selectedSlot) || ""
+                                  views.selectedSlot) || ""
                     }, {
                         text: qsTr("Static Password")
                     }]

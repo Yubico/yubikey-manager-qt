@@ -22,20 +22,20 @@ ColumnLayout {
 
     function programChallengeResponse() {
         yubiKey.programChallengeResponse(views.selectedSlot,
-                                           secretKeyInput.text,
-                                           requireTouchCb.checked,
-                                           function (resp) {
-                                               if (resp.success) {
-                                                   views.otpSuccess()
-                                               } else {
-                                                   if (resp.error === 'write error') {
-                                                       views.otpWriteError()
-                                                   } else {
-                                                       views.otpFailedToConfigureErrorPopup(
-                                                                   resp.error)
-                                                   }
-                                               }
-                                           })
+                                         secretKeyInput.text,
+                                         requireTouchCb.checked,
+                                         function (resp) {
+                                             if (resp.success) {
+                                                 views.otpSuccess()
+                                             } else {
+                                                 if (resp.error === 'write error') {
+                                                     views.otpWriteError()
+                                                 } else {
+                                                     views.otpFailedToConfigureErrorPopup(
+                                                                 resp.error)
+                                                 }
+                                             }
+                                         })
     }
 
     OtpSlotAlreadyConfiguredPopup {
@@ -55,7 +55,7 @@ ColumnLayout {
                         text: qsTr("OTP")
                     }, {
                         text: SlotUtils.slotNameCapitalized(
-                                    views.selectedSlot) || ""
+                                  views.selectedSlot) || ""
                     }, {
                         text: qsTr("Challenge-response")
                     }]

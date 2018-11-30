@@ -16,18 +16,18 @@ ColumnLayout {
 
     function programOathHotp() {
         yubiKey.programOathHotp(views.selectedSlot, secretKeyInput.text,
-                                  digits.currentText, function (resp) {
-                                      if (resp.success) {
-                                          views.otpSuccess()
-                                      } else {
-                                          if (resp.error === 'write error') {
-                                              views.otpWriteError()
-                                          } else {
-                                              views.otpFailedToConfigureErrorPopup(
-                                                          resp.error)
-                                          }
-                                      }
-                                  })
+                                digits.currentText, function (resp) {
+                                    if (resp.success) {
+                                        views.otpSuccess()
+                                    } else {
+                                        if (resp.error === 'write error') {
+                                            views.otpWriteError()
+                                        } else {
+                                            views.otpFailedToConfigureErrorPopup(
+                                                        resp.error)
+                                        }
+                                    }
+                                })
     }
 
     OtpSlotAlreadyConfiguredPopup {
@@ -47,7 +47,7 @@ ColumnLayout {
                         text: qsTr("OTP")
                     }, {
                         text: SlotUtils.slotNameCapitalized(
-                                    views.selectedSlot) || ""
+                                  views.selectedSlot) || ""
                     }, {
                         text: qsTr("OATH-HOTP")
                     }]

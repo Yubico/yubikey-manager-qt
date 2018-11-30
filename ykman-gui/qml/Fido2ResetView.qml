@@ -11,14 +11,10 @@ ColumnLayout {
 
     function initiateReset() {
         confirmationPopup.show(
-            [
-                qsTr("Are you sure you want to reset FIDO? This will delete all FIDO credentials, including FIDO U2F credentials."),
-                qsTr("This action cannot be undone!"),
-            ],
-            function () {
-                reInsertYubiKey.open()
-            }
-        )
+                    [qsTr("Are you sure you want to reset FIDO? This will delete all FIDO credentials, including FIDO U2F credentials."), qsTr(
+                         "This action cannot be undone!")], function () {
+                             reInsertYubiKey.open()
+                         })
     }
 
     function resetOnReInsert() {

@@ -10,12 +10,15 @@ ColumnLayout {
     readonly property bool hasCurrentManagementKeyInput: !hasProtectedKey
     readonly property bool hasNewManagementKeyInput: true
     readonly property bool hasPinInput: hasProtectedKey || storeManagementKey
-    readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key || false
+    readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key
+                                            || false
     readonly property bool storeManagementKey: storeManagementKeyCheckbox.checked
     readonly property bool validCurrentManagementKey: (!hasCurrentManagementKeyInput
-        || currentManagementKey.text.length === constants.pivManagementKeyHexLength)
+                                                       || currentManagementKey.text.length
+                                                       === constants.pivManagementKeyHexLength)
     readonly property bool validNewManagementKey: (!hasNewManagementKeyInput
-        || newManagementKey.text.length === constants.pivManagementKeyHexLength)
+                                                   || newManagementKey.text.length
+                                                   === constants.pivManagementKeyHexLength)
 
     function clearDefaultManagementKey() {
         if (useDefaultCurrentManagementKeyCheckbox.checked) {
@@ -25,7 +28,7 @@ ColumnLayout {
     }
 
     function generateManagementKey() {
-        yubiKey.pivGenerateRandomMgmKey(function(key) {
+        yubiKey.pivGenerateRandomMgmKey(function (key) {
             newManagementKey.text = key
         })
     }
@@ -51,43 +54,32 @@ ColumnLayout {
 
         function _finish(pin) {
             isBusy = true
-            yubiKey.pivChangeMgmKey(
-                function(resp) {
-                    isBusy = false
+            yubiKey.pivChangeMgmKey(function (resp) {
+                isBusy = false
 
-                    if (resp.success) {
-                        pivSuccessPopup.open()
-                        views.pivPinManagement()
+                if (resp.success) {
+                    pivSuccessPopup.open()
+                    views.pivPinManagement()
+                } else {
+                    pivError.showResponseError(resp, {
+                                                   mgm_key_bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters.").arg(constants.pivManagementKeyHexLength),
+                                                   mgm_key_required: qsTr("Please enter the current management key."),
+                                                   pin_required: qsTr("Please enter the PIN."),
+                                                   wrong_mgm_key: qsTr("Wrong current management key.")
+                                               })
 
-                    } else {
-                        pivError.showResponseError(
-                            resp,
-                            {
-                                mgm_key_bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters.")
-                                    .arg(constants.pivManagementKeyHexLength),
-                                mgm_key_required: qsTr("Please enter the current management key."),
-                                pin_required: qsTr("Please enter the PIN."),
-                                wrong_mgm_key: qsTr("Wrong current management key."),
-                            }
-                        )
-
-                        if (resp.error_id === 'wrong_mgm_key') {
-                            clearDefaultManagementKey()
-
-                        } else if (resp.error_id === 'pin_blocked') {
-                            if (hasProtectedKey) {
-                                views.pivPinManagement()
-                            } else {
-                                views.pop()
-                            }
+                    if (resp.error_id === 'wrong_mgm_key') {
+                        clearDefaultManagementKey()
+                    } else if (resp.error_id === 'pin_blocked') {
+                        if (hasProtectedKey) {
+                            views.pivPinManagement()
+                        } else {
+                            views.pop()
                         }
                     }
-                },
-                pin,
-                currentManagementKey.text,
-                newManagementKey.text,
-                storeManagementKey
-            )
+                }
+            }, pin, currentManagementKey.text, newManagementKey.text,
+            storeManagementKey)
         }
     }
 
@@ -101,12 +93,12 @@ ColumnLayout {
 
             BreadCrumbRow {
                 items: [{
-                    text: qsTr("PIV")
-                }, {
-                    text: qsTr("Configure PINs")
-                }, {
-                    text: qsTr("Set Management Key")
-                }]
+                        text: qsTr("PIV")
+                    }, {
+                        text: qsTr("Configure PINs")
+                    }, {
+                        text: qsTr("Set Management Key")
+                    }]
             }
         }
 

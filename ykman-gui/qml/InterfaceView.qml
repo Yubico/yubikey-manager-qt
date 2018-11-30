@@ -45,17 +45,17 @@ ColumnLayout {
     function writeInterfaces() {
         views.lock()
         yubiKey.writeConfig(newApplicationsEnabledOverUsb,
-                             newApplicationsEnabledOverNfc, lockCode,
-                             function (resp) {
-                                 if (resp.success) {
-                                     interfacesSuccessPopup.open()
-                                     views.unlock()
-                                 } else {
-                                     console.log(resp.error)
-                                     views.unlock()
-                                     errorLockCodePopup.open()
-                                 }
-                             })
+                            newApplicationsEnabledOverNfc, lockCode,
+                            function (resp) {
+                                if (resp.success) {
+                                    interfacesSuccessPopup.open()
+                                    views.unlock()
+                                } else {
+                                    console.log(resp.error)
+                                    views.unlock()
+                                    errorLockCodePopup.open()
+                                }
+                            })
     }
 
     function configurationHasChanged() {

@@ -36,19 +36,19 @@ ColumnLayout {
 
     function programYubiOtp() {
         yubiKey.programOtp(views.selectedSlot, publicIdInput.text,
-                            privateIdInput.text, secretKeyInput.text,
-                            function (resp) {
-                                if (resp.success) {
-                                    views.otpSuccess()
-                                } else {
-                                    if (resp.error === 'write error') {
-                                        views.otpWriteError()
-                                    } else {
-                                        views.otpFailedToConfigureErrorPopup(
-                                                    resp.error)
-                                    }
-                                }
-                            })
+                           privateIdInput.text, secretKeyInput.text,
+                           function (resp) {
+                               if (resp.success) {
+                                   views.otpSuccess()
+                               } else {
+                                   if (resp.error === 'write error') {
+                                       views.otpWriteError()
+                                   } else {
+                                       views.otpFailedToConfigureErrorPopup(
+                                                   resp.error)
+                                   }
+                               }
+                           })
     }
 
     OtpSlotAlreadyConfiguredPopup {
@@ -70,7 +70,7 @@ ColumnLayout {
                         text: qsTr("OTP")
                     }, {
                         text: SlotUtils.slotNameCapitalized(
-                                    views.selectedSlot) || ""
+                                  views.selectedSlot) || ""
                     }, {
                         text: qsTr("Yubico OTP")
                     }]
@@ -167,8 +167,8 @@ ColumnLayout {
         ButtonsBar {
             finishCallback: finish
             finishEnabled: publicIdInput.acceptableInput
-                && privateIdInput.acceptableInput
-                && secretKeyInput.acceptableInput
+                           && privateIdInput.acceptableInput
+                           && secretKeyInput.acceptableInput
             finishTooltip: qsTr("Finish and write the configuration to the YubiKey")
         }
     }

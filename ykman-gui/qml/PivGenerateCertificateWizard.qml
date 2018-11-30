@@ -25,15 +25,16 @@ ColumnLayout {
 
     function deleteCertificate(pin, managementKey) {
         isBusy = true
-        yubiKey.pivDeleteCertificate(slot.id, pin, managementKey, function (resp) {
-            isBusy = false
-            if (resp.success) {
-                pivSuccessPopup.open()
-            } else {
-                pivError.showResponseError(resp)
-            }
-            views.pop()
-        })
+        yubiKey.pivDeleteCertificate(slot.id, pin, managementKey,
+                                     function (resp) {
+                                         isBusy = false
+                                         if (resp.success) {
+                                             pivSuccessPopup.open()
+                                         } else {
+                                             pivError.showResponseError(resp)
+                                         }
+                                         views.pop()
+                                     })
     }
 
     function finish(confirmOverwrite, csrFileUrl) {
@@ -336,12 +337,13 @@ ColumnLayout {
                                 expirationDate = text
 
                                 if ((expirationDate.length > previousValue.length)
-                                    && (expirationDate.length === 4 || expirationDate.length === 7)
-                                ) {
+                                        && (expirationDate.length === 4
+                                            || expirationDate.length === 7)) {
                                     expirationDate = expirationDate + "-"
                                 }
                                 if (isExpirationDateValid(expirationDate)) {
-                                    calendarWidget.goToMonth(new Date(expirationDate))
+                                    calendarWidget.goToMonth(
+                                                new Date(expirationDate))
                                 }
                             }
                         }
@@ -454,7 +456,7 @@ ColumnLayout {
             finishEnabled: isInputValid()
             finishText: qsTr("Generate")
             finishTooltip: qsTr("Finish and generate the private key and %1").arg(
-                              selfSign ? qsTr("certificate") : qsTr("CSR"))
+                               selfSign ? qsTr("certificate") : qsTr("CSR"))
         }
     }
 }
