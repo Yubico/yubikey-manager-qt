@@ -42,10 +42,6 @@ ColumnLayout {
         }
     }
 
-    TouchYubiKeyPopup {
-        id: touchYubiKey
-    }
-
     CustomContentColumn {
 
         ColumnLayout {
