@@ -178,8 +178,7 @@ StackView {
     }
 
     function otpGeneralError(error) {
-        otpGeneralErrorPopup.error = error
-        otpGeneralErrorPopup.open()
+        errorPopup.show(error)
     }
 
     Component {
@@ -224,10 +223,6 @@ StackView {
 
     ErrorPopup {
         id: errorPopup
-    }
-
-    OtpGeneralErrorPopup {
-        id: otpGeneralErrorPopup
     }
 
     Component {
