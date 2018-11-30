@@ -56,7 +56,7 @@ def catch_error(f):
             logger.error('Uncaught exception', exc_info=e)
             return unknown_failure(e)
 
-        except FailedOpeningDeviceException as e:
+        except FailedOpeningDeviceException:
             return failure('open_device_failed')
 
         except Exception as e:
