@@ -23,7 +23,7 @@ ChangePinView {
                 successPopup.open()
                 views.pop()
             } else {
-                pivError.showResponseError(resp, {
+                errorPopup.showResponseError(resp, {
                                                wrong_pin: qsTr("Wrong current PIN. Tries remaining: %1").arg(
                                                               resp.tries_left),
                                                pin_blocked: qsTr("PIN is blocked. Use the PUK to unlock it, or reset the PIV application."),

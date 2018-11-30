@@ -58,13 +58,13 @@ ColumnLayout {
                                         "Remove and re-insert your YubiKey to start the macOS pairing setup.")
                             views.pop()
                         } else {
-                            pivError.showResponseError(resp)
+                            errorPopup.showResponseError(resp)
                         }
                         isBusy = false
                     })
                 } else {
                     isBusy = false
-                    pivError.showResponseError(resp)
+                    errorPopup.showResponseError(resp)
                 }
             })
         }

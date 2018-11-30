@@ -31,7 +31,7 @@ ColumnLayout {
                                          if (resp.success) {
                                              successPopup.open()
                                          } else {
-                                             pivError.showResponseError(resp)
+                                             errorPopup.showResponseError(resp)
                                          }
                                          views.pop()
                                      })
@@ -65,7 +65,7 @@ ColumnLayout {
                                                pin: pin,
                                                keyHex: managementKey,
                                                callback: function (resp) {
-                                                   pivError.showResponseError(
+                                                   errorPopup.showResponseError(
                                                                resp)
                                                    if (resp.success) {
                                                        if (selfSign) {

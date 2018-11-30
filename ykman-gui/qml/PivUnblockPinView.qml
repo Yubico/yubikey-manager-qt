@@ -27,7 +27,7 @@ ChangePinView {
                 successPopup.open()
                 views.pop()
             } else {
-                pivError.showResponseError(resp)
+                errorPopup.showResponseError(resp)
 
                 if (resp.error_id === 'puk_blocked') {
                     views.pop()

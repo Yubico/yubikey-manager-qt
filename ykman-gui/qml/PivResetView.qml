@@ -18,7 +18,7 @@ ColumnLayout {
                                      successPopup.open()
                                      views.pop()
                                  } else {
-                                     pivError.showResponseError(resp)
+                                     errorPopup.showResponseError(resp)
                                  }
                              })
                          })

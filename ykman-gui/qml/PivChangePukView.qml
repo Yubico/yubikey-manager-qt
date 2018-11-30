@@ -24,7 +24,7 @@ ChangePinView {
                 successPopup.open()
                 views.pop()
             } else {
-                pivError.showResponseError(resp, {
+                errorPopup.showResponseError(resp, {
                                                wrong_puk: qsTr("Wrong current PUK. Tries remaning: %1").arg(
                                                               resp.tries_left)
                                            })
