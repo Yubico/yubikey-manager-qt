@@ -4,13 +4,10 @@ import QtQuick.Layouts 1.2
 
 InlinePopup {
     property string message: qsTr("Success!")
-    property string bodyMessage: ""
 
     standardButtons: Dialog.Ok
-    onClosed: bodyMessage = ""
 
     function show(msg) {
-        bodyMessage = msg
         open()
     }
 
@@ -23,19 +20,6 @@ InlinePopup {
             horizontalAlignment: Text.AlignHCenter
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillWidth: true
-        }
-
-        Label {
-            width: parent.width
-            text: bodyMessage
-            visible: bodyMessage
-            horizontalAlignment: Text.AlignHCenter
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.fillWidth: true
-            Layout.topMargin: constants.contentTopMargin
-            wrapMode: Text.WordWrap
-            color: yubicoBlue
-            font.pixelSize: constants.h2
         }
     }
 }
