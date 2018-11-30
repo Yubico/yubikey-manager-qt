@@ -43,10 +43,8 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [qsTr("OTP"),
-                        SlotUtils.slotNameCapitalized(views.selectedSlot),
-                        qsTr("OATH-HOTP"),
-                    ]
+                items: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
+                        views.selectedSlot), qsTr("OATH-HOTP")]
             }
         }
         RowLayout {

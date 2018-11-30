@@ -66,10 +66,8 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [qsTr("OTP"),
-                        SlotUtils.slotNameCapitalized(views.selectedSlot),
-                        qsTr("Yubico OTP"),
-                    ]
+                items: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
+                        views.selectedSlot), qsTr("Yubico OTP")]
             }
         }
         GridLayout {

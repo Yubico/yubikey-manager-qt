@@ -189,11 +189,9 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [qsTr("PIV"),
-                        qsTr("Certificates"),
-                        qsTr("Generate: %1 (%2/%3)").arg(slot.name).arg(
-                                  currentStep).arg(numSteps)
-                    ]
+                items: [qsTr("PIV"), qsTr("Certificates"), qsTr(
+                        "Generate: %1 (%2/%3)").arg(slot.name).arg(
+                        currentStep).arg(numSteps)]
             }
 
             StackView {
