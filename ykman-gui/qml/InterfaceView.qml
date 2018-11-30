@@ -53,7 +53,7 @@ ColumnLayout {
                                 } else {
                                     console.log(resp.error_id)
                                     views.unlock()
-                                    errorLockCodePopup.open()
+                                    errorPopup.show(qsTr("Failed to configure interfaces"))
                                 }
                             })
     }
@@ -266,10 +266,6 @@ ColumnLayout {
         InterFaceLockCodePopup {
             id: lockCodePopup
             onAccepted: writeInterfaces()
-        }
-
-        InterfacesErrorPopup {
-            id: errorLockCodePopup
         }
 
         ButtonsBar {
