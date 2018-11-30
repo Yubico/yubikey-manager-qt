@@ -349,7 +349,7 @@ class Controller(object):
             unpadded = key.upper().rstrip('=').replace(' ', '')
             key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
             with self._open_otp_controller() as controller:
-                controller.program_hotp(slot, key, hotp8=(digits == 8))
+                controller.program_hotp(slot, key, hotp8=(int(digits) == 8))
             return {'success': True, 'error': None}
         except YkpersError as e:
             if e.errno == 3:
