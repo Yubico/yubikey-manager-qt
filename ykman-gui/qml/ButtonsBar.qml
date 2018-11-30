@@ -19,16 +19,8 @@ RowLayout {
     Layout.preferredWidth: constants.contentWidth
 
     BackButton {
-        id: nonDefaultBackButton
         flat: true
         onClickedCallback: backCallback
-        visible: backCallback
-        Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
-    }
-
-    BackButton {
-        flat: true
-        visible: !nonDefaultBackButton.visible
         Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
     }
 
