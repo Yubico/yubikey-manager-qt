@@ -37,9 +37,10 @@ RowLayout {
     function getText(item) {
         if (typeof item === 'string') {
             return item
-        } else {
+        } else if (item) {
             return item.text
         }
+        return "UNDEFINED"
     }
 
     BreadCrumb {
