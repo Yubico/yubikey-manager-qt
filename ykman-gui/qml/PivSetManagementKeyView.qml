@@ -42,7 +42,7 @@ ColumnLayout {
         }
     }
 
-    function finish(currentManagementKey, newManagementKey, pin) {
+    function finish() {
         if (hasProtectedKey || storeManagementKey) {
             pivPinPopup.getPinAndThen(_finish)
         } else {
@@ -84,8 +84,8 @@ ColumnLayout {
                     }
                 },
                 pin,
-                currentManagementKey,
-                newManagementKey,
+                currentManagementKey.text,
+                newManagementKey.text,
                 storeManagementKey
             )
         }
@@ -168,22 +168,10 @@ ColumnLayout {
             }
         }
 
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-            Layout.preferredWidth: constants.contentWidth
-            BackButton {
-                flat: true
-                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
-            }
-            FinishButton {
-                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                highlighted: true
-                onClicked: finish(currentManagementKey.text,
-                                  newManagementKey.text)
-                enabled: validCurrentManagementKey && validNewManagementKey
-                toolTipText: qsTr("Finish and change the management key")
-            }
+        ButtonsBar {
+            finishCallback: finish
+            finishEnabled: validCurrentManagementKey && validNewManagementKey
+            finishTooltip: qsTr("Finish and change the management key")
         }
     }
 }

@@ -166,9 +166,8 @@ ColumnLayout {
                 }
             }
         }
-        BackButton {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
-            flat: true
+
+        ButtonsBar {
         }
     }
 }
