@@ -1,9 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.2
 
-StandardPopup {
-
-    heading: qsTr("Error!")
+ErrorPopup {
 
     function getDefaultMessage(resp) {
         switch (resp.error_id) {
