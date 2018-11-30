@@ -24,6 +24,14 @@ RowLayout {
                             text: qsTr("Home")
                         })
 
+    function getAction(items, index) {
+        if (items[index].action) {
+            return items[index].action
+        } else if (index < items.length - 1) {
+            return function () { popToDepth(index + 1) }
+        }
+    }
+
     BreadCrumb {
         text: root.text
         action: root.action || (items.length > 0 && function () {
@@ -39,10 +47,7 @@ RowLayout {
             }
             BreadCrumb {
                 text: items[index].text
-                action: items[index].action || (index < items.length - 1
-                                                && function () {
-                                                    popToDepth(index + 1)
-                                                })
+                action: getAction(items, index)
                 active: !!action
             }
         }
