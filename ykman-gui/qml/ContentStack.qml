@@ -177,10 +177,6 @@ StackView {
         )
     }
 
-    function otpGeneralError(error) {
-        errorPopup.show(error)
-    }
-
     Component {
         id: fido2SetPinView
         Fido2SetPinView {
