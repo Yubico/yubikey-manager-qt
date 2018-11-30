@@ -14,8 +14,7 @@ eval "$(pyenv init -)"
 pyenv global 3.6.5
 pip3 install -r /yubikey-manager-qt/requirements.txt
 cp -R /root/.pyenv/versions/3.6.5/* /yubikey-manager-qt/appDir/usr
-apt-get download libykpers-1-1
-dpkg -x libykpers*.deb /yubikey-manager-qt/appDir/
+dpkg -x /libykpers*.deb /yubikey-manager-qt/appDir/
 
 cd /yubikey-manager-qt
 

@@ -33,6 +33,7 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && qmake \
     && make \
     && make install
+RUN apt-get download libykpers-1-1
 
 COPY build.sh /
 CMD ["/build.sh"]
