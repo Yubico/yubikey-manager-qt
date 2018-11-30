@@ -32,6 +32,10 @@ RowLayout {
         }
     }
 
+    function getText(item) {
+        return item.text
+    }
+
     BreadCrumb {
         text: root.text
         action: root.action || (items.length > 0 && function () {
@@ -46,7 +50,7 @@ RowLayout {
             BreadCrumbSeparator {
             }
             BreadCrumb {
-                text: items[index].text
+                text: getText(items[index])
                 action: getAction(items, index)
                 active: !!action
             }
