@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
+import "slotutils.js" as SlotUtils
 
 StackView {
     anchors.fill: parent
@@ -164,7 +165,10 @@ StackView {
     }
 
     function otpWriteError() {
-        otpWriteErrorPopup.show()
+        errorPopup.show([
+            qsTr("Failed to modify %1.").arg(SlotUtils.slotNameCapitalized(views.selectedSlot)),
+            qsTr("Make sure the YubiKey does not have restricted access."),
+        ])
     }
 
     function otpFailedToConfigureErrorPopup(error) {
@@ -211,10 +215,6 @@ StackView {
         id: otpConfigureSlotView
         OtpConfigureSlotView {
         }
-    }
-
-    OtpWriteErrorPopup {
-        id: otpWriteErrorPopup
     }
 
     OtpFailedToConfigureErrorPopup {
