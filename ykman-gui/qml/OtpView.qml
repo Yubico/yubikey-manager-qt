@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 import QtQuick.Controls.Material 2.2
+import "slotutils.js" as SlotUtils
 
 ColumnLayout {
     id: otpView
@@ -38,6 +39,15 @@ ColumnLayout {
 
     function slot2StatusTxt() {
         return slot2Configured ? slotIsConfigured : slotIsEmpty
+    }
+
+    function confirmDelete() {
+        confirmationPopup.show(
+                    [qsTr("Do you want to delete the content of the %1?").arg(
+                         SlotUtils.slotNameCapitalized(
+                             views.selectedSlot)), qsTr(
+                         "This permanently deletes the configuration in the slot.")],
+                    deleteSelectedSlot)
     }
 
     function deleteSelectedSlot() {
@@ -81,11 +91,6 @@ ColumnLayout {
     OtpSwapConfigurationsPopup {
         id: otpSwapConfigurationsPopup
         onAccepted: swapConfigurations()
-    }
-
-    OtpDeleteSlotPopup {
-        id: otpDeleteSlotPopup
-        onAccepted: deleteSelectedSlot()
     }
 
     CustomContentColumn {
@@ -132,7 +137,7 @@ ColumnLayout {
                         enabled: slot1Configured
                         onClicked: {
                             views.selectSlot1()
-                            otpDeleteSlotPopup.open()
+                            confirmDelete()
                         }
                         toolTipText: qsTr("Permanently delete the configuration of Short Touch (Slot 1)")
                         iconSource: "../images/delete.svg"
@@ -203,7 +208,7 @@ ColumnLayout {
                         enabled: views.slot2Configured
                         onClicked: {
                             views.selectSlot2()
-                            otpDeleteSlotPopup.open()
+                            confirmDelete()
                         }
                         toolTipText: qsTr("Permanently delete the configuration of Long Touch (Slot 2)")
                         iconSource: "../images/delete.svg"
