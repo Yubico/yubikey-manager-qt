@@ -222,6 +222,10 @@ StackView {
     }
 
     SuccessPopup {
+        id: successPopup
+    }
+
+    SuccessPopup {
         id: otpSuccessPopup
         onClosed: views.otp()
     }
@@ -229,10 +233,6 @@ StackView {
     SuccessPopup {
         id: fido2SuccessPopup
         onClosed: views.fido2()
-    }
-
-    SuccessPopup {
-        id: pivSuccessPopup
     }
 
     SuccessPopup {

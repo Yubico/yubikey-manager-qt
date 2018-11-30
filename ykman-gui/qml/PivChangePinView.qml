@@ -20,7 +20,7 @@ ChangePinView {
     onChangePin: {
         yubiKey.pivChangePin(currentPin, newPin, function (resp) {
             if (resp.success) {
-                pivSuccessPopup.open()
+                successPopup.open()
                 views.pop()
             } else {
                 pivError.showResponseError(resp, {

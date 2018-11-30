@@ -32,7 +32,7 @@ ColumnLayout {
                                                              managementKey,
                                                              function (resp) {
                                                                  if (resp.success) {
-                                                                     pivSuccessPopup.open()
+                                                                     successPopup.open()
                                                                  } else {
                                                                      pivError.showResponseError(
                                                                                  resp)
@@ -51,7 +51,7 @@ ColumnLayout {
     function exportCertificate(fileUrl) {
         yubiKey.pivExportCertificate(slot.id, fileUrl, function (resp) {
             if (resp.success) {
-                pivSuccessPopup.open()
+                successPopup.open()
             } else {
                 pivError.showResponseError(resp)
             }
@@ -62,7 +62,7 @@ ColumnLayout {
 
         function handleResponse(resp) {
             if (resp.success) {
-                pivSuccessPopup.open()
+                successPopup.open()
             } else {
                 if (resp.error === 'failed_parsing') {
                     pivError.show('Something went wrong with reading the file.')

@@ -58,7 +58,7 @@ ColumnLayout {
                 isBusy = false
 
                 if (resp.success) {
-                    pivSuccessPopup.open()
+                    successPopup.open()
                     views.pivPinManagement()
                 } else {
                     pivError.showResponseError(resp, {

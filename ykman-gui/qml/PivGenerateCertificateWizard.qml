@@ -29,7 +29,7 @@ ColumnLayout {
                                      function (resp) {
                                          isBusy = false
                                          if (resp.success) {
-                                             pivSuccessPopup.open()
+                                             successPopup.open()
                                          } else {
                                              pivError.showResponseError(resp)
                                          }
@@ -70,8 +70,7 @@ ColumnLayout {
                                                    if (resp.success) {
                                                        if (selfSign) {
                                                            isBusy = false
-                                                           pivSuccessPopup.open(
-                                                                       )
+                                                           successPopup.open()
                                                            views.pop()
                                                        } else {
                                                            deleteCertificate(
