@@ -234,6 +234,7 @@ class Controller(object):
         with self._open_device() as dev:
             transports = sum([TRANSPORT[i] for i in interfaces])
             dev.mode = Mode(transports & TRANSPORT.usb_transports())
+        return success()
 
     def get_username(self):
         username = getpass.getuser()

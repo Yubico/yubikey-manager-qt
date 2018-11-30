@@ -28,15 +28,15 @@ ColumnLayout {
     }
 
     function configureInterfaces() {
-        yubiKey.setMode(getEnabledInterfaces(), function (error) {
-            if (error) {
-                errorPopup.show(qsTr("Failed to configure interfaces. Make sure the YubiKey does not have restricted access."))
-            } else {
+        yubiKey.setMode(getEnabledInterfaces(), function (resp) {
+            if (resp.success) {
                 if (!yubiKey.canWriteConfig) {
                     reInsertYubiKey.open()
                 } else {
                     views.pop()
                 }
+            } else {
+                errorPopup.show(qsTr("Failed to configure interfaces. Make sure the YubiKey does not have restricted access."))
             }
         })
     }
