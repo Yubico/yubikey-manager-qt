@@ -70,6 +70,7 @@ before_script:
         time docker build -t bionic-deb docker/bionic-deb && \
         time docker build -t xenial-appimage docker/xenial-appimage && \
         mkdir -p $HOME/docker-images && \
+        rm -f $HOME/docker-images/images.tar && \
         time docker save -o $HOME/docker-images/images.tar bionic-ci bionic-deb xenial-appimage
 
     else
