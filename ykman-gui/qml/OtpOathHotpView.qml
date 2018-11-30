@@ -8,7 +8,7 @@ ColumnLayout {
 
     function finish() {
         if (views.selectedSlotConfigured()) {
-            otpSlotAlreadyConfigured.open()
+            otpConfirmOverwrite(programOathHotp)
         } else {
             programOathHotp()
         }
@@ -28,11 +28,6 @@ ColumnLayout {
                                         }
                                     }
                                 })
-    }
-
-    OtpSlotAlreadyConfiguredPopup {
-        id: otpSlotAlreadyConfigured
-        onAccepted: programOathHotp()
     }
 
     CustomContentColumn {

@@ -164,6 +164,15 @@ StackView {
         successPopup.showAndThen(views.otp)
     }
 
+    function otpConfirmOverwrite(callback) {
+        confirmationPopup.show(
+                    [qsTr("%1 is already configured.").arg(
+                         SlotUtils.slotNameCapitalized(
+                             views.selectedSlot)), qsTr(
+                         "Do you want to overwrite the existing configuration?")],
+                    callback)
+    }
+
     function otpWriteError() {
         errorPopup.show([
             qsTr("Failed to modify %1.").arg(SlotUtils.slotNameCapitalized(views.selectedSlot)),
