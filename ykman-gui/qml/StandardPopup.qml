@@ -12,6 +12,12 @@ InlinePopup {
     onSetMessage: setMessages([message])
     onSetMessages: messageParagraphs = messages
 
+    onVisibleChanged: {
+        if (!visible) {
+            messageParagraphs = []
+        }
+    }
+
     ColumnLayout {
         width: parent.width
 
