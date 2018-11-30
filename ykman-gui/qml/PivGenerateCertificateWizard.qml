@@ -25,7 +25,7 @@ ColumnLayout {
 
     function deleteCertificate(pin, managementKey) {
         isBusy = true
-        yubiKey.pivDeleteCertificate(slot, pin, managementKey, function (resp) {
+        yubiKey.pivDeleteCertificate(slot.id, pin, managementKey, function (resp) {
             isBusy = false
             if (resp.success) {
                 pivSuccessPopup.open()
