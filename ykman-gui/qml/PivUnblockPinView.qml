@@ -5,13 +5,7 @@ import QtQuick.Controls.Material 2.2
 
 ChangePinView {
 
-    breadcrumbs: [{
-            text: qsTr("PIV")
-        }, {
-            text: qsTr("Configure PINs")
-        }, {
-            text: qsTr("Unblock PIN")
-        }]
+    breadcrumbs: [qsTr("PIV"), qsTr("Configure PINs"), qsTr("Unblock PIN")]
     currentPinLabel: qsTr("PUK:")
     defaultCurrentPin: constants.pivDefaultPuk
     finishButtonText: qsTr("Unblock PIN")

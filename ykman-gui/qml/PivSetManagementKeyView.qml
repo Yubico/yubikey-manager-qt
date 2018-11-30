@@ -92,13 +92,7 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [{
-                        text: qsTr("PIV")
-                    }, {
-                        text: qsTr("Configure PINs")
-                    }, {
-                        text: qsTr("Set Management Key")
-                    }]
+                items: [qsTr("PIV"), qsTr("Configure PINs"), qsTr("Set Management Key")]
             }
         }
 

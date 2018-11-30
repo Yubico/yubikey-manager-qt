@@ -25,16 +25,15 @@ ColumnLayout {
 
     function deleteCertificate(pin, managementKey) {
         isBusy = true
-        yubiKey.pivDeleteCertificate(slot.id, pin, managementKey,
-                                     function (resp) {
-                                         isBusy = false
-                                         if (resp.success) {
-                                             pivSuccessPopup.open()
-                                         } else {
-                                             pivError.showResponseError(resp)
-                                         }
-                                         views.pop()
-                                     })
+        yubiKey.pivDeleteCertificate(slot, pin, managementKey, function (resp) {
+            isBusy = false
+            if (resp.success) {
+                pivSuccessPopup.open()
+            } else {
+                pivError.showResponseError(resp)
+            }
+            views.pop()
+        })
     }
 
     function finish(confirmOverwrite, csrFileUrl) {
@@ -190,14 +189,11 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [{
-                        text: qsTr("PIV")
-                    }, {
-                        text: qsTr("Certificates")
-                    }, {
-                        text: qsTr("Generate: %1 (%2/%3)").arg(slot.name).arg(
+                items: [qsTr("PIV"),
+                        qsTr("Certificates"),
+                        qsTr("Generate: %1 (%2/%3)").arg(slot.name).arg(
                                   currentStep).arg(numSteps)
-                    }]
+                    ]
             }
 
             StackView {
@@ -337,13 +333,12 @@ ColumnLayout {
                                 expirationDate = text
 
                                 if ((expirationDate.length > previousValue.length)
-                                        && (expirationDate.length === 4
-                                            || expirationDate.length === 7)) {
+                                    && (expirationDate.length === 4 || expirationDate.length === 7)
+                                ) {
                                     expirationDate = expirationDate + "-"
                                 }
                                 if (isExpirationDateValid(expirationDate)) {
-                                    calendarWidget.goToMonth(
-                                                new Date(expirationDate))
+                                    calendarWidget.goToMonth(new Date(expirationDate))
                                 }
                             }
                         }
@@ -446,17 +441,32 @@ ColumnLayout {
             }
         }
 
-        ButtonsBar {
-            backCallback: currentStep > 1 && previous
-
-            nextCallback: currentStep < numSteps && next
-            nextEnabled: isInputValid()
-
-            finishCallback: currentStep === numSteps && finish
-            finishEnabled: isInputValid()
-            finishText: qsTr("Generate")
-            finishTooltip: qsTr("Finish and generate the private key and %1").arg(
-                               selfSign ? qsTr("certificate") : qsTr("CSR"))
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            Layout.preferredWidth: constants.contentWidth
+            BackButton {
+                onClickedCallback: currentStep == 1 ? views.pop : previous
+                flat: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+            }
+            NextButton {
+                onClicked: next()
+                visible: currentStep < numSteps
+                enabled: isInputValid()
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+            }
+            FinishButton {
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                text: qsTr("Generate")
+                onClicked: finish()
+                visible: currentStep === numSteps
+                ToolTip.delay: 1000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Finish and generate the private key and %1").arg(
+                                  selfSign ? qsTr("certificate") : qsTr("CSR"))
+                enabled: isInputValid()
+            }
         }
     }
 }
