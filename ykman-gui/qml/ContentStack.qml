@@ -172,8 +172,9 @@ StackView {
     }
 
     function otpFailedToConfigureErrorPopup(error) {
-        otpFailedToConfigureErrorPopup.error = error
-        otpFailedToConfigureErrorPopup.open()
+        errorPopup.show(
+            qsTr("Failed to configure %1. %2").arg(SlotUtils.slotNameCapitalized(views.selectedSlot)).arg(error)
+        )
     }
 
     function otpGeneralError(error) {
@@ -215,10 +216,6 @@ StackView {
         id: otpConfigureSlotView
         OtpConfigureSlotView {
         }
-    }
-
-    OtpFailedToConfigureErrorPopup {
-        id: otpFailedToConfigureErrorPopup
     }
 
     SuccessPopup {
