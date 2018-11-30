@@ -21,7 +21,7 @@ ChangePinView {
     onChangePin: {
         yubiKey.fidoChangePin(currentPin, newPin, function (resp) {
             if (resp.success) {
-                fido2SuccessPopup.open()
+                successPopup.showAndThen(views.pop)
             } else {
                 if (resp.error_id === 'too long') {
                     fido2TooLongError.open()

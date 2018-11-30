@@ -27,7 +27,7 @@ ColumnLayout {
                 yubiKey.fidoReset(function (resp) {
                     touchYubiKey.close()
                     if (resp.success) {
-                        fido2SuccessPopup.open()
+                        successPopup.showAndThen(views.pop)
                     } else {
                         if (resp.error_id === 'touch timeout') {
                             fido2ResetTouchError.open()

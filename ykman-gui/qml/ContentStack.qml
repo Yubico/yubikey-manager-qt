@@ -231,11 +231,6 @@ StackView {
     }
 
     SuccessPopup {
-        id: fido2SuccessPopup
-        onClosed: views.fido2()
-    }
-
-    SuccessPopup {
         id: interfacesSuccessPopup
         onClosed: views.home()
     }
