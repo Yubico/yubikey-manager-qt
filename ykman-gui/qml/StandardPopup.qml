@@ -3,6 +3,8 @@ import QtQuick.Layouts 1.2
 
 InlinePopup {
 
+    property var closeCallback
+
     property string heading: ""
     property var messageParagraphs: []
 
@@ -15,7 +17,25 @@ InlinePopup {
     onVisibleChanged: {
         if (!visible) {
             messageParagraphs = []
+
+            if (closeCallback) {
+                closeCallback()
+            }
         }
+    }
+
+    function show(msg) {
+        if (typeof msg === "string") {
+            setMessage(msg)
+        } else {
+            setMessages(msg)
+        }
+        open()
+    }
+
+    function showAndThen(cb) {
+        closeCallback = cb
+        open()
     }
 
     ColumnLayout {

@@ -41,11 +41,6 @@ StandardPopup {
         }
     }
 
-    function show(message) {
-        setMessage(message)
-        open()
-    }
-
     function showResponseError(resp, overrideMessages) {
         if (!resp.success) {
             if (overrideMessages && overrideMessages[resp.error_id]) {
