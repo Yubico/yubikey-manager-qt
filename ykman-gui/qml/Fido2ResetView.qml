@@ -44,15 +44,8 @@ ColumnLayout {
 
     CustomContentColumn {
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Reset FIDO")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("FIDO2"), qsTr("Reset FIDO")]
-            }
+        ViewHeader {
+            breadcrumbs: [qsTr("FIDO2"), qsTr("Reset FIDO")]
         }
 
         Label {

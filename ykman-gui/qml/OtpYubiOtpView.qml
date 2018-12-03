@@ -53,18 +53,11 @@ ColumnLayout {
 
     CustomContentColumn {
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-
-            Heading1 {
-                text: qsTr("Yubico OTP")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
-                        views.selectedSlot), qsTr("Yubico OTP")]
-            }
+        ViewHeader {
+            breadcrumbs: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
+                    views.selectedSlot), qsTr("Yubico OTP")]
         }
+
         GridLayout {
             columns: 3
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop

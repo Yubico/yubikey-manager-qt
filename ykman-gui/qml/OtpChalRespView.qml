@@ -39,16 +39,9 @@ ColumnLayout {
     }
 
     CustomContentColumn {
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Challenge-response")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
-                        views.selectedSlot), qsTr("Challenge-response")]
-            }
+        ViewHeader {
+            breadcrumbs: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
+                    views.selectedSlot), qsTr("Challenge-response")]
         }
         RowLayout {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop

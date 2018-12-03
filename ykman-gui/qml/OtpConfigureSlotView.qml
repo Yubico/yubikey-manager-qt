@@ -8,16 +8,10 @@ ColumnLayout {
 
     CustomContentColumn {
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Select Credential Type")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
-                        views.selectedSlot)]
-            }
+        ViewHeader {
+            heading: qsTr("Select Credential Type")
+            breadcrumbs: [qsTr("OTP"), SlotUtils.slotNameCapitalized(
+                    views.selectedSlot)]
         }
 
         ButtonGroup {

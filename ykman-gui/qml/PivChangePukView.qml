@@ -5,7 +5,7 @@ import QtQuick.Controls.Material 2.2
 
 ChangePinView {
 
-    breadcrumbs: [qsTr("PUK"), qsTr("Configure PINs"), qsTr("PUK")]
+    breadcrumbs: [qsTr("PIV"), qsTr("Configure PINs"), qsTr("PUK")]
     codeName: qsTr("PUK")
     defaultCurrentPin: constants.pivDefaultPuk
     hasCurrentPin: true

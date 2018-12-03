@@ -70,22 +70,14 @@ ColumnLayout {
     CustomContentColumn {
         visible: !isBusy
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Configure PINs")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("PIV"), qsTr("Configure PINs")]
-            }
+        ViewHeader {
+            breadcrumbs: [qsTr("PIV"), qsTr("Configure PINs")]
         }
 
         RowLayout {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.fillWidth: true
-            id: mainRow
             spacing: 30
 
             ColumnLayout {
@@ -121,15 +113,7 @@ ColumnLayout {
                 }
             }
 
-            Rectangle {
-                id: separator
-                Layout.minimumWidth: 1
-                Layout.maximumWidth: 1
-                Layout.maximumHeight: mainRow.height * 0.7
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                color: yubicoGrey
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            ColumnSeparator {
             }
 
             ColumnLayout {
@@ -155,15 +139,7 @@ ColumnLayout {
                 }
             }
 
-            Rectangle {
-                id: separator2
-                Layout.minimumWidth: 1
-                Layout.maximumWidth: 1
-                Layout.maximumHeight: mainRow.height * 0.7
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                color: yubicoGrey
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            ColumnSeparator {
             }
 
             ColumnLayout {

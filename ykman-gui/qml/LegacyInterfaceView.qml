@@ -55,22 +55,14 @@ ColumnLayout {
 
     CustomContentColumn {
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Heading1 {
-                text: qsTr("Interfaces")
-            }
-
-            BreadCrumbRow {
-                items: [qsTr("Interfaces")]
-            }
+        ViewHeader {
+            breadcrumbs: [qsTr("Interfaces")]
         }
 
         RowLayout {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Layout.fillHeight: true
             Layout.fillWidth: true
-            id: mainRow
 
             GridLayout {
                 columns: 3
