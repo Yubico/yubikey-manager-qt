@@ -5,13 +5,7 @@ import QtQuick.Controls.Material 2.2
 
 ChangePinView {
 
-    breadcrumbs: [{
-            text: qsTr("PIV")
-        }, {
-            text: qsTr("Configure PINs")
-        }, {
-            text: qsTr("PIN")
-        }]
+    breadcrumbs: [qsTr("PIV"), qsTr("Configure PINs"), qsTr("PIN")]
     defaultCurrentPin: constants.pivDefaultPin
     hasCurrentPin: true
     maxLength: constants.pivPinMaxLength

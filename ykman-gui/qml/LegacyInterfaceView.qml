@@ -62,9 +62,7 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [{
-                        text: qsTr("Interfaces")
-                    }]
+                items: [qsTr("Interfaces")]
             }
         }
 

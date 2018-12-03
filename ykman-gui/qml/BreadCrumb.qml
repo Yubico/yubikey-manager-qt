@@ -5,7 +5,7 @@ Label {
     property bool active
     property var action
     color: action ? yubicoGreen : yubicoGrey
-    font.underline: !active && action && mouseArea.containsMouse
+    font.underline: !active && !!action && mouseArea.containsMouse
     font.pixelSize: constants.h4
 
     MouseArea {

@@ -57,9 +57,7 @@ ColumnLayout {
 
                 BreadCrumbRow {
                     Layout.fillWidth: true
-                    items: [{
-                            text: qsTr("PIV")
-                        }]
+                    items: [qsTr("PIV")]
                 }
             }
             CustomButton {

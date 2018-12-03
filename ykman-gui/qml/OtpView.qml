@@ -105,9 +105,7 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [{
-                        text: qsTr("OTP")
-                    }]
+                items: [qsTr("OTP")]
             }
         }
 
