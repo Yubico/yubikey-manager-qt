@@ -5,11 +5,7 @@ import QtQuick.Controls.Material 2.2
 
 ChangePinView {
 
-    breadcrumbs: [{
-            text: qsTr("FIDO2")
-        }, {
-            text: qsTr("Change PIN")
-        }]
+    breadcrumbs: [qsTr("FIDO2"), qsTr("Change PIN")]
     finishButtonTooltip: qsTr("Finish and change the FIDO2 PIN")
     hasCurrentPin: true
     mainHeading: qsTr("Change FIDO2 PIN")

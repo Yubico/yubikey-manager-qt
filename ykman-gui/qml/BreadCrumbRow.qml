@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.2
 RowLayout {
 
     /**
-     * Type: `[item]`, where `item` has the shape:
+     * Type: `[item]`, where `item` is a string or an object with the shape:
      *
      * {
      *   text: string,
@@ -14,6 +14,8 @@ RowLayout {
      * If `action` is not present, it defaults to popping the stack to the
      * depth of the breadcrumb item. The last breadcrumb item has no action by
      * default.
+     *
+     * If an `item` is a string, it is equivalent to `{ text: item }`.
      */
     property var items
 
@@ -23,6 +25,23 @@ RowLayout {
     property var root: ({
                             text: qsTr("Home")
                         })
+
+    function getAction(items, index) {
+        if (typeof items[index] === 'object' && typeof items[index].action === 'function') {
+            return items[index].action
+        } else if (index < items.length - 1) {
+            return function () { popToDepth(index + 1) }
+        }
+    }
+
+    function getText(item) {
+        if (typeof item === 'string') {
+            return item
+        } else if (item) {
+            return item.text
+        }
+        return "UNDEFINED"
+    }
 
     BreadCrumb {
         text: root.text
@@ -38,11 +57,8 @@ RowLayout {
             BreadCrumbSeparator {
             }
             BreadCrumb {
-                text: items[index].text
-                action: items[index].action || (index < items.length - 1
-                                                && function () {
-                                                    popToDepth(index + 1)
-                                                })
+                text: getText(items[index])
+                action: getAction(items, index)
                 active: !!action
             }
         }

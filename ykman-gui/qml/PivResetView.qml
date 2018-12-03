@@ -39,11 +39,7 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [{
-                        text: qsTr("PIV")
-                    }, {
-                        text: qsTr("Reset PIV")
-                    }]
+                items: [qsTr("PIV"), qsTr("Reset PIV")]
             }
         }
 

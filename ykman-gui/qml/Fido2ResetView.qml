@@ -63,11 +63,7 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [{
-                        text: qsTr("FIDO2")
-                    }, {
-                        text: qsTr("Reset FIDO")
-                    }]
+                items: [qsTr("FIDO2"), qsTr("Reset FIDO")]
             }
         }
 

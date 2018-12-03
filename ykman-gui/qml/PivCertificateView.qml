@@ -16,11 +16,7 @@ ColumnLayout {
             }
 
             BreadCrumbRow {
-                items: [{
-                        text: qsTr("PIV")
-                    }, {
-                        text: qsTr("Certificates")
-                    }]
+                items: [qsTr("PIV"), qsTr("Certificates")]
             }
         }
 
