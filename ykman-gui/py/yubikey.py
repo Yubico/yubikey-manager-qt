@@ -26,7 +26,7 @@ from ykman.fido import Fido2Controller
 from ykman.driver_ccid import APDUError, SW
 from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.piv import (
-    PivController, ALGO, PIN_POLICY, SLOT, TOUCH_POLICY, AuthenticationBlocked,
+    PivController, ALGO, SLOT, AuthenticationBlocked,
     AuthenticationFailed, BadFormat, WrongPin, WrongPuk)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
@@ -377,13 +377,11 @@ class Controller(object):
 
     def piv_generate_certificate(
             self, slot_name, algorithm, common_name, expiration_date,
-            self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None,
-            pin_policy=None, touch_policy=None):
+            self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None):
         logger.debug('slot_name=%s algorithm=%s common_name=%s '
-                     'expiration_date=%s self_sign=%s csr_file_url=%s '
-                     'pin_policy=%s touch_policy=%s',
+                     'expiration_date=%s self_sign=%s csr_file_url=%s',
                      slot_name, algorithm, common_name, expiration_date,
-                     self_sign, csr_file_url, pin_policy, touch_policy)
+                     self_sign, csr_file_url)
 
         file_path = urllib.parse.urlparse(csr_file_url).path
 
@@ -412,18 +410,8 @@ class Controller(object):
                         'invalid_iso8601_date',
                         {'date': expiration_date})
 
-            unsupported_policy = self._piv_check_policies(
-                piv_controller, pin_policy=pin_policy,
-                touch_policy=touch_policy)
-            if unsupported_policy:
-                return unsupported_policy
-
             public_key = piv_controller.generate_key(
-                SLOT[slot_name], ALGO[algorithm],
-                pin_policy=(PIN_POLICY.from_string(pin_policy)
-                            if pin_policy else PIN_POLICY.DEFAULT),
-                touch_policy=(TOUCH_POLICY.from_string(touch_policy)
-                              if touch_policy else TOUCH_POLICY.DEFAULT))
+                SLOT[slot_name], ALGO[algorithm])
 
             pin_failed = self._piv_verify_pin(piv_controller, pin)
             if pin_failed:
@@ -670,23 +658,6 @@ class Controller(object):
 
             else:
                 return failure('mgm_key_required')
-
-    def _piv_check_policies(self, piv_controller, pin_policy=None,
-                            touch_policy=None):
-        if pin_policy and not piv_controller.supports_pin_policies:
-            return failure(
-                'unsupported_pin_policy',
-                {'supported_pin_policies': []})
-
-        if touch_policy and not (
-                TOUCH_POLICY[touch_policy]
-                in piv_controller.supported_touch_policies):
-            return failure(
-                'unsupported_touch_policy',
-                {'supported_touch_policies': [
-                    policy.name for policy in
-                    piv_controller.supported_touch_policies
-                ]})
 
 
 controller = None
