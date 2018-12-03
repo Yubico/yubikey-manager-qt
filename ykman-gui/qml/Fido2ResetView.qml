@@ -27,31 +27,19 @@ ColumnLayout {
                 yubiKey.fidoReset(function (resp) {
                     touchYubiKey.close()
                     if (resp.success) {
-                        fido2SuccessPopup.open()
+                        successPopup.showAndThen(views.pop)
                     } else {
                         if (resp.error_id === 'touch timeout') {
-                            fido2ResetTouchError.open()
+                            errorPopup.show(qsTr("A reset requires a touch on the YubiKey to be confirmed."))
+                        } else if (resp.error_message) {
+                            errorPopup.show(resp.error_message)
                         } else {
-                            fido2GeneralError.error = resp.error_id
-                            fido2GeneralError.open()
+                            errorPopup.show(resp.error_id)
                         }
                     }
                 })
             }
         }
-    }
-
-    TouchYubiKeyPopup {
-        id: touchYubiKey
-    }
-
-    Fido2GeneralErrorPopup {
-        id: fido2ResetTouchError
-        error: qsTr("A reset requires a touch on the YubiKey to be confirmed.")
-    }
-
-    Fido2GeneralErrorPopup {
-        id: fido2GeneralError
     }
 
     CustomContentColumn {

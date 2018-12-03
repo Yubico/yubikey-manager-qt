@@ -18,7 +18,7 @@ ColumnLayout {
         yubiKey.refreshPivData(function (resp) {
             isBusy = false
             if (!resp.success) {
-                pivError.showResponseError(resp)
+                errorPopup.showResponseError(resp)
                 views.home()
             }
             yubiKey.isMacOs(function (resp) {

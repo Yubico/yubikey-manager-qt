@@ -48,12 +48,12 @@ ColumnLayout {
                             newApplicationsEnabledOverNfc, lockCode,
                             function (resp) {
                                 if (resp.success) {
-                                    interfacesSuccessPopup.open()
+                                    successPopup.showAndThen(views.home)
                                     views.unlock()
                                 } else {
                                     console.log(resp.error_id)
                                     views.unlock()
-                                    errorLockCodePopup.open()
+                                    errorPopup.show(qsTr("Failed to configure interfaces"))
                                 }
                             })
     }
@@ -264,10 +264,6 @@ ColumnLayout {
         InterFaceLockCodePopup {
             id: lockCodePopup
             onAccepted: writeInterfaces()
-        }
-
-        InterfacesErrorPopup {
-            id: errorLockCodePopup
         }
 
         ButtonsBar {

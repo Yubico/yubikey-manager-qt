@@ -58,10 +58,10 @@ ColumnLayout {
                 isBusy = false
 
                 if (resp.success) {
-                    pivSuccessPopup.open()
+                    successPopup.open()
                     views.pivPinManagement()
                 } else {
-                    pivError.showResponseError(resp, {
+                    errorPopup.showResponseError(resp, {
                                                    mgm_key_bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters.").arg(constants.pivManagementKeyHexLength),
                                                    mgm_key_required: qsTr("Please enter the current management key."),
                                                    pin_required: qsTr("Please enter the PIN."),

@@ -15,10 +15,10 @@ ColumnLayout {
                              yubiKey.pivReset(function (resp) {
                                  isBusy = false
                                  if (resp.success) {
-                                     pivSuccessPopup.open()
+                                     successPopup.open()
                                      views.pop()
                                  } else {
-                                     pivError.showResponseError(resp)
+                                     errorPopup.showResponseError(resp)
                                  }
                              })
                          })

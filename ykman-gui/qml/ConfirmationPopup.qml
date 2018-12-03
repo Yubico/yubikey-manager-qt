@@ -2,10 +2,9 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 
-InlinePopup {
+StandardPopup {
 
     property var acceptCallback
-    property var messageParagraphs
 
     standardButtons: Dialog.No | Dialog.Yes
 
@@ -14,27 +13,11 @@ InlinePopup {
     function show(msg, cb) {
         acceptCallback = cb
         if (typeof msg === "string") {
-            messageParagraphs = [msg]
+            setMessage(msg)
         } else {
-            messageParagraphs = msg
+            setMessages(msg)
         }
         open()
     }
 
-    ColumnLayout {
-        width: parent.width
-
-        Repeater {
-            model: messageParagraphs
-
-            Heading2 {
-                text: modelData
-                horizontalAlignment: Qt.AlignHCenter
-                width: parent.width
-                wrapMode: Text.WordWrap
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.maximumWidth: parent.width
-            }
-        }
-    }
 }

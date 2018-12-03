@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
+import "slotutils.js" as SlotUtils
 
 StackView {
     anchors.fill: parent
@@ -160,21 +161,29 @@ StackView {
     }
 
     function otpSuccess() {
-        otpSuccessPopup.open()
+        successPopup.showAndThen(views.otp)
+    }
+
+    function otpConfirmOverwrite(callback) {
+        confirmationPopup.show(
+                    [qsTr("%1 is already configured.").arg(
+                         SlotUtils.slotNameCapitalized(
+                             views.selectedSlot)), qsTr(
+                         "Do you want to overwrite the existing configuration?")],
+                    callback)
     }
 
     function otpWriteError() {
-        otpWriteErrorPopup.open()
+        errorPopup.show([
+            qsTr("Failed to modify %1.").arg(SlotUtils.slotNameCapitalized(views.selectedSlot)),
+            qsTr("Make sure the YubiKey does not have restricted access."),
+        ])
     }
 
     function otpFailedToConfigureErrorPopup(error) {
-        otpFailedToConfigureErrorPopup.error = error
-        otpFailedToConfigureErrorPopup.open()
-    }
-
-    function otpGeneralError(error) {
-        otpGeneralErrorPopup.error = error
-        otpGeneralErrorPopup.open()
+        errorPopup.show(
+            qsTr("Failed to configure %1. %2").arg(SlotUtils.slotNameCapitalized(views.selectedSlot)).arg(error)
+        )
     }
 
     Component {
@@ -213,35 +222,12 @@ StackView {
         }
     }
 
-    OtpWriteErrorPopup {
-        id: otpWriteErrorPopup
-    }
-
-    OtpFailedToConfigureErrorPopup {
-        id: otpFailedToConfigureErrorPopup
-    }
-
     SuccessPopup {
-        id: otpSuccessPopup
-        onClosed: views.otp()
+        id: successPopup
     }
 
-    SuccessPopup {
-        id: fido2SuccessPopup
-        onClosed: views.fido2()
-    }
-
-    SuccessPopup {
-        id: pivSuccessPopup
-    }
-
-    SuccessPopup {
-        id: interfacesSuccessPopup
-        onClosed: views.home()
-    }
-
-    OtpGeneralErrorPopup {
-        id: otpGeneralErrorPopup
+    ErrorPopup {
+        id: errorPopup
     }
 
     Component {
@@ -371,10 +357,6 @@ StackView {
 
     ConfirmationPopup {
         id: confirmationPopup
-    }
-
-    PivGeneralErrorPopup {
-        id: pivError
     }
 
     PivPinPopup {

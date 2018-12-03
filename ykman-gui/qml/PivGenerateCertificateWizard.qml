@@ -25,15 +25,17 @@ ColumnLayout {
 
     function deleteCertificate(pin, managementKey) {
         isBusy = true
-        yubiKey.pivDeleteCertificate(slot, pin, managementKey, function (resp) {
-            isBusy = false
-            if (resp.success) {
-                pivSuccessPopup.open()
-            } else {
-                pivError.showResponseError(resp)
-            }
-            views.pop()
-        })
+
+        yubiKey.pivDeleteCertificate(slot.id, pin, managementKey,
+                                     function (resp) {
+                                         isBusy = false
+                                         if (resp.success) {
+                                             successPopup.open()
+                                         } else {
+                                             errorPopup.showResponseError(resp)
+                                         }
+                                         views.pop()
+                                     })
     }
 
     function finish(confirmOverwrite, csrFileUrl) {
@@ -64,13 +66,12 @@ ColumnLayout {
                                                pin: pin,
                                                keyHex: managementKey,
                                                callback: function (resp) {
-                                                   pivError.showResponseError(
+                                                   errorPopup.showResponseError(
                                                                resp)
                                                    if (resp.success) {
                                                        if (selfSign) {
                                                            isBusy = false
-                                                           pivSuccessPopup.open(
-                                                                       )
+                                                           successPopup.open()
                                                            views.pop()
                                                        } else {
                                                            deleteCertificate(

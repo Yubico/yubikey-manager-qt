@@ -20,24 +20,17 @@ ChangePinView {
     onChangePin: {
         yubiKey.fidoSetPin(newPin, function (resp) {
             if (resp.success) {
-                fido2SuccessPopup.open()
+                successPopup.showAndThen(views.pop)
             } else {
                 if (resp.error_id === 'too long') {
-                    fido2TooLongError.open()
+                    errorPopup.show(qsTr("Too long PIN, maximum size is 128 bytes"))
+                } else if (resp.error_message) {
+                    errorPopup.show(resp.error_message)
                 } else {
-                    fido2GeneralError.error = resp.error_id
-                    fido2GeneralError.open()
+                    errorPopup.show(resp.error_id)
                 }
             }
         })
     }
 
-    Fido2GeneralErrorPopup {
-        id: fido2TooLongError
-        error: qsTr("Too long PIN, maximum size is 128 bytes")
-    }
-
-    Fido2GeneralErrorPopup {
-        id: fido2GeneralError
-    }
 }

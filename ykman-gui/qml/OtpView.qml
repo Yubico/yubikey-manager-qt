@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 import QtQuick.Controls.Material 2.2
+import "slotutils.js" as SlotUtils
 
 ColumnLayout {
     id: otpView
@@ -23,10 +24,9 @@ ColumnLayout {
                 isBusy = false
             } else {
                 if (resp.error_id === 'timeout') {
-                    views.otpGeneralError(qsTr(
-                                              "Failed to load OTP application"))
+                    errorPopup.show(qsTr("Failed to load OTP application"))
                 } else {
-                    views.otpGeneralError(resp.error_id)
+                    errorPopup.show(resp.error_id)
                 }
                 views.home()
             }
@@ -39,6 +39,22 @@ ColumnLayout {
 
     function slot2StatusTxt() {
         return slot2Configured ? slotIsConfigured : slotIsEmpty
+    }
+
+    function confirmDelete() {
+        confirmationPopup.show(
+                    [qsTr("Do you want to delete the content of the %1?").arg(
+                         SlotUtils.slotNameCapitalized(
+                             views.selectedSlot)), qsTr(
+                         "This permanently deletes the configuration in the slot.")],
+                    deleteSelectedSlot)
+    }
+
+    function confirmSwap() {
+        confirmationPopup.show(
+            qsTr("Do you want to swap the credentials between Short Touch (Slot 1) and Long Touch (Slot 2)?"),
+            swapConfigurations
+        )
     }
 
     function deleteSelectedSlot() {
@@ -63,11 +79,11 @@ ColumnLayout {
                 load()
             } else {
                 if (resp.error_id === 'write error') {
-                    views.otpGeneralError("Failed to swap slots. Make sure the YubiKey does not have restricted access.")
+                    errorPopup.show(qsTr("Failed to swap slots. Make sure the YubiKey does not have restricted access."))
                 } else if (resp.error_message) {
-                    views.otpGeneralError(resp.error_message)
+                    errorPopup.show(resp.error_message)
                 } else {
-                    views.otpGeneralError("Unknown error.")
+                    errorPopup.show(qsTr("Unknown error."))
                 }
             }
         })
@@ -77,16 +93,6 @@ ColumnLayout {
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         running: isBusy
         visible: running
-    }
-
-    OtpSwapConfigurationsPopup {
-        id: otpSwapConfigurationsPopup
-        onAccepted: swapConfigurations()
-    }
-
-    OtpDeleteSlotPopup {
-        id: otpDeleteSlotPopup
-        onAccepted: deleteSelectedSlot()
     }
 
     CustomContentColumn {
@@ -131,7 +137,7 @@ ColumnLayout {
                         enabled: slot1Configured
                         onClicked: {
                             views.selectSlot1()
-                            otpDeleteSlotPopup.open()
+                            confirmDelete()
                         }
                         toolTipText: qsTr("Permanently delete the configuration of Short Touch (Slot 1)")
                         iconSource: "../images/delete.svg"
@@ -166,7 +172,7 @@ ColumnLayout {
                     text: qsTr("Swap")
                     enabled: slot1Configured || slot2Configured
                     iconSource: "../images/swap.svg"
-                    onClicked: otpSwapConfigurationsPopup.open()
+                    onClicked: confirmSwap()
                     flat: true
                     toolTipText: qsTr("Swap the configurations between the two slots")
                 }
@@ -202,7 +208,7 @@ ColumnLayout {
                         enabled: views.slot2Configured
                         onClicked: {
                             views.selectSlot2()
-                            otpDeleteSlotPopup.open()
+                            confirmDelete()
                         }
                         toolTipText: qsTr("Permanently delete the configuration of Long Touch (Slot 2)")
                         iconSource: "../images/delete.svg"

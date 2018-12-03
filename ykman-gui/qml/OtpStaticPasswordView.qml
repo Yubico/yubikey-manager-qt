@@ -10,7 +10,7 @@ ColumnLayout {
 
     function finish() {
         if (views.selectedSlotConfigured()) {
-            otpSlotAlreadyConfigured.open()
+            otpConfirmOverwrite(programStaticPassword)
         } else {
             programStaticPassword()
         }
@@ -46,11 +46,6 @@ ColumnLayout {
     RegExpValidator {
         id: usLayoutValidator
         regExp: /[ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#\$%&'\(\)\*\+,-\.\/:;<=>\?@\[\]\^_{}\|~]{1,38}$/
-    }
-
-    OtpSlotAlreadyConfiguredPopup {
-        id: otpSlotAlreadyConfigured
-        onAccepted: programStaticPassword()
     }
 
     CustomContentColumn {
