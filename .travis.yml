@@ -20,6 +20,10 @@ osx_image: xcode9.2
 services:
   - docker
 
+cache:
+  directories:
+    - $HOME/docker-images
+
 before_install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
@@ -56,14 +60,35 @@ install:
       cd ../../
     fi
 
+before_script:
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]] && ((! [[ -f $HOME/docker-images/images.tar ]]) || [[ "$TRAVIS_EVENT_TYPE" == "cron" ]])
+    then
+      echo "Building Docker images"
+      time docker build -t yubikey-manager-qt-ci-base docker/bionic-base && \
+        time docker build -t bionic-ci docker/bionic-ci && \
+        time docker build -t bionic-deb docker/bionic-deb && \
+        time docker build -t xenial-appimage docker/xenial-appimage && \
+        mkdir -p $HOME/docker-images && \
+        rm -f $HOME/docker-images/images.tar && \
+        time docker save -o $HOME/docker-images/images.tar bionic-ci bionic-deb xenial-appimage
+
+    else
+      echo "Reading Docker images from file"
+      if [[ -f $HOME/docker-images/images.tar ]]; then
+        time docker load -i $HOME/docker-images/images.tar
+      else
+        echo "Image cache file $HOME/docker-images/images.tar not found"
+      fi
+    fi
+
 script:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      docker build -t bionic-ci docker/bionic-ci && \
-        docker run --rm -v $(pwd):/sources/yubikey-manager-qt:ro bionic-ci && \
-        docker build -t bionic-deb -f docker/bionic-deb/Dockerfile . && \
-        docker build -t xenial-appimage -f docker/xenial-appimage/Dockerfile .
+      time docker run --rm -v $(pwd):/sources/yubikey-manager-qt:ro bionic-ci && \
+        time docker run --name bionic-deb -v $(pwd):/sources/yubikey-manager-qt:ro bionic-deb && \
+        time docker run --name xenial-appimage -v $(pwd):/sources/yubikey-manager-qt:ro --privileged xenial-appimage
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
@@ -121,12 +146,11 @@ after_success:
   - | 
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      id=$(docker create bionic-deb)
-      docker start --attach $id
-      docker cp $id:/yubikey-manager-qt-debian-packages.tar.gz deploy/yubikey-manager-qt-$TRAVIS_BRANCH-deb.tar.gz
-      id=$(docker create --privileged xenial-appimage)
-      docker start --attach $id
-      docker cp $id:/yubikey-manager-qt/YubiKey_Manager-x86_64.AppImage deploy/yubikey-manager-qt-$TRAVIS_BRANCH.AppImage
+      id=bionic-deb
+      time docker cp $id:/yubikey-manager-qt-debian-packages.tar.gz deploy/yubikey-manager-qt-$TRAVIS_BRANCH-deb.tar.gz
+
+      id=xenial-appimage
+      time docker cp $id:/yubikey-manager-qt/YubiKey_Manager-x86_64.AppImage deploy/yubikey-manager-qt-$TRAVIS_BRANCH.AppImage
     fi
 
 deploy:
