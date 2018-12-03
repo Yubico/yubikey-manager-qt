@@ -358,6 +358,7 @@ ColumnLayout {
             ColumnLayout {
                 Heading2 {
                     text: qsTr("Confirm selected options:")
+                    Layout.topMargin: 20
                 }
 
                 RowLayout {
