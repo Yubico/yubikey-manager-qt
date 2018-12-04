@@ -383,7 +383,11 @@ class Controller(object):
                      slot_name, algorithm, common_name, expiration_date,
                      self_sign, csr_file_url)
 
-        file_path = urllib.parse.urlparse(csr_file_url).path
+        if csr_file_url:
+            file_path = urllib.parse.urlparse(csr_file_url).path
+            file_path_windows = file_path[1:]
+            if os.name == 'nt':
+                file_path = file_path_windows
 
         with self._open_piv() as piv_controller:
             auth_failed = self._piv_ensure_authenticated(
