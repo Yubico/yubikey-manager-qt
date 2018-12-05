@@ -58,8 +58,8 @@ ColumnLayout {
                 isBusy = false
 
                 if (resp.success) {
-                    successPopup.open()
                     views.pivPinManagement()
+                    snackbarSuccess.show("Changed the Management Key")
                 } else {
                     errorPopup.showResponseError(resp, {
                                                    mgm_key_bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters.").arg(constants.pivManagementKeyHexLength),

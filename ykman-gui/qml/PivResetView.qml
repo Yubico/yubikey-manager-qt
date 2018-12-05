@@ -15,8 +15,9 @@ ColumnLayout {
                              yubiKey.pivReset(function (resp) {
                                  isBusy = false
                                  if (resp.success) {
-                                     successPopup.open()
                                      views.pop()
+                                     snackbarSuccess.show(
+                                                 "PIV application has been reset")
                                  } else {
                                      errorPopup.showResponseError(resp)
                                  }

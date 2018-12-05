@@ -48,8 +48,10 @@ ColumnLayout {
                             newApplicationsEnabledOverNfc, lockCode,
                             function (resp) {
                                 if (resp.success) {
-                                    successPopup.showAndThen(views.home)
+                                    views.home()
                                     views.unlock()
+                                    snackbarSuccess.show(
+                                                "Configured interfaces")
                                 } else {
                                     console.log(resp.error_id)
                                     views.unlock()

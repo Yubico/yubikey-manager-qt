@@ -30,7 +30,8 @@ ColumnLayout {
                                      function (resp) {
                                          isBusy = false
                                          if (resp.success) {
-                                             successPopup.open()
+                                             snackbarSuccess.show(
+                                                         "Certificate Signing Request (CSR) generated")
                                          } else {
                                              errorPopup.showResponseError(resp)
                                          }
@@ -71,8 +72,9 @@ ColumnLayout {
                                                    if (resp.success) {
                                                        if (selfSign) {
                                                            isBusy = false
-                                                           successPopup.open()
                                                            views.pop()
+                                                           snackbarSuccess.show(
+                                                                       "Self-signed certificate generated")
                                                        } else {
                                                            deleteCertificate(
                                                                        pin,

@@ -160,10 +160,6 @@ StackView {
         replaceAtDepth(1, otpViewComponent, 'otpView')
     }
 
-    function otpSuccess() {
-        successPopup.showAndThen(views.otp)
-    }
-
     function otpConfirmOverwrite(callback) {
         confirmationPopup.show(
                     [qsTr("%1 is already configured.").arg(
@@ -220,10 +216,6 @@ StackView {
         id: otpConfigureSlotView
         OtpConfigureSlotView {
         }
-    }
-
-    SuccessPopup {
-        id: successPopup
     }
 
     ErrorPopup {
@@ -369,5 +361,9 @@ StackView {
 
     PivPasswordPopup {
         id: pivPasswordPopup
+    }
+
+    SnackBarSuccess {
+        id: snackbarSuccess
     }
 }

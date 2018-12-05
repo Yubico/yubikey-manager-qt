@@ -14,8 +14,8 @@ ChangePinView {
     onChangePin: {
         yubiKey.pivChangePin(currentPin, newPin, function (resp) {
             if (resp.success) {
-                successPopup.open()
                 views.pop()
+                snackbarSuccess.show("Changed PIN")
             } else {
                 errorPopup.showResponseError(resp, {
                                                wrong_pin: qsTr("Wrong current PIN. Tries remaining: %1").arg(

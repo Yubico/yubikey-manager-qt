@@ -26,7 +26,9 @@ ColumnLayout {
                                          requireTouchCb.checked,
                                          function (resp) {
                                              if (resp.success) {
-                                                 views.otpSuccess()
+                                                 views.otp()
+                                                 snackbarSuccess.show(
+                                                             "Configured Challenge-Response credential")
                                              } else {
                                                  if (resp.error_id === 'write error') {
                                                      views.otpWriteError()

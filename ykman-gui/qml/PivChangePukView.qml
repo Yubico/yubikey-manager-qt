@@ -15,8 +15,8 @@ ChangePinView {
     onChangePin: {
         yubiKey.pivChangePuk(currentPin, newPin, function (resp) {
             if (resp.success) {
-                successPopup.open()
                 views.pop()
+                snackbarSuccess.show("Changed PUK")
             } else {
                 errorPopup.showResponseError(resp, {
                                                wrong_puk: qsTr("Wrong current PUK. Tries remaning: %1").arg(

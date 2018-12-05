@@ -60,8 +60,8 @@ ColumnLayout {
     function deleteSelectedSlot() {
         yubiKey.eraseSlot(views.selectedSlot, function (resp) {
             if (resp.success) {
-                views.otpSuccess()
                 load()
+                snackbarSuccess.show("Configuration deleted")
             } else {
                 if (resp.error_id === 'write error') {
                     views.otpWriteError()
@@ -75,8 +75,9 @@ ColumnLayout {
     function swapConfigurations() {
         yubiKey.swapSlots(function (resp) {
             if (resp.success) {
-                views.otpSuccess()
+
                 load()
+                snackbarSuccess.show("Configurations swapped between slots")
             } else {
                 if (resp.error_id === 'write error') {
                     errorPopup.show(qsTr("Failed to swap slots. Make sure the YubiKey does not have restricted access."))

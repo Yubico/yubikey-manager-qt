@@ -54,9 +54,9 @@ ColumnLayout {
                 if (resp.success) {
                     _generateCertificate('KEY_MANAGEMENT', function (resp) {
                         if (resp.success) {
-                            successPopup.show(
-                                        "Remove and re-insert your YubiKey to start the macOS pairing setup.")
                             views.pop()
+                            snackbarSuccess.show(
+                                        "Remove and re-insert your YubiKey to start the macOS pairing setup.")
                         } else {
                             errorPopup.showResponseError(resp)
                         }

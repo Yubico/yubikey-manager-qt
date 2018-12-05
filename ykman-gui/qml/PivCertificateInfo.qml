@@ -32,7 +32,7 @@ ColumnLayout {
                                                              managementKey,
                                                              function (resp) {
                                                                  if (resp.success) {
-                                                                     successPopup.open()
+                                                                     snackbarSuccess.show("Certificate was deleted")
                                                                  } else {
                                                                      errorPopup.showResponseError(
                                                                                  resp)
@@ -51,7 +51,7 @@ ColumnLayout {
     function exportCertificate(fileUrl) {
         yubiKey.pivExportCertificate(slot.id, fileUrl, function (resp) {
             if (resp.success) {
-                successPopup.open()
+                snackbarSuccess.show("Certificate was exported")
             } else {
                 errorPopup.showResponseError(resp)
             }
@@ -62,7 +62,7 @@ ColumnLayout {
 
         function handleResponse(resp) {
             if (resp.success) {
-                successPopup.open()
+                snackbarSuccess.show("Certificate was imported")
             } else {
                 if (resp.error === 'failed_parsing') {
                     errorPopup.show('Something went wrong with reading the file.')

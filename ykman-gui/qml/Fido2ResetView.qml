@@ -27,7 +27,9 @@ ColumnLayout {
                 yubiKey.fidoReset(function (resp) {
                     touchYubiKey.close()
                     if (resp.success) {
-                        successPopup.showAndThen(views.pop)
+                        views.fido2()
+                        snackbarSuccess.show(
+                                    "FIDO applications have been reset")
                     } else {
                         if (resp.error_id === 'touch timeout') {
                             errorPopup.show(qsTr("A reset requires a touch on the YubiKey to be confirmed."))
