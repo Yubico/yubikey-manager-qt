@@ -24,11 +24,11 @@ ChangePinView {
                 snackbarSuccess.show("FIDO2 PIN was set")
             } else {
                 if (resp.error_id === 'too long') {
-                    errorPopup.show(qsTr("Too long PIN, maximum size is 128 bytes"))
+                    snackbarError.show(qsTr("Too long PIN, maximum size is 128 bytes"))
                 } else if (resp.error_message) {
-                    errorPopup.show(resp.error_message)
+                    snackbarError.show(resp.error_message)
                 } else {
-                    errorPopup.show(resp.error_id)
+                    snackbarError.show(resp.error_id)
                 }
             }
         })

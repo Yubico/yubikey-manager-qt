@@ -55,7 +55,7 @@ ColumnLayout {
                                 } else {
                                     console.log(resp.error_id)
                                     views.unlock()
-                                    errorPopup.show(qsTr("Failed to configure interfaces"))
+                                    snackbarError.show(qsTr("Failed to configure interfaces"))
                                 }
                             })
     }

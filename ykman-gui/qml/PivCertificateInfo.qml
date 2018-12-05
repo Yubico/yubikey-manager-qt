@@ -17,7 +17,7 @@ ColumnLayout {
     function load() {
         yubiKey.refreshPivData(function (resp) {
             if (!resp.success) {
-                errorPopup.showResponseError(resp)
+                snackbarError.showResponseError(resp)
                 views.home()
             }
         })
@@ -34,7 +34,7 @@ ColumnLayout {
                                                                  if (resp.success) {
                                                                      snackbarSuccess.show("Certificate was deleted")
                                                                  } else {
-                                                                     errorPopup.showResponseError(
+                                                                     snackbarError.showResponseError(
                                                                                  resp)
                                                                  }
                                                              })
@@ -53,7 +53,7 @@ ColumnLayout {
             if (resp.success) {
                 snackbarSuccess.show("Certificate was exported")
             } else {
-                errorPopup.showResponseError(resp)
+                snackbarError.showResponseError(resp)
             }
         })
     }
@@ -65,9 +65,9 @@ ColumnLayout {
                 snackbarSuccess.show("Certificate was imported")
             } else {
                 if (resp.error === 'failed_parsing') {
-                    errorPopup.show('Something went wrong with reading the file.')
+                    snackbarError.show('Something went wrong with reading the file.')
                 } else {
-                    errorPopup.show(resp.error)
+                    snackbarError.show(resp.error)
                 }
             }
             load()

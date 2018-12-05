@@ -19,7 +19,7 @@ ColumnLayout {
                                      snackbarSuccess.show(
                                                  "PIV application has been reset")
                                  } else {
-                                     errorPopup.showResponseError(resp)
+                                     snackbarError.showResponseError(resp)
                                  }
                              })
                          })

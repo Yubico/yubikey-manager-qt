@@ -24,9 +24,9 @@ ColumnLayout {
                 isBusy = false
             } else {
                 if (resp.error_id === 'timeout') {
-                    errorPopup.show(qsTr("Failed to load OTP application"))
+                    snackbarError.show(qsTr("Failed to load OTP application"))
                 } else {
-                    errorPopup.show(resp.error_id)
+                    snackbarError.show(resp.error_id)
                 }
                 views.home()
             }
@@ -80,11 +80,12 @@ ColumnLayout {
                 snackbarSuccess.show("Configurations swapped between slots")
             } else {
                 if (resp.error_id === 'write error') {
-                    errorPopup.show(qsTr("Failed to swap slots. Make sure the YubiKey does not have restricted access."))
+                    snackbarError.show(
+                                qsTr("Failed to swap slots. Make sure the YubiKey does not have restricted access."))
                 } else if (resp.error_message) {
-                    errorPopup.show(resp.error_message)
+                    snackbarError.show(resp.error_message)
                 } else {
-                    errorPopup.show(qsTr("Unknown error."))
+                    snackbarError.show(qsTr("Unknown error."))
                 }
             }
         })

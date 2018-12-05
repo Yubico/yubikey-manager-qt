@@ -33,7 +33,7 @@ ColumnLayout {
                                              snackbarSuccess.show(
                                                          "Certificate Signing Request (CSR) generated")
                                          } else {
-                                             errorPopup.showResponseError(resp)
+                                             snackbarError.showResponseError(resp)
                                          }
                                          views.pop()
                                      })
@@ -67,7 +67,7 @@ ColumnLayout {
                                                pin: pin,
                                                keyHex: managementKey,
                                                callback: function (resp) {
-                                                   errorPopup.showResponseError(
+                                                   snackbarError.showResponseError(
                                                                resp)
                                                    if (resp.success) {
                                                        if (selfSign) {

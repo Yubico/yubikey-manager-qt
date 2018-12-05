@@ -21,21 +21,22 @@ ChangePinView {
                 snackbarSuccess.show("Changed FIDO2 PIN")
             } else {
                 if (resp.error_id === 'too long') {
-                    errorPopup.show(qsTr("Too long PIN, maximum size is 128 bytes"))
+                    snackbarError.show(
+                                qsTr("Too long PIN, maximum size is 128 bytes"))
                 } else if (resp.error_id === 'wrong pin') {
                     clearCurrentPinInput()
-                    errorPopup.show(qsTr("The current PIN is wrong"))
+                    snackbarError.show(qsTr("The current PIN is wrong"))
                 } else if (resp.error_id === 'currently blocked') {
-                    errorPopup.show(qsTr("PIN authentication is currently blocked - Remove and re-insert your YubiKey"))
+                    snackbarError.show(
+                                qsTr("PIN authentication is currently blocked. Remove and re-insert your YubiKey"))
                 } else if (resp.error_id === 'blocked') {
-                    errorPopup.show(qsTr("PIN is blocked"))
+                    snackbarError.show(qsTr("PIN is blocked"))
                 } else if (resp.error_message) {
-                    errorPopup.show(resp.error_message)
+                    snackbarError.show(resp.error_message)
                 } else {
-                    errorPopup.show(resp.error_id)
+                    snackbarError.show(resp.error_id)
                 }
             }
         })
     }
-
 }

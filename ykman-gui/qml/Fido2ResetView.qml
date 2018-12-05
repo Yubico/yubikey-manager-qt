@@ -32,11 +32,11 @@ ColumnLayout {
                                     "FIDO applications have been reset")
                     } else {
                         if (resp.error_id === 'touch timeout') {
-                            errorPopup.show(qsTr("A reset requires a touch on the YubiKey to be confirmed."))
+                            snackbarError.show(qsTr("A reset requires a touch on the YubiKey to be confirmed."))
                         } else if (resp.error_message) {
-                            errorPopup.show(resp.error_message)
+                            snackbarError.show(resp.error_message)
                         } else {
-                            errorPopup.show(resp.error_id)
+                            snackbarError.show(resp.error_id)
                         }
                     }
                 })

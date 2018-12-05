@@ -170,16 +170,17 @@ StackView {
     }
 
     function otpWriteError() {
-        errorPopup.show([
-            qsTr("Failed to modify %1.").arg(SlotUtils.slotNameCapitalized(views.selectedSlot)),
-            qsTr("Make sure the YubiKey does not have restricted access."),
-        ])
+        snackbarError.show(
+                    [qsTr("Failed to modify %1.").arg(
+                         SlotUtils.slotNameCapitalized(
+                             views.selectedSlot)), qsTr(
+                         "Make sure the YubiKey does not have restricted access.")])
     }
 
     function otpFailedToConfigureErrorPopup(error) {
-        errorPopup.show(
-            qsTr("Failed to configure %1. %2").arg(SlotUtils.slotNameCapitalized(views.selectedSlot)).arg(error)
-        )
+        snackbarError.show(qsTr("Failed to configure %1. %2").arg(
+                               SlotUtils.slotNameCapitalized(
+                                   views.selectedSlot)).arg(error))
     }
 
     Component {
@@ -216,10 +217,6 @@ StackView {
         id: otpConfigureSlotView
         OtpConfigureSlotView {
         }
-    }
-
-    ErrorPopup {
-        id: errorPopup
     }
 
     Component {
@@ -365,5 +362,9 @@ StackView {
 
     SnackBarSuccess {
         id: snackbarSuccess
+    }
+
+    SnackBarError {
+        id: snackbarError
     }
 }
