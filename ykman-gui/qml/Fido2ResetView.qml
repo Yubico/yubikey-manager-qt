@@ -11,10 +11,11 @@ ColumnLayout {
 
     function initiateReset() {
         confirmationPopup.show(
-                    [qsTr("Are you sure you want to reset FIDO? This will delete all FIDO credentials, including FIDO U2F credentials."), qsTr(
-                         "This action cannot be undone!")], function () {
-                             reInsertYubiKey.open()
-                         })
+                    "Reset FIDO?",
+                    "Are you sure you want to reset FIDO? This will delete all FIDO credentials, including FIDO U2F credentials.
+This action cannot be undone!", function () {
+    reInsertYubiKey.open()
+})
     }
 
     function resetOnReInsert() {
@@ -32,7 +33,8 @@ ColumnLayout {
                                     "FIDO applications have been reset")
                     } else {
                         if (resp.error_id === 'touch timeout') {
-                            snackbarError.show(qsTr("A reset requires a touch on the YubiKey to be confirmed."))
+                            snackbarError.show(
+                                        qsTr("A reset requires a touch on the YubiKey to be confirmed."))
                         } else if (resp.error_message) {
                             snackbarError.show(resp.error_message)
                         } else {

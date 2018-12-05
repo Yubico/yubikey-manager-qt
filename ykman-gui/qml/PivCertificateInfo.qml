@@ -25,7 +25,8 @@ ColumnLayout {
 
     function deleteCertificate() {
         confirmationPopup.show(
-                    qsTr("This will delete the certificate stored in slot '%1' of your YubiKey, and cannot be undone. Note that the private key is not deleted.").arg(
+                    "Delete certificate?",
+                    "This will delete the certificate stored in slot %1, and cannot be undone. Note that the private key is not deleted.".arg(
                         slot.hex), function () {
                             function _finish(pin, managementKey) {
                                 yubiKey.pivDeleteCertificate(slot.id, pin,
@@ -34,8 +35,7 @@ ColumnLayout {
                                                                  if (resp.success) {
                                                                      snackbarSuccess.show("Certificate was deleted")
                                                                  } else {
-                                                                     snackbarError.showResponseError(
-                                                                                 resp)
+                                                                     snackbarError.showResponseError(resp)
                                                                  }
                                                              })
                             }
@@ -65,7 +65,8 @@ ColumnLayout {
                 snackbarSuccess.show("Certificate was imported")
             } else {
                 if (resp.error === 'failed_parsing') {
-                    snackbarError.show('Something went wrong with reading the file.')
+                    snackbarError.show(
+                                'Something went wrong with reading the file.')
                 } else {
                     snackbarError.show(resp.error)
                 }

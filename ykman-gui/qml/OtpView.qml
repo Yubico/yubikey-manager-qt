@@ -43,18 +43,17 @@ ColumnLayout {
 
     function confirmDelete() {
         confirmationPopup.show(
-                    [qsTr("Do you want to delete the content of the %1?").arg(
-                         SlotUtils.slotNameCapitalized(
-                             views.selectedSlot)), qsTr(
-                         "This permanently deletes the configuration in the slot.")],
+                    "Delete slot?",
+                    "Do you want to delete the content of %1? This permanently deletes the configuration.".arg(
+                        SlotUtils.slotNameCapitalized(views.selectedSlot)),
                     deleteSelectedSlot)
     }
 
     function confirmSwap() {
         confirmationPopup.show(
-            qsTr("Do you want to swap the credentials between Short Touch (Slot 1) and Long Touch (Slot 2)?"),
-            swapConfigurations
-        )
+                    "Swap slots?",
+                    "Do you want to swap the credentials between Short Touch (Slot 1) and Long Touch (Slot 2)?",
+                    swapConfigurations)
     }
 
     function deleteSelectedSlot() {

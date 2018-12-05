@@ -162,19 +162,16 @@ StackView {
 
     function otpConfirmOverwrite(callback) {
         confirmationPopup.show(
-                    [qsTr("%1 is already configured.").arg(
-                         SlotUtils.slotNameCapitalized(
-                             views.selectedSlot)), qsTr(
-                         "Do you want to overwrite the existing configuration?")],
+                    "Overwrite?", "%1 is already configured.".arg(
+                        SlotUtils.slotNameCapitalized(views.selectedSlot))
+                    + " Do you want to overwrite the existing configuration?",
                     callback)
     }
 
     function otpWriteError() {
         snackbarError.show(
-                    [qsTr("Failed to modify %1.").arg(
-                         SlotUtils.slotNameCapitalized(
-                             views.selectedSlot)), qsTr(
-                         "Make sure the YubiKey does not have restricted access.")])
+                    qsTr("Failed to modify %1. Make sure the YubiKey does not have restricted access.").arg(
+                        SlotUtils.slotNameCapitalized(views.selectedSlot)))
     }
 
     function otpFailedToConfigureErrorPopup(error) {

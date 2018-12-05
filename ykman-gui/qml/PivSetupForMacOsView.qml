@@ -74,9 +74,8 @@ ColumnLayout {
             _prompt_for_pin_and_key()
         } else {
             confirmationPopup.show(
-                        [qsTr("This will overwrite any existing key and certificate in slot 9a and 9d."), qsTr(
-                             "This action cannot be undone!"), qsTr(
-                             'Are you sure you want to continue?')],
+                        "Overwrite?",
+                        "This will overwrite any existing key and certificate in slot 9a and 9d. This action cannot be undone! Are you sure you want to continue?",
                         function () {
                             setupForMacOs(true)
                         })

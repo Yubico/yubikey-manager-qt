@@ -33,7 +33,8 @@ ColumnLayout {
                                              snackbarSuccess.show(
                                                          "Certificate Signing Request (CSR) generated")
                                          } else {
-                                             snackbarError.showResponseError(resp)
+                                             snackbarError.showResponseError(
+                                                         resp)
                                          }
                                          views.pop()
                                      })
@@ -94,15 +95,14 @@ ColumnLayout {
                 selectCsrOutputDialog.open()
             }
         } else {
-            var firstMessageTemplate = selfSign ? qsTr('This will overwrite the key and certificate in the %1 (%2) slot.') : qsTr('This will overwrite the key and delete the certificate in the %1 (%2) slot.')
-
-            confirmationPopup.show([firstMessageTemplate.arg(slot.name).arg(
-                                        slot.hex), qsTr(
-                                        'This action cannot be undone!'), qsTr(
-                                        'Are you sure you want to continue?')],
-                                   function () {
-                                       finish(true)
-                                   })
+            var firstMessageTemplate = selfSign ? "This will overwrite the key and certificate in the %1 (%2) slot." : "This will overwrite the key and delete the certificate in the %1 (%2) slot."
+            confirmationPopup.show(
+                        "Overwrite?",
+                        firstMessageTemplate.arg(slot.name).arg(slot.hex)
+                        + " This action cannot be undone! Are you sure you want to continue?",
+                        function () {
+                            finish(true)
+                        })
         }
     }
 
