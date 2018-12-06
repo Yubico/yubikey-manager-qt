@@ -88,7 +88,7 @@ ColumnLayout {
             if (resp.success) {
                 _tryImport()
             } else {
-                pivPasswordPopup.getPasswordAndThen(_tryImport)
+                pivPasswordPopup.getInputAndThen(_tryImport)
             }
         })
     }

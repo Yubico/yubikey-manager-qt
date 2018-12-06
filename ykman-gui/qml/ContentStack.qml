@@ -134,9 +134,9 @@ StackView {
         if ((yubiKey.piv || {
 
              }).has_protected_key) {
-            pivPinPopup.getPinAndThen(pinCallback)
+            pivPinPopup.getInputAndThen(pinCallback)
         } else {
-            pivManagementKeyPopup.getKeyAndThen(keyCallback)
+            pivManagementKeyPopup.getInputAndThen(keyCallback)
         }
     }
 
@@ -355,6 +355,10 @@ StackView {
 
     PivPasswordPopup {
         id: pivPasswordPopup
+    }
+
+    InterFaceLockCodePopup {
+        id: lockCodePopup
     }
 
     SnackBarSuccess {

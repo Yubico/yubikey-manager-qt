@@ -44,7 +44,7 @@ ColumnLayout {
 
         function _prompt_for_pin_and_key(pin, key) {
             if (key) {
-                pivPinPopup.getPinAndThen(function (pin) {
+                pivPinPopup.getInputAndThen(function (pin) {
                     _finish(pin, key)
                 })
             } else {

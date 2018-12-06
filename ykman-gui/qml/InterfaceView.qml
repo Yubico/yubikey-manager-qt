@@ -7,8 +7,6 @@ import QtQuick.Controls.Material 2.2
 ColumnLayout {
     objectName: "interfaces"
 
-    property string lockCode: lockCodePopup.lockCode
-
     property var newApplicationsEnabledOverUsb: []
     property var newApplicationsEnabledOverNfc: []
 
@@ -36,13 +34,13 @@ ColumnLayout {
 
     function configureInterfaces() {
         if (yubiKey.configurationLocked) {
-            lockCodePopup.open()
+            lockCodePopup.getInputAndThen(writeInterfaces)
         } else {
             writeInterfaces()
         }
     }
 
-    function writeInterfaces() {
+    function writeInterfaces(lockCode) {
         views.lock()
         yubiKey.writeConfig(newApplicationsEnabledOverUsb,
                             newApplicationsEnabledOverNfc, lockCode,
@@ -55,7 +53,8 @@ ColumnLayout {
                                 } else {
                                     console.log(resp.error_id)
                                     views.unlock()
-                                    snackbarError.show(qsTr("Failed to configure interfaces"))
+                                    snackbarError.show(
+                                                qsTr("Failed to configure interfaces"))
                                 }
                             })
     }
@@ -245,11 +244,6 @@ ColumnLayout {
                     }
                 }
             }
-        }
-
-        InterFaceLockCodePopup {
-            id: lockCodePopup
-            onAccepted: writeInterfaces()
         }
 
         ButtonsBar {

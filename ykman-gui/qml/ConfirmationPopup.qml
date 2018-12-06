@@ -7,6 +7,7 @@ InlinePopup {
     property var acceptCallback
     standardButtons: Dialog.No | Dialog.Yes
     onAccepted: acceptCallback()
+    focus: true
 
     function show(heading, message, cb) {
         confirmationHeading.text = qsTr(heading)
