@@ -199,7 +199,7 @@ ColumnLayout {
                 CustomButton {
                     text: qsTr("Generate")
                     highlighted: true
-                    toolTipText: qsTr("Generate a new private key")
+                    toolTipText: qsTr("Generate a new self-signed certificate or CSR")
                     onClicked: views.push(pivGenerateCertificateWizard, {
                                               slot: slot
                                           })
@@ -208,7 +208,7 @@ ColumnLayout {
                     text: qsTr("Import")
                     highlighted: true
                     iconSource: "../images/import.svg"
-                    toolTipText: qsTr("Import certificate from a file")
+                    toolTipText: qsTr("Import a certificate or private key from a file")
                     onClicked: selectCertificateDialog.open()
                     DropArea {
                         anchors.fill: parent

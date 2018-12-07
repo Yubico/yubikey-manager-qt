@@ -184,7 +184,7 @@ ColumnLayout {
         visible: !isBusy
 
         ViewHeader {
-            heading: qsTr("Generate certificate")
+            heading: qsTr("Generate")
             breadcrumbs: [qsTr("PIV"), qsTr("Certificates"), qsTr(
                     "Generate: %1 (%2/%3)").arg(slot.name).arg(currentStep).arg(
                     numSteps)]
@@ -214,7 +214,7 @@ ColumnLayout {
                         onCheckedChanged: selfSign = checked
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Generate a self-signed certficate and store it on the YubiKey.")
+                        ToolTip.text: qsTr("Generate a self-signed certficate and store it on the YubiKey")
                     }
 
                     RadioButton {
@@ -224,7 +224,7 @@ ColumnLayout {
                         Material.foreground: yubicoBlue
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Generate a private key on the YubiKey and output a Certificate Signing Request (CSR) to a file.")
+                        ToolTip.text: qsTr("Generate a private key on the YubiKey and output a Certificate Signing Request (CSR) to a file")
                     }
                 }
             }
@@ -285,7 +285,7 @@ ColumnLayout {
                         Layout.fillWidth: true
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("The subject common name (CN) for the certificate.")
+                        ToolTip.text: qsTr("The subject common name (CN) for the certificate")
                         selectionColor: yubicoGreen
                         onTextChanged: subjectCommonName = text
                     }
@@ -317,7 +317,7 @@ ColumnLayout {
                         text: expirationDate
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format.")
+                        ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format")
                         selectionColor: yubicoGreen
                         validator: RegExpValidator {
                             regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
