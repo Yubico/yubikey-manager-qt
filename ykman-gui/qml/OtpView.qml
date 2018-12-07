@@ -50,13 +50,6 @@ ColumnLayout {
                     deleteSelectedSlot)
     }
 
-    function confirmSwap() {
-        confirmationPopup.show(
-            qsTr("Do you want to swap the credentials between Short Touch (Slot 1) and Long Touch (Slot 2)?"),
-            swapConfigurations
-        )
-    }
-
     function deleteSelectedSlot() {
         yubiKey.eraseSlot(views.selectedSlot, function (resp) {
             if (resp.success) {
@@ -158,7 +151,7 @@ ColumnLayout {
                     text: qsTr("Swap")
                     enabled: slot1Configured || slot2Configured
                     iconSource: "../images/swap.svg"
-                    onClicked: confirmSwap()
+                    onClicked: swapConfigurations()
                     flat: true
                     toolTipText: qsTr("Swap the configurations between the two slots")
                 }
