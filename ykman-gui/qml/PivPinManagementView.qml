@@ -26,7 +26,7 @@ ColumnLayout {
         yubiKey.refreshPivData(function (resp) {
             isBusy = false
             if (!resp.success) {
-                errorPopup.showResponseError(resp)
+                snackbarError.showResponseError(resp)
                 views.home()
             }
         })

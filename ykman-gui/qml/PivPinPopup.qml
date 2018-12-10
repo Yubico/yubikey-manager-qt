@@ -2,29 +2,16 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 
-InlinePopup {
-
-    property var doneCallback
-
-    closePolicy: Popup.CloseOnEscape
-    focus: true
-    standardButtons: Dialog.Cancel | Dialog.Ok
-
-    onAccepted: doneCallback(pinInput.text)
-    onVisibleChanged: pinInput.clear()
-
-    function getPinAndThen(cb) {
-        doneCallback = cb
-        open()
-        pinInput.focus = true
-    }
+AuthenticationPopup {
 
     ColumnLayout {
-        anchors.fill: parent
+        width: parent.width
+        spacing: 10
+
         Heading2 {
-            text: qsTr("Please enter the PIN.")
-            color: yubicoBlue
-            font.pixelSize: constants.h3
+            text: "Please enter the PIN"
+            width: parent.width
+            Layout.maximumWidth: parent.width
         }
 
         RowLayout {
@@ -34,7 +21,7 @@ InlinePopup {
                 font.pixelSize: constants.h3
             }
             TextField {
-                id: pinInput
+                id: keyInput
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
                 selectionColor: yubicoGreen

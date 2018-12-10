@@ -18,10 +18,10 @@ ChangePinView {
     onChangePin: {
         yubiKey.pivUnblockPin(currentPin, newPin, function (resp) {
             if (resp.success) {
-                successPopup.open()
                 views.pop()
+                snackbarSuccess.show("PUK was unblocked")
             } else {
-                errorPopup.showResponseError(resp)
+                snackbarError.showResponseError(resp)
 
                 if (resp.error_id === 'puk_blocked') {
                     views.pop()

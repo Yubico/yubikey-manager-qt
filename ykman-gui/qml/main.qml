@@ -13,11 +13,13 @@ ApplicationWindow {
     width: 750
     height: 500
     color: yubicoWhite
+
     readonly property string yubicoGreen: "#9aca3c"
     readonly property string yubicoBlue: "#284c61"
     readonly property string yubicoLightBlue: "#417488"
     readonly property string yubicoGrey: "#939598"
     readonly property string yubicoWhite: "#FFFFFF"
+    readonly property string yubicoRed: "#d32f2f"
 
     Component.onDestruction: saveScreenLayout()
 

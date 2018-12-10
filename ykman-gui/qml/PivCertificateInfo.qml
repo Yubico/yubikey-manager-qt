@@ -17,7 +17,7 @@ ColumnLayout {
     function load() {
         yubiKey.refreshPivData(function (resp) {
             if (!resp.success) {
-                errorPopup.showResponseError(resp)
+                snackbarError.showResponseError(resp)
                 views.home()
             }
         })
@@ -25,17 +25,17 @@ ColumnLayout {
 
     function deleteCertificate() {
         confirmationPopup.show(
-                    qsTr("This will delete the certificate stored in slot '%1' of your YubiKey, and cannot be undone. Note that the private key is not deleted.").arg(
+                    "Delete certificate?",
+                    "This will delete the certificate stored in slot %1, and cannot be undone. Note that the private key is not deleted.".arg(
                         slot.hex), function () {
                             function _finish(pin, managementKey) {
                                 yubiKey.pivDeleteCertificate(slot.id, pin,
                                                              managementKey,
                                                              function (resp) {
                                                                  if (resp.success) {
-                                                                     successPopup.open()
+                                                                     snackbarSuccess.show("Certificate was deleted")
                                                                  } else {
-                                                                     errorPopup.showResponseError(
-                                                                                 resp)
+                                                                     snackbarError.showResponseError(resp)
                                                                  }
                                                              })
                             }
@@ -51,9 +51,9 @@ ColumnLayout {
     function exportCertificate(fileUrl) {
         yubiKey.pivExportCertificate(slot.id, fileUrl, function (resp) {
             if (resp.success) {
-                successPopup.open()
+                snackbarSuccess.show("Certificate was exported")
             } else {
-                errorPopup.showResponseError(resp)
+                snackbarError.showResponseError(resp)
             }
         })
     }
@@ -62,12 +62,13 @@ ColumnLayout {
 
         function handleResponse(resp) {
             if (resp.success) {
-                successPopup.open()
+                snackbarSuccess.show("Certificate was imported")
             } else {
                 if (resp.error === 'failed_parsing') {
-                    errorPopup.show('Something went wrong with reading the file.')
+                    snackbarError.show(
+                                'Something went wrong with reading the file.')
                 } else {
-                    errorPopup.show(resp.error)
+                    snackbarError.show(resp.error)
                 }
             }
             load()
@@ -87,7 +88,7 @@ ColumnLayout {
             if (resp.success) {
                 _tryImport()
             } else {
-                pivPasswordPopup.getPasswordAndThen(_tryImport)
+                pivPasswordPopup.getInputAndThen(_tryImport)
             }
         })
     }

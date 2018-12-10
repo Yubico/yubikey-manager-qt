@@ -36,7 +36,8 @@ ColumnLayout {
                     views.pop()
                 }
             } else {
-                errorPopup.show(qsTr("Failed to configure interfaces. Make sure the YubiKey does not have restricted access."))
+                snackbarError.show(
+                            qsTr("Failed to configure interfaces. Make sure the YubiKey does not have restricted access."))
             }
         })
     }

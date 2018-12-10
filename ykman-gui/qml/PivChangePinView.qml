@@ -14,10 +14,10 @@ ChangePinView {
     onChangePin: {
         yubiKey.pivChangePin(currentPin, newPin, function (resp) {
             if (resp.success) {
-                successPopup.open()
                 views.pop()
+                snackbarSuccess.show("Changed PIN")
             } else {
-                errorPopup.showResponseError(resp, {
+                snackbarError.showResponseError(resp, {
                                                wrong_pin: qsTr("Wrong current PIN. Tries remaining: %1").arg(
                                                               resp.tries_left),
                                                pin_blocked: qsTr("PIN is blocked. Use the PUK to unlock it, or reset the PIV application."),

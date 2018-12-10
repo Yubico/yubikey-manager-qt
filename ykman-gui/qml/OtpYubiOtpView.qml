@@ -39,7 +39,9 @@ ColumnLayout {
                            privateIdInput.text, secretKeyInput.text,
                            function (resp) {
                                if (resp.success) {
-                                   views.otpSuccess()
+                                   views.otp()
+                                   snackbarSuccess.show(
+                                               "Configured Yubico OTP credential")
                                } else {
                                    if (resp.error_id === 'write error') {
                                        views.otpWriteError()

@@ -206,13 +206,20 @@ class Controller(object):
                 lock_code = a2b_hex(lock_code)
                 if len(lock_code) != 16:
                     return failure('lock_code_not_16_bytes')
-            dev.write_config(
-                device_config(
-                    usb_enabled=usb_enabled,
-                    nfc_enabled=nfc_enabled,
-                    ),
-                reboot=True,
-                lock_key=lock_code)
+
+            try:
+                dev.write_config(
+                    device_config(
+                        usb_enabled=usb_enabled,
+                        nfc_enabled=nfc_enabled,
+                        ),
+                    reboot=True,
+                    lock_key=lock_code)
+            except APDUError as e:
+                if (e.sw == SW.VERIFY_FAIL_NO_RETRY):
+                    return failure('wrong_lock_code')
+                raise
+
             return success()
 
     def refresh_piv(self):

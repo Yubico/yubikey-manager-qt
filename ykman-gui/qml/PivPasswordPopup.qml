@@ -2,27 +2,16 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 
-InlinePopup {
-
-    property var doneCallback
-
-    closePolicy: Popup.NoAutoClose
-    standardButtons: Dialog.Cancel | Dialog.Ok
-
-    onAccepted: doneCallback(passwordInput.text)
-    onVisibleChanged: passwordInput.clear()
-
-    function getPasswordAndThen(cb) {
-        doneCallback = cb
-        open()
-    }
+AuthenticationPopup {
 
     ColumnLayout {
-        anchors.fill: parent
+        width: parent.width
+        spacing: 10
+
         Heading2 {
-            text: qsTr("Password Required.")
-            color: yubicoBlue
-            font.pixelSize: constants.h3
+            text: qsTr("Plese enter the password")
+            width: parent.width
+            Layout.maximumWidth: parent.width
         }
 
         RowLayout {
@@ -32,7 +21,7 @@ InlinePopup {
                 font.pixelSize: constants.h3
             }
             TextField {
-                id: passwordInput
+                id: keyInput
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
                 selectionColor: yubicoGreen

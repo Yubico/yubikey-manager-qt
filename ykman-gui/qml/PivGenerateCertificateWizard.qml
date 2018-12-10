@@ -30,9 +30,11 @@ ColumnLayout {
                                      function (resp) {
                                          isBusy = false
                                          if (resp.success) {
-                                             successPopup.open()
+                                             snackbarSuccess.show(
+                                                         "Certificate Signing Request (CSR) generated")
                                          } else {
-                                             errorPopup.showResponseError(resp)
+                                             snackbarError.showResponseError(
+                                                         resp)
                                          }
                                          views.pop()
                                      })
@@ -42,7 +44,7 @@ ColumnLayout {
 
         function _prompt_for_pin_and_key(pin, key) {
             if (key) {
-                pivPinPopup.getPinAndThen(function (pin) {
+                pivPinPopup.getInputAndThen(function (pin) {
                     _finish(pin, key)
                 })
             } else {
@@ -66,13 +68,14 @@ ColumnLayout {
                                                pin: pin,
                                                keyHex: managementKey,
                                                callback: function (resp) {
-                                                   errorPopup.showResponseError(
+                                                   snackbarError.showResponseError(
                                                                resp)
                                                    if (resp.success) {
                                                        if (selfSign) {
                                                            isBusy = false
-                                                           successPopup.open()
                                                            views.pop()
+                                                           snackbarSuccess.show(
+                                                                       "Self-signed certificate generated")
                                                        } else {
                                                            deleteCertificate(
                                                                        pin,
@@ -92,15 +95,14 @@ ColumnLayout {
                 selectCsrOutputDialog.open()
             }
         } else {
-            var firstMessageTemplate = selfSign ? qsTr('This will overwrite the key and certificate in the %1 (%2) slot.') : qsTr('This will overwrite the key and delete the certificate in the %1 (%2) slot.')
-
-            confirmationPopup.show([firstMessageTemplate.arg(slot.name).arg(
-                                        slot.hex), qsTr(
-                                        'This action cannot be undone!'), qsTr(
-                                        'Are you sure you want to continue?')],
-                                   function () {
-                                       finish(true)
-                                   })
+            var firstMessageTemplate = selfSign ? "This will overwrite the key and certificate in the %1 (%2) slot." : "This will overwrite the key and delete the certificate in the %1 (%2) slot."
+            confirmationPopup.show(
+                        "Overwrite?",
+                        firstMessageTemplate.arg(slot.name).arg(slot.hex)
+                        + " This action cannot be undone! Are you sure you want to continue?",
+                        function () {
+                            finish(true)
+                        })
         }
     }
 
