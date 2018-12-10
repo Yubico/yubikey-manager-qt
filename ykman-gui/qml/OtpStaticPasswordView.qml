@@ -20,7 +20,9 @@ ColumnLayout {
         yubiKey.programStaticPassword(views.selectedSlot, passwordInput.text,
                                       keyboardLayout, function (resp) {
                                           if (resp.success) {
-                                              views.otpSuccess()
+                                              views.otp()
+                                              snackbarSuccess.show(
+                                                          "Configured static password")
                                           } else {
                                               if (resp.error_id === 'write error') {
                                                   views.otpWriteError()
@@ -45,7 +47,7 @@ ColumnLayout {
 
     RegExpValidator {
         id: usLayoutValidator
-        regExp: /[ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#\$%&'\(\)\*\+,-\.\/:;<=>\?@\[\]\^_{}\|~]{1,38}$/
+        regExp: /[ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#\$%&'\\`\(\)\*\+,-\.\/:;<=>\?@\[\]\^_{}\|~]{1,38}$/
     }
 
     CustomContentColumn {

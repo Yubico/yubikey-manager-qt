@@ -24,9 +24,9 @@ ColumnLayout {
                 isBusy = false
             } else {
                 if (resp.error_id === 'timeout') {
-                    errorPopup.show(qsTr("Failed to load OTP application"))
+                    snackbarError.show(qsTr("Failed to load OTP application"))
                 } else {
-                    errorPopup.show(resp.error_id)
+                    snackbarError.show(resp.error_id)
                 }
                 views.home()
             }
@@ -43,18 +43,18 @@ ColumnLayout {
 
     function confirmDelete() {
         confirmationPopup.show(
-                    [qsTr("Do you want to delete the content of the %1?").arg(
-                         SlotUtils.slotNameCapitalized(
-                             views.selectedSlot)), qsTr(
-                         "This permanently deletes the configuration in the slot.")],
+                    "Delete slot?",
+                    "Do you want to delete the content of %1? This permanently deletes the configuration.".arg(
+                        SlotUtils.slotNameCapitalized(views.selectedSlot)),
                     deleteSelectedSlot)
     }
+
 
     function deleteSelectedSlot() {
         yubiKey.eraseSlot(views.selectedSlot, function (resp) {
             if (resp.success) {
-                views.otpSuccess()
                 load()
+                snackbarSuccess.show("Configuration deleted")
             } else {
                 if (resp.error_id === 'write error') {
                     views.otpWriteError()
@@ -68,15 +68,17 @@ ColumnLayout {
     function swapConfigurations() {
         yubiKey.swapSlots(function (resp) {
             if (resp.success) {
-                views.otpSuccess()
+
                 load()
+                snackbarSuccess.show("Configurations swapped between slots")
             } else {
                 if (resp.error_id === 'write error') {
-                    errorPopup.show(qsTr("Failed to swap slots. Make sure the YubiKey does not have restricted access."))
+                    snackbarError.show(
+                                qsTr("Failed to swap slots. Make sure the YubiKey does not have restricted access."))
                 } else if (resp.error_message) {
-                    errorPopup.show(resp.error_message)
+                    snackbarError.show(resp.error_message)
                 } else {
-                    errorPopup.show(qsTr("Unknown error."))
+                    snackbarError.show(qsTr("Unknown error."))
                 }
             }
         })

@@ -18,7 +18,9 @@ ColumnLayout {
         yubiKey.programOathHotp(views.selectedSlot, secretKeyInput.text,
                                 digits.currentText, function (resp) {
                                     if (resp.success) {
-                                        views.otpSuccess()
+                                        views.otp()
+                                        snackbarSuccess.show(
+                                                    "Configured OATH-HOTP credential")
                                     } else {
                                         if (resp.error_id === 'write error') {
                                             views.otpWriteError()

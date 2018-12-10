@@ -134,9 +134,9 @@ StackView {
         if ((yubiKey.piv || {
 
              }).has_protected_key) {
-            pivPinPopup.getPinAndThen(pinCallback)
+            pivPinPopup.getInputAndThen(pinCallback)
         } else {
-            pivManagementKeyPopup.getKeyAndThen(keyCallback)
+            pivManagementKeyPopup.getInputAndThen(keyCallback)
         }
     }
 
@@ -160,30 +160,24 @@ StackView {
         replaceAtDepth(1, otpViewComponent, 'otpView')
     }
 
-    function otpSuccess() {
-        successPopup.showAndThen(views.otp)
-    }
-
     function otpConfirmOverwrite(callback) {
         confirmationPopup.show(
-                    [qsTr("%1 is already configured.").arg(
-                         SlotUtils.slotNameCapitalized(
-                             views.selectedSlot)), qsTr(
-                         "Do you want to overwrite the existing configuration?")],
+                    "Overwrite?", "%1 is already configured.".arg(
+                        SlotUtils.slotNameCapitalized(views.selectedSlot))
+                    + " Do you want to overwrite the existing configuration?",
                     callback)
     }
 
     function otpWriteError() {
-        errorPopup.show([
-            qsTr("Failed to modify %1.").arg(SlotUtils.slotNameCapitalized(views.selectedSlot)),
-            qsTr("Make sure the YubiKey does not have restricted access."),
-        ])
+        snackbarError.show(
+                    qsTr("Failed to modify %1. Make sure the YubiKey does not have restricted access.").arg(
+                        SlotUtils.slotNameCapitalized(views.selectedSlot)))
     }
 
     function otpFailedToConfigureErrorPopup(error) {
-        errorPopup.show(
-            qsTr("Failed to configure %1. %2").arg(SlotUtils.slotNameCapitalized(views.selectedSlot)).arg(error)
-        )
+        snackbarError.show(qsTr("Failed to configure %1. %2").arg(
+                               SlotUtils.slotNameCapitalized(
+                                   views.selectedSlot)).arg(error))
     }
 
     Component {
@@ -220,14 +214,6 @@ StackView {
         id: otpConfigureSlotView
         OtpConfigureSlotView {
         }
-    }
-
-    SuccessPopup {
-        id: successPopup
-    }
-
-    ErrorPopup {
-        id: errorPopup
     }
 
     Component {
@@ -369,5 +355,17 @@ StackView {
 
     PivPasswordPopup {
         id: pivPasswordPopup
+    }
+
+    InterFaceLockCodePopup {
+        id: lockCodePopup
+    }
+
+    SnackBarSuccess {
+        id: snackbarSuccess
+    }
+
+    SnackBarError {
+        id: snackbarError
     }
 }

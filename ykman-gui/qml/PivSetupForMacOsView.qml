@@ -22,7 +22,7 @@ ColumnLayout {
     function setupForMacOs(confirmedOverwrite) {
         function _prompt_for_pin_and_key(pin, key) {
             if (key) {
-                pivPinPopup.getPinAndThen(function (pin) {
+                pivPinPopup.getInputAndThen(function (pin) {
                     _finish(pin, key)
                 })
             } else {
@@ -54,17 +54,17 @@ ColumnLayout {
                 if (resp.success) {
                     _generateCertificate('KEY_MANAGEMENT', function (resp) {
                         if (resp.success) {
-                            successPopup.show(
-                                        "Remove and re-insert your YubiKey to start the macOS pairing setup.")
                             views.pop()
+                            snackbarSuccess.show(
+                                        "Remove and re-insert your YubiKey to start the macOS pairing setup.")
                         } else {
-                            errorPopup.showResponseError(resp)
+                            snackbarError.showResponseError(resp)
                         }
                         isBusy = false
                     })
                 } else {
                     isBusy = false
-                    errorPopup.showResponseError(resp)
+                    snackbarError.showResponseError(resp)
                 }
             })
         }
@@ -74,9 +74,8 @@ ColumnLayout {
             _prompt_for_pin_and_key()
         } else {
             confirmationPopup.show(
-                        [qsTr("This will overwrite any existing key and certificate in slot 9a and 9d."), qsTr(
-                             "This action cannot be undone!"), qsTr(
-                             'Are you sure you want to continue?')],
+                        "Overwrite?",
+                        "This will overwrite any existing key and certificate in slot 9a and 9d. This action cannot be undone! Are you sure you want to continue?",
                         function () {
                             setupForMacOs(true)
                         })
