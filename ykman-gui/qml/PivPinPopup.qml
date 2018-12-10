@@ -36,6 +36,7 @@ InlinePopup {
             TextField {
                 id: pinInput
                 Layout.fillWidth: true
+                background.width: width
                 echoMode: TextInput.Password
                 selectionColor: yubicoGreen
                 onAccepted: accept()

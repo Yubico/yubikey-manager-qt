@@ -283,6 +283,7 @@ ColumnLayout {
                         id: subjectNameInput
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         Layout.fillWidth: true
+                        background.width: width
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("The subject common name (CN) for the certificate")
@@ -317,6 +318,7 @@ ColumnLayout {
                         text: expirationDate
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
+                        background.width: width
                         ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format")
                         selectionColor: yubicoGreen
                         validator: RegExpValidator {

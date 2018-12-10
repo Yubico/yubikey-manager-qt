@@ -29,6 +29,7 @@ InlinePopup {
                     regExp: /[0-9a-fA-F]{32}$/
                 }
                 Layout.fillWidth: true
+                background.width: width
                 echoMode: TextInput.Password
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered

@@ -34,6 +34,7 @@ InlinePopup {
             TextField {
                 id: passwordInput
                 Layout.fillWidth: true
+                background.width: width
                 echoMode: TextInput.Password
                 selectionColor: yubicoGreen
             }

@@ -65,6 +65,7 @@ ColumnLayout {
             TextField {
                 id: passwordInput
                 Layout.fillWidth: true
+                background.width: width
                 validator: allowNonModhex.checked ? usLayoutValidator : modHexValidator
                 selectByMouse: true
                 selectionColor: yubicoGreen

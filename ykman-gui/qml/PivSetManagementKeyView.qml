@@ -106,6 +106,7 @@ ColumnLayout {
                 PivManagementKeyTextField {
                     id: currentManagementKey
                     Layout.fillWidth: true
+                    background.width: width
                     visible: hasCurrentManagementKeyInput
                     enabled: !useDefaultCurrentManagementKeyCheckbox.checked
                 }
@@ -127,6 +128,7 @@ ColumnLayout {
                 PivManagementKeyTextField {
                     id: newManagementKey
                     Layout.fillWidth: true
+                    background.width: width
                 }
                 CustomButton {
                     id: randomManagementKeyBtn

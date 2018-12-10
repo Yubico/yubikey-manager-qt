@@ -72,6 +72,7 @@ ColumnLayout {
             TextField {
                 id: publicIdInput
                 Layout.fillWidth: true
+                background.width: width
                 enabled: !useSerialCb.checked
                 validator: RegExpValidator {
                     regExp: /[cbdefghijklnrtuv]{12}$/
@@ -103,6 +104,7 @@ ColumnLayout {
             TextField {
                 id: privateIdInput
                 Layout.fillWidth: true
+                background.width: width
                 validator: RegExpValidator {
                     regExp: /[0-9a-fA-F]{12}$/
                 }
@@ -128,6 +130,7 @@ ColumnLayout {
             TextField {
                 id: secretKeyInput
                 Layout.fillWidth: true
+                background.width: width
                 validator: RegExpValidator {
                     regExp: /[0-9a-fA-F]{32}$/
                 }

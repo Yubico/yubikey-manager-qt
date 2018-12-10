@@ -48,6 +48,7 @@ ColumnLayout {
             TextField {
                 id: secretKeyInput
                 Layout.fillWidth: true
+                background.width: width
                 validator: RegExpValidator {
                     regExp: /[ 2-7a-zA-Z]+=*/
                 }
