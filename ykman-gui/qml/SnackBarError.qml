@@ -33,6 +33,8 @@ SnackBar {
             return qsTr("Wrong management key.")
         case 'wrong_mgm_key_or_touch_required':
             return qsTr("Wrong management key, or timeout while waiting for touch confirmation.")
+        case 'wrong_lock_code':
+            return qsTr("Wrong lock code.")
         case 'wrong_pin':
             return qsTr('Wrong PIN, %1 tries left.'.arg(resp.tries_left))
         case 'wrong_puk':
