@@ -61,6 +61,7 @@ ColumnLayout {
                     regExp: /([0-9a-fA-F]{2}){1,20}$/
                 }
                 ToolTip.delay: 1000
+                background.width: width
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Secret key can be a up to 40 characters (20 bytes) hex value")
                 selectByMouse: true

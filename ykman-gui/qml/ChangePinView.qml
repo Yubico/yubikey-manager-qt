@@ -96,6 +96,7 @@ ColumnLayout {
                 TextField {
                     id: currentPin
                     Layout.fillWidth: true
+                    background.width: width
                     echoMode: enabled ? TextInput.Password : TextInput.Normal
                     selectByMouse: true
                     selectionColor: yubicoGreen
@@ -121,6 +122,7 @@ ColumnLayout {
             TextField {
                 id: newPin
                 Layout.fillWidth: true
+                background.width: width
                 echoMode: TextInput.Password
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
@@ -137,6 +139,7 @@ ColumnLayout {
             }
             TextField {
                 id: confirmPin
+                background.width: width
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
                 selectByMouse: true

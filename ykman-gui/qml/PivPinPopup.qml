@@ -23,6 +23,7 @@ AuthenticationPopup {
             TextField {
                 id: keyInput
                 Layout.fillWidth: true
+                background.width: width
                 echoMode: TextInput.Password
                 selectionColor: yubicoGreen
                 onAccepted: accept()

@@ -23,6 +23,7 @@ AuthenticationPopup {
 
             PivManagementKeyTextField {
                 id: keyInput
+                background.width: width
                 Layout.fillWidth: true
                 onAccepted: accept()
             }
