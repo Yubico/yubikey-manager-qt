@@ -35,6 +35,7 @@ ColumnLayout {
                     isBusy = false
                 }
             } else {
+                snackbarError.showResponseError(resp)
                 views.home()
             }
         })
