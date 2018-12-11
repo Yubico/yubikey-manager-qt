@@ -97,7 +97,7 @@ ColumnLayout {
                 columns: 3
 
                 Label {
-                    text: qsTr("Current Management Key:")
+                    text: qsTr("Current Management Key")
                     font.pixelSize: constants.h3
                     color: yubicoBlue
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -120,7 +120,7 @@ ColumnLayout {
                 }
 
                 Label {
-                    text: qsTr("New Management Key:")
+                    text: qsTr("New Management Key")
                     font.pixelSize: constants.h3
                     color: yubicoBlue
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter

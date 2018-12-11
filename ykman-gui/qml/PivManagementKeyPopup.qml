@@ -16,7 +16,7 @@ AuthenticationPopup {
         RowLayout {
 
             Heading2 {
-                text: qsTr("Management key:")
+                text: qsTr("Management key")
                 color: yubicoBlue
                 font.pixelSize: constants.h3
             }
