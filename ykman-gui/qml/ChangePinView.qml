@@ -102,6 +102,7 @@ ColumnLayout {
                     selectByMouse: true
                     selectionColor: yubicoGreen
                     enabled: !useDefaultCurrentPinCheckbox.checked
+                    maximumLength: maxLength
                 }
 
                 CheckBox {
@@ -130,6 +131,7 @@ ColumnLayout {
                 ToolTip.text: newPinTooltip
                 selectByMouse: true
                 selectionColor: yubicoGreen
+                maximumLength: maxLength
             }
 
             Label {
@@ -145,6 +147,7 @@ ColumnLayout {
                 echoMode: TextInput.Password
                 selectByMouse: true
                 selectionColor: yubicoGreen
+                maximumLength: maxLength
             }
         }
 
