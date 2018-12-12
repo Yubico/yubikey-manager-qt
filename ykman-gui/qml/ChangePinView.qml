@@ -35,7 +35,7 @@ ColumnLayout {
     function validPin() {
         return (!hasCurrentPin || currentPin.length >= minLength)
                 && (pinMatches) && (chosenPin.length >= minLength)
-                && (chosenPin.length <= maxLength)
+                && (chosenPin.length <= maxLength || !maxLength)
     }
 
     signal changePin(string currentPin, string newPin)
@@ -102,7 +102,7 @@ ColumnLayout {
                     selectByMouse: true
                     selectionColor: yubicoGreen
                     enabled: !useDefaultCurrentPinCheckbox.checked
-                    maximumLength: maxLength
+                    maximumLength: !!maxLength ? maxLength : null
                 }
 
                 CheckBox {
@@ -131,7 +131,7 @@ ColumnLayout {
                 ToolTip.text: newPinTooltip
                 selectByMouse: true
                 selectionColor: yubicoGreen
-                maximumLength: maxLength
+                maximumLength: !!maxLength ? maxLength : null
             }
 
             Label {
@@ -147,7 +147,7 @@ ColumnLayout {
                 echoMode: TextInput.Password
                 selectByMouse: true
                 selectionColor: yubicoGreen
-                maximumLength: maxLength
+                maximumLength: !!maxLength ? maxLength : null
             }
         }
 
