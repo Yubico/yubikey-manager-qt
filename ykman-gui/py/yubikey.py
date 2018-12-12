@@ -328,7 +328,8 @@ class Controller(object):
                 controller.set_pin(new_pin)
                 return success()
         except CtapError as e:
-            if e.code == CtapError.ERR.INVALID_LENGTH:
+            if e.code == CtapError.ERR.INVALID_LENGTH or \
+                    e.code == CtapError.ERR.PIN_POLICY_VIOLATION:
                 return failure('too long')
             raise
 
@@ -338,7 +339,8 @@ class Controller(object):
                 controller.change_pin(old_pin=current_pin, new_pin=new_pin)
                 return success()
         except CtapError as e:
-            if e.code == CtapError.ERR.INVALID_LENGTH:
+            if e.code == CtapError.ERR.INVALID_LENGTH or \
+                    e.code == CtapError.ERR.PIN_POLICY_VIOLATION:
                 return failure('too long')
             if e.code == CtapError.ERR.PIN_INVALID:
                 return failure('wrong pin')

@@ -8,7 +8,7 @@ ColumnLayout {
     property var breadcrumbs
     property string defaultCurrentPin
     property bool hasCurrentPin
-    property int maxLength
+    property int maxLength: 32767 // Default max value for TextField.maximumWidth
     property int minLength
 
     property string codeName: qsTr("PIN")
@@ -35,7 +35,7 @@ ColumnLayout {
     function validPin() {
         return (!hasCurrentPin || currentPin.length >= minLength)
                 && (pinMatches) && (chosenPin.length >= minLength)
-                && (chosenPin.length <= maxLength)
+                && (chosenPin.length <= maxLength || !maxLength)
     }
 
     signal changePin(string currentPin, string newPin)
