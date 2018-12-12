@@ -11,7 +11,6 @@ ChangePinView {
     finishButtonTooltip: qsTr("Finish and set the FIDO2 PIN")
     hasCurrentPin: false
     mainHeading: qsTr("Set FIDO2 PIN")
-    maxLength: constants.fido2PinMaxLength
     minLength: constants.fido2PinMinLength
     newPinLabel: qsTr("New PIN")
     newPinTooltip: qsTr("The FIDO2 PIN must be at least %1 characters").arg(

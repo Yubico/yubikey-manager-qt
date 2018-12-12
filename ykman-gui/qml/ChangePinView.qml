@@ -8,7 +8,7 @@ ColumnLayout {
     property var breadcrumbs
     property string defaultCurrentPin
     property bool hasCurrentPin
-    property int maxLength
+    property int maxLength: 32767 // Default max value for TextField.maximumWidth
     property int minLength
 
     property string codeName: qsTr("PIN")
@@ -102,7 +102,7 @@ ColumnLayout {
                     selectByMouse: true
                     selectionColor: yubicoGreen
                     enabled: !useDefaultCurrentPinCheckbox.checked
-                    maximumLength: !!maxLength ? maxLength : null
+                    maximumLength: maxLength
                 }
 
                 CheckBox {
@@ -131,7 +131,7 @@ ColumnLayout {
                 ToolTip.text: newPinTooltip
                 selectByMouse: true
                 selectionColor: yubicoGreen
-                maximumLength: !!maxLength ? maxLength : null
+                maximumLength: maxLength
             }
 
             Label {
@@ -147,7 +147,7 @@ ColumnLayout {
                 echoMode: TextInput.Password
                 selectByMouse: true
                 selectionColor: yubicoGreen
-                maximumLength: !!maxLength ? maxLength : null
+                maximumLength: maxLength
             }
         }
 
