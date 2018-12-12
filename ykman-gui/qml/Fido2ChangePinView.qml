@@ -21,8 +21,7 @@ ChangePinView {
                 snackbarSuccess.show("Changed FIDO2 PIN")
             } else {
                 if (resp.error_id === 'too long') {
-                    snackbarError.show(
-                                qsTr("Too long PIN, maximum size is 128 bytes"))
+                    snackbarError.show(qsTr("Too long PIN"))
                 } else if (resp.error_id === 'wrong pin') {
                     clearCurrentPinInput()
                     snackbarError.show(qsTr("The current PIN is wrong"))
