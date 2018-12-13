@@ -13,6 +13,7 @@ ColumnLayout {
         confirmationPopup.show(
                     "Reset FIDO?",
                     "Are you sure you want to reset FIDO? This will delete all FIDO credentials, including FIDO U2F credentials.
+
 This action cannot be undone!", function () {
     reInsertYubiKey.open()
 })
