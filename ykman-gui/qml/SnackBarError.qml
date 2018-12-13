@@ -4,7 +4,11 @@ import QtQuick.Layouts 1.2
 import QtQuick.Controls.Material 2.2
 
 SnackBar {
-    Material.background: yubicoRed
+    background: Rectangle {
+        color: yubicoRed
+        opacity: 0.8
+        radius: 4
+    }
 
     function getDefaultMessage(resp) {
         switch (resp.error_id) {
