@@ -258,12 +258,6 @@ StackView {
     }
 
     Component {
-        id: pivResetView
-        PivResetView {
-        }
-    }
-
-    Component {
         id: pivPinManagementView
 
         PivPinManagementView {
