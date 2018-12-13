@@ -281,15 +281,13 @@ ColumnLayout {
                         color: yubicoBlue
                     }
 
-                    TextField {
+                    CustomTextField {
                         id: subjectNameInput
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         Layout.fillWidth: true
-                        background.width: width
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
                         ToolTip.text: qsTr("The subject common name (CN) for the certificate")
-                        selectionColor: yubicoGreen
                         onTextChanged: subjectCommonName = text
                     }
                 }
@@ -316,13 +314,11 @@ ColumnLayout {
                         text: qsTr("Expiration date")
                     }
 
-                    TextField {
+                    CustomTextField {
                         text: expirationDate
                         ToolTip.delay: 1000
                         ToolTip.visible: hovered
-                        background.width: width
                         ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format")
-                        selectionColor: yubicoGreen
                         validator: RegExpValidator {
                             regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
                         }

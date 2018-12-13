@@ -94,13 +94,10 @@ ColumnLayout {
             RowLayout {
                 visible: hasCurrentPin
 
-                TextField {
+                CustomTextField {
                     id: currentPin
                     Layout.fillWidth: true
-                    background.width: width
                     echoMode: enabled ? TextInput.Password : TextInput.Normal
-                    selectByMouse: true
-                    selectionColor: yubicoGreen
                     enabled: !useDefaultCurrentPinCheckbox.checked
                     maximumLength: maxLength
                 }
@@ -121,16 +118,13 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 color: yubicoBlue
             }
-            TextField {
+            CustomTextField {
                 id: newPin
                 Layout.fillWidth: true
-                background.width: width
                 echoMode: TextInput.Password
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: newPinTooltip
-                selectByMouse: true
-                selectionColor: yubicoGreen
                 maximumLength: maxLength
             }
 
@@ -140,13 +134,10 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 color: yubicoBlue
             }
-            TextField {
+            CustomTextField {
                 id: confirmPin
-                background.width: width
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
-                selectByMouse: true
-                selectionColor: yubicoGreen
                 maximumLength: maxLength
             }
         }

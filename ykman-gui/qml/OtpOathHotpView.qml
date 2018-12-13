@@ -47,18 +47,15 @@ ColumnLayout {
                 font.pixelSize: constants.h3
                 color: yubicoBlue
             }
-            TextField {
+            CustomTextField {
                 id: secretKeyInput
                 Layout.fillWidth: true
-                background.width: width
                 validator: RegExpValidator {
                     regExp: /[ 2-7a-zA-Z]+=*/
                 }
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Secret key must be a base32 encoded value")
-                selectByMouse: true
-                selectionColor: yubicoGreen
             }
         }
         RowLayout {

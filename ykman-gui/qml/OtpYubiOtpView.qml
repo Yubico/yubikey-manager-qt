@@ -71,10 +71,9 @@ ColumnLayout {
                 font.pixelSize: constants.h3
                 color: yubicoBlue
             }
-            TextField {
+            CustomTextField {
                 id: publicIdInput
                 Layout.fillWidth: true
-                background.width: width
                 enabled: !useSerialCb.checked
                 validator: RegExpValidator {
                     regExp: /[cbdefghijklnrtuv]{12}$/
@@ -82,8 +81,6 @@ ColumnLayout {
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Public ID must be a 12 characters (6 bytes) modhex value")
-                selectByMouse: true
-                selectionColor: yubicoGreen
             }
             CheckBox {
                 id: useSerialCb
@@ -99,22 +96,19 @@ ColumnLayout {
 
             Label {
                 text: qsTr("Private ID")
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 font.pixelSize: constants.h3
                 color: yubicoBlue
             }
-            TextField {
+            CustomTextField {
                 id: privateIdInput
                 Layout.fillWidth: true
-                background.width: width
                 validator: RegExpValidator {
                     regExp: /[0-9a-fA-F]{12}$/
                 }
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Private ID must be a 12 characters (6 bytes) hex value")
-                selectByMouse: true
-                selectionColor: yubicoGreen
             }
             CustomButton {
                 id: generatePrivateIdBtn
@@ -126,21 +120,19 @@ ColumnLayout {
 
             Label {
                 text: qsTr("Secret key")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 font.pixelSize: constants.h3
                 color: yubicoBlue
             }
-            TextField {
+            CustomTextField {
                 id: secretKeyInput
                 Layout.fillWidth: true
-                background.width: width
                 validator: RegExpValidator {
                     regExp: /[0-9a-fA-F]{32}$/
                 }
                 ToolTip.delay: 1000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Secret key must be a 32 characters (16 bytes) hex value")
-                selectByMouse: true
-                selectionColor: yubicoGreen
             }
             CustomButton {
                 id: generateSecretKeyBtn
