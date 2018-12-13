@@ -193,12 +193,6 @@ StackView {
     }
 
     Component {
-        id: fido2ResetView
-        Fido2ResetView {
-        }
-    }
-
-    Component {
         id: homeView
         HomeView {
         }
