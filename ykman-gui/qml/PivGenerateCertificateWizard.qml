@@ -96,13 +96,12 @@ ColumnLayout {
             }
         } else {
             var firstMessageTemplate = selfSign ? "This will overwrite the key and certificate in the %1 (%2) slot." : "This will overwrite the key and delete the certificate in the %1 (%2) slot."
-            confirmationPopup.show(
-                        "Overwrite?",
-                        firstMessageTemplate.arg(slot.name).arg(slot.hex)
-                        + " This action cannot be undone! Are you sure you want to continue?",
-                        function () {
-                            finish(true)
-                        })
+            confirmationPopup.show("Overwrite?", firstMessageTemplate.arg(
+                                       slot.name).arg(slot.hex) + "
+
+Do you want to continue?", function () {
+    finish(true)
+})
         }
     }
 
@@ -356,14 +355,11 @@ ColumnLayout {
             id: finishView
 
             ColumnLayout {
-                Heading2 {
-                    text: qsTr("Confirm selected options:")
-                    Layout.topMargin: 20
-                }
 
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: constants.contentMargins
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                     GridLayout {
                         columns: 2
