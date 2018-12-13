@@ -11,7 +11,7 @@ ListView {
     orientation: ListView.Horizontal
     highlightMoveDuration: 0
     highlightRangeMode: ListView.StrictlyEnforceRange
-    width: 275
+    width: 250
     height: 200
     interactive: false
     model: CalendarModel {

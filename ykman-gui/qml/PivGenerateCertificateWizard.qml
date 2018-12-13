@@ -302,9 +302,7 @@ ColumnLayout {
                 Component.onCompleted: calendarWidget.goToMonth(
                                            new Date(expirationDate))
 
-                GridLayout {
-                    columns: 2
-
+                RowLayout {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
@@ -327,14 +325,16 @@ ColumnLayout {
                             expirationDate = text
 
                             if ((expirationDate.length > previousValue.length)
-                                && (expirationDate.length === 4 || expirationDate.length === 7)
-                            ) {
+                                    && (expirationDate.length === 4
+                                        || expirationDate.length === 7)) {
                                 expirationDate = expirationDate + "-"
                             }
                             if (isExpirationDateValid(expirationDate)) {
-                                calendarWidget.goToMonth(new Date(expirationDate))
+                                calendarWidget.goToMonth(
+                                            new Date(expirationDate))
                             }
                         }
+                        Layout.rightMargin: 20
                     }
 
                     CalendarWidget {
