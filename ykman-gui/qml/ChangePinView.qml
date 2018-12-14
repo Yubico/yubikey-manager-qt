@@ -122,7 +122,7 @@ ColumnLayout {
                 id: newPin
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
-                tooltip: newPinTooltip
+                toolTipText: newPinTooltip
                 maximumLength: maxLength
             }
 

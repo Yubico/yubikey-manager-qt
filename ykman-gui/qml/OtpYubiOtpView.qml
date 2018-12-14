@@ -78,7 +78,7 @@ ColumnLayout {
                 validator: RegExpValidator {
                     regExp: /[cbdefghijklnrtuv]{12}$/
                 }
-                tooltip: qsTr("Public ID must be a 12 characters (6 bytes) modhex value")
+                toolTipText: qsTr("Public ID must be a 12 characters (6 bytes) modhex value")
             }
             CheckBox {
                 id: useSerialCb
@@ -104,7 +104,7 @@ ColumnLayout {
                 validator: RegExpValidator {
                     regExp: /[0-9a-fA-F]{12}$/
                 }
-                tooltip: qsTr("Private ID must be a 12 characters (6 bytes) hex value")
+                toolTipText: qsTr("Private ID must be a 12 characters (6 bytes) hex value")
             }
             CustomButton {
                 id: generatePrivateIdBtn
@@ -126,7 +126,7 @@ ColumnLayout {
                 validator: RegExpValidator {
                     regExp: /[0-9a-fA-F]{32}$/
                 }
-                tooltip: qsTr("Secret key must be a 32 characters (16 bytes) hex value")
+                toolTipText: qsTr("Secret key must be a 32 characters (16 bytes) hex value")
             }
             CustomButton {
                 id: generateSecretKeyBtn

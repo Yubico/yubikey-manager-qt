@@ -27,7 +27,7 @@ AuthenticationPopup {
                 }
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
-                tooltip: qsTr("Lock code must be a 32 characters (16 bytes) hex value")
+                toolTipText: qsTr("Lock code must be a 32 characters (16 bytes) hex value")
                 onAccepted: accept()
             }
         }
