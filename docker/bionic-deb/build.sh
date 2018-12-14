@@ -8,6 +8,7 @@ set -x
 
 
 git clone /sources/yubikey-manager-qt /yubikey-manager-qt
+apt-get update -qq
 yes | mk-build-deps -i /yubikey-manager-qt/debian/control
 
 cd yubikey-manager-qt
