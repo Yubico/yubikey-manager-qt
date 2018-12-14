@@ -447,9 +447,7 @@ Do you want to continue?", function () {
                 text: qsTr("Generate")
                 onClicked: finish()
                 visible: currentStep === numSteps
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and generate the private key and %1").arg(
+                toolTipText: qsTr("Finish and generate the private key and %1").arg(
                                   selfSign ? qsTr("certificate") : qsTr("CSR"))
                 enabled: isInputValid()
             }
