@@ -284,9 +284,7 @@ Do you want to continue?", function () {
                         id: subjectNameInput
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         Layout.fillWidth: true
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("The subject common name (CN) for the certificate")
+                        tooltip: qsTr("The subject common name (CN) for the certificate")
                         onTextChanged: subjectCommonName = text
                     }
                 }
@@ -313,9 +311,7 @@ Do you want to continue?", function () {
 
                     CustomTextField {
                         text: expirationDate
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format")
+                        tooltip: qsTr("The expiration date for the certificate, in YYYY-MM-DD format")
                         validator: RegExpValidator {
                             regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
                         }
