@@ -284,9 +284,7 @@ Do you want to continue?", function () {
                         id: subjectNameInput
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         Layout.fillWidth: true
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("The subject common name (CN) for the certificate")
+                        toolTipText: qsTr("The subject common name (CN) for the certificate")
                         onTextChanged: subjectCommonName = text
                     }
                 }
@@ -313,9 +311,7 @@ Do you want to continue?", function () {
 
                     CustomTextField {
                         text: expirationDate
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format")
+                        toolTipText: qsTr("The expiration date for the certificate, in YYYY-MM-DD format")
                         validator: RegExpValidator {
                             regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
                         }
@@ -451,9 +447,7 @@ Do you want to continue?", function () {
                 text: qsTr("Generate")
                 onClicked: finish()
                 visible: currentStep === numSteps
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and generate the private key and %1").arg(
+                toolTipText: qsTr("Finish and generate the private key and %1").arg(
                                   selfSign ? qsTr("certificate") : qsTr("CSR"))
                 enabled: isInputValid()
             }

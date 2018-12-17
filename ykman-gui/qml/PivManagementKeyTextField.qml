@@ -7,7 +7,5 @@ CustomTextField {
     validator: RegExpValidator {
         regExp: /[0-9a-f]*/
     }
-    ToolTip.delay: 1000
-    ToolTip.visible: hovered
-    ToolTip.text: qsTr("Management key must be exactly 48 hexadecimal digits.")
+    toolTipText: qsTr("Management key must be exactly 48 hexadecimal digits.")
 }

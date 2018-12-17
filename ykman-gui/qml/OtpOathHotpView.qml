@@ -53,9 +53,7 @@ ColumnLayout {
                 validator: RegExpValidator {
                     regExp: /[ 2-7a-zA-Z]+=*/
                 }
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Secret key must be a base32 encoded value")
+                toolTipText: qsTr("Secret key must be a base32 encoded value")
             }
         }
         RowLayout {
