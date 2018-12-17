@@ -64,13 +64,10 @@ ColumnLayout {
                 font.pixelSize: constants.h3
                 color: yubicoBlue
             }
-            TextField {
+            CustomTextField {
                 id: passwordInput
                 Layout.fillWidth: true
-                background.width: width
                 validator: allowNonModhex.checked ? usLayoutValidator : modHexValidator
-                selectByMouse: true
-                selectionColor: yubicoGreen
             }
             CustomButton {
                 id: generatePasswordBtn

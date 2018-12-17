@@ -193,12 +193,6 @@ StackView {
     }
 
     Component {
-        id: fido2ResetView
-        Fido2ResetView {
-        }
-    }
-
-    Component {
         id: homeView
         HomeView {
         }
@@ -260,12 +254,6 @@ StackView {
     Component {
         id: pivSetupForMacOsView
         PivSetupForMacOsView {
-        }
-    }
-
-    Component {
-        id: pivResetView
-        PivResetView {
         }
     }
 

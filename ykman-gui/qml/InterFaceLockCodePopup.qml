@@ -20,19 +20,14 @@ AuthenticationPopup {
                 color: yubicoBlue
                 font.pixelSize: constants.h3
             }
-            TextField {
+            CustomTextField {
                 id: keyInput
                 validator: RegExpValidator {
                     regExp: /[0-9a-fA-F]{32}$/
                 }
                 Layout.fillWidth: true
-                background.width: width
                 echoMode: TextInput.Password
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Lock code must be a 32 characters (16 bytes) hex value")
-                selectByMouse: true
-                selectionColor: yubicoGreen
+                toolTipText: qsTr("Lock code must be a 32 characters (16 bytes) hex value")
                 onAccepted: accept()
             }
         }

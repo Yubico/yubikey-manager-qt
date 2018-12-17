@@ -97,7 +97,11 @@ ColumnLayout {
 
         Label {
             color: yubicoBlue
-            text: qsTr("This version of macOS allows you to pair a YubiKey with your user account. When you have completed the pairing, you can use your YubiKey to login to macOS.")
+            text: qsTr("On macOS you may pair a YubiKey with your user account, using certificates on the PIV application. When you have completed the pairing, you can use your YubiKey to login to macOS.")
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+            rightPadding: 40
+            leftPadding: 40
+            topPadding: 0
             verticalAlignment: Text.AlignVCenter
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width

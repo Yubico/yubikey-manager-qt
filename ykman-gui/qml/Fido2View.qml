@@ -11,6 +11,9 @@ ColumnLayout {
     property string pinMessage
     property int pinRetries
     property bool isBusy
+    readonly property bool hasDevice: yubiKey.hasDevice
+    property bool loadedReset
+    onHasDeviceChanged: resetOnReInsert()
 
     StackView.onActivating: load()
 
@@ -50,6 +53,44 @@ ColumnLayout {
         }
         if (hasPin && pinRetries) {
             return qsTr("A PIN is set, ") + pinRetries + qsTr(" retries left")
+        }
+    }
+
+    function initiateReset() {
+        confirmationPopup.show(
+                    "Reset FIDO?",
+                    "Are you sure you want to reset FIDO? This will delete all FIDO credentials, including FIDO U2F credentials, and remove the FIDO2 PIN.
+
+This action cannot be undone!", function () {
+    reInsertYubiKey.open()
+})
+    }
+
+    function resetOnReInsert() {
+        if (!hasDevice && reInsertYubiKey.visible) {
+            loadedReset = true
+        } else {
+            if (loadedReset) {
+                loadedReset = false
+                touchYubiKey.open()
+                yubiKey.fidoReset(function (resp) {
+                    touchYubiKey.close()
+                    if (resp.success) {
+                        load()
+                        snackbarSuccess.show(
+                                    "FIDO applications have been reset")
+                    } else {
+                        if (resp.error_id === 'touch timeout') {
+                            snackbarError.show(
+                                        qsTr("A reset requires a touch on the YubiKey to be confirmed."))
+                        } else if (resp.error_message) {
+                            snackbarError.show(resp.error_message)
+                        } else {
+                            snackbarError.show(resp.error_id)
+                        }
+                    }
+                })
+            }
         }
     }
 
@@ -113,7 +154,7 @@ ColumnLayout {
                 CustomButton {
                     text: qsTr("Reset FIDO")
                     highlighted: true
-                    onClicked: views.fido2Reset()
+                    onClicked: initiateReset()
                     toolTipText: qsTr("Reset FIDO2 and FIDO U2F applications")
                     iconSource: "../images/reset.svg"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

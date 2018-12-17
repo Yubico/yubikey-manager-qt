@@ -54,18 +54,13 @@ ColumnLayout {
                 font.pixelSize: constants.h3
                 color: yubicoBlue
             }
-            TextField {
+            CustomTextField {
                 id: secretKeyInput
                 Layout.fillWidth: true
                 validator: RegExpValidator {
                     regExp: /([0-9a-fA-F]{2}){1,20}$/
                 }
-                ToolTip.delay: 1000
-                background.width: width
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Secret key can be a up to 40 characters (20 bytes) hex value")
-                selectByMouse: true
-                selectionColor: yubicoGreen
+                toolTipText: qsTr("Secret key can be a up to 40 characters (20 bytes) hex value")
             }
             CustomButton {
                 id: generateBtn

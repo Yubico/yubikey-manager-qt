@@ -12,6 +12,8 @@ Button {
 
     property string foregroundColor: getForegroundColor()
     property bool iconOnRight: false
+    rightPadding: 12
+    leftPadding: 12
 
     font.capitalization: Font.MixedCase
     font.family: constants.fontFamily

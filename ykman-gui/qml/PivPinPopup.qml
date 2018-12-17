@@ -20,12 +20,10 @@ AuthenticationPopup {
                 color: yubicoBlue
                 font.pixelSize: constants.h3
             }
-            TextField {
+            CustomTextField {
                 id: keyInput
                 Layout.fillWidth: true
-                background.width: width
                 echoMode: TextInput.Password
-                selectionColor: yubicoGreen
                 onAccepted: accept()
             }
         }

@@ -6,13 +6,12 @@ ToolTip {
 
     property string message: ""
 
-    timeout: 2000
+    timeout: 3000
     width: snackLbl.implicitWidth + constants.contentMargins
     height: constants.contentMargins
     x: (app.width - width) / 2
     y: app.height
     bottomMargin: constants.contentMargins / 2
-
     function show(message) {
         snackLbl.text = message
         open()

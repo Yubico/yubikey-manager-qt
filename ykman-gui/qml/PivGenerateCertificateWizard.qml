@@ -96,13 +96,12 @@ ColumnLayout {
             }
         } else {
             var firstMessageTemplate = selfSign ? "This will overwrite the key and certificate in the %1 (%2) slot." : "This will overwrite the key and delete the certificate in the %1 (%2) slot."
-            confirmationPopup.show(
-                        "Overwrite?",
-                        firstMessageTemplate.arg(slot.name).arg(slot.hex)
-                        + " This action cannot be undone! Are you sure you want to continue?",
-                        function () {
-                            finish(true)
-                        })
+            confirmationPopup.show("Overwrite?", firstMessageTemplate.arg(
+                                       slot.name).arg(slot.hex) + "
+
+Do you want to continue?", function () {
+    finish(true)
+})
         }
     }
 
@@ -281,15 +280,11 @@ ColumnLayout {
                         color: yubicoBlue
                     }
 
-                    TextField {
+                    CustomTextField {
                         id: subjectNameInput
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         Layout.fillWidth: true
-                        background.width: width
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("The subject common name (CN) for the certificate")
-                        selectionColor: yubicoGreen
+                        toolTipText: qsTr("The subject common name (CN) for the certificate")
                         onTextChanged: subjectCommonName = text
                     }
                 }
@@ -304,9 +299,7 @@ ColumnLayout {
                 Component.onCompleted: calendarWidget.goToMonth(
                                            new Date(expirationDate))
 
-                GridLayout {
-                    columns: 2
-
+                RowLayout {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
@@ -316,13 +309,9 @@ ColumnLayout {
                         text: qsTr("Expiration date")
                     }
 
-                    TextField {
+                    CustomTextField {
                         text: expirationDate
-                        ToolTip.delay: 1000
-                        ToolTip.visible: hovered
-                        background.width: width
-                        ToolTip.text: qsTr("The expiration date for the certificate, in YYYY-MM-DD format")
-                        selectionColor: yubicoGreen
+                        toolTipText: qsTr("The expiration date for the certificate, in YYYY-MM-DD format")
                         validator: RegExpValidator {
                             regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
                         }
@@ -331,14 +320,16 @@ ColumnLayout {
                             expirationDate = text
 
                             if ((expirationDate.length > previousValue.length)
-                                && (expirationDate.length === 4 || expirationDate.length === 7)
-                            ) {
+                                    && (expirationDate.length === 4
+                                        || expirationDate.length === 7)) {
                                 expirationDate = expirationDate + "-"
                             }
                             if (isExpirationDateValid(expirationDate)) {
-                                calendarWidget.goToMonth(new Date(expirationDate))
+                                calendarWidget.goToMonth(
+                                            new Date(expirationDate))
                             }
                         }
+                        Layout.rightMargin: 20
                     }
 
                     CalendarWidget {
@@ -360,14 +351,11 @@ ColumnLayout {
             id: finishView
 
             ColumnLayout {
-                Heading2 {
-                    text: qsTr("Confirm selected options:")
-                    Layout.topMargin: 20
-                }
 
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: constants.contentMargins
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                     GridLayout {
                         columns: 2
@@ -459,9 +447,7 @@ ColumnLayout {
                 text: qsTr("Generate")
                 onClicked: finish()
                 visible: currentStep === numSteps
-                ToolTip.delay: 1000
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Finish and generate the private key and %1").arg(
+                toolTipText: qsTr("Finish and generate the private key and %1").arg(
                                   selfSign ? qsTr("certificate") : qsTr("CSR"))
                 enabled: isInputValid()
             }

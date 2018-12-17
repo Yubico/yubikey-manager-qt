@@ -18,7 +18,7 @@ InlinePopup {
 
     ColumnLayout {
         width: parent.width
-        spacing: 10
+        spacing: 20
         Heading2 {
             id: confirmationHeading
             width: parent.width
