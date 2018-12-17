@@ -24,6 +24,7 @@ AuthenticationPopup {
                 id: keyInput
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
+                onAccepted: accept()
             }
         }
     }
