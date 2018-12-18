@@ -572,6 +572,10 @@ class Controller(object):
                 is_private_key = True
             except (ValueError, TypeError):
                 pass
+
+            if not (is_cert or is_private_key):
+                return failure('failed_parsing')
+
             with self._open_piv() as controller:
                 auth_failed = self._piv_ensure_authenticated(
                     controller, pin, mgm_key)
