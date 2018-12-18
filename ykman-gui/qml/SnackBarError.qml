@@ -44,7 +44,7 @@ SnackBar {
         case 'wrong_puk':
             return qsTr("Wrong PUK. Tries remaning: %1".arg(resp.tries_left))
         case 'failed_parsing':
-            return qsTr("Something went wrong with reading the file")
+            return qsTr("Failed to parse file")
         }
     }
 
