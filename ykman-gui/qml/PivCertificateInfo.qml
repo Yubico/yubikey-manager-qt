@@ -64,12 +64,7 @@ ColumnLayout {
             if (resp.success) {
                 snackbarSuccess.show("Certificate was imported")
             } else {
-                if (resp.error === 'failed_parsing') {
-                    snackbarError.show(
-                                'Something went wrong with reading the file.')
-                } else {
-                    snackbarError.show(resp.error)
-                }
+                snackbarError.showResponseError(resp)
             }
             load()
         }
