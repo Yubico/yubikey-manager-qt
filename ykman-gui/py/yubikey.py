@@ -27,11 +27,11 @@ from ykman.driver_ccid import APDUError, SW
 from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.piv import (
     PivController, ALGO, SLOT, AuthenticationBlocked,
-    AuthenticationFailed, BadFormat, WrongPin, WrongPuk)
+    AuthenticationFailed, BadFormat, WrongPin, WrongPuk, KeypairMismatch)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
-    generate_static_pw, parse_certificate, parse_private_key)
+    generate_static_pw, parse_certificates, parse_private_key)
 
 logger = logging.getLogger(__name__)
 
@@ -539,7 +539,7 @@ class Controller(object):
         with open(file_path, 'r+b') as file:
             data = file.read()
             try:
-                parse_certificate(data, password=None)
+                parse_certificates(data, password=None)
                 return success()
             except (ValueError, TypeError):
                 pass
@@ -563,7 +563,7 @@ class Controller(object):
         with open(file_path, 'r+b') as file:
             data = file.read()
             try:
-                cert = parse_certificate(data, password)
+                certs = parse_certificates(data, password)
                 is_cert = True
             except (ValueError, TypeError):
                 pass
@@ -581,10 +581,25 @@ class Controller(object):
                     controller, pin, mgm_key)
                 if auth_failed:
                     return auth_failed
-                if is_cert:
-                    controller.import_certificate(SLOT[slot], cert)
                 if is_private_key:
                     controller.import_key(SLOT[slot], private_key)
+                if is_cert:
+                    if len(certs) > 1:
+                        issuers = [
+                            cert.issuer.get_attributes_for_oid(
+                                x509.NameOID.COMMON_NAME) for cert in certs]
+                        leafs = [
+                            cert for cert in certs if
+                            cert.subject.get_attributes_for_oid(
+                                    x509.NameOID.COMMON_NAME) not in issuers]
+                        cert_to_import = leafs[0]
+                    else:
+                        cert_to_import = certs[0]
+                    try:
+                        controller.import_certificate(
+                            SLOT[slot], cert_to_import, verify=True)
+                    except KeypairMismatch:
+                        return failure('keypair_mismatch')
         return success()
 
     def piv_export_certificate(self, slot, file_url):
