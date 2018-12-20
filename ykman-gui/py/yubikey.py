@@ -31,7 +31,8 @@ from ykman.piv import (
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
-    generate_static_pw, parse_certificates, parse_private_key)
+    generate_static_pw, parse_certificates, get_leaf_certificates,
+    parse_private_key)
 
 logger = logging.getLogger(__name__)
 
@@ -585,13 +586,7 @@ class Controller(object):
                     controller.import_key(SLOT[slot], private_key)
                 if is_cert:
                     if len(certs) > 1:
-                        issuers = [
-                            cert.issuer.get_attributes_for_oid(
-                                x509.NameOID.COMMON_NAME) for cert in certs]
-                        leafs = [
-                            cert for cert in certs if
-                            cert.subject.get_attributes_for_oid(
-                                    x509.NameOID.COMMON_NAME) not in issuers]
+                        leafs = get_leaf_certificates(certs)
                         cert_to_import = leafs[0]
                     else:
                         cert_to_import = certs[0]
