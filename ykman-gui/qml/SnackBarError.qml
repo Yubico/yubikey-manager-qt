@@ -46,7 +46,7 @@ SnackBar {
         case 'failed_parsing':
             return qsTr("Failed to parse file")
         case 'keypair_mismatch':
-            return qsTr("Certificate and private key does not match")
+            return qsTr("Certificate and private key do not match")
         }
     }
 
