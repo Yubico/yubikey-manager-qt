@@ -152,6 +152,10 @@ Python {
         return name === 'YubiKey 4'
     }
 
+    function isSecurityKeyNfc() {
+        return name === 'Security Key NFC'
+    }
+
     function isSecurityKeyByYubico() {
         return name === 'Security Key by Yubico'
     }
@@ -194,7 +198,7 @@ Python {
 
     function supportsNewInterfaces() {
         return isYubiKeyPreview() || isYubiKey5Family()
-                || isSecurityKeyByYubico()
+                || isSecurityKeyByYubico() || isSecurityKeyNfc()
     }
 
     function supportsNfcConfiguration() {

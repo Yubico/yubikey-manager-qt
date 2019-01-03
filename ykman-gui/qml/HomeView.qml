@@ -12,6 +12,11 @@ ColumnLayout {
         if (yubiKey.isYubiKeyEdge()) {
             return "../images/ykedge.png"
         }
+
+        if (yubiKey.isSecurityKeyNfc()) {
+            return "../images/sky3.png"
+        }
+
         if (yubiKey.isSecurityKeyByYubico()) {
             return "../images/sky2.png"
         }
