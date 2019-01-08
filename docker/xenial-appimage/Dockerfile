@@ -34,7 +34,7 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && make \
     && make install
 RUN apt-get download libykpers-1-1
-RUN wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/5/linuxdeployqt-continuous-x86_64.AppImage" \
+RUN wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/5/linuxdeployqt-5-x86_64.AppImage" \
     && chmod a+x /linuxdeployqt*.AppImage
 RUN wget -c "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" \
     && chmod a+x /appimagetool*.AppImage
