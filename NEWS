@@ -1,4 +1,4 @@
-* Version 1.1.0 (unreleased)
+* Version 1.1.0 (released 2019-01-09)
  ** Add support for Security Key NFC
  ** Add support for managing PIV Application
  ** Bugfix: OATH-HOTP credentials was always configured with 6 digits
