@@ -70,3 +70,7 @@ To use these:
 
     $ pip install pre-commit flake8
     $ pre-commit install
+
+=== Packaging
+
+For third-party packaging, use the source releases and signatures available https://developers.yubico.com/yubikey-manager-qt/Releases/[here].
