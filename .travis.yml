@@ -20,9 +20,9 @@ osx_image: xcode9.2
 services:
   - docker
 
-#cache:
-#  directories:
-#    - $HOME/docker-images
+cache:
+  directories:
+    - $HOME/docker-images
 
 before_install:
   - |
