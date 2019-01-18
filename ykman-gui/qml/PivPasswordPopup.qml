@@ -9,7 +9,7 @@ AuthenticationPopup {
         spacing: 10
 
         Heading2 {
-            text: qsTr("Plese enter the password")
+            text: qsTr("Please enter the password")
             width: parent.width
             Layout.maximumWidth: parent.width
         }
