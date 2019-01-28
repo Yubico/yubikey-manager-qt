@@ -58,11 +58,11 @@ ColumnLayout {
         })
     }
 
-    function importCertificate(fileUrl) {
+    function importFromFile(fileUrl) {
 
         function handleResponse(resp) {
             if (resp.success) {
-                snackbarSuccess.show("Certificate was imported")
+                snackbarSuccess.show("Certificate/Key was imported")
             } else {
                 snackbarError.showResponseError(resp)
             }
@@ -95,7 +95,7 @@ ColumnLayout {
         fileMode: FileDialog.OpenFile
         folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
         nameFilters: ["Certificate/Key files (*.pem *.der *.pfx *.p12 *.key *.crt)"]
-        onAccepted: importCertificate(file.toString())
+        onAccepted: importFromFile(file.toString())
     }
 
     FileDialog {
@@ -210,7 +210,7 @@ ColumnLayout {
                         anchors.fill: parent
                         onDropped: {
                             if (drop.hasUrls) {
-                                importCertificate(drop.urls[0])
+                                importFromFile(drop.urls[0])
                             }
                         }
                     }
