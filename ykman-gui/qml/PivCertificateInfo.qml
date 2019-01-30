@@ -71,11 +71,15 @@ ColumnLayout {
 
         function _tryImport(password) {
             views.pivGetPinOrManagementKey(function (pin) {
+                // We got the pin, nothing more needed
                 yubiKey.pivImportFile(slot.id, fileUrl, password, pin, null,
                                       handleResponse)
             }, function (managementKey) {
-                yubiKey.pivImportFile(slot.id, fileUrl, password, null,
-                                      managementKey, handleResponse)
+                // We got the mgm key, need pin as well for verification
+                pivPinPopup.getInputAndThen(function (pin) {
+                    yubiKey.pivImportFile(slot.id, fileUrl, password, pin,
+                                          managementKey, handleResponse)
+                })
             })
         }
 
