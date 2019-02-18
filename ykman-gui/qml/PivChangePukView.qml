@@ -11,6 +11,7 @@ ChangePinView {
     hasCurrentPin: true
     maxLength: constants.pivPukMaxLength
     minLength: constants.pivPukMinLength
+    newPinTooltip: "The PUK must be between 6 and 8 characters long"
 
     onChangePin: {
         yubiKey.pivChangePuk(currentPin, newPin, function (resp) {
