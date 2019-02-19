@@ -591,11 +591,6 @@ class Controller(object):
                     else:
                         cert_to_import = certs[0]
                     try:
-                        # PIN is needed because import will try to
-                        # use the private key for verification
-                        pin_failed = self._piv_verify_pin(controller, pin)
-                        if pin_failed:
-                            return pin_failed
                         controller.import_certificate(
                             SLOT[slot], cert_to_import, verify=True)
                     except KeypairMismatch:
