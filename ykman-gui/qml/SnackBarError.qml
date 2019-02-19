@@ -45,8 +45,6 @@ SnackBar {
             return qsTr("Wrong PUK. Tries remaning: %1".arg(resp.tries_left))
         case 'failed_parsing':
             return qsTr("Failed to parse file")
-        case 'keypair_mismatch':
-            return qsTr("Certificate and private key do not match")
         }
     }
 
