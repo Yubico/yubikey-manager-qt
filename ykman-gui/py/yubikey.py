@@ -592,7 +592,7 @@ class Controller(object):
                         cert_to_import = certs[0]
                     try:
                         controller.import_certificate(
-                            SLOT[slot], cert_to_import, verify=True)
+                            SLOT[slot], cert_to_import)
                     except KeypairMismatch:
                         return failure('keypair_mismatch')
         return success()
