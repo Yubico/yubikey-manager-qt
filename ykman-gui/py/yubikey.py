@@ -27,7 +27,7 @@ from ykman.driver_ccid import APDUError, SW
 from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.piv import (
     PivController, ALGO, SLOT, AuthenticationBlocked,
-    AuthenticationFailed, BadFormat, WrongPin, WrongPuk, KeypairMismatch)
+    AuthenticationFailed, BadFormat, WrongPin, WrongPuk)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
@@ -590,11 +590,9 @@ class Controller(object):
                         cert_to_import = leafs[0]
                     else:
                         cert_to_import = certs[0]
-                    try:
-                        controller.import_certificate(
+
+                    controller.import_certificate(
                             SLOT[slot], cert_to_import)
-                    except KeypairMismatch:
-                        return failure('keypair_mismatch')
         return success()
 
     def piv_export_certificate(self, slot, file_url):
