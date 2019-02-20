@@ -40,9 +40,9 @@ SnackBar {
         case 'wrong_lock_code':
             return qsTr("Wrong lock code")
         case 'wrong_pin':
-            return qsTr('Wrong PIN. Tries remaning: %1'.arg(resp.tries_left))
+            return qsTr('Wrong PIN. Tries remaining: %1'.arg(resp.tries_left))
         case 'wrong_puk':
-            return qsTr("Wrong PUK. Tries remaning: %1".arg(resp.tries_left))
+            return qsTr("Wrong PUK. Tries remaining: %1".arg(resp.tries_left))
         case 'failed_parsing':
             return qsTr("Failed to parse file")
         case 'keypair_mismatch':

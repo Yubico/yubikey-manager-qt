@@ -20,9 +20,9 @@ ChangePinView {
                 snackbarSuccess.show("Changed PUK")
             } else {
                 snackbarError.showResponseError(resp, {
-                                               wrong_puk: qsTr("Wrong current PUK. Tries remaning: %1").arg(
-                                                              resp.tries_left)
-                                           })
+                                                    wrong_puk: qsTr("Wrong current PUK. Tries remaining: %1").arg(
+                                                                   resp.tries_left)
+                                                })
 
                 if (resp.error_id === 'puk_blocked') {
                     views.pop()
