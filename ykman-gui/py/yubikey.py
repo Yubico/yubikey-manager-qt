@@ -593,7 +593,11 @@ class Controller(object):
 
                     controller.import_certificate(
                             SLOT[slot], cert_to_import)
-        return success()
+        return {
+            'success': True,
+            'imported_cert': is_cert,
+            'imported_key': is_private_key
+        }
 
     def piv_export_certificate(self, slot, file_url):
         file_path = urllib.parse.urlparse(file_url).path
