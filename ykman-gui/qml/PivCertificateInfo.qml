@@ -59,10 +59,21 @@ ColumnLayout {
     }
 
     function importFromFile(fileUrl) {
-
         function handleResponse(resp) {
             if (resp.success) {
-                snackbarSuccess.show("Certificate/Key was imported")
+                if (resp.imported_cert && resp.imported_key) {
+                    snackbarSuccess.show(
+                                qsTr("Certificate and private key was imported to slot %1".arg(
+                                         slot.hex)))
+                } else if (resp.imported_cert) {
+                    snackbarSuccess.show(
+                                qsTr("Certificate was imported to slot %1".arg(
+                                         slot.hex)))
+                } else if (resp.imported_key) {
+                    snackbarSuccess.show(
+                                qsTr("Private key was imported to slot %1".arg(
+                                         slot.hex)))
+                }
             } else {
                 snackbarError.showResponseError(resp)
             }
