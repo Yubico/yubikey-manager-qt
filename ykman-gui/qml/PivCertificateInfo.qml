@@ -63,16 +63,16 @@ ColumnLayout {
             if (resp.success) {
                 if (resp.imported_cert && resp.imported_key) {
                     snackbarSuccess.show(
-                                "Certificate and private key was imported to slot %1".arg(
-                                    slot.hex))
+                                qsTr("Certificate and private key was imported to slot %1".arg(
+                                         slot.hex)))
                 } else if (resp.imported_cert) {
                     snackbarSuccess.show(
-                                "Certificate was imported to slot %1".arg(
-                                    slot.hex))
+                                qsTr("Certificate was imported to slot %1".arg(
+                                         slot.hex)))
                 } else if (resp.imported_key) {
                     snackbarSuccess.show(
-                                "Private key was imported to slot %1".arg(
-                                    slot.hex))
+                                qsTr("Private key was imported to slot %1".arg(
+                                         slot.hex)))
                 }
             } else {
                 snackbarError.showResponseError(resp)
