@@ -5,9 +5,9 @@ SOURCES += main.cpp
 
 # This is the internal verson number, Windows requires 4 digits.
 win32|win64 {
-    VERSION = 1.1.0.0
+    VERSION = 1.1.1.0
 } else {
-    VERSION = 1.1.0
+    VERSION = 1.1.1
 }
 # This is the version shown on the About page
 DEFINES += APP_VERSION=\\\"1.1.0\\\"

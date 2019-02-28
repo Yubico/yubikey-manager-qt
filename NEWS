@@ -1,3 +1,8 @@
+* Version 1.1.1 (unreleased)
+ ** PIV: On import, do not always verify that the certifcate and private key matches, since it may require the PIN
+ ** PIV: Report if private key or certificate was imported
+ ** PIV: Improve handling of malformed certificates
+
 * Version 1.1.0 (released 2019-01-09)
  ** Add support for Security Key NFC
  ** Add support for managing PIV Application
