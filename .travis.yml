@@ -152,7 +152,7 @@ after_success:
       id=xenial-appimage
       time docker cp $id:/yubikey-manager-qt/YubiKey_Manager-x86_64.AppImage deploy/yubikey-manager-qt-$TRAVIS_BRANCH.AppImage
 
-      git archive --format=tar.gz -o yubikey-manager-qt-$TRAVIS_BRANCH.tar.gz --prefix yubikey-manager-qt-$TRAVIS_BRANCH/ $TRAVIS_BRANCH
+      git archive --format=tar.gz -o yubikey-manager-qt-$TRAVIS_BRANCH.tar.gz --prefix yubikey-manager-qt/ $TRAVIS_BRANCH
       mv yubikey-manager-qt-$TRAVIS_BRANCH.tar.gz deploy/
     fi
 
