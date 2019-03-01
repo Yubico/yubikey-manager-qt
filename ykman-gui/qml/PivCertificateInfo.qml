@@ -138,7 +138,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: constants.contentWidth
             GridLayout {
-                visible: !!certificate
+                visible: !!certificate && !certificate.malformed
                 columns: 2
                 Layout.fillWidth: true
                 Label {
@@ -179,6 +179,13 @@ ColumnLayout {
             Label {
                 visible: !certificate
                 text: qsTr("No certificate loaded.")
+                color: yubicoGrey
+                font.pixelSize: constants.h3
+            }
+
+            Label {
+                visible: !!certificate && certificate.malformed
+                text: qsTr("Malformed certificate.")
                 color: yubicoGrey
                 font.pixelSize: constants.h3
             }
