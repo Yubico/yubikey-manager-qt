@@ -10,7 +10,7 @@ win32|win64 {
     VERSION = 1.1.1
 }
 # This is the version shown on the About page
-DEFINES += APP_VERSION=\\\"1.1.0\\\"
+DEFINES += APP_VERSION=\\\"1.1.1\\\"
 
 message(Version of this build: $$VERSION)
 
