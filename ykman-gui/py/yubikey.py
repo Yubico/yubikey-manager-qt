@@ -565,7 +565,8 @@ class Controller(object):
             data = file.read()
             try:
                 certs = parse_certificates(data, password)
-                is_cert = True
+                if len(certs) > 0:
+                    is_cert = True
             except (ValueError, TypeError):
                 pass
             try:
