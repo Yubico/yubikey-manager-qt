@@ -32,8 +32,8 @@ Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#bu
     $ sudo apt install \
       libqt5svg5-dev \
       python3-yubikey-manager \
-      qml-module-io-thp-pyothersidei \
-      qml-module-qt-labs-calendar,
+      qml-module-io-thp-pyotherside \
+      qml-module-qt-labs-calendar \
       qml-module-qt-labs-folderlistmodel \
       qml-module-qt-labs-platform \
       qml-module-qt-labs-settings \
