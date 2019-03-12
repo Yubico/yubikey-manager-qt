@@ -37,7 +37,7 @@ An experimental AppImage is available https://developers.yubico.com/yubikey-mana
     $ sudo apt install yubikey-manager-qt
 
 ==== Source
-To install from source, see the https://github.com/Yubico/yubikey-manager-qt/blob/master/doc/development.adoc[development] instructions.
+To install from source, see the doc/development.adoc[development] instructions.
 
 === Command line version
 This project also bundles the https://developers.yubico.com/yubikey-manager/[command line version].
