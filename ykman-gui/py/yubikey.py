@@ -604,10 +604,7 @@ class Controller(object):
 
     def _get_file_path(self, file_url):
         file_path = urllib.parse.urlparse(file_url).path
-        file_path_windows = file_path[1:]
-        if os.name == 'nt':
-            file_path = file_path_windows
-        return file_path
+        return file_path[1:] if os.name == 'nt' else file_path
 
     def _piv_verify_pin(self, piv_controller, pin=None):
         touch_required = False
