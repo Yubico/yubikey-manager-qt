@@ -394,10 +394,7 @@ class Controller(object):
                      self_sign, csr_file_url)
 
         if csr_file_url:
-            file_path = urllib.parse.urlparse(csr_file_url).path
-            file_path_windows = file_path[1:]
-            if os.name == 'nt':
-                file_path = file_path_windows
+            file_path = self._get_file_path(csr_file_url)
 
         with self._open_piv() as piv_controller:
             auth_failed = self._piv_ensure_authenticated(
@@ -536,7 +533,7 @@ class Controller(object):
                 return failure('wrong_puk', {'tries_left': e.tries_left})
 
     def piv_can_parse(self, file_url):
-        file_path = urllib.parse.urlparse(file_url).path
+        file_path = self._get_file_path(file_url)
         with open(file_path, 'r+b') as file:
             data = file.read()
             try:
@@ -555,10 +552,7 @@ class Controller(object):
                         pin=None, mgm_key=None):
         is_cert = False
         is_private_key = False
-        file_path = urllib.parse.urlparse(file_url).path
-        file_path_windows = file_path[1:]
-        if os.name == 'nt':
-            file_path = file_path_windows
+        file_path = self._get_file_path(file_url)
         if password:
             password = password.encode()
         with open(file_path, 'r+b') as file:
@@ -599,10 +593,7 @@ class Controller(object):
         })
 
     def piv_export_certificate(self, slot, file_url):
-        file_path = urllib.parse.urlparse(file_url).path
-        file_path_windows = file_path[1:]
-        if os.name == 'nt':
-            file_path = file_path_windows
+        file_path = self._get_file_path(file_url)
         with self._open_piv() as controller:
             cert = controller.read_certificate(SLOT[slot])
             with open(file_path, 'wb') as file:
@@ -610,6 +601,10 @@ class Controller(object):
                     cert.public_bytes(
                         encoding=serialization.Encoding.PEM))
         return success()
+
+    def _get_file_path(self, file_url):
+        file_path = urllib.parse.urlparse(file_url).path
+        return file_path[1:] if os.name == 'nt' else file_path
 
     def _piv_verify_pin(self, piv_controller, pin=None):
         touch_required = False
