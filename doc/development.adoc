@@ -48,6 +48,11 @@ Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#bu
       qtdeclarative5-dev \
       qtquickcontrols2-5-dev
 
+==== Linux (Fedora 29)
+
+    $ sudo dnf install qt5-devel qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtquickcontrols2-devel \
+      qt5-qtquickcontrols qt5-qtgraphicaleffects pyotherside
+
 === Setup the repository
 
     $ git clone https://github.com/Yubico/yubikey-manager-qt.git
@@ -55,7 +60,13 @@ Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#bu
 
 === Compile the app
 
+On Windows, macOS & Debian-based Linux distributions:
+
     $ qmake && make
+
+On Fedora 29:
+
+    $ qmake-qt5 && make
 
 === Run the app
 
@@ -63,7 +74,7 @@ Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#bu
 
 === Code Style & Linting
 
-This project uses http://flake8.pycqa.org/[Flake8] (for the python parts) and qmllint 
+This project uses http://flake8.pycqa.org/[Flake8] (for the python parts) and qmllint
 (for the QML parts) for code style with a http://pre-commit.com/[pre-commit] hook.
 
 To use these:
