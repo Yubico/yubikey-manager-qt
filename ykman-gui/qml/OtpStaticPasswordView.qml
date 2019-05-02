@@ -35,8 +35,12 @@ ColumnLayout {
     }
 
     function generatePassword() {
-        yubiKey.generateStaticPw(keyboardLayout, function (res) {
-            passwordInput.text = res
+        yubiKey.generateStaticPw(keyboardLayout, function (resp) {
+            if (resp.success) {
+                passwordInput.text = resp.password
+            } else {
+                snackbarError.showResponseError(resp)
+            }
         })
     }
 
