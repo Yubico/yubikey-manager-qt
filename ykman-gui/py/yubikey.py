@@ -271,7 +271,8 @@ class Controller(object):
 
     def generate_static_pw(self, keyboard_layout):
         return success({
-            'password': generate_static_pw(38, KEYBOARD_LAYOUT[keyboard_layout])
+            'password': generate_static_pw(
+                38, KEYBOARD_LAYOUT[keyboard_layout])
         })
 
     def random_uid(self):
