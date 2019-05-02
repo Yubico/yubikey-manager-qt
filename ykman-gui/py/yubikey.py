@@ -270,8 +270,10 @@ class Controller(object):
             return modhex_encode(b'\xff\x00' + struct.pack(b'>I', dev.serial))
 
     def generate_static_pw(self, keyboard_layout):
-        return generate_static_pw(
-            38, KEYBOARD_LAYOUT[keyboard_layout]).decode('utf-8')
+        return success({
+            'password': generate_static_pw(
+                38, KEYBOARD_LAYOUT[keyboard_layout])
+        })
 
     def random_uid(self):
         return b2a_hex(os.urandom(6)).decode('ascii')
