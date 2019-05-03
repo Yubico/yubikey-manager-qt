@@ -91,7 +91,7 @@ after_build:
   # Create zip for deployment
   - set ARTIFACT_NAME=%APPVEYOR_REPO_BRANCH%-%WIN_ARCH%
   - if defined APPVEYOR_REPO_TAG_NAME set ARTIFACT_NAME=%APPVEYOR_REPO_TAG_NAME%-%WIN_ARCH%
-  - 7z a yubikey-manager-qt-%ARTIFACT_NAME%.zip .\ykman-gui\release\*
+  - 7z a yubikey-manager-qt-%ARTIFACT_NAME%.zip ykman-gui\release
   # Verify that the cli tool can run
   - copy .\ykman-cli\test.py .\ykman-gui\release
   - cd .\ykman-gui\release
