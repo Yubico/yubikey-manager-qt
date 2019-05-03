@@ -33,10 +33,6 @@ ColumnLayout {
         })
     }
 
-    function inputDefaultManagementKey() {
-        currentManagementKey.text = constants.pivDefaultManagementKey
-    }
-
     function toggleUseDefaultCurrentManagementKey() {
         if (useDefaultCurrentManagementKeyCheckbox.checked) {
             currentManagementKey.text = constants.pivDefaultManagementKey
@@ -118,7 +114,6 @@ ColumnLayout {
                     Material.foreground: yubicoBlue
                     visible: hasCurrentManagementKeyInput
                 }
-
                 Label {
                     text: qsTr("New Management Key")
                     font.pixelSize: constants.h3
