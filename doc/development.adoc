@@ -51,9 +51,12 @@ Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#bu
 ==== Linux (Fedora 29)
 
     $ sudo dnf install make python \
-      libyubikey ykpers \
+      libyubikey ykpers yubikey-manager \
       qt5-devel qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtquickcontrols2-devel \
       qt5-qtquickcontrols qt5-qtgraphicaleffects pyotherside
+
+The `yubikey-manager` isn't strictly required to build `ykman-gui`, but
+it installs dependencies required to detect when a YubiKey is inserted.
 
 === Setup the repository
 
