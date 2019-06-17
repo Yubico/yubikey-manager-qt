@@ -1,3 +1,9 @@
+* Version 1.1.2 (unreleased)
+ ** Add support for new YubiKey Preview
+ ** PIV: The popup for the management key now have a "Use default" option
+ ** Windows: Fix issue with importing PIV certificates
+ ** Bugfix: generate static password now works correctly
+
 * Version 1.1.1 (released 2019-03-11)
  ** PIV: On import, do not always verify that the certifcate and private key matches, since it may require the PIN
  ** PIV: Report if private key or certificate was imported
