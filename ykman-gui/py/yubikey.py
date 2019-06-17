@@ -189,7 +189,8 @@ class Controller(object):
                         if a & dev.config.nfc_supported],
                     'usb_interfaces_enabled': str(dev.mode).split('+'),
                     'can_write_config': dev.can_write_config,
-                    'configuration_locked': dev.config.configuration_locked
+                    'configuration_locked': dev.config.configuration_locked,
+                    'form_factor': dev.config.form_factor
                 }
             return success({'dev': self._dev_info})
 

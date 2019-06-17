@@ -29,6 +29,8 @@ Python {
     property var piv
     property bool pivPukBlocked: false
 
+    property int formFactor
+
     property var pivSlots: [{
             id: "AUTHENTICATION",
             name: qsTr("Authentication"),
@@ -196,6 +198,10 @@ Python {
         return name.startsWith('YubiKey 5')
     }
 
+    function hasLightningConnector() {
+        return formFactor == 5
+    }
+
     function supportsNewInterfaces() {
         return isYubiKeyPreview() || isYubiKey5Family()
                 || isSecurityKeyByYubico() || isSecurityKeyNfc()
@@ -265,6 +271,7 @@ Python {
                         usbInterfacesSupported = resp.dev.usb_interfaces_supported
                         usbInterfacesEnabled = resp.dev.usb_interfaces_enabled
                         canWriteConfig = resp.dev.can_write_config
+                        formFactor = resp.dev.form_factor
                     } else {
                         clearYubiKey()
                     }

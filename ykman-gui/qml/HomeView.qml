@@ -29,6 +29,9 @@ ColumnLayout {
         if (yubiKey.isYubiKeyStandard()) {
             return "../images/standard.png"
         }
+        if (yubiKey.isYubiKeyPreview() && yubiKey.hasLightningConnector()) {
+            return "../images/lightning.png"
+        }
         if (yubiKey.isYubiKeyPreview()) {
             return "../images/yk5nfc.png"
         }
