@@ -7,9 +7,6 @@
 language: cpp
 sudo: required
 
-env:
-  - PY_VERSION="3.6.8" PYOTHERSIDE_VERSION="1.5.4"
-
 os:
   - osx
   - linux
@@ -24,39 +21,11 @@ cache:
   directories:
     - $HOME/docker-images
 
-before_install:
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]
-    then
-      brew update
-      wget https://github.com/thp/pyotherside/archive/$PYOTHERSIDE_VERSION.tar.gz -P ./lib
-      cd lib
-      tar -xzvf $PYOTHERSIDE_VERSION.tar.gz
-      # Patch PyOtherSide to not be built with debug output
-      echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> pyotherside-$PYOTHERSIDE_VERSION/src/src.pro
-      cd ..
-    fi
-
 install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
-      git clone https://github.com/aurelien-rainone/macdeployqtfix.git
-      brew install swig
-      brew install qt
-      brew link qt --force
-      brew install ykpers libyubikey libusb
-      # Build Python 3 with --enable-framework, to be able to distribute it in a .app bundle
-      brew upgrade pyenv
-      eval "$(pyenv init -)"
-      env PYTHON_CONFIGURE_OPTS="--enable-framework CC=clang" pyenv install $PY_VERSION
-      pyenv global system $PY_VERSION
-      # Build and install PyOtherside
-      cd lib/pyotherside-$PYOTHERSIDE_VERSION
-      qmake
-      make
-      sudo make install
-      cd ../../
+      ./.travis/build-macos
     fi
 
 before_script:
@@ -65,13 +34,12 @@ before_script:
     then
       echo "Building Docker images"
       time docker build -t yubikey-manager-qt-ci-base docker/bionic-base && \
-        time docker build -t bionic-ci docker/bionic-ci && \
-        time docker build -t bionic-deb docker/bionic-deb && \
-        time docker build -t xenial-appimage docker/xenial-appimage && \
-        mkdir -p $HOME/docker-images && \
-        rm -f $HOME/docker-images/images.tar && \
-        time docker save -o $HOME/docker-images/images.tar bionic-ci bionic-deb xenial-appimage
-
+      time docker build -t bionic-ci docker/bionic-ci && \
+      time docker build -t bionic-deb docker/bionic-deb && \
+      time docker build -t xenial-appimage docker/xenial-appimage && \
+      mkdir -p $HOME/docker-images && \
+      rm -f $HOME/docker-images/images.tar && \
+      time docker save -o $HOME/docker-images/images.tar bionic-ci bionic-deb xenial-appimage
     else
       echo "Reading Docker images from file"
       if [[ -f $HOME/docker-images/images.tar ]]; then
@@ -86,14 +54,8 @@ script:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       time docker run --rm -v $(pwd):/sources/yubikey-manager-qt:ro bionic-ci && \
-        time docker run --name bionic-deb -v $(pwd):/sources/yubikey-manager-qt:ro bionic-deb && \
-        time docker run --name xenial-appimage -v $(pwd):/sources/yubikey-manager-qt:ro --privileged xenial-appimage
-    fi
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]
-    then
-      qmake
-      make
+      time docker run --name bionic-deb -v $(pwd):/sources/yubikey-manager-qt:ro bionic-deb && \
+      time docker run --name xenial-appimage -v $(pwd):/sources/yubikey-manager-qt:ro --privileged xenial-appimage
     fi
 
 after_success:
@@ -104,35 +66,6 @@ after_success:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
-      macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/ -appstore-compliant
-      # Copy needed dylibs
-      find /usr/local/Cellar/json-c/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      find /usr/local/Cellar/ykpers/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      find /usr/local/Cellar/libyubikey/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      find /usr/local/Cellar/libusb/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      find /usr/local/Cellar/openssl/ -name '*.dylib' -exec sudo cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-      # Copy Python framework
-      cp -a ~/.pyenv/versions/$PY_VERSION/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
-      sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '*.pyc' -delete
-      sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '__pycache__' -delete
-      # Move pymodules from app bundle to site-packages, to be accepted by codesign
-      mv ykman-gui/ykman-gui.app/Contents/MacOS/pymodules/* ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/
-      rm -rf ykman-gui/ykman-gui.app/Contents/MacOS/pymodules
-      # Add cli executable
-      cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
-      # Add pymodules from cli
-      cp -rn ykman-cli/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/
-      # Fix stuff that macdeployqt does incorrectly.
-      sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman-gui /usr/local
-      sudo python macdeployqtfix/macdeployqtfix.py ykman-gui/ykman-gui.app/Contents/MacOS/ykman /usr/local
-      # Fix linking for PyOtherSide
-      sudo install_name_tool -change /Users/travis/.pyenv/versions/$PY_VERSION/Python.framework/Versions/3.6/Python @executable_path/../Frameworks/Python.framework/Versions/3.6/Python ykman-gui/ykman-gui.app/Contents/Resources/qml/io/thp/pyotherside/libpyothersideplugin.dylib
-      # Fix linking for Python _ssl
-      sudo install_name_tool -change /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib @executable_path/../Frameworks/libcrypto.1.0.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload/_ssl.cpython-36m-darwin.so
-      sudo install_name_tool -change /usr/local/opt/openssl/lib/libssl.1.0.0.dylib @executable_path/../Frameworks/libssl.1.0.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload/_ssl.cpython-36m-darwin.so
-      # Fix linking for Python _hashlib
-      sudo install_name_tool -change /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib @executable_path/../Frameworks/libcrypto.1.0.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload/_hashlib.cpython-36m-darwin.so
-      sudo install_name_tool -change /usr/local/opt/openssl/lib/libssl.1.0.0.dylib @executable_path/../Frameworks/libssl.1.0.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload/_hashlib.cpython-36m-darwin.so
       # Rename app bundle
       mv ykman-gui/ykman-gui.app ykman-gui/YubiKey\ Manager.app
       # Copy .app to deploy dir
