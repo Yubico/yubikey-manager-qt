@@ -1,4 +1,4 @@
-* Version 1.1.2 (unreleased)
+* Version 1.1.2 (released 2019-06-24)
  ** Add support for new YubiKey Preview
  ** PIV: The popup for the management key now have a "Use default" option
  ** Windows: Fix issue with importing PIV certificates
