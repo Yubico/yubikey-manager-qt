@@ -30,7 +30,7 @@ Package: yubikey-manager-qt
 Architecture: any
 Depends: libqt5svg5,
          pcscd,
-         python3-yubikey-manager (< 3),
+         python3-yubikey-manager (< 4),
          python3-yubikey-manager (>= 0.7.0~dev),
          qml-module-io-thp-pyotherside,
          qml-module-qt-labs-calendar,
