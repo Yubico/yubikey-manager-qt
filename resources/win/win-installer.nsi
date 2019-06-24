@@ -39,7 +39,7 @@ Var STARTMENU_FOLDER
   Name "YubiKey Manager"
   
   ; The file to write
-  OutFile "../../yubikey-manager-qt-${VERSION}-win.exe"
+  OutFile "../../yubikey-manager-qt-${VERSION}-win32.exe"
   
   ; The default installation directory
   InstallDir "$PROGRAMFILES\Yubico\YubiKey Manager"
@@ -127,9 +127,9 @@ Section "YubiKey Manager"
 
   ; Install Visual C++ Redistrubutable Packages
   ; will do nothing if already installed
-  ExecWait "$INSTDIR\vcredist_x86.exe /q /norestart"
+  ExecWait "$INSTDIR\vc_redist.x86.exe /q /norestart"
   ; Delete redist packages
-  Delete "$INSTDIR\vcredist_x86.exe"
+  Delete "$INSTDIR\vc_redist.x86.exe"
 
 SectionEnd
  
