@@ -1,3 +1,6 @@
+* Version 1.1.2b (releasaed 2019-06-26)
+ ** macOS: Fix build problem that caused communication with the OTP application to fail
+
 * Version 1.1.2 (released 2019-06-24)
  ** Add support for new YubiKey Preview
  ** PIV: The popup for the management key now have a "Use default" option
