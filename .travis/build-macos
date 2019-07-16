@@ -2,15 +2,14 @@
 
 # Builds a deployable yubikey-manager-qt on macOS Mojave.
 # Assumes hombrew and xcode installed.
-# Uses pyenv to build a python as a framework, but 
-# compiles pyotherside against homebrew python.
-# Make sure the versions match.
+# Compiles Python as a framework.
 
-rm -rf ~/.pyenv
-rm -rf lib
-rm -rf ykman-gui.app
+sudo rm -rf lib
+sudo rm -rf ykman-gui/ykman-gui.app
+sudo rm -rf /Library/Frameworks/Python.framework
 
-PYVERSION="3.6.7"
+PYVERSION="3.7.4"
+PYVERSIONMINOR="3.7"
 PYOTHERSIDEVERSION="1.5.3"
 
 # Workaround for compiling python on mojave
@@ -18,15 +17,18 @@ PYOTHERSIDEVERSION="1.5.3"
 sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
 CFLAGS="-I$(xcrun --show-sdk-path)/usr/include"
 
-# Get python 3.6.4 from homebrew, workaround for https://github.com/pyenv/pyenv/issues/1066 (can't use 3.7 yet)
-brew uninstall python --ignore-dependencies
-brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/10cdf659af8c56c629fba94347b25346d0770875/Formula/python.rb
-brew link --overwrite python
-
-# Install and upgrade brew dependencies
-brew install swig ykpers libyubikey libusb qt pyenv wget zlib openssl@1.1
-brew upgrade swig ykpers libyubikey libusb qt pyenv wget zlib openssl@1.1
+brew upgrade
+brew bundle --file=./.travis/Brewfile
 brew link qt -f
+
+# Build our own python as a framework
+wget https://www.python.org/ftp/python/$PYVERSION/Python-$PYVERSION.tgz -P ./lib
+cd lib
+tar -xzvf Python-$PYVERSION.tgz
+cd Python-$PYVERSION
+./configure CPPFLAGS="-I$(brew --prefix openssl@1.1)/include" LDFLAGS="-L$(brew --prefix openssl@1.1)/lib" MACOSX_DEPLOYMENT_TARGET=10.13 CC=clang --enable-framework --with-openssl=$(brew --prefix openssl@1.1)
+sudo make altinstall
+cd ../..
 
 # Download, build and install pyotherside qml plugin
 wget https://github.com/thp/pyotherside/archive/$PYOTHERSIDEVERSION.tar.gz -P ./lib
@@ -34,15 +36,10 @@ cd lib
 tar -xzvf $PYOTHERSIDEVERSION.tar.gz
 echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> pyotherside-$PYOTHERSIDEVERSION/src/src.pro
 cd pyotherside-$PYOTHERSIDEVERSION
-qmake
+qmake PYTHON_CONFIG=/Library/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/bin/python3.7m-config
 make
 sudo make install
 cd ../..
-
-# Build custom Python from pyenv with --enable-framework and activate it
-eval "$(pyenv init -)"
-env PYTHON_CONFIGURE_OPTS="--enable-framework CC=clang" pyenv install $PYVERSION -f
-pyenv global $PYVERSION
 
 # Build yubikey-manager-qt
 make distclean
@@ -58,17 +55,15 @@ sudo find /usr/local/Cellar/libusb/ -name '*.dylib' -exec cp '{}' ykman-gui/ykma
 sudo find /usr/local/Cellar/openssl@1.1/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
 
 # Copy over Python.framework 
-cp -a ~/.pyenv/versions/$PYVERSION/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
+cp -a /Library/Frameworks/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
 sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '*.pyc' -delete
 sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '__pycache__' -delete
 
 # Move pymodules from app bundle to site-packages, to be accepted by codesign
-mv ykman-gui/ykman-gui.app/Contents/MacOS/pymodules/* ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/
-rm -rf ykman-gui/ykman-gui.app/Contents/MacOS/pymodules
-
-# Move over CLI and modules for it
+rsync -a ykman-gui/ykman-gui.app/Contents/MacOS/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/site-packages/
+rsync -a ykman-cli/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/site-packages/
 cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
-cp -rn ykman-cli/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/
+rm -rf ykman-gui/ykman-gui.app/Contents/MacOS/pymodules
 
 # Fix links for CLI binary, macdeployqt doesn't fix this.
 sudo install_name_tool -change /usr/local/opt/qt/lib/QtQml.framework/Versions/5/QtQml @executable_path/../Frameworks/QtQml.framework/Versions/5/QtQml ykman-gui/ykman-gui.app/Contents/MacOS/ykman
@@ -76,13 +71,13 @@ sudo install_name_tool -change /usr/local/opt/qt/lib/QtNetwork.framework/Version
 sudo install_name_tool -change /usr/local/opt/qt/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore ykman-gui/ykman-gui.app/Contents/MacOS/ykman
 
 # Point pyotherside to relative custom Python, currently points to homebrew python
-sudo install_name_tool -change /usr/local/opt/python/Frameworks/Python.framework/Versions/3.6/Python @executable_path/../Frameworks/Python.framework/Versions/3.6/Python ykman-gui/ykman-gui.app/Contents/PlugIns/quick/libpyothersideplugin.dylib
+sudo install_name_tool -change /Library/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/Python @executable_path/../Frameworks/Python.framework/Versions/$PYVERSIONMINOR/Python ykman-gui/ykman-gui.app/Contents/PlugIns/quick/libpyothersideplugin.dylib
 
 # Fix linking for python and openssl .so's
-sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload/_ssl.cpython-36m-darwin.so
-sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload/_ssl.cpython-36m-darwin.so
-sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload/_hashlib.cpython-36m-darwin.so
-sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload/_hashlib.cpython-36m-darwin.so
+sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_ssl.cpython-37m-darwin.so
+sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_ssl.cpython-37m-darwin.so
+sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_hashlib.cpython-37m-darwin.so
+sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_hashlib.cpython-37m-darwin.so
 sudo install_name_tool -change /usr/local/Cellar/openssl@1.1/1.1.1c/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libssl.1.1.dylib
 
 # Fix linking to dependencies for libykpers
