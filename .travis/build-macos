@@ -61,9 +61,13 @@ sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '__
 
 # Move pymodules from app bundle to site-packages, to be accepted by codesign
 rsync -a ykman-gui/ykman-gui.app/Contents/MacOS/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/site-packages/
-rsync -a ykman-cli/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/site-packages/
+# Should not be needed
+#rsync -a ykman-cli/pymodules/ ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/site-packages/
 cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
 rm -rf ykman-gui/ykman-gui.app/Contents/MacOS/pymodules
+
+# Second round of macdeploywt, fixes python and some other dylibs
+sudo macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/ -appstore-compliant -always-overwrite
 
 # Fix links for CLI binary, macdeployqt doesn't fix this.
 sudo install_name_tool -change /usr/local/opt/qt/lib/QtQml.framework/Versions/5/QtQml @executable_path/../Frameworks/QtQml.framework/Versions/5/QtQml ykman-gui/ykman-gui.app/Contents/MacOS/ykman
@@ -73,15 +77,15 @@ sudo install_name_tool -change /usr/local/opt/qt/lib/QtCore.framework/Versions/5
 # Point pyotherside to relative custom Python, currently points to homebrew python
 sudo install_name_tool -change /Library/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/Python @executable_path/../Frameworks/Python.framework/Versions/$PYVERSIONMINOR/Python ykman-gui/ykman-gui.app/Contents/PlugIns/quick/libpyothersideplugin.dylib
 
-# Fix linking for python and openssl .so's
-sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_ssl.cpython-37m-darwin.so
-sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_ssl.cpython-37m-darwin.so
-sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_hashlib.cpython-37m-darwin.so
-sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_hashlib.cpython-37m-darwin.so
-sudo install_name_tool -change /usr/local/Cellar/openssl@1.1/1.1.1c/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libssl.1.1.dylib
+# Fix linking for python and openssl .so's (not needed?)
+# sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_ssl.cpython-37m-darwin.so
+# sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_ssl.cpython-37m-darwin.so
+# sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_hashlib.cpython-37m-darwin.so
+#sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/$PYVERSIONMINOR/lib/python$PYVERSIONMINOR/lib-dynload/_hashlib.cpython-37m-darwin.so
+# sudo install_name_tool -change /usr/local/Cellar/openssl@1.1/1.1.1c/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libssl.1.1.dylib
 
-# Fix linking to dependencies for libykpers
-sudo install_name_tool -change /usr/local/opt/libyubikey/lib/libyubikey.0.dylib @executable_path/../Frameworks/libyubikey.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.1.dylib
-sudo install_name_tool -change /usr/local/opt/libyubikey/lib/libyubikey.0.dylib @executable_path/../Frameworks/libyubikey.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.dylib
-sudo install_name_tool -change /usr/local/opt/json-c/lib/libjson-c.4.dylib @executable_path/../Frameworks/libjson-c.4.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.1.dylib
-sudo install_name_tool -change /usr/local/opt/json-c/lib/libjson-c.4.dylib @executable_path/../Frameworks/libjson-c.4.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.dylib
+# Fix linking to dependencies for libykpers (not needed?)
+# sudo install_name_tool -change /usr/local/opt/libyubikey/lib/libyubikey.0.dylib @executable_path/../Frameworks/libyubikey.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.1.dylib
+# sudo install_name_tool -change /usr/local/opt/libyubikey/lib/libyubikey.0.dylib @executable_path/../Frameworks/libyubikey.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.dylib
+# sudo install_name_tool -change /usr/local/opt/json-c/lib/libjson-c.4.dylib @executable_path/../Frameworks/libjson-c.4.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.1.dylib
+# sudo install_name_tool -change /usr/local/opt/json-c/lib/libjson-c.4.dylib @executable_path/../Frameworks/libjson-c.4.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.dylib
