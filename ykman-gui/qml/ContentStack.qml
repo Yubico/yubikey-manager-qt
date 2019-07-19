@@ -177,7 +177,7 @@ StackView {
     function otpFailedToConfigureErrorPopup(error) {
         snackbarError.show(qsTr("Failed to configure %1. %2").arg(
                                SlotUtils.slotNameCapitalized(
-                                   views.selectedSlot)).arg(error))
+                                   views.selectedSlot)).arg(snackbarError.getDefaultMessage(error)))
     }
 
     Component {
