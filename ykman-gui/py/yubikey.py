@@ -719,7 +719,7 @@ def _piv_serialise_cert(slot, cert):
         'issuedFrom': issuer_cns[0].value if issuer_cns else '',
         'issuedTo': subject_cns[0].value if subject_cns else '',
         'validFrom': valid_from if valid_from else '',
-        'validTo': valid_to if valid_from else ''
+        'validTo': valid_to if valid_to else ''
     }
 
 
