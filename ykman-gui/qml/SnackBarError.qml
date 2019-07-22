@@ -45,6 +45,8 @@ SnackBar {
             return qsTr("Wrong PUK. Tries remaining: %1".arg(resp.tries_left))
         case 'failed_parsing':
             return qsTr("Failed to parse file")
+        case 'incorrect_padding':
+            return qsTr("Incorrect padding.")
         }
     }
 

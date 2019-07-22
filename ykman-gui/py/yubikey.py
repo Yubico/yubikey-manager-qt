@@ -61,6 +61,8 @@ def catch_error(f):
             return failure('open_device_failed')
 
         except Exception as e:
+            if str(e) == 'Incorrect padding':
+                return failure('incorrect_padding')
             logger.error('Uncaught exception', exc_info=e)
             return unknown_failure(e)
 
