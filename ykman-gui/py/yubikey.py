@@ -705,13 +705,21 @@ def _piv_serialise_cert(slot, cert):
     except ValueError:
         malformed = True
         subject_cns = None
+    try:
+        valid_from = cert.not_valid_before.date().isoformat()
+    except ValueError:
+        valid_from = None
+    try:
+        valid_to = cert.not_valid_after.date().isoformat()
+    except ValueError:
+        valid_to = None
     return {
         'slot': SLOT(slot).name,
         'malformed': malformed,
         'issuedFrom': issuer_cns[0].value if issuer_cns else '',
         'issuedTo': subject_cns[0].value if subject_cns else '',
-        'validFrom': cert.not_valid_before.date().isoformat(),
-        'validTo': cert.not_valid_after.date().isoformat()
+        'validFrom': valid_from if valid_from else '',
+        'validTo': valid_to if valid_from else ''
     }
 
 
