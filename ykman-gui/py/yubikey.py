@@ -412,7 +412,7 @@ class Controller(object):
                 return pin_failed
 
             if self_sign:
-                now = datetime.datetime.now()
+                now = datetime.datetime.utcnow()
                 try:
                     year = int(expiration_date[0:4])
                     month = int(expiration_date[(4+1):(4+1+2)])
