@@ -1,3 +1,6 @@
+* Version 1.1.3 (unreleased)
+ ** PIV: Use UTC time for self-signed certificates
+
 * Version 1.1.2b (releasaed 2019-06-26)
  ** macOS: Fix build problem that caused communication with the OTP application to fail
 
