@@ -194,6 +194,10 @@ Python {
         return name === 'YubiKey 5A'
     }
 
+    function isYubiKey5Ci() {
+        return name === 'YubiKey 5Ci'
+    }
+
     function isYubiKey5Family() {
         return name.startsWith('YubiKey 5')
     }

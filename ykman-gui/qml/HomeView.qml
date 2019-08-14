@@ -53,6 +53,9 @@ ColumnLayout {
         if (yubiKey.isYubiKey5Family()) {
             return "../images/yk5series.png"
         }
+        if (yubiKey.isYubiKey5Ci()) {
+            return "../images/yk5ci.png"
+        }
         return "../images/yk5series.png" //default for now
     }
 
