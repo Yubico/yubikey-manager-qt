@@ -214,6 +214,7 @@ Python {
     function supportsNfcConfiguration() {
         return applicationsSupportedOverNfc.length > 0
     }
+
     function supportsUsbConfiguration() {
         return applicationsSupportedOverUsb.length > 1
     }

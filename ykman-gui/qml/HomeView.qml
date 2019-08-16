@@ -50,11 +50,11 @@ ColumnLayout {
         if (yubiKey.isYubiKey5A()) {
             return "../images/yk4.png"
         }
-        if (yubiKey.isYubiKey5Family()) {
-            return "../images/yk5series.png"
-        }
         if (yubiKey.isYubiKey5Ci()) {
             return "../images/yk5ci.png"
+        }
+        if (yubiKey.isYubiKey5Family()) {
+            return "../images/yk5series.png"
         }
         return "../images/yk5series.png" //default for now
     }
