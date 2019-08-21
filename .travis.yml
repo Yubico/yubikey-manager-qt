@@ -35,7 +35,7 @@ before_script:
       echo "Building Docker images"
       time docker build -t yubikey-manager-qt-ci-base docker/bionic-base && \
       time docker build -t bionic-ci docker/bionic-ci && \
-      #time docker build -t bionic-deb docker/bionic-deb && \
+      time docker build -t bionic-deb docker/bionic-deb && \
       time docker build -t xenial-appimage docker/xenial-appimage && \
       mkdir -p $HOME/docker-images && \
       rm -f $HOME/docker-images/images.tar && \
@@ -54,7 +54,7 @@ script:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       time docker run --rm -v $(pwd):/sources/yubikey-manager-qt:ro bionic-ci && \
-      #time docker run --name bionic-deb -v $(pwd):/sources/yubikey-manager-qt:ro bionic-deb && \
+      time docker run --name bionic-deb -v $(pwd):/sources/yubikey-manager-qt:ro bionic-deb && \
       time docker run --name xenial-appimage -v $(pwd):/sources/yubikey-manager-qt:ro --privileged xenial-appimage
     fi
 
@@ -78,8 +78,8 @@ after_success:
   - | 
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      #id=bionic-deb
-      #time docker cp $id:/yubikey-manager-qt-debian-packages.tar.gz deploy/yubikey-manager-qt-$TRAVIS_BRANCH-deb.tar.gz
+      id=bionic-deb
+      time docker cp $id:/yubikey-manager-qt-debian-packages.tar.gz deploy/yubikey-manager-qt-$TRAVIS_BRANCH-deb.tar.gz
 
       id=xenial-appimage
       time docker cp $id:/yubikey-manager-qt/YubiKey_Manager-x86_64.AppImage deploy/yubikey-manager-qt-$TRAVIS_BRANCH.AppImage
