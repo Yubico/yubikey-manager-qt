@@ -72,7 +72,7 @@ On Fedora 29:
 
 === Run the app
 
-    $ ykman-gui
+    $ ./ykman-gui/ykman-gui
 
 === Code Style & Linting
 
