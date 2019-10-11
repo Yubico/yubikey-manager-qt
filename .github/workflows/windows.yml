@@ -26,7 +26,7 @@ jobs:
 
       - name: Build Pyotherside and Yubico Authenticator
         run: |
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\Qt5.13.1\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
+          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\Qt5.13.1\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.23.28105\bin\Hostx64\x64;%PATH%
           cd pyotherside-1.5.3
           qmake
           jom
