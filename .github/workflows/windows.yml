@@ -46,10 +46,10 @@ jobs:
           7z x libusb-1.0.22.7z
           Copy-Item .\MS64\dll\*.dll .\ykman-gui\release -Force
 
-          cd release
+          cd .\ykman-gui\release
           wget https://www.python.org/ftp/python/3.6.8/python-3.6.8-embed-amd64.zip -OutFile python-3.6.8-embed-amd64.zip
           7z x python-3.6.8-embed-amd64.zip
-          cd ..
+          cd ../..
 
           windeployqt .\ykman-gui\ykman-gui.exe --qmldir=.\ykman-gui\qml --no-translations --angle --release
           Copy-Item .\ykman-gui\pymodules .\release -recurse
