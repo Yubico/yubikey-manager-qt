@@ -39,7 +39,7 @@ jobs:
       - name: Build yubikey-manager-qt
         run: |
           qmake
-          makei
+          make
           macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/ -appstore-compliant
 
       - name: Copy over dylibs from homebrew
