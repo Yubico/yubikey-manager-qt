@@ -1,0 +1,27 @@
+name: Build AppImage
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Build docker image that produces the AppImage
+        run: |
+          export REF=$(echo ${GITHUB_REF} | cut -d '/' -f 3)
+          docker build -t xenial-appimage -f docker/xenial-appimage/Dockerfile .
+          id=$(docker create --privileged xenial-appimage)
+          docker start --attach $id
+          docker cp $id:/yubioath-desktop/YubiKey_Manager-x86_64.AppImage yubikey-manager-qt-${REF}.AppImage
+          mkdir deploy
+          mv yubikey-manager-qt-${REF}.AppImage deploy
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: yubikey-manager-qt-appimage
+          path: deploy
