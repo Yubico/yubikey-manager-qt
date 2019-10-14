@@ -16,7 +16,7 @@ jobs:
           docker build -t xenial-appimage -f docker/xenial-appimage/Dockerfile .
           id=$(docker create --privileged xenial-appimage)
           docker start --attach $id
-          docker cp $id:/yubioath-desktop/YubiKey_Manager-x86_64.AppImage yubikey-manager-qt-${REF}.AppImage
+          docker cp $id:/yubikey-manager-qt/YubiKey_Manager-x86_64.AppImage yubikey-manager-qt-${REF}.AppImage
           mkdir deploy
           mv yubikey-manager-qt-${REF}.AppImage deploy
 
