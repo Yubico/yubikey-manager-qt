@@ -10,12 +10,14 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Install dependencies
+      - name: Install Qt and Jom
         run: |
           pip install aqtinstall
           python -m aqt install 5.13.1 windows desktop win64_msvc2017_64
           wget http://download.qt.io/official_releases/jom/jom.zip -OutFile jom.zip
           7z x jom.zip
+
+      - name: Download and prepare pyotherside
           wget https://github.com/thp/pyotherside/archive/1.5.3.zip -OutFile pyotherside-1.5.3.zip
           7z x pyotherside-1.5.3.zip
           cd pyotherside-1.5.3
@@ -24,7 +26,7 @@ jobs:
           Add-Content python.pri "PYTHON_CONFIG = python3-config`nQMAKE_LIBS += -LC:\hostedtoolcache\windows\Python\3.6.8\x64\libs -lpython36`nQMAKE_CXXFLAGS += -IC:\hostedtoolcache\windows\Python\3.6.8\x64\include`n"
         shell: powershell
 
-      - name: Build Pyotherside and Yubico Authenticator
+      - name: Build and install pyotherside
         run: |
           set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\Qt5.13.1\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x64
@@ -32,7 +34,10 @@ jobs:
           qmake
           jom
           jom install
-          cd ..
+
+      - name: Build app
+        run: |
+          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\Qt5.13.1\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           qmake
           jom
 
@@ -49,14 +54,13 @@ jobs:
           cd .\ykman-gui\release
           wget https://www.python.org/ftp/python/3.6.8/python-3.6.8-embed-amd64.zip -OutFile python-3.6.8-embed-amd64.zip
           7z x python-3.6.8-embed-amd64.zip
-          cd ../..
 
       - name: Run windeployqt
-        run: | 
+        run: |
           set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\Qt5.13.1\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           windeployqt .\ykman-gui\release\ykman-gui.exe --qmldir=.\ykman-gui\qml --no-translations --angle --release
 
-      - name: Copy files and create .zip archive
+      - name: Copy over files and create .zip archive
         run: |
           Copy-Item .\ykman-gui\pymodules .\release -recurse
           Get-ChildItem -File -Include *.pyc -Recurse | Remove-Item -Force
