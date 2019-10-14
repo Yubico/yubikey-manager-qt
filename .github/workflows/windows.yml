@@ -59,6 +59,10 @@ jobs:
           7z x python-3.6.8-embed-amd64.zip
         shell: powershell
 
+      - name: Verify checksums of downloaded files
+        shell: bash
+        run: sha256sum -c ./.github/workflows/windows-libs.sha256sum
+
       - name: Run windeployqt
         run: |
           set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\Qt5.13.1\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
