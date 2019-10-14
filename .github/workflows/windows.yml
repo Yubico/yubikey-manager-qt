@@ -18,6 +18,7 @@ jobs:
           7z x jom.zip
 
       - name: Download and prepare pyotherside
+        run: |
           wget https://github.com/thp/pyotherside/archive/1.5.3.zip -OutFile pyotherside-1.5.3.zip
           7z x pyotherside-1.5.3.zip
           cd pyotherside-1.5.3
