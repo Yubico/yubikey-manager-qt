@@ -54,7 +54,7 @@ jobs:
       - name: Run windeployqt
         run: | 
           set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\Qt5.13.1\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
-          windeployqt .\ykman-gui\ykman-gui.exe --qmldir=.\ykman-gui\qml --no-translations --angle --release
+          windeployqt .\ykman-gui\release\ykman-gui.exe --qmldir=.\ykman-gui\qml --no-translations --angle --release
 
       - name: Copy files and create .zip archive
         run: |
