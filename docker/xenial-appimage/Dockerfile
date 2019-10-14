@@ -56,7 +56,7 @@ RUN mkdir -p yubikey-manager-qt/appDir/usr \
     && unset QT_PLUGIN_PATH \
     && unset LD_LIBRARY_PATH
 CMD cd yubikey-manager-qt \
-    && ./linuxdeployqt*.AppImage appDir/usr/bin/ykman-gui -qmldir=./qml -bundle-non-qt-libs \
+    && ./linuxdeployqt*.AppImage appDir/usr/bin/ykman-gui -qmldir=./ykman-gui/qml -bundle-non-qt-libs \
     && rm appDir/AppRun \
     && cp ./resources/linux/AppRun appDir/ \
     && chmod a+x appDir/AppRun \
