@@ -57,6 +57,7 @@ jobs:
           cd .\ykman-gui\release
           wget https://www.python.org/ftp/python/3.6.8/python-3.6.8-embed-amd64.zip -OutFile python-3.6.8-embed-amd64.zip
           7z x python-3.6.8-embed-amd64.zip
+        shell: powershell
 
       - name: Run windeployqt
         run: |
