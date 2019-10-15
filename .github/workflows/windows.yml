@@ -14,7 +14,7 @@ jobs:
         run: |
           pip install aqtinstall
           python -m aqt install 5.13.1 windows desktop win64_msvc2017_64
-          wget http://download.qt.io/official_releases/jom/jom.zip -OutFile jom.zip
+          wget https://download.qt.io/official_releases/jom/jom.zip -OutFile jom.zip
           7z x jom.zip
         shell: powershell
 
