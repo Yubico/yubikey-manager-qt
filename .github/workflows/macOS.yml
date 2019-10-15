@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Install dependencies from hombrew
+      - name: Install dependencies from homebrew
         run: |
           brew upgrade
           brew bundle --file=./.github/workflows/Brewfile
