@@ -20,8 +20,13 @@ jobs:
           wget https://www.python.org/ftp/python/3.6.8/python-3.6.8-embed-amd64.zip -OutFile python-3.6.8-embed-amd64.zip
         shell: powershell
 
+      - name: Fetch GPG keys
+        run: gpg --no-default-keyring --keyring yubico --recv-keys 0A3B0262BCA1705307D5FF06BCA00FD4B2168C0A
+
       - name: Verify checksums of downloaded files
-        run: sha256sum -c ./.github/workflows/windows-libs.sha256sum
+        run: |
+          sha256sum -c ./.github/workflows/windows-libs.sha256sum
+          gpg --no-default-keyring --keyring yubico --verify ykpers-1.20.0-win64.zip.sig ykpers-1.20.0-win64.zip
         shell: bash
 
       - name: Install Qt and Jom
