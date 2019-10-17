@@ -61,9 +61,6 @@ jobs:
           sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '*.pyc' -delete
           sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '__pycache__' -delete
 
-      - name: Copy over CLI binary to app bundle
-        run: cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
-
       - name: Move python dependencies to site-packages (required by codesign)
         run: |
           rsync -a ykman-gui/ykman-gui.app/Contents/MacOS/pymodules/* ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/
