@@ -18,7 +18,7 @@ jobs:
           docker start --attach $id
           docker cp $id:/yubikey-manager-qt/YubiKey_Manager-x86_64.AppImage yubikey-manager-qt-${REF}.AppImage
           mkdir deploy
-          mv yubikey-manager-qt-${REF}.AppImage deploy
+          cp yubikey-manager-qt-${REF}.AppImage deploy
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1
