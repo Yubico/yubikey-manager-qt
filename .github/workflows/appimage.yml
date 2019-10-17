@@ -20,13 +20,6 @@ jobs:
           mkdir deploy
           cp yubikey-manager-qt-${REF}.AppImage deploy
 
-      - name: Run AppImage
-        run: |
-          export REF=$(echo ${GITHUB_REF} | cut -d '/' -f 3)
-          sudo chmod +x yubikey-manager-qt-${REF}.AppImage
-          ./yubikey-manager-qt-${REF}.AppImage --version
-          ./yubikey-manager-qt-${REF}.AppImage --help
-
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
