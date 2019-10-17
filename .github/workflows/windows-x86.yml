@@ -86,10 +86,10 @@ jobs:
         shell: powershell
 
       - name: Run GUI
-        shell: powershell
+        shell: bash
         run: |
-          .\ykman-gui\release\ykman-gui.exe --version
-          .\ykman-gui\release\ykman-gui.exe --help
+          ./ykman-gui/release/ykman-gui --version
+          ./ykman-gui/release/ykman-gui --help
 
       - name: Run CLI
         shell: bash
