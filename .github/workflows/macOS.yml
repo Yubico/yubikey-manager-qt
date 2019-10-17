@@ -92,6 +92,9 @@ jobs:
           mkdir deploy
           mv yubikey-manager-qt-${REF}.app.tar.gz deploy
 
+      - name: Uninstall runtime dependencies
+        run: brew uninstall qt openssl@1.1 python ykpers --ignore-dependencies
+
       - name: Run GUI
         run: |
           ./YubiKey\ Manager.app/Contents/MacOS/ykman-gui --version

@@ -86,6 +86,7 @@ jobs:
         shell: powershell
 
       - name: Run GUI
+        shell: powershell
         run: |
           .\ykman-gui\release\ykman-gui.exe --version
           .\ykman-gui\release\ykman-gui.exe --help
