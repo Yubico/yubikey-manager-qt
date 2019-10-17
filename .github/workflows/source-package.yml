@@ -13,8 +13,7 @@ jobs:
       - name: Build a .tar.gz source package
         run: |
           export REF=$(echo ${GITHUB_REF} | cut -d '/' -f 3)
-          cd ..
-          tar zcvf yubikey-manager-qt-$REF.tar.gz --exclude-vcs yubikey-manager-qt
+          git archive --format=tar.gz --prefix=yubikey-manager-qt -o yubikey-manager-qt-$REF.tar.gz HEAD
           mkdir deploy
           mv yubikey-manager-qt-$REF.tar.gz deploy
 
@@ -22,4 +21,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: yubikey-manager-qt-source-package
-          path: ../deploy
+          path: deploy
