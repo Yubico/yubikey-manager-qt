@@ -85,6 +85,12 @@ jobs:
           sudo install_name_tool -change /usr/local/opt/json-c/lib/libjson-c.4.dylib @executable_path/../Frameworks/libjson-c.4.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.1.dylib
           sudo install_name_tool -change /usr/local/opt/json-c/lib/libjson-c.4.dylib @executable_path/../Frameworks/libjson-c.4.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.dylib
 
+      - name: Point to relative Qt for CLI binary (macdeployqt doesn't fix this)
+        run: |
+          sudo install_name_tool -change /usr/local/opt/qt/lib/QtQml.framework/Versions/5/QtQml @executable_path/../Frameworks/QtQml.framework/Versions/5/QtQml ykman-gui/ykman-gui.app/Contents/MacOS/ykman
+          sudo install_name_tool -change /usr/local/opt/qt/lib/QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork ykman-gui/ykman-gui.app/Contents/MacOS/ykman
+          sudo install_name_tool -change /usr/local/opt/qt/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore ykman-gui/ykman-gui.app/Contents/MacOS/ykman
+
       - name: Rename and archive app bundle
         run: |
           export REF=$(echo ${GITHUB_REF} | cut -d '/' -f 3)
