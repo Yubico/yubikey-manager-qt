@@ -40,7 +40,12 @@ jobs:
         run: |
           qmake
           make
-          macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/ -appstore-compliant
+
+      - name: Copy over CLI binary to app bundle
+        run: cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
+
+      - name: Run macdeployqt
+        run: macdeployqt ykman-gui/ykman-gui.app/ -qmldir=ykman-gui/qml/ -appstore-compliant
 
       - name: Copy over dylibs from homebrew
         run: |
@@ -55,10 +60,6 @@ jobs:
           cp -a /Library/Frameworks/Python.framework ykman-gui/ykman-gui.app/Contents/Frameworks/
           sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '*.pyc' -delete
           sudo find ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework -name '__pycache__' -delete
-
-
-      - name: Copy over CLI binary to app bundle
-        run: cp ykman-cli/ykman ykman-gui/ykman-gui.app/Contents/MacOS/
 
       - name: Move python dependencies to site-packages (required by codesign)
         run: |
@@ -84,6 +85,12 @@ jobs:
           sudo install_name_tool -change /usr/local/opt/json-c/lib/libjson-c.4.dylib @executable_path/../Frameworks/libjson-c.4.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.1.dylib
           sudo install_name_tool -change /usr/local/opt/json-c/lib/libjson-c.4.dylib @executable_path/../Frameworks/libjson-c.4.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.dylib
 
+      - name: Point to relative Qt for CLI binary (macdeployqt doesn't fix this)
+        run: |
+          sudo install_name_tool -change /usr/local/opt/qt/lib/QtQml.framework/Versions/5/QtQml @executable_path/../Frameworks/QtQml.framework/Versions/5/QtQml ykman-gui/ykman-gui.app/Contents/MacOS/ykman
+          sudo install_name_tool -change /usr/local/opt/qt/lib/QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork ykman-gui/ykman-gui.app/Contents/MacOS/ykman
+          sudo install_name_tool -change /usr/local/opt/qt/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore ykman-gui/ykman-gui.app/Contents/MacOS/ykman
+
       - name: Rename and archive app bundle
         run: |
           export REF=$(echo ${GITHUB_REF} | cut -d '/' -f 3)
@@ -91,6 +98,21 @@ jobs:
           tar -czf yubikey-manager-qt-${REF}.app.tar.gz YubiKey\ Manager.app
           mkdir deploy
           mv yubikey-manager-qt-${REF}.app.tar.gz deploy
+
+      - name: Uninstall runtime dependencies
+        run: |
+          brew uninstall openssl@1.1 python ykpers --ignore-dependencies
+          sudo rm -rf /usr/local/Cellar/qt
+
+      - name: Run GUI
+        run: |
+          ./YubiKey\ Manager.app/Contents/MacOS/ykman-gui --version
+          ./YubiKey\ Manager.app/Contents/MacOS/ykman-gui --help
+
+      - name: Run CLI
+        run: |
+          ./YubiKey\ Manager.app/Contents/MacOS/ykman --version
+          [[ -z "$(./YubiKey\ Manager.app/Contents/MacOS/ykman --version | grep -E "not found|missing")" ]]
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1
