@@ -95,6 +95,17 @@ jobs:
           cp yubikey-manager-qt-$branch-win64.zip deploy
         shell: powershell
 
+      - name: Run GUI
+        run: |
+          .\ykman-gui\release\ykman-gui.exe --version
+          .\ykman-gui\release\ykman-gui.exe --help
+
+      - name: Run CLI
+        shell: bash
+        run: |
+          ./ykman-gui/release/ykman --version
+          [[ -z "$(./ykman-gui/release/ykman --version | grep -E "not found|missing")" ]]
+
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:

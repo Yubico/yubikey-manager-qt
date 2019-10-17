@@ -92,6 +92,16 @@ jobs:
           mkdir deploy
           mv yubikey-manager-qt-${REF}.app.tar.gz deploy
 
+      - name: Run GUI
+        run: |
+          ./YubiKey\ Manager.app/Contents/MacOS/ykman-gui --version
+          ./YubiKey\ Manager.app/Contents/MacOS/ykman-gui --help
+
+      - name: Run CLI
+        run: |
+          ./YubiKey\ Manager.app/Contents/MacOS/ykman --version
+          [[ -z "$(./YubiKey\ Manager.app/Contents/MacOS/ykman --version | grep -E "not found|missing")" ]]
+
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
