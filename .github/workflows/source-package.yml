@@ -1,25 +1,20 @@
 name: Build a source package
 
-# TODO: enable this workflow for pull_request (will require a different way to do the archive)
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
-        # Don't use checkout, we need a full clone for this workflow
-      - name: Clone repository
-        run: |
-          git clone https://github.com/yubico/yubikey-manager-qt
+      - uses: actions/checkout@v1
 
       - name: Build a .tar.gz source package
         run: |
           export REF=$(echo ${GITHUB_REF} | cut -d '/' -f 3)
-          cd yubikey-manager-qt
-          git checkout $REF
-          git archive --format=tar.gz -o yubikey-manager-qt-$REF.tar.gz --prefix yubikey-manager-qt/ $REF
+          cd ..
+          tar -zcvf yubikey-manager-qt-$REF.tar.gz yubikey-manager-qt
           mkdir deploy
           mv yubikey-manager-qt-$REF.tar.gz deploy
 
@@ -27,4 +22,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: yubikey-manager-qt-source-package
-          path: yubikey-manager-qt/deploy
+          path: ../deploy
