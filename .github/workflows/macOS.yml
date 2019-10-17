@@ -93,7 +93,9 @@ jobs:
           mv yubikey-manager-qt-${REF}.app.tar.gz deploy
 
       - name: Uninstall runtime dependencies
-        run: brew uninstall qt openssl@1.1 python ykpers --ignore-dependencies
+        run: |
+          brew uninstall openssl@1.1 python ykpers --ignore-dependencies
+          sudo rm -rf /usr/local/Cellar/qt
 
       - name: Run GUI
         run: |
