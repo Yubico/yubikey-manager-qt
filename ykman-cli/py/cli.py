@@ -3,7 +3,8 @@
 
 import sys
 from ykman.cli.__main__ import main
-
+import signal
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 def run(argv):
     sys.argv = argv
