@@ -280,13 +280,14 @@ Python {
                     } else {
                         clearYubiKey()
                     }
+
+                    if (doneCallback) {
+                        doneCallback(resp)
+                    }
+
                 })
             } else if (hasDevice) {
                 clearYubiKey()
-            }
-
-            if (doneCallback) {
-                doneCallback()
             }
         })
     }

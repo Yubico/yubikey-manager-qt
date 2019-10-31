@@ -27,6 +27,8 @@ SnackBar {
             return qsTr('No YubiKey present')
         case 'open_device_failed':
             return qsTr("Failed to open the application on the YubiKey")
+        case 'windows_admin_required':
+            return qsTr("Failed to open, try to run the application as administrator")
         case 'pin_blocked':
             return qsTr('PIN is blocked')
         case 'pin_required':

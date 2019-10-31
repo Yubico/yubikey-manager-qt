@@ -180,6 +180,10 @@ StackView {
                                    views.selectedSlot)).arg(snackbarError.getDefaultMessage(error)))
     }
 
+    function snackbarErrorMessage(error) {
+        snackbarError.showResponseError(error)
+    }
+
     Component {
         id: fido2SetPinView
         Fido2SetPinView {
