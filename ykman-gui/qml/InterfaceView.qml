@@ -49,7 +49,7 @@ ColumnLayout {
                                     views.home()
                                     views.unlock()
                                     snackbarSuccess.show(
-                                                "Configured interfaces")
+                                                qsTr("Configured interfaces"))
                                 } else {
                                     views.unlock()
                                     snackbarError.showResponseError(resp)

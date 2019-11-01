@@ -162,9 +162,9 @@ StackView {
 
     function otpConfirmOverwrite(callback) {
         confirmationPopup.show(
-                    "Overwrite?", "%1 is already configured.".arg(
-                        SlotUtils.slotNameCapitalized(views.selectedSlot))
-                    + " Do you want to overwrite the existing configuration?",
+                    qsTr("Overwrite?"), qsTr(
+                        "%1 is already configured. Do you want to overwrite the existing configuration?").arg(
+                        SlotUtils.slotNameCapitalized(views.selectedSlot)),
                     callback)
     }
 

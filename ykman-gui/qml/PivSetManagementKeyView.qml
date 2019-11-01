@@ -55,7 +55,7 @@ ColumnLayout {
 
                 if (resp.success) {
                     views.pivPinManagement()
-                    snackbarSuccess.show("Changed the Management Key")
+                    snackbarSuccess.show(qsTr("Changed the Management Key"))
                 } else {
                     snackbarError.showResponseError(resp, {
                                                         mgm_key_bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters").arg(constants.pivManagementKeyHexLength),

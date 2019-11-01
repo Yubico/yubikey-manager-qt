@@ -10,8 +10,8 @@ InlinePopup {
     focus: true
 
     function show(heading, message, cb) {
-        confirmationHeading.text = qsTr(heading)
-        confirmationLbl.text = qsTr(message)
+        confirmationHeading.text = heading
+        confirmationLbl.text = message
         acceptCallback = cb
         open()
     }

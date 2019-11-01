@@ -31,7 +31,7 @@ ColumnLayout {
                                          isBusy = false
                                          if (resp.success) {
                                              snackbarSuccess.show(
-                                                         "Certificate Signing Request (CSR) generated")
+                                                         qsTr("Certificate Signing Request (CSR) generated"))
                                          } else {
                                              snackbarError.showResponseError(
                                                          resp)
@@ -75,7 +75,7 @@ ColumnLayout {
                                                            isBusy = false
                                                            views.pop()
                                                            snackbarSuccess.show(
-                                                                       "Self-signed certificate generated")
+                                                                       qsTr("Self-signed certificate generated"))
                                                        } else {
                                                            deleteCertificate(
                                                                        pin,
@@ -95,11 +95,11 @@ ColumnLayout {
                 selectCsrOutputDialog.open()
             }
         } else {
-            var firstMessageTemplate = selfSign ? "This will overwrite the key and certificate in the %1 (%2) slot." : "This will overwrite the key and delete the certificate in the %1 (%2) slot."
-            confirmationPopup.show("Overwrite?", firstMessageTemplate.arg(
-                                       slot.name).arg(slot.hex) + "
+            var firstMessageTemplate = selfSign ? qsTr("This will overwrite the key and certificate in the %1 (%2) slot.") : qsTr("This will overwrite the key and delete the certificate in the %1 (%2) slot.")
+            confirmationPopup.show(qsTr("Overwrite?"), firstMessageTemplate.arg(
+                                       slot.name).arg(slot.hex) + qsTr("
 
-Do you want to continue?", function () {
+Do you want to continue?"), function () {
     finish(true)
 })
         }
