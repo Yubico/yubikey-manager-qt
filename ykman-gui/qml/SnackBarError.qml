@@ -59,7 +59,7 @@ SnackBar {
                 if (defaultMessage) {
                     show(defaultMessage)
                 } else {
-                    console.log('PIV unmapped error:', resp.error_id,
+                    console.log('Unmapped error:', resp.error_id,
                                 resp.error_message)
 
                     if (resp.error_message) {
