@@ -94,7 +94,7 @@ ColumnLayout {
 
             Label {
                 text: qsTr("Private ID")
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 font.pixelSize: constants.h3
                 color: yubicoBlue
             }
@@ -116,7 +116,7 @@ ColumnLayout {
 
             Label {
                 text: qsTr("Secret key")
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 font.pixelSize: constants.h3
                 color: yubicoBlue
             }
