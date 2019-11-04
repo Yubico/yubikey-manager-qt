@@ -28,7 +28,7 @@ ColumnLayout {
                                              if (resp.success) {
                                                  views.otp()
                                                  snackbarSuccess.show(
-                                                             "Configured Challenge-Response credential")
+                                                             qsTr("Configured Challenge-Response credential"))
                                              } else {
                                                  if (resp.error_id === 'write error') {
                                                      views.otpWriteError()

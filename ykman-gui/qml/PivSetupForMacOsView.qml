@@ -56,7 +56,7 @@ ColumnLayout {
                         if (resp.success) {
                             views.pop()
                             snackbarSuccess.show(
-                                        "Remove and re-insert your YubiKey to start the macOS pairing setup.")
+                                        qsTr("Remove and re-insert your YubiKey to start the macOS pairing setup."))
                         } else {
                             snackbarError.showResponseError(resp)
                         }
@@ -74,8 +74,8 @@ ColumnLayout {
             _prompt_for_pin_and_key()
         } else {
             confirmationPopup.show(
-                        "Overwrite?",
-                        "This will overwrite any existing key and certificate in slot 9a and 9d. This action cannot be undone! Are you sure you want to continue?",
+                        qsTr("Overwrite?"), qsTr(
+                            "This will overwrite any existing key and certificate in slot 9a and 9d. This action cannot be undone! Are you sure you want to continue?"),
                         function () {
                             setupForMacOs(true)
                         })

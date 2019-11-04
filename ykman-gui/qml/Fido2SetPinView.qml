@@ -20,7 +20,7 @@ ChangePinView {
         yubiKey.fidoSetPin(newPin, function (resp) {
             if (resp.success) {
                 views.fido2()
-                snackbarSuccess.show("FIDO2 PIN was set")
+                snackbarSuccess.show(qsTr("FIDO2 PIN was set"))
             } else {
                 if (resp.error_id === 'too long') {
                     snackbarError.show(qsTr("Too long PIN"))

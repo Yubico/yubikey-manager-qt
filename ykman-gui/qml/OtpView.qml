@@ -43,8 +43,8 @@ ColumnLayout {
 
     function confirmDelete() {
         confirmationPopup.show(
-                    "Delete slot?",
-                    "Do you want to delete the content of %1? This permanently deletes the configuration.".arg(
+                    qsTr("Delete slot?"), qsTr(
+                        "Do you want to delete the content of %1? This permanently deletes the configuration.").arg(
                         SlotUtils.slotNameCapitalized(views.selectedSlot)),
                     deleteSelectedSlot)
     }
@@ -54,7 +54,7 @@ ColumnLayout {
         yubiKey.eraseSlot(views.selectedSlot, function (resp) {
             if (resp.success) {
                 load()
-                snackbarSuccess.show("Configuration deleted")
+                snackbarSuccess.show(qsTr("Configuration deleted"))
             } else {
                 if (resp.error_id === 'write error') {
                     views.otpWriteError()
@@ -70,7 +70,8 @@ ColumnLayout {
             if (resp.success) {
 
                 load()
-                snackbarSuccess.show("Configurations swapped between slots")
+                snackbarSuccess.show(
+                            qsTr("Configurations swapped between slots"))
             } else {
                 if (resp.error_id === 'write error') {
                     snackbarError.show(

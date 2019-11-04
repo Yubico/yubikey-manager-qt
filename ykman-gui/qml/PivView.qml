@@ -40,16 +40,16 @@ ColumnLayout {
 
     function resetPiv() {
         confirmationPopup.show(
-                    "Reset PIV?",
-                    "This will delete all PIV data, and restore all PINs to the default values.
+                    qsTr("Reset PIV?"), qsTr(
+                        "This will delete all PIV data, and restore all PINs to the default values.
 
-This action cannot be undone!", function () {
+This action cannot be undone!"), function () {
     isBusy = true
     yubiKey.pivReset(function (resp) {
         isBusy = false
         if (resp.success) {
             load()
-            snackbarSuccess.show("PIV application has been reset")
+            snackbarSuccess.show(qsTr("PIV application has been reset"))
         } else {
             snackbarError.showResponseError(resp)
         }

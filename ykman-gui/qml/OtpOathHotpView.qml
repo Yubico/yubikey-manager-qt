@@ -20,7 +20,7 @@ ColumnLayout {
                                     if (resp.success) {
                                         views.otp()
                                         snackbarSuccess.show(
-                                                    "Configured OATH-HOTP credential")
+                                                    qsTr("Configured OATH-HOTP credential"))
                                     } else {
                                         if (resp.error_id === 'write error') {
                                             views.otpWriteError()

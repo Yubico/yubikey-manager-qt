@@ -41,7 +41,7 @@ ColumnLayout {
                                if (resp.success) {
                                    views.otp()
                                    snackbarSuccess.show(
-                                               "Configured Yubico OTP credential")
+                                               qsTr("Configured Yubico OTP credential"))
                                } else {
                                    if (resp.error_id === 'write error') {
                                        views.otpWriteError()

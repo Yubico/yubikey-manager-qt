@@ -25,15 +25,15 @@ ColumnLayout {
 
     function deleteCertificate() {
         confirmationPopup.show(
-                    "Delete certificate?",
-                    "This will delete the certificate stored in slot %1, and cannot be undone. Note that the private key is not deleted.".arg(
+                    qsTr("Delete certificate?"), qsTr(
+                        "This will delete the certificate stored in slot %1, and cannot be undone. Note that the private key is not deleted.").arg(
                         slot.hex), function () {
                             function _finish(pin, managementKey) {
                                 yubiKey.pivDeleteCertificate(slot.id, pin,
                                                              managementKey,
                                                              function (resp) {
                                                                  if (resp.success) {
-                                                                     snackbarSuccess.show("Certificate was deleted")
+                                                                     snackbarSuccess.show(qsTr("Certificate was deleted"))
                                                                  } else {
                                                                      snackbarError.showResponseError(resp)
                                                                  }
@@ -51,7 +51,7 @@ ColumnLayout {
     function exportCertificate(fileUrl) {
         yubiKey.pivExportCertificate(slot.id, fileUrl, function (resp) {
             if (resp.success) {
-                snackbarSuccess.show("Certificate was exported")
+                snackbarSuccess.show(qsTr("Certificate was exported"))
             } else {
                 snackbarError.showResponseError(resp)
             }
