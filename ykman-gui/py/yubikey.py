@@ -236,6 +236,10 @@ class Controller(object):
                 if (e.sw == SW.VERIFY_FAIL_NO_RETRY):
                     return failure('wrong_lock_code')
                 raise
+            except ValueError as e:
+                if str(e) == 'Configuration locked!':
+                    return failure('interface_config_locked')
+                raise
 
             return success()
 
