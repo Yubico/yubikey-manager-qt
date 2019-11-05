@@ -46,7 +46,6 @@ ColumnLayout {
 
                                    if (resp.upload_url) {
                                        uploadUrl = resp.upload_url
-                                       Qt.openUrlExternally(uploadUrl)
                                        views.push(yubiOtpUploadView)
                                    } else {
                                        views.otp()
