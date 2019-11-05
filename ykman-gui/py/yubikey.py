@@ -21,7 +21,7 @@ from cryptography import x509
 from cryptography.hazmat.primitives import serialization
 from ykman.descriptor import FailedOpeningDeviceException, get_descriptors
 from ykman.device import device_config
-from ykman.otp import OtpController
+from ykman.otp import OtpController, PrepareUploadFailed
 from ykman.fido import Fido2Controller
 from ykman.driver_ccid import APDUError, SW
 from ykman.driver_otp import YkpersError, libversion as ykpers_version
@@ -287,13 +287,30 @@ class Controller(object):
     def random_key(self, bytes):
         return b2a_hex(os.urandom(int(bytes))).decode('ascii')
 
-    def program_otp(self, slot, public_id, private_id, key):
+    def program_otp(self, slot, public_id, private_id, key, upload=False,
+                    app_version='unknown'):
         key = a2b_hex(key)
         public_id = modhex_decode(public_id)
         private_id = a2b_hex(private_id)
+
+        upload_url = None
+
         with self._open_otp_controller() as controller:
+            if upload:
+                try:
+                    upload_url = controller.prepare_upload_key(
+                        key, public_id, private_id,
+                        serial=self._dev_info['serial'],
+                        user_agent='ykman-qt/' + app_version)
+                except PrepareUploadFailed as e:
+                    logger.debug('YubiCloud upload failed', exc_info=e)
+                    return failure('upload_failed',
+                                   {'upload_errors': [err.name
+                                                      for err in e.errors]})
+
             controller.program_otp(slot, key, public_id, private_id)
-        return success()
+
+        return success({'upload_url': upload_url})
 
     def program_challenge_response(self, slot, key, touch):
         key = a2b_hex(key)
