@@ -6,6 +6,8 @@ import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
 
+    property string uploadUrl
+
     function useSerial() {
         if (useSerialCb.checked) {
             yubiKey.serialModhex(function (res) {
@@ -37,20 +39,48 @@ ColumnLayout {
     function programYubiOtp() {
         yubiKey.programOtp(views.selectedSlot, publicIdInput.text,
                            privateIdInput.text, secretKeyInput.text,
-                           function (resp) {
+                           enableUpload.checked, function (resp) {
                                if (resp.success) {
-                                   views.otp()
                                    snackbarSuccess.show(
                                                qsTr("Configured Yubico OTP credential"))
+
+                                   if (resp.upload_url) {
+                                       uploadUrl = resp.upload_url
+                                       views.push(yubiOtpUploadView)
+                                   } else {
+                                       views.otp()
+                                   }
                                } else {
                                    if (resp.error_id === 'write error') {
                                        views.otpWriteError()
+                                   } else if (resp.error_id === 'upload_failed') {
+                                       snackbarError.show(
+                                                   qsTr(
+                                                       "Upload failed: %1").arg(
+                                                       getUploadErrorMessage(
+                                                           resp.upload_errors[0])))
                                    } else {
                                        views.otpFailedToConfigureErrorPopup(
                                                    resp.error_id)
                                    }
                                }
                            })
+    }
+
+    function getUploadErrorMessage(uploadErrorId) {
+        // Keys defined in ykman library
+        switch (uploadErrorId) {
+        case 'CONNECTION_FAILED':
+            return qsTr('Failed to open HTTPS connection.')
+        case 'NOT_FOUND':
+            return qsTr('Upload request not recognized by server.')
+        case 'PUBLIC_ID_NOT_VV':
+            return qsTr('Public ID must begin with "vv".')
+        case 'PUBLIC_ID_OCCUPIED':
+            return qsTr('Public ID is already in use.')
+        case 'SERVICE_UNAVAILABLE':
+            return qsTr('Service temporarily unavailable, please try again later.')
+        }
     }
 
     CustomContentColumn {
@@ -135,6 +165,19 @@ ColumnLayout {
                 onClicked: generateKey()
                 toolTipText: qsTr("Generate a random Secret Key")
             }
+
+            Label {}
+            CheckBox {
+                id: enableUpload
+                text: qsTr("Upload to YubiCloud")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                ToolTip.delay: 1000
+                font.pixelSize: constants.h3
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Upload key and ID to YubiCloud (required for most 3rd party services)")
+                Material.foreground: yubicoBlue
+            }
+            Label {}
         }
 
         ButtonsBar {
@@ -144,5 +187,10 @@ ColumnLayout {
                            && secretKeyInput.acceptableInput
             finishTooltip: qsTr("Finish and write the configuration to the YubiKey")
         }
+    }
+
+    Component {
+        id: yubiOtpUploadView
+        YubiOtpUploadView {}
     }
 }
