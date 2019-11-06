@@ -1,4 +1,5 @@
 * Version 1.2.0 (unreleased)
+ ** FIDO: Show better error message when failing to open a FIDO device in Windows
  ** OTP: Add option to upload YubiOTP credential to YubiCloud
 
 * Version 1.1.3 (released 2019-08-20)
