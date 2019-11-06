@@ -40,6 +40,10 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 logger = logging.getLogger(__name__)
 
 
+class WinAdminRequiredException(Exception):
+    pass
+
+
 def as_json(f):
     def wrapped(*args, **kwargs):
         return json.dumps(f(*args, **kwargs))
@@ -63,6 +67,9 @@ def catch_error(f):
         except FailedOpeningDeviceException:
             return failure('open_device_failed')
 
+        except WinAdminRequiredException:
+            return failure('windows_admin_required')
+
         except Exception as e:
             if str(e) == 'Incorrect padding':
                 return failure('incorrect_padding')
@@ -85,6 +92,7 @@ def failure(err_id, result={}):
 
 def unknown_failure(exception):
     return failure(None, {'error_message': str(exception)})
+
 
 def os_is_windows():
     return os.name == 'nt'
@@ -150,8 +158,13 @@ class Controller(object):
             self._descriptor.open_device(transports=TRANSPORT.OTP))
 
     def _open_fido2_controller(self):
-        return Fido2ContextManager(
-            self._descriptor.open_device(transports=TRANSPORT.FIDO))
+        try:
+            return Fido2ContextManager(
+                self._descriptor.open_device(transports=TRANSPORT.FIDO))
+        except FailedOpeningDeviceException:
+            if os_is_windows():
+                raise WinAdminRequiredException
+            raise
 
     def _open_piv(self):
         return PivContextManager(
@@ -206,7 +219,7 @@ class Controller(object):
         except FailedOpeningDeviceException:
             if self._descriptor.mode.transports == TRANSPORT.FIDO:
                 if os_is_windows():
-                    return failure('windows_admin_required')
+                    raise WinAdminRequiredException
             raise
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
