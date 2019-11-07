@@ -6,7 +6,7 @@ ToolTip {
 
     property string message: ""
 
-    timeout: 3000
+    timeout: 5000
     width: snackLbl.implicitWidth + constants.contentMargins
     height: constants.contentMargins
     x: (app.width - width) / 2
@@ -21,5 +21,6 @@ ToolTip {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         font.pixelSize: constants.h4
+        horizontalAlignment: Qt.AlignHCenter
     }
 }

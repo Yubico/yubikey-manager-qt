@@ -18,6 +18,8 @@ SnackBar {
             return qsTr('Invalid date: %1').arg(resp.date)
         case 'lock_code_not_16_bytes':
             return qsTr('Lock code must be exactly 32 hexadecimal characters')
+        case 'macos_input_monitoring_access':
+            return qsTr('Error! Make sure YubiKey Manager has been granted\nInput Monitoring access (Security & Privacy preferences)')
         case 'mgm_key_bad_format':
             return qsTr('Management key must be exactly %1 hexadecimal characters'.arg(
                             constants.pivManagementKeyHexLength))
