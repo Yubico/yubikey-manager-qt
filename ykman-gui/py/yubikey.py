@@ -9,6 +9,7 @@ import os
 import sys
 import platform
 import pyotherside
+import smartcard
 import struct
 import types
 import getpass
@@ -77,6 +78,9 @@ def catch_error(f):
 
         except MacOSMonitoringException:
             return failure('macos_input_monitoring_access')
+
+        except smartcard.pcsc.PCSCExceptions.EstablishContextException:
+            return failure('pcsc_establish_context_failed')
 
         except Exception as e:
             if str(e) == 'Incorrect padding':
