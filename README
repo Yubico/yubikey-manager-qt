@@ -27,6 +27,9 @@ Installers are available https://developers.yubico.com/yubikey-manager-qt/Releas
 
 ==== Linux
 
+In addition to the application itself, you may also need to manually install and start the `pcscd` service for CCID support.
+
+
 ===== AppImage
 An experimental AppImage is available https://developers.yubico.com/yubikey-manager-qt/Releases/[here].
 
