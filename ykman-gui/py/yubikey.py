@@ -35,8 +35,6 @@ from ykman.util import (
     generate_static_pw, parse_certificates, get_leaf_certificates,
     parse_private_key)
 
-import signal
-signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 logger = logging.getLogger(__name__)
 

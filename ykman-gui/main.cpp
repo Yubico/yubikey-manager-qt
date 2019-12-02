@@ -2,12 +2,34 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <stdlib.h>
+#include <signal.h>
 #include <QtGlobal>
 #include <QtWidgets>
 #include <QQuickStyle>
 
+void handleExitSignal(int sig) {
+  printf("Exiting due to signal %d\n", sig);
+  QCoreApplication::quit();
+}
+
+void setupSignalHandlers() {
+#ifdef _WIN32
+  signal(SIGINT, handleExitSignal);
+#else
+  struct sigaction sa;
+  sa.sa_handler = handleExitSignal;
+  sigset_t signal_mask;
+  sigemptyset(&signal_mask);
+  sa.sa_mask = signal_mask;
+  sa.sa_flags = 0;
+  sigaction(SIGINT, &sa, nullptr);
+#endif
+}
+
 int main(int argc, char *argv[])
 {
+    setupSignalHandlers();
+
     // Global menubar is broken for qt5 apps in Ubuntu Unity, see:
     // https://bugs.launchpad.net/ubuntu/+source/appmenu-qt5/+bug/1323853
     // This workaround enables a local menubar.
