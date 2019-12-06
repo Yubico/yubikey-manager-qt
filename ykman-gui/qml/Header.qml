@@ -33,21 +33,33 @@ ColumnLayout {
                 color: yubicoBlue
                 font.pixelSize: constants.h4
             }
-            CustomButton {
+            ToolButton {
+                id: helpBtn
                 flat: true
                 text: qsTr("Help")
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                iconSource: "../images/help.svg"
-                toolTipText: qsTr("Visit Yubico Support in your web browser")
+                icon.source: "../images/help.svg"
+                ToolTip {
+                    text: qsTr("Visit Yubico Support in your web browser")
+                    delay: 1000
+                    parent: helpBtn
+                    visible: parent.hovered
+                }
                 onClicked: Qt.openUrlExternally("https://www.yubico.com/kb")
                 font.pixelSize: constants.h4
             }
-            CustomButton {
+            ToolButton {
+                id: infoBtn
                 flat: true
                 text: qsTr("About")
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                iconSource: "../images/info.svg"
-                toolTipText: qsTr("About YubiKey Manager")
+                icon.source: "../images/info.svg"
+                ToolTip {
+                    text: qsTr("About YubiKey Manager")
+                    delay: 1000
+                    parent: infoBtn
+                    visible: parent.hovered
+                }
                 onClicked: aboutPage.open()
                 font.pixelSize: constants.h4
             }
