@@ -1,3 +1,10 @@
+* Version 1.2.0 (unreleased)
+ ** OTP: Add option to upload YubiOTP credential to YubiCloud
+ ** CCID: Show hint about pcscd service if opening device fails
+ ** Windows: Show better error message when failing to open a FIDO device
+ ** macOS: Add hint about app permissions
+ ** Bugfix: Signal handling now compatible with Python 3.8
+
 * Version 1.1.3 (released 2019-08-20)
  ** Add support for YubiKey 5Ci
  ** PIV: Use UTC time for self-signed certificates
