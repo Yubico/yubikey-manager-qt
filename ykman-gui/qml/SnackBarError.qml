@@ -33,8 +33,6 @@ SnackBar {
             return qsTr("Failed to open the application on the YubiKey")
         case 'pcsc_establish_context_failed':
             return qsTr("Failed to establish CCID context. Is the pcscd service running?")
-        case 'windows_admin_required':
-            return qsTr("Failed to open, try to run the application as administrator")
         case 'pin_blocked':
             return qsTr('PIN is blocked')
         case 'pin_required':

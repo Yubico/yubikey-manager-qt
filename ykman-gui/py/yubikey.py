@@ -88,9 +88,6 @@ def failure(err_id, result={}):
 def unknown_failure(exception):
     return failure(None, {'error_message': str(exception)})
 
-def os_is_windows():
-    return os.name == 'nt'
-
 
 class OtpContextManager(object):
     def __init__(self, dev):
@@ -173,43 +170,36 @@ class Controller(object):
                 return success({'dev': self._dev_info})
 
         self._descriptor = desc
-        self._dev_info = None
 
-        try:
-            with self._open_device() as dev:
-                if not dev:
-                    return failure('no_device')
+        with self._open_device() as dev:
+            if not dev:
+                return failure('no_device')
 
-                self._dev_info = {
-                        'name': dev.device_name,
-                        'version': '.'.join(str(x) for x in dev.version),
-                        'serial': dev.serial or '',
-                        'usb_enabled': [
-                            a.name for a in APPLICATION
-                            if a & dev.config.usb_enabled],
-                        'usb_supported': [
-                            a.name for a in APPLICATION
-                            if a & dev.config.usb_supported],
-                        'usb_interfaces_supported': [
-                            t.name for t in TRANSPORT
-                            if t & dev.config.usb_supported],
-                        'nfc_enabled': [
-                            a.name for a in APPLICATION
-                            if a & dev.config.nfc_enabled],
-                        'nfc_supported': [
-                            a.name for a in APPLICATION
-                            if a & dev.config.nfc_supported],
-                        'usb_interfaces_enabled': str(dev.mode).split('+'),
-                        'can_write_config': dev.can_write_config,
-                        'configuration_locked': dev.config.configuration_locked,
-                        'form_factor': dev.config.form_factor
-                    }
-                return success({'dev': self._dev_info})
-        except FailedOpeningDeviceException:
-            if self._descriptor.mode.transports == TRANSPORT.FIDO:
-                if os_is_windows():
-                    return failure('windows_admin_required')
-            raise
+            self._dev_info = {
+                    'name': dev.device_name,
+                    'version': '.'.join(str(x) for x in dev.version),
+                    'serial': dev.serial or '',
+                    'usb_enabled': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.usb_enabled],
+                    'usb_supported': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.usb_supported],
+                    'usb_interfaces_supported': [
+                        t.name for t in TRANSPORT
+                        if t & dev.config.usb_supported],
+                    'nfc_enabled': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.nfc_enabled],
+                    'nfc_supported': [
+                        a.name for a in APPLICATION
+                        if a & dev.config.nfc_supported],
+                    'usb_interfaces_enabled': str(dev.mode).split('+'),
+                    'can_write_config': dev.can_write_config,
+                    'configuration_locked': dev.config.configuration_locked,
+                    'form_factor': dev.config.form_factor
+                }
+            return success({'dev': self._dev_info})
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
         usb_enabled = 0x00
@@ -779,3 +769,4 @@ def init_with_logging(log_level, log_file=None):
 def init():
     global controller
     controller = Controller()
+    controller.refresh()
