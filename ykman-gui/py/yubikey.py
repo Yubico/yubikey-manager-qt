@@ -39,10 +39,6 @@ from ykman.util import (
 logger = logging.getLogger(__name__)
 
 
-class WinAdminRequiredException(Exception):
-    pass
-
-
 def as_json(f):
     def wrapped(*args, **kwargs):
         return json.dumps(f(*args, **kwargs))
@@ -65,9 +61,6 @@ def catch_error(f):
 
         except FailedOpeningDeviceException:
             return failure('open_device_failed')
-
-        except WinAdminRequiredException:
-            return failure('windows_admin_required')
 
         except smartcard.pcsc.PCSCExceptions.EstablishContextException:
             return failure('pcsc_establish_context_failed')
@@ -94,7 +87,6 @@ def failure(err_id, result={}):
 
 def unknown_failure(exception):
     return failure(None, {'error_message': str(exception)})
-
 
 def os_is_windows():
     return os.name == 'nt'
@@ -160,13 +152,8 @@ class Controller(object):
             self._descriptor.open_device(transports=TRANSPORT.OTP))
 
     def _open_fido2_controller(self):
-        try:
-            return Fido2ContextManager(
-                self._descriptor.open_device(transports=TRANSPORT.FIDO))
-        except FailedOpeningDeviceException:
-            if os_is_windows():
-                raise WinAdminRequiredException
-            raise
+        return Fido2ContextManager(
+            self._descriptor.open_device(transports=TRANSPORT.FIDO))
 
     def _open_piv(self):
         return PivContextManager(
@@ -221,7 +208,7 @@ class Controller(object):
         except FailedOpeningDeviceException:
             if self._descriptor.mode.transports == TRANSPORT.FIDO:
                 if os_is_windows():
-                    raise WinAdminRequiredException
+                    return failure('windows_admin_required')
             raise
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
