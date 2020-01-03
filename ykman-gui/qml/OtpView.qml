@@ -26,7 +26,7 @@ ColumnLayout {
                 if (resp.error_id === 'timeout') {
                     snackbarError.show(qsTr("Failed to load OTP application"))
                 } else {
-                    snackbarError.showResponseError(resp)
+                    snackbarError.show(resp.error_id)
                 }
                 views.home()
             }
