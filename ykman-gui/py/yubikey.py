@@ -170,6 +170,7 @@ class Controller(object):
                 return success({'dev': self._dev_info})
 
         self._descriptor = desc
+        self._dev_info = None
 
         with self._open_device() as dev:
             if not dev:
@@ -769,4 +770,3 @@ def init_with_logging(log_level, log_file=None):
 def init():
     global controller
     controller = Controller()
-    controller.refresh()
