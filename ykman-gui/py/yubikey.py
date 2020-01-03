@@ -7,7 +7,6 @@ import json
 import logging
 import os
 import sys
-import platform
 import pyotherside
 import smartcard
 import struct
@@ -44,10 +43,6 @@ class WinAdminRequiredException(Exception):
     pass
 
 
-class MacOSMonitoringException(Exception):
-    pass
-
-
 def as_json(f):
     def wrapped(*args, **kwargs):
         return json.dumps(f(*args, **kwargs))
@@ -73,9 +68,6 @@ def catch_error(f):
 
         except WinAdminRequiredException:
             return failure('windows_admin_required')
-
-        except MacOSMonitoringException:
-            return failure('macos_input_monitoring_access')
 
         except smartcard.pcsc.PCSCExceptions.EstablishContextException:
             return failure('pcsc_establish_context_failed')
@@ -106,15 +98,6 @@ def unknown_failure(exception):
 
 def os_is_windows():
     return os.name == 'nt'
-
-
-def os_is_macos_catalina():
-    if (os.uname().sysname == 'Darwin'):
-        version = platform.mac_ver()[0]
-        mac_version = tuple(int(s) for s in version.split('.'))
-        if (mac_version >= (10, 15, 0)):
-            return True
-    return False
 
 
 class OtpContextManager(object):
@@ -173,13 +156,8 @@ class Controller(object):
             raise Exception(
                 'Could not find the "ykpers" library. Please ensure that '
                 'YubiKey Manager was installed correctly.')
-        try:
-            return OtpContextManager(
-                self._descriptor.open_device(transports=TRANSPORT.OTP))
-        except FailedOpeningDeviceException:
-            if os_is_macos_catalina():
-                raise MacOSMonitoringException
-        raise
+        return OtpContextManager(
+            self._descriptor.open_device(transports=TRANSPORT.OTP))
 
     def _open_fido2_controller(self):
         try:
