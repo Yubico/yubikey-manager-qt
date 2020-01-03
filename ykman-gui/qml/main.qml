@@ -121,7 +121,11 @@ ApplicationWindow {
         interval: 500
         repeat: true
         running: true
-        onTriggered: yubiKey.refresh()
+        onTriggered: yubiKey.refresh(function (resp) {
+            if (!resp.success) {
+                views.snackbarErrorMessage(resp)
+            }
+        })
     }
 
     ContentStack {
