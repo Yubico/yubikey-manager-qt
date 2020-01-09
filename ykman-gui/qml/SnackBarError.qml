@@ -30,7 +30,7 @@ SnackBar {
         case 'no_device':
             return qsTr('No YubiKey present')
         case 'open_device_failed':
-            return qsTr("Failed to open the application on the YubiKey. Make sure you have the correct permissions.")
+            return qsTr("Failed connecting to the YubiKey. Make sure the application have the required permissions.")
         case 'pcsc_establish_context_failed':
             return qsTr("Failed to establish CCID context. Is the pcscd service running?")
         case 'pin_blocked':
