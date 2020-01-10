@@ -40,14 +40,17 @@ ColumnLayout {
                            enableUpload.checked, function (resp) {
                                if (resp.success) {
                                    if (resp.upload_url) {
-                                       snackbarSuccess.show(qsTr("Configured Yubico OTP credential. Preparing upload in web browser."))
-                                       Qt.openUrlExternally(resp.upload_url)
+                                       if (Qt.openUrlExternally(resp.upload_url)) {
+                                           snackbarSuccess.show(qsTr("Configured Yubico OTP credential. Preparing upload in web browser."))
+                                           views.otp()
+                                       } else {
+                                           snackbarError.show(qsTr("Configured Yubico OTP credential. Failed to open upload in web browser!"))
+                                       }
                                    } else {
                                        snackbarSuccess.show(
                                                qsTr("Configured Yubico OTP credential"))
-
+                                       views.otp()
                                    }
-                                   views.otp()
 
                                } else {
                                    if (resp.error_id === 'write error') {
