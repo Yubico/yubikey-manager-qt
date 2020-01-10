@@ -719,29 +719,37 @@ controller = None
 
 
 def _piv_serialise_cert(slot, cert):
-    # Try reading out issuer and subject,
-    # may throw ValueError if malformed
-    malformed = False
-    try:
-        issuer_cns = cert.issuer.get_attributes_for_oid(
-            x509.NameOID.COMMON_NAME)
-    except ValueError:
+    if cert:
+        # Try reading out issuer and subject,
+        # may throw ValueError if malformed
+        malformed = False
+        try:
+            issuer_cns = cert.issuer.get_attributes_for_oid(
+                x509.NameOID.COMMON_NAME)
+        except ValueError:
+            malformed = True
+            issuer_cns = None
+        try:
+            subject_cns = cert.subject.get_attributes_for_oid(
+                x509.NameOID.COMMON_NAME)
+        except ValueError:
+            malformed = True
+            subject_cns = None
+        try:
+            valid_from = cert.not_valid_before.date().isoformat()
+        except ValueError:
+            valid_from = None
+        try:
+            valid_to = cert.not_valid_after.date().isoformat()
+        except ValueError:
+            valid_to = None
+    else:
         malformed = True
         issuer_cns = None
-    try:
-        subject_cns = cert.subject.get_attributes_for_oid(
-            x509.NameOID.COMMON_NAME)
-    except ValueError:
-        malformed = True
         subject_cns = None
-    try:
-        valid_from = cert.not_valid_before.date().isoformat()
-    except ValueError:
         valid_from = None
-    try:
-        valid_to = cert.not_valid_after.date().isoformat()
-    except ValueError:
         valid_to = None
+
     return {
         'slot': SLOT(slot).name,
         'malformed': malformed,
