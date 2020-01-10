@@ -41,13 +41,15 @@ ColumnLayout {
                            privateIdInput.text, secretKeyInput.text,
                            enableUpload.checked, function (resp) {
                                if (resp.success) {
-                                   snackbarSuccess.show(
-                                               qsTr("Configured Yubico OTP credential"))
+
 
                                    if (resp.upload_url) {
+                                       snackbarSuccess.show(qsTr("Configured Yubico OTP credential. Preparing upload in web browser."))
                                        uploadUrl = resp.upload_url
-                                       views.push(yubiOtpUploadView)
+                                       Qt.openUrlExternally(uploadUrl)
                                    } else {
+                                       snackbarSuccess.show(
+                                               qsTr("Configured Yubico OTP credential"))
                                        views.otp()
                                    }
                                } else {
@@ -56,7 +58,7 @@ ColumnLayout {
                                    } else if (resp.error_id === 'upload_failed') {
                                        snackbarError.show(
                                                    qsTr(
-                                                       "Upload failed: %1").arg(
+                                                       "Upload failed: %1 Credential not configured.").arg(
                                                        getUploadErrorMessage(
                                                            resp.upload_errors[0])))
                                    } else {
@@ -165,32 +167,46 @@ ColumnLayout {
                 onClicked: generateKey()
                 toolTipText: qsTr("Generate a random Secret Key")
             }
+        }
 
-            Label {}
-            CheckBox {
-                id: enableUpload
-                text: qsTr("Upload to YubiCloud")
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        RowLayout {
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            Layout.preferredWidth: constants.contentWidth
+
+            BackButton {
+                Layout.fillWidth: false
+                flat: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+            }
+
+            Row {
+                id: row
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                CheckBox {
+                    id: enableUpload
+                text: qsTr("Upload")
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 ToolTip.delay: 1000
                 font.pixelSize: constants.h3
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Upload key and ID to YubiCloud (required for most 3rd party services)")
+                ToolTip.text: qsTr("Upload credential to YubiCloud (opens a web browser)")
                 Material.foreground: yubicoBlue
             }
-            Label {}
-        }
 
-        ButtonsBar {
-            finishCallback: finish
-            finishEnabled: publicIdInput.acceptableInput
+            FinishButton {
+
+                onClicked:  finish()
+                enabled: publicIdInput.acceptableInput
                            && privateIdInput.acceptableInput
                            && secretKeyInput.acceptableInput
-            finishTooltip: qsTr("Finish and write the configuration to the YubiKey")
-        }
-    }
+                toolTipText: qsTr("Finish and write the configuration to the YubiKey")
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+            }
 
-    Component {
-        id: yubiOtpUploadView
-        YubiOtpUploadView {}
+            }
+
+        }
     }
 }
