@@ -317,6 +317,10 @@ class Controller(object):
 
             controller.program_otp(slot, key, public_id, private_id)
 
+        logger.debug('YubiOTP successfully programmed.')
+        if upload_url:
+            logger.info('Upload url: %s', upload_url)
+
         return success({'upload_url': upload_url})
 
     def program_challenge_response(self, slot, key, touch):
