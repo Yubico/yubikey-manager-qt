@@ -50,8 +50,10 @@ ColumnLayout {
                                    } else {
                                        snackbarSuccess.show(
                                                qsTr("Configured Yubico OTP credential"))
-                                       views.otp()
+
                                    }
+                                   views.otp()
+
                                } else {
                                    if (resp.error_id === 'write error') {
                                        views.otpWriteError()
