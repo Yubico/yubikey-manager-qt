@@ -6,8 +6,6 @@ import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
 
-    property string uploadUrl
-
     function useSerial() {
         if (useSerialCb.checked) {
             yubiKey.serialModhex(function (res) {
@@ -41,12 +39,9 @@ ColumnLayout {
                            privateIdInput.text, secretKeyInput.text,
                            enableUpload.checked, function (resp) {
                                if (resp.success) {
-
-
                                    if (resp.upload_url) {
                                        snackbarSuccess.show(qsTr("Configured Yubico OTP credential. Preparing upload in web browser."))
-                                       uploadUrl = resp.upload_url
-                                       Qt.openUrlExternally(uploadUrl)
+                                       Qt.openUrlExternally(resp.upload_url)
                                    } else {
                                        snackbarSuccess.show(
                                                qsTr("Configured Yubico OTP credential"))
