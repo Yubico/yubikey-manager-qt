@@ -185,6 +185,7 @@ ColumnLayout {
 
             Row {
                 id: row
+                spacing: 5
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 CheckBox {
                     id: enableUpload
