@@ -319,7 +319,7 @@ class Controller(object):
 
         logger.debug('YubiOTP successfully programmed.')
         if upload_url:
-            logger.info('Upload url: %s', upload_url)
+            logger.debug('Upload url: %s', upload_url)
 
         return success({'upload_url': upload_url})
 
