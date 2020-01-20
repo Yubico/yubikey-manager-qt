@@ -1,7 +1,4 @@
 == YubiKey Manager
-image:https://travis-ci.org/Yubico/yubikey-manager-qt.svg?branch=master["Build Status", link="https://travis-ci.org/Yubico/yubikey-manager-qt"]
-image:https://ci.appveyor.com/api/projects/status/a7wr7ptyx9kbprno?svg=true["Appveyor Status", link="https://ci.appveyor.com/project/Yubico53275/yubikey-manager-qt"]
-
 Cross-platform application for configuring any YubiKey over all USB interfaces.
 
 image::screenshot.png[]
@@ -28,7 +25,6 @@ Installers are available https://developers.yubico.com/yubikey-manager-qt/Releas
 ==== Linux
 
 In addition to the application itself, you may also need to manually install and start the `pcscd` service for CCID support.
-
 
 ===== AppImage
 An experimental AppImage is available https://developers.yubico.com/yubikey-manager-qt/Releases/[here].
