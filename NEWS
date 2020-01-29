@@ -1,8 +1,9 @@
-* Version 1.1.4 (unreleased)
+* Version 1.1.4 (released 2020-01-29)
  ** OTP: Add option to upload YubiOTP credential to YubiCloud
- ** Windows: Show better error message when failing to open a FIDO device
  ** macOS: Add hint about app permissions
  ** Linux: Show hint about pcscd service if opening device fails
+ ** Windows: Show better error message when failing to open a FIDO device
+ ** Windows: Improve how .dll files are loaded, thanks to Marius Gabriel Mihai for reporting this!
  ** Bugfix: Signal handling now compatible with Python 3.8
 
 * Version 1.1.3 (released 2019-08-20)

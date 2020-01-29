@@ -10,7 +10,7 @@ win32|win64 {
     VERSION = 1.1.4
 }
 # This is the version shown on the About page
-DEFINES += APP_VERSION=\\\"1.1.4-RC1\\\"
+DEFINES += APP_VERSION=\\\"1.1.4\\\"
 
 message(Version of this build: $$VERSION)
 
@@ -53,7 +53,6 @@ RC_ICONS = ../resources/icons/ykman.ico
 macx {
     ICON = ../resources/icons/ykman.icns
     QMAKE_INFO_PLIST = ../resources/mac/Info.plist.in
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9 # Mavericks
     QMAKE_POST_LINK += cp -rnf pymodules/lib/python3*/site-packages/ ykman-gui.app/Contents/MacOS/pymodules/
 }
 
