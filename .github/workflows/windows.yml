@@ -61,7 +61,7 @@ jobs:
         run: |
           set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x64
-          cd pyotherside-$env:PYOTHERSIDE_VER
+          cd pyotherside-1.5.9
           qmake
           jom
           jom install
