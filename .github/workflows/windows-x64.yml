@@ -1,4 +1,4 @@
-name: windows
+name: windows 64bit
 
 on: [push, pull_request]
 
@@ -9,7 +9,7 @@ env:
 jobs:
   build:
 
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v1
@@ -21,7 +21,7 @@ jobs:
       - name: Download dependencies
         run: |
           wget https://download.qt.io/official_releases/jom/jom.zip -OutFile jom.zip
-          wget https://github.com/thp/pyotherside/archive/1.5.3.zip -OutFile pyotherside-1.5.3.zip
+          wget https://github.com/thp/pyotherside/archive/1.5.9.zip -OutFile pyotherside-1.5.9.zip
           wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-1.20.0-win64.zip -OutFile ykpers-1.20.0-win64.zip
           wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-1.20.0-win64.zip.sig -OutFile ykpers-1.20.0-win64.zip.sig
           wget https://github.com/libusb/libusb/releases/download/v1.0.22/libusb-1.0.22.7z -OutFile libusb-1.0.22.7z
@@ -33,7 +33,7 @@ jobs:
 
       - name: Verify checksums of downloaded files
         run: |
-          sha256sum -c ./.github/workflows/windows-libs.sha256sum
+          sha256sum -c ./.github/workflows/windows-x64-libs.sha256sum
           gpg --no-default-keyring --keyring yubico --verify ykpers-1.20.0-win64.zip.sig ykpers-1.20.0-win64.zip
 
       - name: Install swig
@@ -48,8 +48,8 @@ jobs:
 
       - name: Download and prepare pyotherside
         run: |
-          7z x pyotherside-1.5.3.zip
-          cd pyotherside-1.5.3
+          7z x pyotherside-1.5.9.zip
+          cd pyotherside-1.5.9
           (Get-Content .\src\qmldir).replace('pyothersideplugin', 'pyothersideplugin1') | Set-Content .\src\qmldir
           Clear-Content python.pri
           Add-Content python.pri "PYTHON_CONFIG = python3-config`nQMAKE_LIBS += -LC:\hostedtoolcache\windows\Python\$env:PYTHON_VER\x64\libs -l$env:PYTHON_VER_DIRNAME`nQMAKE_CXXFLAGS += -IC:\hostedtoolcache\windows\Python\$env:PYTHON_VER\x64\include`n"
@@ -60,7 +60,7 @@ jobs:
         run: |
           set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x64
-          cd pyotherside-1.5.3
+          cd pyotherside-1.5.9
           qmake
           jom
           jom install
