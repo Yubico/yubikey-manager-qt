@@ -42,7 +42,7 @@ jobs:
       - name: Install Qt and Jom
         run: |
           pip install aqtinstall==0.6
-          python -m aqt install 5.13.1 windows desktop win64_msvc2017_64
+          python -m aqt install 5.14.1 windows desktop win64_msvc2017_64
           7z x jom.zip
         shell: powershell
 
@@ -58,7 +58,7 @@ jobs:
       - name: Build and install pyotherside
         shell: cmd
         run: |
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
+          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x64
           cd pyotherside-1.5.9
           qmake
@@ -68,7 +68,7 @@ jobs:
       - name: Build app
         shell: cmd
         run: |
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
+          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x64
           qmake
           jom
@@ -76,7 +76,7 @@ jobs:
       - name: Run windeployqt
         shell: cmd
         run: |
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.13.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
+          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x64
           windeployqt .\ykman-gui\release\ykman-gui.exe --qmldir=.\ykman-gui\qml --no-translations --angle --release
 
@@ -111,7 +111,7 @@ jobs:
         shell: cmd
         run: |
           choco install visualstudio2019community --package-parameters "--add Microsoft.VisualStudio.Component.VC.Redist.MSM"
-      
+
       - name: Create an unsigned .msi installer package
         run: |
           cd .\ykman-gui\
@@ -129,7 +129,7 @@ jobs:
           cd .\ykman-gui\
           msiexec /i yubikey-manager.msi /quiet /l .\log.txt
           cat .\log.txt
-          
+
       - name: Rename installer
         shell: powershell
         run: |
