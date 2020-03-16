@@ -190,6 +190,10 @@ Python {
         return name === 'YubiKey 5C Nano'
     }
 
+    function isYubiKey5CNFC() {
+        return name === 'YubiKey 5C NFC'
+    }
+
     function isYubiKey5A() {
         return name === 'YubiKey 5A'
     }

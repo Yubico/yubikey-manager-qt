@@ -47,6 +47,9 @@ ColumnLayout {
         if (yubiKey.isYubiKey5CNano()) {
             return "../images/yk5cnano.png"
         }
+        if (yubiKey.isYubiKey5CNFC()) {
+            return "../images/yk5cnfc.png"
+        }
         if (yubiKey.isYubiKey5A()) {
             return "../images/yk4.png"
         }
