@@ -29,6 +29,7 @@ from ykman.driver_otp import YkpersError, libversion as ykpers_version
 from ykman.piv import (
     PivController, ALGO, SLOT, AuthenticationBlocked,
     AuthenticationFailed, BadFormat, WrongPin, WrongPuk)
+from ykman.bio import BioController
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
     APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
@@ -122,6 +123,17 @@ class PivContextManager(object):
         self._dev.close()
 
 
+class BioContextManager(object):
+    def __init__(self, dev):
+        self._dev = dev
+
+    def __enter__(self):
+        return BioController(self._dev.driver)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._dev.close()
+
+
 class Controller(object):
     _descriptor = None
     _dev_info = None
@@ -154,6 +166,10 @@ class Controller(object):
 
     def _open_piv(self):
         return PivContextManager(
+                self._descriptor.open_device(transports=TRANSPORT.CCID))
+
+    def _open_bio(self):
+        return BioContextManager(
                 self._descriptor.open_device(transports=TRANSPORT.CCID))
 
     def refresh(self):
@@ -717,6 +733,18 @@ class Controller(object):
 
             else:
                 return failure('mgm_key_required')
+
+    def bio_clear_logs(self):
+        with self._open_bio() as controller:
+            controller.clear_logs()
+            return success()
+
+    def bio_dump_logs(self, file_url):
+        file_path = self._get_file_path(file_url)
+        with self._open_bio() as controller:
+            with open(file_path, 'wb') as logfile:
+                controller.dump_logs(logfile)
+        return success()
 
 
 controller = None
