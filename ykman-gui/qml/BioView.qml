@@ -12,6 +12,11 @@ ColumnLayout {
 
     property bool isBusy
     property bool isMacOs
+    property bool willDumpOnReset
+    readonly property bool hasDevice: yubiKey.hasDevice
+    onHasDeviceChanged: {
+        resetOnReInsert()
+    }
 
     function clearLogs() {
         confirmationPopup.show(
@@ -31,16 +36,28 @@ Proceed?"), function () {
 })
     }
 
+    function resetOnReInsert() {
+        if (!hasDevice && reInsertYubiKey.visible) {
+            willDumpOnReset = true
+        } else {
+            if (willDumpOnReset) {
+                willDumpOnReset = false
+                exportCertificateDialog.open()
+
+            }
+        }
+    }
 
     function dumpLogs(fileUrl) {
         yubiKey.bioDumpLogs(fileUrl, function (resp) {
-            if (resp.success) {
-                snackbarSuccess.show(qsTr("Log has been written"))
-            } else {
-                snackbarError.showResponseError(resp)
-            }
-        })
-    }
+                if (resp.success) {
+                    snackbarSuccess.show(qsTr("Log has been written"))
+                } else {
+                    snackbarError.showResponseError(resp)
+                }
+            })
+        }
+
 
     function initiateReset() {
         reInsertYubiKey.open()
@@ -87,7 +104,7 @@ Proceed?"), function () {
                     highlighted: true
                     toolTipText: "Dump the stored logs to a file"
                     onClicked: {
-                        exportCertificateDialog.open()
+                        initiateReset()
                     }
                 }
             }
