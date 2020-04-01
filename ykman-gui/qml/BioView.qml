@@ -23,7 +23,7 @@ Proceed?"), function () {
     yubiKey.bioClearLogs(function (resp) {
         isBusy = false
         if (resp.success) {
-            snackbarSuccess.show(qsTr("PIV application has been reset"))
+            snackbarSuccess.show(qsTr("Logs have been cleared"))
         } else {
             snackbarError.showResponseError(resp)
         }
@@ -48,7 +48,7 @@ Proceed?"), function () {
 
     FileDialog {
         id: exportCertificateDialog
-        title: "Dump logs to file..."
+        title: "Dump logs to file"
         defaultSuffix: ".txt"
         fileMode: FileDialog.SaveFile
         folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
