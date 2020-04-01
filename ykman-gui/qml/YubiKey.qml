@@ -399,6 +399,15 @@ Python {
         doCall('yubikey.controller.program_oath_hotp', [slot, key, digits], cb)
     }
 
+    function bioClearLogs(cb) {
+        doCall('yubikey.controller.bio_clear_logs', [], cb)
+    }
+
+    function bioDumpLogs(fileUrl, cb) {
+        doCall('yubikey.controller.bio_dump_logs',
+                  [fileUrl], cb)
+    }
+
     function fidoHasPin(cb) {
         doCall('yubikey.controller.fido_has_pin', [], cb)
     }

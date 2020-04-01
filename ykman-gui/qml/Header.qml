@@ -116,6 +116,17 @@ ColumnLayout {
                     font.family: constants.fontFamily
                     font.pixelSize: constants.h3
                 }
+                MenuItem {
+                    enabled: true
+                    text: qsTr("YubiKey Bio")
+                    onClicked: views.bio()
+                    Material.foreground: yubicoBlue
+                    ToolTip.delay: 1000
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Clear or dump logs")
+                    font.family: constants.fontFamily
+                    font.pixelSize: constants.h3
+                }
             }
         }
         TopMenuButton {

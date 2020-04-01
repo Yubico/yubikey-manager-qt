@@ -742,7 +742,7 @@ class Controller(object):
     def bio_dump_logs(self, file_url):
         file_path = self._get_file_path(file_url)
         with self._open_bio() as controller:
-            with open(file_path, 'wb') as logfile:
+            with open(file_path, 'w') as logfile:
                 controller.dump_logs(logfile)
         return success()
 

@@ -93,6 +93,10 @@ StackView {
         replaceAtDepth(1, interfaceComponent, 'interfaces')
     }
 
+    function bio() {
+        replaceAtDepth(1, bioView, 'bioView')
+    }
+
     function piv() {
         replaceAtDepth(1, pivView, 'pivView')
     }
@@ -246,6 +250,14 @@ StackView {
         id: pivView
 
         PivView {
+        }
+    }
+
+    Component {
+        id: bioView
+
+        BioView {
+
         }
     }
 
