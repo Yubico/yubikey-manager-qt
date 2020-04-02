@@ -13,6 +13,7 @@ ColumnLayout {
     property bool isBusy
     property bool isMacOs
     property bool willDumpOnReset
+    property var fileName
     readonly property bool hasDevice: yubiKey.hasDevice
     onHasDeviceChanged: {
         resetOnReInsert()
@@ -42,7 +43,7 @@ Proceed?"), function () {
         } else {
             if (willDumpOnReset) {
                 willDumpOnReset = false
-                exportCertificateDialog.open()
+                dumpLogs(fileName)
 
             }
         }
@@ -69,7 +70,10 @@ Proceed?"), function () {
         defaultSuffix: ".txt"
         fileMode: FileDialog.SaveFile
         folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
-        onAccepted: dumpLogs(file.toString())
+        onAccepted: {
+            fileName = file.toString()
+            initiateReset()
+        }
     }
 
     BusyIndicator {
@@ -104,7 +108,7 @@ Proceed?"), function () {
                     highlighted: true
                     toolTipText: "Dump the stored logs to a file"
                     onClicked: {
-                        initiateReset()
+                        exportCertificateDialog.open()
                     }
                 }
             }
