@@ -16,7 +16,14 @@ ColumnLayout {
     property var fileName
     readonly property bool hasDevice: yubiKey.hasDevice
     onHasDeviceChanged: {
-        resetOnReInsert()
+        delay(500, function() {
+            resetOnReInsert();
+        });
+
+    }
+
+    Timer {
+        id: timer
     }
 
     function clearLogs() {
@@ -49,6 +56,13 @@ Proceed?"), function () {
         }
     }
 
+    function delay(delayTime, cb) {
+        timer.interval = delayTime;
+        timer.repeat = false;
+        timer.triggered.connect(cb);
+        timer.start();
+    }
+
     function dumpLogs(fileUrl) {
         yubiKey.bioDumpLogs(fileUrl, function (resp) {
                 if (resp.success) {
@@ -67,7 +81,8 @@ Proceed?"), function () {
     FileDialog {
         id: exportCertificateDialog
         title: "Dump logs to file"
-        defaultSuffix: ".txt"
+        defaultSuffix: ".csv"
+        nameFilters: ["CSV (*.csv)"]
         fileMode: FileDialog.SaveFile
         folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
         onAccepted: {
@@ -97,9 +112,16 @@ Proceed?"), function () {
             Layout.fillWidth: true
             spacing: 30
 
+
             ColumnLayout {
                 Heading2 {
                     text: qsTr("Dump logs")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                Label {
+                    text: qsTr("Dump the stored logs to a file")
+                    font.pixelSize: constants.h3
+                    color: yubicoGrey
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CustomButton {
@@ -121,6 +143,12 @@ Proceed?"), function () {
             ColumnLayout {
                 Heading2 {
                     text: qsTr("Clear logs")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                Label {
+                    text: qsTr("Clear the logs from the device.")
+                    font.pixelSize: constants.h3
+                    color: yubicoGrey
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 CustomButton {
