@@ -83,7 +83,7 @@ jobs:
           sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/lib/python${PYTHON_VER_SHORT}/lib-dynload/_ssl.cpython-${PYTHON_VER_SHORT_COMPACT}m-darwin.so
           sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/lib/python${PYTHON_VER_SHORT}/lib-dynload/_hashlib.cpython-${PYTHON_VER_SHORT_COMPACT}m-darwin.so
           sudo install_name_tool -change /usr/local/opt/openssl@1.1/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/lib/python${PYTHON_VER_SHORT}/lib-dynload/_hashlib.cpython-${PYTHON_VER_SHORT_COMPACT}m-darwin.so
-          sudo install_name_tool -change /usr/local/Cellar/openssl@1.1/1.1.1d/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libssl.1.1.dylib
+          sudo install_name_tool -change /usr/local/Cellar/openssl@1.1/1.1.1f/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libssl.1.1.dylib
 
       - name: Point ykpers dependencies to relative dylibs
         run: |
