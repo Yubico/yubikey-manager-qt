@@ -3,8 +3,9 @@ name: windows 32bit
 on: [push, pull_request]
 
 env:
-  PYTHON_VER: '3.8.2'
+  PYTHON_VER: '3.8.3'
   PYTHON_VER_DIRNAME: 'python38'
+  PYOTHERSIDE_VER: '1.5.9'
 
 jobs:
   build:
@@ -18,10 +19,19 @@ jobs:
           python-version: ${{ env.PYTHON_VER }}
           architecture: 'x86'
 
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.5.0
+        with:
+          version: '5.14.1'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win32_msvc2017'
+          aqtversion: '==0.8'
+
       - name: Download dependencies
         run: |
           wget https://download.qt.io/official_releases/jom/jom.zip -OutFile jom.zip
-          wget https://github.com/thp/pyotherside/archive/1.5.9.zip -OutFile pyotherside-1.5.9.zip
+          wget https://github.com/thp/pyotherside/archive/$env:PYOTHERSIDE_VER.zip -OutFile pyotherside-$env:PYOTHERSIDE_VER.zip
           wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-1.20.0-win32.zip -OutFile ykpers-1.20.0-win32.zip
           wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-1.20.0-win32.zip.sig -OutFile ykpers-1.20.0-win32.zip.sig
           wget https://github.com/libusb/libusb/releases/download/v1.0.22/libusb-1.0.22.7z -OutFile libusb-1.0.22.7z
@@ -39,17 +49,14 @@ jobs:
       - name: Install swig
         run: choco install swig
 
-      - name: Install Qt and Jom
+      - name: Install jom
         run: |
-          pip install aqtinstall==0.6
-          python -m aqt install 5.14.1 windows desktop win32_msvc2017
           7z x jom.zip
-        shell: powershell
 
-      - name: Unpack and prepare pyotherside
+      - name: Prepare pyotherside
         run: |
-          7z x pyotherside-1.5.9.zip
-          cd pyotherside-1.5.9
+          7z x pyotherside-$env:PYOTHERSIDE_VER.zip
+          cd pyotherside-$env:PYOTHERSIDE_VER
           (Get-Content .\src\qmldir).replace('pyothersideplugin', 'pyothersideplugin1') | Set-Content .\src\qmldir
           Clear-Content python.pri
           Add-Content python.pri "PYTHON_CONFIG = python3-config`nQMAKE_LIBS += -LC:\hostedtoolcache\windows\Python\$env:PYTHON_VER\x86\libs -l$env:PYTHON_VER_DIRNAME`nQMAKE_CXXFLAGS += -IC:\hostedtoolcache\windows\Python\$env:PYTHON_VER\x86\include`n"
@@ -60,7 +67,7 @@ jobs:
         run: |
           set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
-          cd pyotherside-1.5.9
+          cd pyotherside-%PYOTHERSIDE_VER%
           qmake
           jom
           jom install
@@ -95,48 +102,14 @@ jobs:
           7z x libusb-1.0.22.7z
           Copy-Item .\MS32\dll\*.dll .\ykman-gui\release\pymodules\ykman\native -Force
 
-          cd .\ykman-gui\release
-          7z x ..\..\python-$env:PYTHON_VER-embed-win32.zip
-          cd ..\..
-
+      - name: Create .zip artifact
+        shell: powershell
+        run: |
           $arr = $env:GITHUB_REF -split '/'
           $branch = $arr[2]
           7z a yubikey-manager-qt-$branch-win32.zip .\ykman-gui\release
-
           mkdir deploy
           cp yubikey-manager-qt-$branch-win32.zip deploy
-        shell: powershell
-
-      - name: Install Visual Studio C++ 2019 Redistributable MSMs
-        shell: cmd
-        run: |
-          choco install visualstudio2019community --package-parameters "--add Microsoft.VisualStudio.Component.VC.Redist.MSM"
-      
-      - name: Create an unsigned .msi installer package
-        run: |
-          cd .\ykman-gui\
-          $env:PATH += ";$env:WIX\bin"
-          $env:SRCDIR = ".\release\"
-          $env:MERGEDPATH = Get-ChildItem "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\*\MergeModules\Microsoft_VC142_CRT_x86.msm"
-          heat dir .\release -out fragment.wxs -gg -scom -srd -sfrag -dr INSTALLDIR -cg ApplicationFiles -var env.SRCDIR
-          candle .\fragment.wxs ..\resources\win\yubikey-manager-x86.wxs -arch x86
-          light fragment.wixobj yubikey-manager-x86.wixobj -ext WixUIExtension -ext WixUtilExtension -o yubikey-manager-x86.msi
-          cp yubikey-manager-x86.msi ../deploy
-
-      - name: Run installer
-        shell: cmd
-        run: |
-          cd .\ykman-gui\
-          msiexec /i yubikey-manager-x86.msi /quiet /l .\log.txt
-          cat .\log.txt
-          
-      - name: Rename installer
-        shell: powershell
-        run: |
-          $arr = $env:GITHUB_REF -split '/'
-          $branch = $arr[2]
-          mv .\deploy\yubikey-manager-x86.msi .\deploy\yubikey-manager-$branch-win32.msi
-
 
       - name: Run GUI
         shell: bash
