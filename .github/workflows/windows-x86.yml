@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 env:
   PYTHON_VER: '3.7.8'
-  PYTHON_VER_DIRNAME: 'python38'
+  PYTHON_VER_DIRNAME: 'python37'
   PYOTHERSIDE_VER: '1.5.9'
 
 jobs:
