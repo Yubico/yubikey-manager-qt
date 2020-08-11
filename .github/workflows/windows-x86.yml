@@ -75,7 +75,7 @@ jobs:
       - name: Build app
         shell: cmd
         run: |
-          set PATH=C:\hostedtoolcache\windows\Python\$env:PYTHON_VER\x86\Scripts;C:\hostedtoolcache\windows\Python\$env:PYTHON_VER\x86;D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
+          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
           qmake
           jom
