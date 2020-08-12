@@ -3,7 +3,7 @@ name: macOS
 on: [push, pull_request]
 
 env:
-  PYTHON_VER: '3.8.3'
+  PYTHON_VER: '3.8.2'
   PYTHON_VER_SHORT: '3.8'
   PYTHON_VER_SHORT_COMPACT: '38'
   PYOTHERSIDE_VER: '1.5.9'
