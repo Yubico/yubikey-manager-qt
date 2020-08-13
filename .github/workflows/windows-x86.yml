@@ -102,6 +102,9 @@ jobs:
           7z x libusb-1.0.22.7z
           Copy-Item .\MS32\dll\*.dll .\ykman-gui\release\pymodules\ykman\native -Force
 
+          cd .\ykman-gui\release
+          7z x ..\..\python-$env:PYTHON_VER-embed-win32.zip
+
       - name: Create .zip artifact
         shell: powershell
         run: |
