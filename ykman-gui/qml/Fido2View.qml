@@ -26,6 +26,7 @@ ColumnLayout {
                 if (hasPin) {
                     yubiKey.fidoPinRetries(function (resp) {
                         if (resp.success) {
+                            isBusy = false // TODO: Without this we get an error here
                             pinRetries = resp.retries
                         } else {
                             console.log(resp.error_id)
@@ -157,6 +158,27 @@ This action cannot be undone!", function () {
                     onClicked: initiateReset()
                     toolTipText: qsTr("Reset FIDO2 and FIDO U2F applications")
                     iconSource: "../images/reset.svg"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+            }
+            ColumnSeparator {
+            }
+
+            ColumnLayout {
+                Heading2 {
+                    text: qsTr("Bio enrollment")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                Label {
+                    text: qsTr("Bio")
+                    font.pixelSize: constants.h3
+                    color: yubicoGrey
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                CustomButton {
+                    text: qsTr("Bio")
+                    highlighted: true
+                    onClicked: hasPin ? views.fido2EnterPin() : views.fido2SetPin()
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }

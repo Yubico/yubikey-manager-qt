@@ -507,4 +507,14 @@ Python {
         doPivCall('yubikey.controller.piv_export_certificate',
                   [slot, fileUrl], cb)
     }
+
+    function fidoEnterPin(pin, cb) {
+        doCall('yubikey.controller.fido_bio_enter_pin', [pin], cb)
+
+    }
+
+    function fidoEnroll(cb) {
+        doCall('yubikey.controller.fido_bio_enroll', [], cb)
+
+    }
 }
