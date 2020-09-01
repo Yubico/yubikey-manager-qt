@@ -182,6 +182,28 @@ This action cannot be undone!", function () {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
+
+            ColumnSeparator {
+            }
+
+            ColumnLayout {
+                Heading2 {
+                    text: qsTr("Bio enumerate")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                Label {
+                    text: qsTr("Bio")
+                    font.pixelSize: constants.h3
+                    color: yubicoGrey
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                CustomButton {
+                    text: qsTr("Bio")
+                    highlighted: true
+                    onClicked: hasPin ? views.fido2EnumeratePin() : views.fido2SetPin()
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+            }
         }
 
         ButtonsBar {

@@ -14,6 +14,7 @@ import types
 import getpass
 import urllib.parse
 import ykman.logging_setup
+import codecs, binascii
 
 from base64 import b32decode
 from binascii import b2a_hex, a2b_hex
@@ -390,6 +391,35 @@ class Controller(object):
         logger.debug(bio.enumerate_enrollments())
         enroller = bio.enroll()
         return success()
+
+    def fido_bio_enumerate(self, pin):
+        global enroller
+
+        dev = next(CtapHidDevice.list_devices(), None)
+        if not dev:
+            logger.debug("No FIDO device found")
+            sys.exit(1)
+
+        ctap = CTAP2(dev)
+        info = ctap.get_info()
+        if not info.options.get("clientPin"):
+            logger.debug("PIN not set for the device!")
+            sys.exit(1)
+
+        if "bioEnroll" not in info.options:
+            if "userVerificationMgmtPreview" not in info.options:  # TODO: Remove later
+                logger.debug("Device does not support bio enrollment!")
+                sys.exit(1)
+
+        # Authenticate with PIN
+        logger.debug("Preparing to enroll a new fingerprint.")
+        pin_token = PinProtocolV1(ctap).get_pin_token(pin)
+        bio = FPBioEnrollment(ctap, PinProtocolV1.VERSION, pin_token)
+
+        logger.debug(bio.enumerate_enrollments())
+        mydict = {k.hex(): v for k, v in bio.enumerate_enrollments().items()}
+        logger.debug(mydict)
+        return success({'enrollments': mydict})
 
     def fido_pin_retries(self):
         try:

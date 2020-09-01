@@ -152,6 +152,10 @@ StackView {
         replaceAtDepth(2, fido2EnterPinView, 'fido2EnterPinView')
     }
 
+    function fido2EnumeratePin() {
+        replaceAtDepth(2, fido2EnumeratePinView, 'fido2EnumeratePinView')
+    }
+
     function fido2ChangePin() {
         replaceAtDepth(2, fido2ChangePinView, 'fido2ChangePinView')
     }
@@ -199,6 +203,14 @@ StackView {
         Fido2EnterPinView {
         }
     }
+
+    Component {
+        id: fido2EnumeratePinView
+        Fido2EnumeratePinView {
+        }
+    }
+
+
 
     Component {
         id: fido2ChangePinView

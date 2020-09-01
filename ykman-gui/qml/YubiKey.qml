@@ -517,4 +517,8 @@ Python {
         doCall('yubikey.controller.fido_bio_enroll', [], cb)
 
     }
+
+    function fidoEnumerate(pin, cb) {
+        doCall('yubikey.controller.fido_bio_enumerate', [pin], cb)
+    }
 }
