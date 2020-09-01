@@ -26,5 +26,11 @@
         <string>True</string>
         <key>NSSupportsAutomaticGraphicsSwitching</key>
         <true/>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+		  <!-- Include to allow all connections; avoid if possible -->
+		  <key>NSAllowsArbitraryLoads</key>
+		  <true/>
+		</dict>
 </dict>
 </plist>
