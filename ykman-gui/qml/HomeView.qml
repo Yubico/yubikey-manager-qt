@@ -35,6 +35,9 @@ ColumnLayout {
         if (yubiKey.isYubiKeyPreview()) {
             return "../images/yk5nfc.png"
         }
+        if (yubiKey.isYubiKeyPlus()) {
+            return "../images/ykplus.png"
+        }
         if (yubiKey.isYubiKey5NFC()) {
             return "../images/yk5nfc.png"
         }

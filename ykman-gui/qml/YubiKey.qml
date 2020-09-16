@@ -174,6 +174,10 @@ Python {
         return name === 'YubiKey Preview'
     }
 
+    function isYubiKeyPlus() {
+        return name === 'YubiKey Plus'
+    }
+
     function isYubiKey5NFC() {
         return name === 'YubiKey 5 NFC'
     }
