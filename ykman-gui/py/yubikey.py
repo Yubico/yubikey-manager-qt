@@ -20,7 +20,7 @@ from binascii import b2a_hex, a2b_hex
 from fido2.ctap import CtapError
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
-from ykman.descriptor import FailedOpeningDeviceException, get_descriptors
+"""
 from ykman.device import device_config
 from ykman.otp import OtpController, PrepareUploadFailed
 from ykman.fido import Fido2Controller
@@ -31,10 +31,15 @@ from ykman.piv import (
     AuthenticationFailed, BadFormat, WrongPin, WrongPuk)
 from ykman.scancodes import KEYBOARD_LAYOUT
 from ykman.util import (
-    APPLICATION, TRANSPORT, Mode, modhex_encode, modhex_decode,
+    modhex_encode, modhex_decode,
     generate_static_pw, parse_certificates, get_leaf_certificates,
     parse_private_key)
+    """
 
+
+from ykman.device import scan_devices, connect_to_device, get_name, get_connection_types
+from yubikit.core import TRANSPORT, APPLICATION
+from yubikit.management import USB_INTERFACE, Mode
 
 logger = logging.getLogger(__name__)
 
@@ -58,9 +63,6 @@ def catch_error(f):
 
             logger.error('Uncaught exception', exc_info=e)
             return unknown_failure(e)
-
-        except FailedOpeningDeviceException:
-            return failure('open_device_failed')
 
         except smartcard.pcsc.PCSCExceptions.EstablishContextException:
             return failure('pcsc_establish_context_failed')
@@ -123,8 +125,8 @@ class PivContextManager(object):
 
 
 class Controller(object):
-    _descriptor = None
     _dev_info = None
+    _state = None
 
     def __init__(self):
         # Wrap all return values as JSON.
@@ -135,10 +137,11 @@ class Controller(object):
                     setattr(self, f, as_json(catch_error(func)))
 
     def count_devices(self):
-        return len(list(get_descriptors()))
+        devices, state = scan_devices()
+        return sum(devices.values())
 
-    def _open_device(self, transports=sum(TRANSPORT)):
-        return self._descriptor.open_device(transports=transports)
+    def _open_device(self, interfaces=sum(USB_INTERFACE)):
+        return connect_to_device(connection_types=get_connection_types(interfaces))
 
     def _open_otp_controller(self):
         if ykpers_version is None:
@@ -157,50 +160,50 @@ class Controller(object):
                 self._descriptor.open_device(transports=TRANSPORT.CCID))
 
     def refresh(self):
-        descriptors = list(get_descriptors())
-        if len(descriptors) != 1:
-            self._descriptor = None
+        devices, state = scan_devices()
+        n_devs = sum(devices.values())
+        if n_devs != 1:
             return failure('multiple_devices')
-        desc = descriptors[0]
 
-        # If we have a cached descriptor
-        if self._descriptor:
-            # Same device, return
-            if desc.fingerprint == self._descriptor.fingerprint:
-                return success({'dev': self._dev_info})
 
-        self._descriptor = desc
-        self._dev_info = None
-
-        with self._open_device() as dev:
-            if not dev:
+        if state != self._state:
+            self._state = state
+            try:
+                connection, pid, info = connect_to_device()
+                connection.close()
+            except:
+                self._state = None
+                self._dev_info = None
                 return failure('no_device')
 
             self._dev_info = {
-                    'name': dev.device_name,
-                    'version': '.'.join(str(x) for x in dev.version),
-                    'serial': dev.serial or '',
-                    'usb_enabled': [
-                        a.name for a in APPLICATION
-                        if a & dev.config.usb_enabled],
-                    'usb_supported': [
-                        a.name for a in APPLICATION
-                        if a & dev.config.usb_supported],
-                    'usb_interfaces_supported': [
-                        t.name for t in TRANSPORT
-                        if t & dev.config.usb_supported],
-                    'nfc_enabled': [
-                        a.name for a in APPLICATION
-                        if a & dev.config.nfc_enabled],
-                    'nfc_supported': [
-                        a.name for a in APPLICATION
-                        if a & dev.config.nfc_supported],
-                    'usb_interfaces_enabled': str(dev.mode).split('+'),
-                    'can_write_config': dev.can_write_config,
-                    'configuration_locked': dev.config.configuration_locked,
-                    'form_factor': dev.config.form_factor
-                }
-            return success({'dev': self._dev_info})
+                'name': get_name(info, pid.get_type()),
+                'version': '.'.join(str(x) for x in info.version) if info.version else "",
+                'serial': info.serial or '',
+                'usb_enabled': [
+                    a.name for a in APPLICATION
+                    if a in info.config.enabled_applications.get(TRANSPORT.USB)],
+                'usb_supported': [
+                    a.name for a in APPLICATION
+                    if a in info.supported_applications.get(TRANSPORT.USB)],
+                'usb_interfaces_supported': [
+                    t.name for t in USB_INTERFACE
+                    if t in pid.get_interfaces()],
+                'nfc_enabled': [
+                    a.name for a in APPLICATION
+                    if a in info.config.enabled_applications.get(TRANSPORT.NFC, [])],
+                'nfc_supported': [
+                    a.name for a in APPLICATION
+                    if a in info.supported_applications.get(TRANSPORT.NFC, [])],
+                'usb_interfaces_enabled': str(Mode.from_pid(pid)).split('+'),
+                'can_write_config': info.version and info.version >= (5,0,0),
+                'configuration_locked': info.is_locked,
+                'form_factor': info.form_factor
+            }
+
+        return success({'dev': self._dev_info})
+
+
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
         usb_enabled = 0x00
