@@ -38,8 +38,12 @@ from ykman.util import (
 
 
 from ykman.device import scan_devices, connect_to_device, get_name, get_connection_types
+from ykman.otp import PrepareUploadFailed, prepare_upload_key
+from ykman.scancodes import KEYBOARD_LAYOUT, encode
+from ykman.util import modhex_encode, modhex_decode, generate_static_pw
 from yubikit.core import TRANSPORT, APPLICATION
-from yubikit.management import USB_INTERFACE, Mode
+from yubikit.management import USB_INTERFACE, Mode, ManagementSession, DeviceConfig
+from yubikit.yubiotp import YubiOtpSession, YubiOtpSlotConfiguration, StaticPasswordSlotConfiguration
 
 logger = logging.getLogger(__name__)
 
@@ -54,15 +58,6 @@ def catch_error(f):
     def wrapped(*args, **kwargs):
         try:
             return f(*args, **kwargs)
-
-        except YkpersError as e:
-            if e.errno == 3:
-                return failure('write error')
-            if e.errno == 4:
-                return failure('timeout')
-
-            logger.error('Uncaught exception', exc_info=e)
-            return unknown_failure(e)
 
         except smartcard.pcsc.PCSCExceptions.EstablishContextException:
             return failure('pcsc_establish_context_failed')
@@ -140,8 +135,8 @@ class Controller(object):
         devices, state = scan_devices()
         return sum(devices.values())
 
-    def _open_device(self, interfaces=sum(USB_INTERFACE)):
-        return connect_to_device(connection_types=get_connection_types(interfaces))
+    def _open_device(self, interfaces=USB_INTERFACE(sum(USB_INTERFACE))):
+        return connect_to_device(connection_types=get_connection_types(interfaces))[0]
 
     def _open_otp_controller(self):
         if ykpers_version is None:
@@ -204,7 +199,7 @@ class Controller(object):
         return success({'dev': self._dev_info})
 
 
-
+    # DONE
     def write_config(self, usb_applications, nfc_applications, lock_code):
         usb_enabled = 0x00
         nfc_enabled = 0x00
@@ -213,7 +208,7 @@ class Controller(object):
         for app in nfc_applications:
             nfc_enabled |= APPLICATION[app]
 
-        with self._open_device() as dev:
+        with self._open_device() as conn:
 
             if lock_code:
                 lock_code = a2b_hex(lock_code)
@@ -221,17 +216,17 @@ class Controller(object):
                     return failure('lock_code_not_16_bytes')
 
             try:
-                dev.write_config(
-                    device_config(
-                        usb_enabled=usb_enabled,
-                        nfc_enabled=nfc_enabled,
-                        ),
-                    reboot=True,
-                    lock_key=lock_code)
-            except APDUError as e:
-                if (e.sw == SW.VERIFY_FAIL_NO_RETRY):
-                    return failure('wrong_lock_code')
-                raise
+                session = ManagementSession(conn)
+                session.write_device_config(
+                    DeviceConfig(
+                        {TRANSPORT.USB: usb_enabled,
+                        TRANSPORT.NFC: nfc_enabled},
+                        None,
+                        None,
+                        None,
+                    ),
+                    True,
+                    lock_code)
             except ValueError as e:
                 if str(e) == 'Configuration locked!':
                     return failure('interface_config_locked')
@@ -267,9 +262,15 @@ class Controller(object):
     def is_macos(self):
         return success({'is_macos': sys.platform == 'darwin'})
 
+    # DONE
     def slots_status(self):
-        with self._open_otp_controller() as controller:
-            return success({'status': controller.slot_status})
+        with self._open_device(USB_INTERFACE.OTP) as conn:
+            session = YubiOtpSession(conn)
+            state = session.get_config_state()
+            slot1 = state.is_configured(1)
+            slot2 = state.is_configured(2)
+            ans = [slot1, slot2]
+            return success({'status': ans})
 
     def erase_slot(self, slot):
         with self._open_otp_controller() as controller:
@@ -281,10 +282,13 @@ class Controller(object):
             controller.swap_slots()
         return success()
 
+    # DONE
     def serial_modhex(self):
-        with self._open_device(TRANSPORT.OTP) as dev:
-            return modhex_encode(b'\xff\x00' + struct.pack(b'>I', dev.serial))
+        with self._open_device(USB_INTERFACE.OTP) as conn:
+            session = YubiOtpSession(conn)
+            return modhex_encode(b'\xff\x00' + struct.pack(b'>I', session.get_serial()))
 
+    # DONE
     def generate_static_pw(self, keyboard_layout):
         return success({
             'password': generate_static_pw(
@@ -297,18 +301,19 @@ class Controller(object):
     def random_key(self, bytes):
         return b2a_hex(os.urandom(int(bytes))).decode('ascii')
 
+    # DONE
     def program_otp(self, slot, public_id, private_id, key, upload=False,
                     app_version='unknown'):
-        key = a2b_hex(key)
+        key = a2b_hex(key) # TODO; maybe change, seems to throw an error
         public_id = modhex_decode(public_id)
         private_id = a2b_hex(private_id)
 
         upload_url = None
 
-        with self._open_otp_controller() as controller:
+        with self._open_device(USB_INTERFACE.OTP) as conn:
             if upload:
                 try:
-                    upload_url = controller.prepare_upload_key(
+                    upload_url = prepare_upload_key(
                         key, public_id, private_id,
                         serial=self._dev_info['serial'],
                         user_agent='ykman-qt/' + app_version)
@@ -317,6 +322,12 @@ class Controller(object):
                     return failure('upload_failed',
                                    {'upload_errors': [err.name
                                                       for err in e.errors]})
+
+            session = YubiOtpSession(conn)
+            session.put_configuration(
+                slot,
+                YubiOtpSlotConfiguration(public_id, private_id, key)
+            )
 
             controller.program_otp(slot, key, public_id, private_id)
 
@@ -332,12 +343,13 @@ class Controller(object):
             controller.program_chalresp(slot, key, touch)
         return success()
 
+    # DONE
     def program_static_password(self, slot, key, keyboard_layout):
-        with self._open_otp_controller() as controller:
-            controller.program_static(
-                slot, key,
-                keyboard_layout=KEYBOARD_LAYOUT[keyboard_layout])
-        return success()
+        with self._open_device(USB_INTERFACE.OTP) as conn:
+            session = YubiOtpSession(conn)
+            scan_codes = encode(key, KEYBOARD_LAYOUT[keyboard_layout])
+            session.put_configuration(slot, StaticPasswordSlotConfiguration(scan_codes))
+            return success()
 
     def program_oath_hotp(self, slot, key, digits):
         unpadded = key.upper().rstrip('=').replace(' ', '')
