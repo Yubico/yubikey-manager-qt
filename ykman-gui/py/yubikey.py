@@ -43,7 +43,9 @@ from ykman.scancodes import KEYBOARD_LAYOUT, encode
 from ykman.util import modhex_encode, modhex_decode, generate_static_pw
 from yubikit.core import TRANSPORT, APPLICATION
 from yubikit.management import USB_INTERFACE, Mode, ManagementSession, DeviceConfig
-from yubikit.yubiotp import YubiOtpSession, YubiOtpSlotConfiguration, StaticPasswordSlotConfiguration
+from yubikit.yubiotp import (
+YubiOtpSession, YubiOtpSlotConfiguration,
+StaticPasswordSlotConfiguration, HotpSlotConfiguration, HmacSha1SlotConfiguration)
 
 logger = logging.getLogger(__name__)
 
@@ -272,14 +274,18 @@ class Controller(object):
             ans = [slot1, slot2]
             return success({'status': ans})
 
+    # DONE
     def erase_slot(self, slot):
-        with self._open_otp_controller() as controller:
-            controller.zap_slot(slot)
+        with self._open_device(USB_INTERFACE.OTP) as conn:
+            session = YubiOtpSession(conn)
+            session.delete_slot(slot)
         return success()
 
+    # DONE
     def swap_slots(self):
-        with self._open_otp_controller() as controller:
-            controller.swap_slots()
+        with self._open_device(USB_INTERFACE.OTP) as conn:
+            session = YubiOtpSession(conn)
+            session.swap_slots()
         return success()
 
     # DONE
@@ -337,10 +343,15 @@ class Controller(object):
 
         return success({'upload_url': upload_url})
 
+    # DONE
     def program_challenge_response(self, slot, key, touch):
         key = a2b_hex(key)
-        with self._open_otp_controller() as controller:
-            controller.program_chalresp(slot, key, touch)
+        with self._open_device(USB_INTERFACE.OTP) as conn:
+            session = YubiOtpSession(conn)
+            session.put_configuration(
+                slot,
+                HmacSha1SlotConfiguration(key).require_touch(touch),
+            )
         return success()
 
     # DONE
@@ -349,14 +360,24 @@ class Controller(object):
             session = YubiOtpSession(conn)
             scan_codes = encode(key, KEYBOARD_LAYOUT[keyboard_layout])
             session.put_configuration(slot, StaticPasswordSlotConfiguration(scan_codes))
-            return success()
+        return success()
 
+    #DONE
     def program_oath_hotp(self, slot, key, digits):
         unpadded = key.upper().rstrip('=').replace(' ', '')
         key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
-        with self._open_otp_controller() as controller:
-            controller.program_hotp(slot, key, hotp8=(int(digits) == 8))
-        return success()
+
+        with self._open_device(USB_INTERFACE.OTP) as conn:
+            session = YubiOtpSession(conn)
+            try:
+                session.put_configuration(
+                    slot,
+                    HotpSlotConfiguration(key)
+                    .digits8(int(digits) == 8),
+                )
+            except Exception as e: # TODO fix exception to commanderror
+                return failure(e)
+            return success()
 
     def fido_has_pin(self):
         with self._open_fido2_controller() as controller:
