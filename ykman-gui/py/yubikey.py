@@ -20,6 +20,7 @@ from binascii import b2a_hex, a2b_hex
 from fido2.ctap import CtapError
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
+from threading import Timer
 """
 from ykman.device import device_config
 from ykman.otp import OtpController, PrepareUploadFailed
@@ -35,14 +36,19 @@ from ykman.util import (
     generate_static_pw, parse_certificates, get_leaf_certificates,
     parse_private_key)
     """
-
-
 from ykman.device import scan_devices, connect_to_device, get_name, get_connection_types
+from ykman.piv import (
+get_pivman_data, list_certificates, generate_self_signed_certificate, generate_csr, OBJECT_ID, generate_chuid)
 from ykman.otp import PrepareUploadFailed, prepare_upload_key
 from ykman.scancodes import KEYBOARD_LAYOUT, encode
-from ykman.util import modhex_encode, modhex_decode, generate_static_pw
+from ykman.util import (
+modhex_encode, modhex_decode, generate_static_pw, parse_certificates, parse_private_key,
+get_leaf_certificates)
 from yubikit.core import TRANSPORT, APPLICATION
+from yubikit.core.smartcard import ApduError, SW
 from yubikit.management import USB_INTERFACE, Mode, ManagementSession, DeviceConfig
+from yubikit.piv import (
+PivSession, SLOT, KEY_TYPE, check_key_support, NotSupportedError, PIN_POLICY, TOUCH_POLICY)
 from yubikit.yubiotp import (
 YubiOtpSession, YubiOtpSlotConfiguration,
 StaticPasswordSlotConfiguration, HotpSlotConfiguration, HmacSha1SlotConfiguration)
@@ -236,20 +242,34 @@ class Controller(object):
 
             return success()
 
+    # DONE
     def refresh_piv(self):
-        with self._open_piv() as piv_controller:
+        with self._open_device() as conn:
+            session = PivSession(conn)
+            pivman = get_pivman_data(session)
+
             return success({
                 'piv_data': {
-                    'certs': self._piv_list_certificates(piv_controller),
-                    'has_derived_key': piv_controller.has_derived_key,
-                    'has_protected_key': piv_controller.has_protected_key,
-                    'has_stored_key': piv_controller.has_stored_key,
-                    'pin_tries': piv_controller.get_pin_tries(),
-                    'puk_blocked': piv_controller.puk_blocked,
-                    'supported_algorithms':
-                        [a.name for a in piv_controller.supported_algorithms],
+                    'certs': self._piv_list_certificates(session),
+                    'has_derived_key': pivman.has_derived_key,
+                    'has_protected_key': pivman.has_protected_key,
+                    'has_stored_key': pivman.has_stored_key,
+                    'pin_tries': session.get_pin_attempts(),
+                    'puk_blocked': pivman.puk_blocked,
+                    'supported_algorithms': self._supported_algorithms(self._dev_info['version'].split('.')),
                 },
             })
+
+    # DONE
+    def _supported_algorithms(self, version):
+        supported = []
+        for key_type in KEY_TYPE:
+            try:
+                check_key_support(tuple(map(int, version)), key_type, PIN_POLICY.DEFAULT, TOUCH_POLICY.DEFAULT)
+                supported.append(key_type.name)
+            except NotSupportedError:
+                pass
+        return supported
 
     def set_mode(self, interfaces):
         with self._open_device() as dev:
@@ -435,28 +455,36 @@ class Controller(object):
                 return failure('touch timeout')
             raise
 
+    # DONE
     def piv_reset(self):
-        with self._open_piv() as controller:
-            controller.reset()
+        with self._open_device() as conn:
+            session = PivSession(conn)
+            session.reset()
             return success()
 
-    def _piv_list_certificates(self, controller):
+    # DONE
+    def _piv_list_certificates(self, session):
         return {
-            SLOT(slot).name: _piv_serialise_cert(slot, cert) for slot, cert in controller.list_certificates().items()  # noqa: E501
+            SLOT(slot).name: _piv_serialise_cert(slot, cert) for slot, cert in list_certificates(session).items()  # noqa: E501
         }
 
+    # DONE
     def piv_delete_certificate(self, slot_name, pin=None, mgm_key_hex=None):
         logger.debug('piv_delete_certificate %s', slot_name)
 
-        with self._open_piv() as piv_controller:
-            auth_failed = self._piv_ensure_authenticated(
-                piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
-            if auth_failed:
-                return auth_failed
+        with self._open_device() as conn:
+            session = PivSession(conn)
+            with PromptTimeout():
+                auth_failed = self._piv_ensure_authenticated(
+                    session, pin=pin, mgm_key_hex=mgm_key_hex)
+                if auth_failed:
+                    return auth_failed
 
-            piv_controller.delete_certificate(SLOT[slot_name])
-            return success()
+                session.delete_certificate(SLOT[slot_name])
+                session.put_object(OBJECT_ID.CHUID, generate_chuid())
+                return success()
 
+    # DONE
     def piv_generate_certificate(
             self, slot_name, algorithm, common_name, expiration_date,
             self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None):
@@ -464,17 +492,18 @@ class Controller(object):
                      'expiration_date=%s self_sign=%s csr_file_url=%s',
                      slot_name, algorithm, common_name, expiration_date,
                      self_sign, csr_file_url)
-
         if csr_file_url:
             file_path = self._get_file_path(csr_file_url)
 
-        with self._open_piv() as piv_controller:
-            auth_failed = self._piv_ensure_authenticated(
-                piv_controller, pin=pin, mgm_key_hex=mgm_key_hex)
+        with self._open_device() as conn:
+            session = PivSession(conn)
+            with PromptTimeout():
+                auth_failed = self._piv_ensure_authenticated(
+                    session, pin=pin, mgm_key_hex=mgm_key_hex)
             if auth_failed:
                 return auth_failed
 
-            pin_failed = self._piv_verify_pin(piv_controller, pin)
+            pin_failed = self._piv_verify_pin(session, pin)
             if pin_failed:
                 return pin_failed
 
@@ -492,71 +521,51 @@ class Controller(object):
                     return failure(
                         'invalid_iso8601_date',
                         {'date': expiration_date})
+            public_key = session.generate_key(
+                SLOT[slot_name], KEY_TYPE[algorithm])
 
-            public_key = piv_controller.generate_key(
-                SLOT[slot_name], ALGO[algorithm])
-
-            pin_failed = self._piv_verify_pin(piv_controller, pin)
+            pin_failed = self._piv_verify_pin(session, pin)
             if pin_failed:
                 return pin_failed
 
             try:
                 if self_sign:
-                    piv_controller.generate_self_signed_certificate(
+                    cert = generate_self_signed_certificate(session,
                         SLOT[slot_name], public_key, common_name, now,
                         valid_to)
+                    session.put_certificate(SLOT[slot_name], cert)
+                    session.put_object(OBJECT_ID.CHUID, generate_chuid())
 
                 else:
-                    csr = piv_controller.generate_certificate_signing_request(
+                    csr = generate_csr(session,
                         SLOT[slot_name], public_key, common_name)
 
                     with open(file_path, 'w+b') as csr_file:
                         csr_file.write(csr.public_bytes(
                             encoding=serialization.Encoding.PEM))
 
-            except APDUError as e:
+            except ApduError as e:
                 if e.sw == SW.SECURITY_CONDITION_NOT_SATISFIED:
                     return failure('pin_required')
                 raise
 
             return success()
 
+    # DONE
     def piv_change_pin(self, old_pin, new_pin):
-        with self._open_piv() as piv_controller:
-            try:
-                piv_controller.change_pin(old_pin, new_pin)
-                logger.debug('PIN change successful!')
-                return success()
+        with self._open_device() as conn:
+            session = PivSession(conn)
 
-            except AuthenticationBlocked:
-                return failure('pin_blocked')
+            session.change_pin(old_pin, new_pin)
+            logger.debug('PIN change successful!')
+            return success()
 
-            except WrongPin as e:
-                return failure('wrong_pin', {'tries_left': e.tries_left})
-
-            except APDUError as e:
-                if e.sw == SW.INCORRECT_PARAMETERS:
-                    return failure('incorrect_parameters')
-
-                tries_left = piv_controller.get_pin_tries()
-                logger.debug('PIN change failed. %s tries left.',
-                             tries_left, exc_info=e)
-                return {
-                    'success': False,
-                    'tries_left': tries_left,
-                }
-
+    # DONE
     def piv_change_puk(self, old_puk, new_puk):
-        with self._open_piv() as piv_controller:
-            try:
-                piv_controller.change_puk(old_puk, new_puk)
-                return success()
-
-            except AuthenticationBlocked:
-                return failure('puk_blocked')
-
-            except WrongPuk as e:
-                return failure('wrong_puk', {'tries_left': e.tries_left})
+        with self._open_device() as conn:
+            session = PivSession(conn)
+            session.change_puk(old_puk, new_puk)
+            return success()
 
     def piv_generate_random_mgm_key(self):
         return b2a_hex(ykman.piv.generate_random_management_key()).decode(
@@ -592,17 +601,13 @@ class Controller(object):
                 new_key, touch=False, store_on_device=store_on_device)
             return success()
 
+    # DONE
     def piv_unblock_pin(self, puk, new_pin):
-        with self._open_piv() as piv_controller:
-            try:
-                piv_controller.unblock_pin(puk, new_pin)
-                return success()
+        with self._open_device() as conn:
+            session = PivSession(conn)
 
-            except AuthenticationBlocked:
-                return failure('puk_blocked')
-
-            except WrongPuk as e:
-                return failure('wrong_puk', {'tries_left': e.tries_left})
+            session.unblock_pin(puk, new_pin)
+            return success()
 
     def piv_can_parse(self, file_url):
         file_path = self._get_file_path(file_url)
@@ -620,6 +625,7 @@ class Controller(object):
                 pass
         raise ValueError('Failed to parse certificate or key')
 
+    # DONE (/TODO)
     def piv_import_file(self, slot, file_url, password=None,
                         pin=None, mgm_key=None):
         is_cert = False
@@ -643,31 +649,36 @@ class Controller(object):
             if not (is_cert or is_private_key):
                 return failure('failed_parsing')
 
-            with self._open_piv() as controller:
-                auth_failed = self._piv_ensure_authenticated(
-                    controller, pin, mgm_key)
-                if auth_failed:
-                    return auth_failed
-                if is_private_key:
-                    controller.import_key(SLOT[slot], private_key)
-                if is_cert:
-                    if len(certs) > 1:
-                        leafs = get_leaf_certificates(certs)
-                        cert_to_import = leafs[0]
-                    else:
-                        cert_to_import = certs[0]
+            with self._open_device() as conn:
+                session = PivSession(conn)
+                with PromptTimeout():
+                    auth_failed = self._piv_ensure_authenticated(
+                        session, pin, mgm_key)
+                    if auth_failed:
+                        return auth_failed
+                    if is_private_key:
+                        session.put_key(SLOT[slot], private_key)
+                    if is_cert:
+                        if len(certs) > 1:
+                            leafs = get_leaf_certificates(certs)
+                            cert_to_import = leafs[0]
+                        else:
+                            cert_to_import = certs[0]
 
-                    controller.import_certificate(
-                            SLOT[slot], cert_to_import)
+                        session.put_certificate(
+                                SLOT[slot], cert_to_import)
+                        session.put_object(OBJECT_ID.CHUID, generate_chuid())
         return success({
             'imported_cert': is_cert,
             'imported_key': is_private_key
         })
 
+    # DONE
     def piv_export_certificate(self, slot, file_url):
         file_path = self._get_file_path(file_url)
-        with self._open_piv() as controller:
-            cert = controller.read_certificate(SLOT[slot])
+        with self._open_device() as conn:
+            session = PivSession(conn)
+            cert = session.get_certificate(SLOT[slot])
             with open(file_path, 'wb') as file:
                 file.write(
                     cert.public_bytes(
@@ -678,51 +689,26 @@ class Controller(object):
         file_path = urllib.parse.urlparse(file_url).path
         return file_path[1:] if os.name == 'nt' else file_path
 
-    def _piv_verify_pin(self, piv_controller, pin=None):
-        touch_required = False
-
-        def touch_callback():
-            nonlocal touch_required
-            touch_required = True
-            _touch_prompt()
+    # DONE
+    def _piv_verify_pin(self, session, pin=None):
 
         if pin:
             try:
-                piv_controller.verify(pin, touch_callback=touch_callback)
+                session.verify_pin(pin)
 
-            except AuthenticationBlocked:
-                return failure('pin_blocked')
-
-            except WrongPin as e:
-                return failure(
-                    'wrong_pin',
-                    {'tries_left': e.tries_left})
-
-            except AuthenticationFailed:
-                if touch_required:
-                    return failure('wrong_mgm_key_or_touch_required')
-                else:
-                    return failure('wrong_mgm_key')
-
-            finally:
-                if touch_required:
-                    _close_touch_prompt()
+            except:
+                pass
 
         else:
             return failure('pin_required')
 
-    def _piv_ensure_authenticated(self, piv_controller, pin=None,
+    # DONE
+    def _piv_ensure_authenticated(self, session, pin=None,
                                   mgm_key_hex=None):
-        if piv_controller.has_protected_key:
-            return self._piv_verify_pin(piv_controller, pin)
+        pivman = get_pivman_data(session)
+        if pivman.has_protected_key:
+            return self._piv_verify_pin(session, pin)
         else:
-            touch_required = False
-
-            def touch_callback():
-                nonlocal touch_required
-                touch_required = True
-                _touch_prompt()
-
             if mgm_key_hex:
                 if len(mgm_key_hex) != 48:
                     return failure('mgm_key_bad_format')
@@ -733,23 +719,12 @@ class Controller(object):
                     return failure('mgm_key_bad_format')
 
                 try:
-                    piv_controller.authenticate(
-                        mgm_key_bytes,
-                        touch_callback
+                    session.authenticate(
+                        mgm_key_bytes
                     )
 
-                except AuthenticationFailed:
-                    if touch_required:
-                        return failure('wrong_mgm_key_or_touch_required')
-                    else:
-                        return failure('wrong_mgm_key')
-
-                except BadFormat:
-                    return failure('mgm_key_bad_format')
-
-                finally:
-                    if touch_required:
-                        _close_touch_prompt()
+                except:
+                    pass
 
             else:
                 return failure('mgm_key_required')
@@ -800,6 +775,7 @@ def _piv_serialise_cert(slot, cert):
     }
 
 
+
 def _touch_prompt():
     pyotherside.send('touchRequired')
 
@@ -818,3 +794,14 @@ def init_with_logging(log_level, log_file=None):
 def init():
     global controller
     controller = Controller()
+
+class PromptTimeout:
+    def __init__(self, timeout=0.5):
+        self.timer = Timer(timeout, _touch_prompt)
+
+    def __enter__(self):
+        self.timer.start()
+
+    def __exit__(self, typ, value, traceback):
+        _close_touch_prompt()
+        self.timer.cancel()
