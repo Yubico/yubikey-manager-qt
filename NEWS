@@ -1,3 +1,6 @@
+* Version 1.1.5b (released 2020-11-19)
+ ** macOS: Fix version in Info.plist
+
 * Version 1.1.5 (released 2020-08-11)
  ** Add support for YubiKey 5C NFC
 
