@@ -36,22 +36,26 @@ from ykman.util import (
     generate_static_pw, parse_certificates, get_leaf_certificates,
     parse_private_key)
     """
-from ykman.device import scan_devices, connect_to_device, get_name, get_connection_types
+
+from ykman import connect_to_device, scan_devices, get_name, get_connection_types
 from ykman.piv import (
 get_pivman_data, list_certificates, generate_self_signed_certificate, generate_csr, OBJECT_ID, generate_chuid)
-from ykman.otp import PrepareUploadFailed, prepare_upload_key
+from ykman.otp import PrepareUploadFailed, prepare_upload_key, generate_static_pw
 from ykman.scancodes import KEYBOARD_LAYOUT, encode
 from ykman.util import (
-modhex_encode, modhex_decode, generate_static_pw, parse_certificates, parse_private_key,
+parse_certificates, parse_private_key,
 get_leaf_certificates)
-from yubikit.core import TRANSPORT, APPLICATION
+
+from yubikit.core.otp import modhex_encode, modhex_decode
 from yubikit.core.smartcard import ApduError, SW
-from yubikit.management import USB_INTERFACE, Mode, ManagementSession, DeviceConfig
+from yubikit.management import USB_INTERFACE, Mode, ManagementSession, DeviceConfig, APPLICATION, TRANSPORT
 from yubikit.piv import (
 PivSession, SLOT, KEY_TYPE, check_key_support, NotSupportedError, PIN_POLICY, TOUCH_POLICY)
 from yubikit.yubiotp import (
 YubiOtpSession, YubiOtpSlotConfiguration,
 StaticPasswordSlotConfiguration, HotpSlotConfiguration, HmacSha1SlotConfiguration)
+
+from fido2.ctap2 import Ctap2, ClientPin
 
 logger = logging.getLogger(__name__)
 
@@ -93,40 +97,6 @@ def failure(err_id, result={}):
 def unknown_failure(exception):
     return failure(None, {'error_message': str(exception)})
 
-
-class OtpContextManager(object):
-    def __init__(self, dev):
-        self._dev = dev
-
-    def __enter__(self):
-        return OtpController(self._dev.driver)
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self._dev.close()
-
-
-class Fido2ContextManager(object):
-    def __init__(self, dev):
-        self._dev = dev
-
-    def __enter__(self):
-        return Fido2Controller(self._dev.driver)
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self._dev.close()
-
-
-class PivContextManager(object):
-    def __init__(self, dev):
-        self._dev = dev
-
-    def __enter__(self):
-        return PivController(self._dev.driver)
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self._dev.close()
-
-
 class Controller(object):
     _dev_info = None
     _state = None
@@ -146,33 +116,16 @@ class Controller(object):
     def _open_device(self, interfaces=USB_INTERFACE(sum(USB_INTERFACE))):
         return connect_to_device(connection_types=get_connection_types(interfaces))[0]
 
-    def _open_otp_controller(self):
-        if ykpers_version is None:
-            raise Exception(
-                'Could not find the "ykpers" library. Please ensure that '
-                'YubiKey Manager was installed correctly.')
-        return OtpContextManager(
-            self._descriptor.open_device(transports=TRANSPORT.OTP))
-
-    def _open_fido2_controller(self):
-        return Fido2ContextManager(
-            self._descriptor.open_device(transports=TRANSPORT.FIDO))
-
-    def _open_piv(self):
-        return PivContextManager(
-                self._descriptor.open_device(transports=TRANSPORT.CCID))
-
     def refresh(self):
         devices, state = scan_devices()
         n_devs = sum(devices.values())
         if n_devs != 1:
             return failure('multiple_devices')
 
-
         if state != self._state:
             self._state = state
             try:
-                connection, pid, info = connect_to_device()
+                connection, device, info = connect_to_device()
                 connection.close()
             except:
                 self._state = None
@@ -180,7 +133,7 @@ class Controller(object):
                 return failure('no_device')
 
             self._dev_info = {
-                'name': get_name(info, pid.get_type()),
+                'name': get_name(info, device.pid.get_type()),
                 'version': '.'.join(str(x) for x in info.version) if info.version else "",
                 'serial': info.serial or '',
                 'usb_enabled': [
@@ -191,14 +144,14 @@ class Controller(object):
                     if a in info.supported_applications.get(TRANSPORT.USB)],
                 'usb_interfaces_supported': [
                     t.name for t in USB_INTERFACE
-                    if t in pid.get_interfaces()],
+                    if t in device.pid.get_interfaces()],
                 'nfc_enabled': [
                     a.name for a in APPLICATION
                     if a in info.config.enabled_applications.get(TRANSPORT.NFC, [])],
                 'nfc_supported': [
                     a.name for a in APPLICATION
                     if a in info.supported_applications.get(TRANSPORT.NFC, [])],
-                'usb_interfaces_enabled': str(Mode.from_pid(pid)).split('+'),
+                'usb_interfaces_enabled': str(Mode.from_pid(device.pid)).split('+'),
                 'can_write_config': info.version and info.version >= (5,0,0),
                 'configuration_locked': info.is_locked,
                 'form_factor': info.form_factor
@@ -235,6 +188,8 @@ class Controller(object):
                     ),
                     True,
                     lock_code)
+
+                self._state = None
             except ValueError as e:
                 if str(e) == 'Configuration locked!':
                     return failure('interface_config_locked')
@@ -399,14 +354,19 @@ class Controller(object):
                 return failure(e)
             return success()
 
+    # DONE
     def fido_has_pin(self):
-        with self._open_fido2_controller() as controller:
-            return success({'hasPin': controller.has_pin})
+        with self._open_device(USB_INTERFACE.FIDO) as conn:
+            ctap2 = Ctap2(conn)
+            return success({'hasPin': ctap2.info.options.get("clientPin")})
 
+    # DONE
     def fido_pin_retries(self):
         try:
-            with self._open_fido2_controller() as controller:
-                return success({'retries': controller.get_pin_retries()})
+            with self._open_device(USB_INTERFACE.FIDO) as conn:
+                ctap2 = Ctap2(conn)
+                client_pin = ClientPin(ctap2)
+                return success({'retries': client_pin.get_pin_retries()[0]})
         except CtapError as e:
             if e.code == CtapError.ERR.PIN_AUTH_BLOCKED:
                 return failure('PIN authentication is currently blocked. '
@@ -415,10 +375,13 @@ class Controller(object):
                 return failure('PIN is blocked.')
             raise
 
+    # DONE
     def fido_set_pin(self, new_pin):
         try:
-            with self._open_fido2_controller() as controller:
-                controller.set_pin(new_pin)
+            with self._open_device(USB_INTERFACE.FIDO) as conn:
+                ctap2 = Ctap2(conn)
+                client_pin = ClientPin(ctap2)
+                client_pin.set_pin(new_pin)
                 return success()
         except CtapError as e:
             if e.code == CtapError.ERR.INVALID_LENGTH or \
@@ -426,10 +389,13 @@ class Controller(object):
                 return failure('too long')
             raise
 
+    # DONE
     def fido_change_pin(self, current_pin, new_pin):
         try:
-            with self._open_fido2_controller() as controller:
-                controller.change_pin(old_pin=current_pin, new_pin=new_pin)
+            with self._open_device(USB_INTERFACE.FIDO) as conn:
+                ctap2 = Ctap2(conn)
+                client_pin = ClientPin(ctap2)
+                client_pin.change_pin(current_pin, new_pin)
                 return success()
         except CtapError as e:
             if e.code == CtapError.ERR.INVALID_LENGTH or \
@@ -443,10 +409,12 @@ class Controller(object):
                 return failure('blocked')
             raise
 
+    # DONE
     def fido_reset(self):
         try:
-            with self._open_fido2_controller() as controller:
-                controller.reset()
+            with self._open_device(USB_INTERFACE.FIDO) as conn:
+                ctap2 = Ctap2(conn)
+                ctap2.reset()
                 return success()
         except CtapError as e:
             if e.code == CtapError.ERR.NOT_ALLOWED:
