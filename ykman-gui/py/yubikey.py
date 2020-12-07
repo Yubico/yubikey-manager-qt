@@ -21,39 +21,28 @@ from fido2.ctap import CtapError
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
 from threading import Timer
-"""
-from ykman.device import device_config
-from ykman.otp import OtpController, PrepareUploadFailed
-from ykman.fido import Fido2Controller
-from ykman.driver_ccid import APDUError, SW
-from ykman.driver_otp import YkpersError, libversion as ykpers_version
-from ykman.piv import (
-    PivController, ALGO, SLOT, AuthenticationBlocked,
-    AuthenticationFailed, BadFormat, WrongPin, WrongPuk)
-from ykman.scancodes import KEYBOARD_LAYOUT
-from ykman.util import (
-    modhex_encode, modhex_decode,
-    generate_static_pw, parse_certificates, get_leaf_certificates,
-    parse_private_key)
-    """
 
 from ykman import connect_to_device, scan_devices, get_name, get_connection_types
 from ykman.piv import (
-get_pivman_data, list_certificates, generate_self_signed_certificate, generate_csr, OBJECT_ID, generate_chuid)
+    get_pivman_data, list_certificates, generate_self_signed_certificate,
+    generate_csr, OBJECT_ID, generate_chuid)
 from ykman.otp import PrepareUploadFailed, prepare_upload_key, generate_static_pw
 from ykman.scancodes import KEYBOARD_LAYOUT, encode
 from ykman.util import (
-parse_certificates, parse_private_key,
-get_leaf_certificates)
+    parse_certificates, parse_private_key, get_leaf_certificates)
 
+from yubikit.core import CommandError
 from yubikit.core.otp import modhex_encode, modhex_decode
 from yubikit.core.smartcard import ApduError, SW
-from yubikit.management import USB_INTERFACE, Mode, ManagementSession, DeviceConfig, APPLICATION, TRANSPORT
+from yubikit.management import (
+    USB_INTERFACE, Mode, ManagementSession, DeviceConfig,
+    APPLICATION, TRANSPORT)
 from yubikit.piv import (
-PivSession, SLOT, KEY_TYPE, check_key_support, NotSupportedError, PIN_POLICY, TOUCH_POLICY)
+    PivSession, SLOT, KEY_TYPE, check_key_support, NotSupportedError,
+    PIN_POLICY, TOUCH_POLICY, InvalidPinError)
 from yubikit.yubiotp import (
-YubiOtpSession, YubiOtpSlotConfiguration,
-StaticPasswordSlotConfiguration, HotpSlotConfiguration, HmacSha1SlotConfiguration)
+    YubiOtpSession, YubiOtpSlotConfiguration,
+    StaticPasswordSlotConfiguration, HotpSlotConfiguration, HmacSha1SlotConfiguration)
 
 from fido2.ctap2 import Ctap2, ClientPin
 
@@ -73,6 +62,10 @@ def catch_error(f):
 
         except smartcard.pcsc.PCSCExceptions.EstablishContextException:
             return failure('pcsc_establish_context_failed')
+
+        except ValueError as e:
+            logger.error('Failed to open device', exc_info=e)
+            return failure('open_device_failed')
 
         except Exception as e:
             if str(e) == 'Incorrect padding':
@@ -159,8 +152,6 @@ class Controller(object):
 
         return success({'dev': self._dev_info})
 
-
-    # DONE
     def write_config(self, usb_applications, nfc_applications, lock_code):
         usb_enabled = 0x00
         nfc_enabled = 0x00
@@ -190,6 +181,10 @@ class Controller(object):
                     lock_code)
 
                 self._state = None
+            except ApduError as e:
+                if (e.sw == SW.VERIFY_FAIL_NO_RETRY):
+                    return failure('wrong_lock_code')
+                raise
             except ValueError as e:
                 if str(e) == 'Configuration locked!':
                     return failure('interface_config_locked')
@@ -197,7 +192,6 @@ class Controller(object):
 
             return success()
 
-    # DONE
     def refresh_piv(self):
         with self._open_device() as conn:
             session = PivSession(conn)
@@ -215,7 +209,6 @@ class Controller(object):
                 },
             })
 
-    # DONE
     def _supported_algorithms(self, version):
         supported = []
         for key_type in KEY_TYPE:
@@ -239,7 +232,6 @@ class Controller(object):
     def is_macos(self):
         return success({'is_macos': sys.platform == 'darwin'})
 
-    # DONE
     def slots_status(self):
         with self._open_device(USB_INTERFACE.OTP) as conn:
             session = YubiOtpSession(conn)
@@ -249,27 +241,23 @@ class Controller(object):
             ans = [slot1, slot2]
             return success({'status': ans})
 
-    # DONE
     def erase_slot(self, slot):
         with self._open_device(USB_INTERFACE.OTP) as conn:
             session = YubiOtpSession(conn)
             session.delete_slot(slot)
         return success()
 
-    # DONE
     def swap_slots(self):
         with self._open_device(USB_INTERFACE.OTP) as conn:
             session = YubiOtpSession(conn)
             session.swap_slots()
         return success()
 
-    # DONE
     def serial_modhex(self):
         with self._open_device(USB_INTERFACE.OTP) as conn:
             session = YubiOtpSession(conn)
             return modhex_encode(b'\xff\x00' + struct.pack(b'>I', session.get_serial()))
 
-    # DONE
     def generate_static_pw(self, keyboard_layout):
         return success({
             'password': generate_static_pw(
@@ -282,10 +270,9 @@ class Controller(object):
     def random_key(self, bytes):
         return b2a_hex(os.urandom(int(bytes))).decode('ascii')
 
-    # DONE
     def program_otp(self, slot, public_id, private_id, key, upload=False,
                     app_version='unknown'):
-        key = a2b_hex(key) # TODO; maybe change, seems to throw an error
+        key = a2b_hex(key)
         public_id = modhex_decode(public_id)
         private_id = a2b_hex(private_id)
 
@@ -303,14 +290,14 @@ class Controller(object):
                     return failure('upload_failed',
                                    {'upload_errors': [err.name
                                                       for err in e.errors]})
-
-            session = YubiOtpSession(conn)
-            session.put_configuration(
-                slot,
-                YubiOtpSlotConfiguration(public_id, private_id, key)
-            )
-
-            controller.program_otp(slot, key, public_id, private_id)
+            try:
+                session = YubiOtpSession(conn)
+                session.put_configuration(
+                    slot,
+                    YubiOtpSlotConfiguration(public_id, private_id, key)
+                )
+            except CommandError as e:
+                return failure("write error")
 
         logger.debug('YubiOTP successfully programmed.')
         if upload_url:
@@ -318,26 +305,29 @@ class Controller(object):
 
         return success({'upload_url': upload_url})
 
-    # DONE
     def program_challenge_response(self, slot, key, touch):
         key = a2b_hex(key)
         with self._open_device(USB_INTERFACE.OTP) as conn:
             session = YubiOtpSession(conn)
-            session.put_configuration(
-                slot,
-                HmacSha1SlotConfiguration(key).require_touch(touch),
-            )
+            try:
+                session.put_configuration(
+                    slot,
+                    HmacSha1SlotConfiguration(key).require_touch(touch),
+                )
+            except CommandError as e:
+                return failure("write error")
         return success()
 
-    # DONE
     def program_static_password(self, slot, key, keyboard_layout):
         with self._open_device(USB_INTERFACE.OTP) as conn:
             session = YubiOtpSession(conn)
             scan_codes = encode(key, KEYBOARD_LAYOUT[keyboard_layout])
-            session.put_configuration(slot, StaticPasswordSlotConfiguration(scan_codes))
-        return success()
+            try:
+                session.put_configuration(slot, StaticPasswordSlotConfiguration(scan_codes))
+            except CommandError as e:
+                return failure("write error")
+            return success()
 
-    #DONE
     def program_oath_hotp(self, slot, key, digits):
         unpadded = key.upper().rstrip('=').replace(' ', '')
         key = b32decode(unpadded + '=' * (-len(unpadded) % 8))
@@ -350,17 +340,15 @@ class Controller(object):
                     HotpSlotConfiguration(key)
                     .digits8(int(digits) == 8),
                 )
-            except Exception as e: # TODO fix exception to commanderror
-                return failure(e)
+            except CommandError as e:
+                return failure("write error")
             return success()
 
-    # DONE
     def fido_has_pin(self):
         with self._open_device(USB_INTERFACE.FIDO) as conn:
             ctap2 = Ctap2(conn)
             return success({'hasPin': ctap2.info.options.get("clientPin")})
 
-    # DONE
     def fido_pin_retries(self):
         try:
             with self._open_device(USB_INTERFACE.FIDO) as conn:
@@ -375,7 +363,6 @@ class Controller(object):
                 return failure('PIN is blocked.')
             raise
 
-    # DONE
     def fido_set_pin(self, new_pin):
         try:
             with self._open_device(USB_INTERFACE.FIDO) as conn:
@@ -389,7 +376,6 @@ class Controller(object):
                 return failure('too long')
             raise
 
-    # DONE
     def fido_change_pin(self, current_pin, new_pin):
         try:
             with self._open_device(USB_INTERFACE.FIDO) as conn:
@@ -409,7 +395,6 @@ class Controller(object):
                 return failure('blocked')
             raise
 
-    # DONE
     def fido_reset(self):
         try:
             with self._open_device(USB_INTERFACE.FIDO) as conn:
@@ -423,20 +408,17 @@ class Controller(object):
                 return failure('touch timeout')
             raise
 
-    # DONE
     def piv_reset(self):
         with self._open_device() as conn:
             session = PivSession(conn)
             session.reset()
             return success()
 
-    # DONE
     def _piv_list_certificates(self, session):
         return {
             SLOT(slot).name: _piv_serialise_cert(slot, cert) for slot, cert in list_certificates(session).items()  # noqa: E501
         }
 
-    # DONE
     def piv_delete_certificate(self, slot_name, pin=None, mgm_key_hex=None):
         logger.debug('piv_delete_certificate %s', slot_name)
 
@@ -452,7 +434,6 @@ class Controller(object):
                 session.put_object(OBJECT_ID.CHUID, generate_chuid())
                 return success()
 
-    # DONE
     def piv_generate_certificate(
             self, slot_name, algorithm, common_name, expiration_date,
             self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None):
@@ -519,16 +500,28 @@ class Controller(object):
 
             return success()
 
-    # DONE
     def piv_change_pin(self, old_pin, new_pin):
         with self._open_device() as conn:
             session = PivSession(conn)
+            try:
+                session.change_pin(old_pin, new_pin)
+                logger.debug('PIN change successful!')
+                return success()
+            except InvalidPinError as e:
+                logger.debug('Invalid PIN', exc_info=e)
+                return failure('wrong_pin', {'tries_left': session.get_pin_attempts()})
+            except ApduError as e:
+                if e.sw == SW.INCORRECT_PARAMETERS:
+                    return failure('incorrect_parameters')
 
-            session.change_pin(old_pin, new_pin)
-            logger.debug('PIN change successful!')
-            return success()
+                tries_left = session.get_pin_attempts()
+                logger.debug('PIN change failed. %s tries left.',
+                             tries_left, exc_info=e)
+                return {
+                    'success': False,
+                    'tries_left': tries_left,
+                }
 
-    # DONE
     def piv_change_puk(self, old_puk, new_puk):
         with self._open_device() as conn:
             session = PivSession(conn)
@@ -569,7 +562,6 @@ class Controller(object):
                 new_key, touch=False, store_on_device=store_on_device)
             return success()
 
-    # DONE
     def piv_unblock_pin(self, puk, new_pin):
         with self._open_device() as conn:
             session = PivSession(conn)
@@ -593,7 +585,7 @@ class Controller(object):
                 pass
         raise ValueError('Failed to parse certificate or key')
 
-    # DONE (/TODO)
+    # TODO test more
     def piv_import_file(self, slot, file_url, password=None,
                         pin=None, mgm_key=None):
         is_cert = False
@@ -641,7 +633,6 @@ class Controller(object):
             'imported_key': is_private_key
         })
 
-    # DONE
     def piv_export_certificate(self, slot, file_url):
         file_path = self._get_file_path(file_url)
         with self._open_device() as conn:
@@ -657,9 +648,7 @@ class Controller(object):
         file_path = urllib.parse.urlparse(file_url).path
         return file_path[1:] if os.name == 'nt' else file_path
 
-    # DONE
     def _piv_verify_pin(self, session, pin=None):
-
         if pin:
             try:
                 session.verify_pin(pin)
@@ -670,7 +659,6 @@ class Controller(object):
         else:
             return failure('pin_required')
 
-    # DONE
     def _piv_ensure_authenticated(self, session, pin=None,
                                   mgm_key_hex=None):
         pivman = get_pivman_data(session)
