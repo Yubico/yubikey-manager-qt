@@ -297,6 +297,7 @@ class Controller(object):
                     YubiOtpSlotConfiguration(public_id, private_id, key)
                 )
             except CommandError as e:
+                logger.debug("Failed to program YubiOTP", exc_info=e)
                 return failure("write error")
 
         logger.debug('YubiOTP successfully programmed.')
@@ -315,6 +316,7 @@ class Controller(object):
                     HmacSha1SlotConfiguration(key).require_touch(touch),
                 )
             except CommandError as e:
+                logger.debug("Failed to program Challenge-response", exc_info=e)
                 return failure("write error")
         return success()
 
@@ -325,6 +327,7 @@ class Controller(object):
             try:
                 session.put_configuration(slot, StaticPasswordSlotConfiguration(scan_codes))
             except CommandError as e:
+                logger.debug("Failed to program static password", exc_info=e)
                 return failure("write error")
             return success()
 
@@ -341,6 +344,7 @@ class Controller(object):
                     .digits8(int(digits) == 8),
                 )
             except CommandError as e:
+                logger.debug("Failed to program OATH-HOTP", exc_info=e)
                 return failure("write error")
             return success()
 
@@ -429,10 +433,15 @@ class Controller(object):
                     session, pin=pin, mgm_key_hex=mgm_key_hex)
                 if auth_failed:
                     return auth_failed
+                try:
+                    session.delete_certificate(SLOT[slot_name])
+                    session.put_object(OBJECT_ID.CHUID, generate_chuid())
+                    return success()
+                except ApduError as e:
+                    if e.sw == SW.SECURITY_CONDITION_NOT_SATISFIED:
+                        logger.debug("Wrong management key", exc_info=e)
+                        return failure('wrong_mgm_key')
 
-                session.delete_certificate(SLOT[slot_name])
-                session.put_object(OBJECT_ID.CHUID, generate_chuid())
-                return success()
 
     def piv_generate_certificate(
             self, slot_name, algorithm, common_name, expiration_date,
@@ -470,8 +479,13 @@ class Controller(object):
                     return failure(
                         'invalid_iso8601_date',
                         {'date': expiration_date})
-            public_key = session.generate_key(
-                SLOT[slot_name], KEY_TYPE[algorithm])
+            try:
+                public_key = session.generate_key(
+                    SLOT[slot_name], KEY_TYPE[algorithm])
+            except ApduError as e:
+                if e.sw == SW.SECURITY_CONDITION_NOT_SATISFIED:
+                    logger.debug("Wrong management key", exc_info=e)
+                    return failure('wrong_mgm_key')
 
             pin_failed = self._piv_verify_pin(session, pin)
             if pin_failed:
@@ -508,13 +522,18 @@ class Controller(object):
                 logger.debug('PIN change successful!')
                 return success()
             except InvalidPinError as e:
-                logger.debug('Invalid PIN', exc_info=e)
-                return failure('wrong_pin', {'tries_left': session.get_pin_attempts()})
+                attempts = e.attempts_remaining
+                if attempts:
+                    logger.debug("Failed to change PIN, %d tries left", attempts, exc_info=e)
+                    return failure('wrong_pin', {'tries_left': attempts})
+                else:
+                    logger.debug("PIN is blocked.", exc_info=e)
+                    return failure('pin_blocked')
             except ApduError as e:
                 if e.sw == SW.INCORRECT_PARAMETERS:
                     return failure('incorrect_parameters')
 
-                tries_left = session.get_pin_attempts()
+                tries_left = e.attempts_remaining
                 logger.debug('PIN change failed. %s tries left.',
                              tries_left, exc_info=e)
                 return {
@@ -524,9 +543,18 @@ class Controller(object):
 
     def piv_change_puk(self, old_puk, new_puk):
         with self._open_device() as conn:
-            session = PivSession(conn)
-            session.change_puk(old_puk, new_puk)
-            return success()
+            try:
+                session = PivSession(conn)
+                session.change_puk(old_puk, new_puk)
+                return success()
+            except InvalidPinError as e:
+                attempts = e.attempts_remaining
+                if attempts:
+                    logger.debug("Failed to change PUK, %d tries left", attempts, exc_info=e)
+                    return failure('wrong_puk', {'tries_left': attempts})
+                else:
+                    logger.debug("PUK is blocked.", exc_info=e)
+                    return failure('puk_blocked')
 
     def piv_generate_random_mgm_key(self):
         return b2a_hex(ykman.piv.generate_random_management_key()).decode(
@@ -564,10 +592,18 @@ class Controller(object):
 
     def piv_unblock_pin(self, puk, new_pin):
         with self._open_device() as conn:
-            session = PivSession(conn)
-
-            session.unblock_pin(puk, new_pin)
-            return success()
+            try:
+                session = PivSession(conn)
+                session.unblock_pin(puk, new_pin)
+                return success()
+            except InvalidPinError as e:
+                attempts = e.attempts_remaining
+                if attempts:
+                    logger.debug("Failed to unblock PIN, %d tries left", attempts, exc_info=e)
+                    return failure('wrong_puk', {'tries_left': attempts})
+                else:
+                    logger.debug("PUK is blocked.", exc_info=e)
+                    return failure('puk_blocked')
 
     def piv_can_parse(self, file_url):
         file_path = self._get_file_path(file_url)
@@ -652,9 +688,14 @@ class Controller(object):
         if pin:
             try:
                 session.verify_pin(pin)
-
-            except:
-                pass
+            except InvalidPinError as e:
+                attempts = e.attempts_remaining
+                if attempts:
+                    logger.debug("Failed to verify PIN, %d tries left", attempts, exc_info=e)
+                    return failure('wrong_pin', {'tries_left': attempts})
+                else:
+                    logger.debug("PIN is blocked.", exc_info=e)
+                    return failure('pin_blocked')
 
         else:
             return failure('pin_required')
@@ -679,7 +720,7 @@ class Controller(object):
                         mgm_key_bytes
                     )
 
-                except:
+                except Exception as e: # TODO
                     pass
 
             else:
