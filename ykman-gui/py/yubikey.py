@@ -25,7 +25,8 @@ from threading import Timer
 from ykman import connect_to_device, scan_devices, get_name, get_connection_types
 from ykman.piv import (
     get_pivman_data, list_certificates, generate_self_signed_certificate,
-    generate_csr, OBJECT_ID, generate_chuid)
+    generate_csr, OBJECT_ID, generate_chuid, pivman_set_mgm_key,
+    derive_management_key, get_pivman_protected_data)
 from ykman.otp import PrepareUploadFailed, prepare_upload_key, generate_static_pw
 from ykman.scancodes import KEYBOARD_LAYOUT, encode
 from ykman.util import (
@@ -39,7 +40,7 @@ from yubikit.management import (
     APPLICATION, TRANSPORT)
 from yubikit.piv import (
     PivSession, SLOT, KEY_TYPE, check_key_support, NotSupportedError,
-    PIN_POLICY, TOUCH_POLICY, InvalidPinError)
+    PIN_POLICY, TOUCH_POLICY, InvalidPinError, MANAGEMENT_KEY_TYPE)
 from yubikit.yubiotp import (
     YubiOtpSession, YubiOtpSlotConfiguration,
     StaticPasswordSlotConfiguration, HotpSlotConfiguration, HmacSha1SlotConfiguration)
@@ -47,6 +48,8 @@ from yubikit.yubiotp import (
 from fido2.ctap2 import Ctap2, ClientPin
 
 logger = logging.getLogger(__name__)
+log = logging.getLogger("ykman.hid")
+log.setLevel(logging.WARNING)
 
 
 def as_json(f):
@@ -562,16 +565,18 @@ class Controller(object):
 
     def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
                            store_on_device=False):
-        with self._open_piv() as piv_controller:
+        with self._open_device() as conn:
+            session = PivSession(conn)
+            pivman = get_pivman_data(session)
 
-            if piv_controller.has_protected_key or store_on_device:
+            if pivman.has_protected_key or store_on_device:
                 pin_failed = self._piv_verify_pin(
-                    piv_controller, pin=pin)
+                    session, pin=pin)
                 if pin_failed:
                     return pin_failed
-
-            auth_failed = self._piv_ensure_authenticated(
-                piv_controller, pin=pin, mgm_key_hex=current_key_hex)
+            with PromptTimeout():
+                auth_failed = self._piv_ensure_authenticated(
+                    session, pin=pin, mgm_key_hex=current_key_hex)
             if auth_failed:
                 return auth_failed
 
@@ -586,8 +591,9 @@ class Controller(object):
                              len(new_key))
                 return failure('new_mgm_key_bad_length')
 
-            piv_controller.set_mgm_key(
-                new_key, touch=False, store_on_device=store_on_device)
+            pivman_set_mgm_key(
+                        session, new_key, touch=False, store_on_device=store_on_device
+                    )
             return success()
 
     def piv_unblock_pin(self, puk, new_pin):
@@ -688,6 +694,18 @@ class Controller(object):
         if pin:
             try:
                 session.verify_pin(pin)
+                pivman = pivman = get_pivman_data(session)
+                if pivman.has_derived_key:
+                    with PromptTimeout():
+                        session.authenticate(
+                            MANAGEMENT_KEY_TYPE.TDES, derive_management_key(pin, pivman.salt)
+                        )
+                    session.verify_pin(pin)
+                elif pivman.has_stored_key:
+                    pivman_prot = get_pivman_protected_data(session)
+                    with PromptTimeout():
+                        session.authenticate(MANAGEMENT_KEY_TYPE.TDES, pivman_prot.key)
+                    session.verify_pin(pin)
             except InvalidPinError as e:
                 attempts = e.attempts_remaining
                 if attempts:
@@ -717,7 +735,7 @@ class Controller(object):
 
                 try:
                     session.authenticate(
-                        mgm_key_bytes
+                        MANAGEMENT_KEY_TYPE.TDES, mgm_key_bytes
                     )
 
                 except Exception as e: # TODO
