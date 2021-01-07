@@ -95,6 +95,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("appDir", app_dir);
+    // TODO: Fix pymodulesDir so it works on non-mac as well.
+    engine.rootContext()->setContextProperty("pymodulesDir", app_dir + "/../Resources/pymodules");
     engine.rootContext()->setContextProperty("urlPrefix", url_prefix);
     engine.rootContext()->setContextProperty("appVersion", APP_VERSION);
 

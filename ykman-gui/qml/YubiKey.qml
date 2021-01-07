@@ -71,7 +71,7 @@ Python {
 
     Component.onCompleted: {
         importModule('site', function () {
-            call('site.addsitedir', [appDir + '/pymodules'], function () {
+            call('site.addsitedir', [pymodulesDir], function () {
                 addImportPath(urlPrefix + '/py')
 
                 importModule('yubikey', function () {
