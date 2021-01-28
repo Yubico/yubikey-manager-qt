@@ -8,9 +8,6 @@ env:
   PYTHON_VER_SHORT_COMPACT: '38'
   PYOTHERSIDE_VER: '1.5.9'
   OPENSSL_VER: '1.1.1g'
-  LIBYUBIKEY_VER: '1.13'
-  LIBYKPERS_VER: '1.20.0'
-  LIBUSB_VER: '1.0.23'
 
 jobs:
   build:
@@ -22,13 +19,14 @@ jobs:
 
       - name: Install dependencies from homebrew
         run: |
+          pip install --upgrade pip
           brew update
           brew install swig qt zlib curl coreutils
           brew link qt -f
 
       - name: Setup GPG
         run: |
-          gpg --keyserver hkps://keys.openpgp.org --recv-keys 0A3B0262BCA1705307D5FF06BCA00FD4B2168C0A 2D347EA6AA65421D e3ff2839c048b25c084debe9b26995e310250568
+          gpg --keyserver hkps://keys.openpgp.org --recv-keys 2D347EA6AA65421D e3ff2839c048b25c084debe9b26995e310250568
           gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C 8657ABB260F056B1E5190839D9C4D26D0E604491
 
       - name: Build OpenSSL
@@ -61,9 +59,11 @@ jobs:
 
       - name: Install python dependencies from source
         run: |
+          sudo /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 install --upgrade pip
           sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 install cryptography --no-binary :all: --ignore-installed --force-reinstall --no-cache
           /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 download pyscard --no-binary :all:
           tar -xvf pyscard*
+          rm pyscard-2.0.0.tar.gz
           cd pyscard*
           patch setup.py ../.github/workflows/macos-pyscard-patch.patch
           cd ..
@@ -84,35 +84,6 @@ jobs:
           make
           sudo make install
 
-      - name: Build libyubikey
-        run: |
-          wget https://developers.yubico.com/yubico-c/Releases/libyubikey-${LIBYUBIKEY_VER}.tar.gz
-          wget https://developers.yubico.com/yubico-c/Releases/libyubikey-${LIBYUBIKEY_VER}.tar.gz.sig
-          gpg --verify libyubikey-${LIBYUBIKEY_VER}.tar.gz.sig
-          tar -xzvf libyubikey-${LIBYUBIKEY_VER}.tar.gz
-          cd libyubikey-${LIBYUBIKEY_VER}
-          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 ./configure --with-backend=osx --prefix=/opt/libyubikey
-          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 make install
-
-      - name: Build libykpers
-        run: |
-          wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-${LIBYKPERS_VER}.tar.gz
-          wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-${LIBYKPERS_VER}.tar.gz.sig
-          gpg --verify ykpers-${LIBYKPERS_VER}.tar.gz.sig
-          tar -xzvf ykpers-${LIBYKPERS_VER}.tar.gz
-          cd ykpers-${LIBYKPERS_VER}
-          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 ./configure --disable-dependency-tracking --disable-silent-rules --with-backend=osx --with-libyubikey-prefix=/opt/libyubikey --prefix=/opt/ykpers
-          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 make install
-
-      - name: Build libusb
-        run: |
-          wget https://github.com/libusb/libusb/releases/download/v${LIBUSB_VER}/libusb-${LIBUSB_VER}.tar.bz2
-          echo "db11c06e958a82dac52cf3c65cb4dd2c3f339c8a988665110e0d24d19312ad8d libusb-${LIBUSB_VER}.tar.bz2" | sha256sum -c -
-          tar -xzvf libusb-${LIBUSB_VER}.tar.bz2
-          cd libusb-${LIBUSB_VER}
-          ./configure --disable-dependency-tracking --prefix=/opt/libusb
-          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 make install
-
       - name: Build yubikey-manager-qt
         run: |
           qmake
@@ -126,10 +97,7 @@ jobs:
 
       - name: Copy over dynamic libraries
         run: |
-          sudo find /opt/libyubikey/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-          sudo find /opt/ykpers/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
           sudo find /opt/openssl/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
-          sudo find /opt/libusb/ -name '*.dylib' -exec cp '{}' ykman-gui/ykman-gui.app/Contents/Frameworks/ ';'
 
       - name: Copy over Python.framework to app bundle
         run: |
@@ -150,12 +118,6 @@ jobs:
           sudo install_name_tool -change /opt/openssl/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libssl.1.1.dylib
           sudo install_name_tool -change /opt/openssl/lib/libcrypto.1.1.dylib @executable_path/../Frameworks/libcrypto.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/lib/python${PYTHON_VER_SHORT}/site-packages/cryptography/hazmat/bindings/_openssl.abi3.so
           sudo install_name_tool -change /opt/openssl/lib/libssl.1.1.dylib @executable_path/../Frameworks/libssl.1.1.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/lib/python${PYTHON_VER_SHORT}/site-packages/cryptography/hazmat/bindings/_openssl.abi3.so
-
-      - name: Point ykpers dependencies to relative dylibs
-        run: |
-          sudo install_name_tool -change /opt/libyubikey/lib/libyubikey.0.dylib @executable_path/../Frameworks/libyubikey.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.1.dylib
-          sudo install_name_tool -change /opt/libyubikey/lib/libyubikey.0.dylib @executable_path/../Frameworks/libyubikey.0.dylib ykman-gui/ykman-gui.app/Contents/Frameworks/libykpers-1.dylib
-
 
       - name: Point to relative Qt for CLI binary (macdeployqt doesn't fix this)
         run: |
