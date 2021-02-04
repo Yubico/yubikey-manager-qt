@@ -129,6 +129,14 @@ class Controller(object):
                 self._dev_info = None
                 return failure('no_device')
 
+            interfaces = USB_INTERFACE(0)
+            usb_supported = info.supported_capabilities.get(TRANSPORT.USB)
+            if CAPABILITY.OTP & usb_supported:
+                interfaces |= USB_INTERFACE.OTP
+            if (CAPABILITY.U2F | CAPABILITY.FIDO2) & usb_supported:
+                interfaces |= USB_INTERFACE.FIDO
+            if (CAPABILITY.OPENPGP | CAPABILITY.PIV | CAPABILITY.OATH) & usb_supported:
+                interfaces |= USB_INTERFACE.CCID
 
             self._dev_info = {
                 'name': get_name(info, device.pid.get_type()),
@@ -142,7 +150,7 @@ class Controller(object):
                     if a in info.supported_capabilities.get(TRANSPORT.USB)],
                 'usb_interfaces_supported': [
                     t.name for t in USB_INTERFACE
-                    if t in device.pid.get_interfaces()],
+                    if t in interfaces],
                 'nfc_enabled': [
                     a.name for a in CAPABILITY
                     if a in info.config.enabled_capabilities.get(TRANSPORT.NFC, [])],
@@ -215,10 +223,22 @@ class Controller(object):
             })
 
     def set_mode(self, interfaces):
-        with self._open_device() as dev:
-            transports = sum([TRANSPORT[i] for i in interfaces])
-            dev.mode = Mode(transports & TRANSPORT.usb_transports())
-        return success()
+        interfaces_enabled = 0x00
+        for usb_interface in interfaces:
+            interfaces_enabled |= USB_INTERFACE [usb_interface]
+
+        with self._open_device() as conn:
+            try:
+                session = ManagementSession(conn)
+                session.set_mode(
+                    Mode(interfaces_enabled))
+
+            except ValueError as e:
+                if str(e) == 'Configuration locked!':
+                    return failure('interface_config_locked')
+                raise
+
+            return success()
 
     def get_username(self):
         username = getpass.getuser()
@@ -552,8 +572,15 @@ class Controller(object):
                     return failure('puk_blocked')
 
     def piv_generate_random_mgm_key(self):
-        return b2a_hex(ykman.piv.generate_random_management_key()).decode(
-            'utf-8')
+        with self._open_device([SmartCardConnection]) as conn:
+            session = PivSession(conn)
+            try:
+                key_type = session.get_management_key_metadata().key_type
+            except NotSupportedError:
+                key_type = MANAGEMENT_KEY_TYPE.TDES
+            key = b2a_hex(ykman.piv.generate_random_management_key(key_type)).decode(
+                'utf-8')
+            return [key_type.key_len, key]
 
     def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
                            store_on_device=False):
@@ -584,7 +611,7 @@ class Controller(object):
                 return failure('new_mgm_key_bad_length')
 
             pivman_set_mgm_key(
-                        session, new_key, touch=False, store_on_device=store_on_device
+                        session, new_key, MANAGEMENT_KEY_TYPE.TDES, touch=False, store_on_device=store_on_device
                     )
             return success()
 
@@ -725,10 +752,16 @@ class Controller(object):
                 except Exception:
                     return failure('mgm_key_bad_format')
 
-                with PromptTimeout():
-                    session.authenticate(
-                        MANAGEMENT_KEY_TYPE.TDES, mgm_key_bytes
-                    )
+                try:
+                    with PromptTimeout():
+                        session.authenticate(
+                            MANAGEMENT_KEY_TYPE.TDES, mgm_key_bytes
+                        )
+                except ApduError as e:
+                    if (e.sw == SW.SECURITY_CONDITION_NOT_SATISFIED):
+                        return failure('wrong_mgm_key')
+                    raise
+
 
             else:
                 return failure('mgm_key_required')

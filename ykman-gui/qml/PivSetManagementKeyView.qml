@@ -13,12 +13,14 @@ ColumnLayout {
     readonly property bool hasProtectedKey: yubiKey.piv.has_protected_key
                                             || false
     readonly property bool storeManagementKey: storeManagementKeyCheckbox.checked
-    readonly property bool validCurrentManagementKey: (!hasCurrentManagementKeyInput
+
+    property int keyLength: 0
+    property bool validCurrentManagementKey: (!hasCurrentManagementKeyInput
                                                        || currentManagementKey.text.length
-                                                       === constants.pivManagementKeyHexLength)
-    readonly property bool validNewManagementKey: (!hasNewManagementKeyInput
+                                                       === keyLength*2)
+    property bool validNewManagementKey: (!hasNewManagementKeyInput
                                                    || newManagementKey.text.length
-                                                   === constants.pivManagementKeyHexLength)
+                                                   === keyLength*2)
 
     function clearDefaultManagementKey() {
         if (useDefaultCurrentManagementKeyCheckbox.checked) {
@@ -29,7 +31,8 @@ ColumnLayout {
 
     function generateManagementKey() {
         yubiKey.pivGenerateRandomMgmKey(function (key) {
-            newManagementKey.text = key
+            keyLength = key[0]
+            newManagementKey.text = key[1]
         })
     }
 
@@ -124,6 +127,7 @@ ColumnLayout {
                     id: newManagementKey
                     Layout.fillWidth: true
                     background.width: width
+                    maximumLength: keyLength*2
                 }
                 CustomButton {
                     id: randomManagementKeyBtn
