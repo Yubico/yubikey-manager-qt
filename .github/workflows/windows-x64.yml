@@ -19,8 +19,9 @@ jobs:
           architecture: 'x64'
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2.10.0
+        uses: jurplel/install-qt-action@v2
         with:
+          version: '5.15.2'
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2017_64'
