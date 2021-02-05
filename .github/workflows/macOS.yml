@@ -21,7 +21,7 @@ jobs:
         run: |
           pip install --upgrade pip
           brew update
-          brew install swig qt zlib curl coreutils
+          brew install swig qt@5.15.1 zlib curl coreutils
           brew link qt -f
 
       - name: Setup GPG
