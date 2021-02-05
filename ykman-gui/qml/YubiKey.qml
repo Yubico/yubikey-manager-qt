@@ -70,15 +70,8 @@ Python {
     }
 
     Component.onCompleted: {
-        var path = appDir
-        if (Qt.platform.os === "osx") {
-            path = path + '/../Resources/pymodules'
-        } else {
-            path = path + '/pymodules'
-        }
-
         importModule('site', function () {
-            call('site.addsitedir', [path], function () {
+            call('site.addsitedir', [appDir + '/pymodules'], function () {
                 addImportPath(urlPrefix + '/py')
 
                 importModule('yubikey', function () {

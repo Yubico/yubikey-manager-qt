@@ -53,7 +53,7 @@ RC_ICONS = ../resources/icons/ykman.ico
 macx {
     ICON = ../resources/icons/ykman.icns
     QMAKE_INFO_PLIST = ../resources/mac/Info.plist.in
-    QMAKE_POST_LINK += cp -rnf pymodules/lib/python3*/site-packages/ ykman-gui.app/Contents/Resources/pymodules/
+    QMAKE_POST_LINK += cp -rnf pymodules/lib/python3*/site-packages/ ykman-gui.app/Contents/MacOS/pymodules/
 }
 
 # For generating a XML file with all strings.
