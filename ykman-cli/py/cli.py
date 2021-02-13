@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from ykman.cli.__main__ import main
 
 
 def run(argv):
     sys.argv = argv
+    from ykman.cli.__main__ import main
 
     try:
         return main()
