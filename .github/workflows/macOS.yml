@@ -3,11 +3,11 @@ name: macOS
 on: [push, pull_request]
 
 env:
-  PYTHON_VER: '3.8.3'
+  PYTHON_VER: '3.8.7'
   PYTHON_VER_SHORT: '3.8'
   PYTHON_VER_SHORT_COMPACT: '38'
   PYOTHERSIDE_VER: '1.5.9'
-  OPENSSL_VER: '1.1.1g'
+  OPENSSL_VER: '1.1.1i'
 
 jobs:
   build:
@@ -52,8 +52,8 @@ jobs:
           # Make sure gettext is not installed when configuring Python,
           # otherwise it seems to break the linking for PyOtherSide build later.
           # Re-intall after, because it's needed for wget.
-          brew uninstall gettext --ignore-dependencies
-          ./configure MACOSX_DEPLOYMENT_TARGET=10.13 CPPFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" CC=clang --enable-framework --with-openssl=/opt/openssl --enable-optimizations
+          brew uninstall gettext libffi --ignore-dependencies
+          ./configure MACOSX_DEPLOYMENT_TARGET=10.13 CPPFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" CC=clang --enable-framework --with-openssl=/opt/openssl --enable-optimizations --with-system-ffi
           sudo make altinstall
           brew reinstall gettext
 
@@ -64,9 +64,6 @@ jobs:
           /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 download pyscard --no-binary :all:
           tar -xvf pyscard*
           rm pyscard-2.0.0.tar.gz
-          cd pyscard*
-          patch setup.py ../.github/workflows/macos-pyscard-patch.patch
-          cd ..
           sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 install ./pyscard* --no-binary :all: --ignore-installed --force-reinstall --no-cache
           sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 install -r requirements.txt --no-binary :all:
 
