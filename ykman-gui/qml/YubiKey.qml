@@ -209,6 +209,14 @@ Python {
         return name === 'YubiKey 5Ci'
     }
 
+    function isYubiKeyBioA() {
+        return name === 'YubiKey Bio (FIDO Edition)'
+    }
+
+    function isYubiKeyBioC() {
+        return name === 'YubiKey Bio C (FIDO Edition)'
+    }
+
     function isYubiKey5Family() {
         return name.startsWith('YubiKey 5')
     }
