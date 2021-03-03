@@ -459,11 +459,11 @@ class Controller(object):
                         return failure('wrong_mgm_key')
 
     def piv_generate_certificate(
-            self, slot_name, algorithm, common_name, expiration_date,
+            self, slot_name, algorithm, subject, expiration_date,
             self_sign=True, csr_file_url=None, pin=None, mgm_key_hex=None):
         logger.debug('slot_name=%s algorithm=%s common_name=%s '
                      'expiration_date=%s self_sign=%s csr_file_url=%s',
-                     slot_name, algorithm, common_name, expiration_date,
+                     slot_name, algorithm, subject, expiration_date,
                      self_sign, csr_file_url)
         if csr_file_url:
             file_path = self._get_file_path(csr_file_url)
@@ -506,17 +506,21 @@ class Controller(object):
             if pin_failed:
                 return pin_failed
 
+            if "=" not in subject:
+                # Old style, common name only.
+                subject = "CN=" + subject
+
             try:
                 if self_sign:
                     cert = generate_self_signed_certificate(session,
-                        SLOT[slot_name], public_key, common_name, now,
+                        SLOT[slot_name], public_key, subject, now,
                         valid_to)
                     session.put_certificate(SLOT[slot_name], cert)
                     session.put_object(OBJECT_ID.CHUID, generate_chuid())
 
                 else:
                     csr = generate_csr(session,
-                        SLOT[slot_name], public_key, common_name)
+                        SLOT[slot_name], public_key, subject)
 
                     with open(file_path, 'w+b') as csr_file:
                         csr_file.write(csr.public_bytes(
