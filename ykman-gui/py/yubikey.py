@@ -387,6 +387,8 @@ class Controller(object):
         try:
             with self._open_device([FidoConnection]) as conn:
                 ctap2 = Ctap2(conn)
+                if len(new_pin) < ctap2.info.min_pin_length:
+                    return failure('too short')
                 client_pin = ClientPin(ctap2)
                 client_pin.set_pin(new_pin)
                 return success()
@@ -400,6 +402,8 @@ class Controller(object):
         try:
             with self._open_device([FidoConnection]) as conn:
                 ctap2 = Ctap2(conn)
+                if len(new_pin) < ctap2.info.min_pin_length:
+                    return failure('too short')
                 client_pin = ClientPin(ctap2)
                 client_pin.change_pin(current_pin, new_pin)
                 return success()
