@@ -3,9 +3,9 @@ name: macOS
 on: [push, pull_request]
 
 env:
-  PYTHON_VER: '3.8.3'
-  PYTHON_VER_SHORT: '3.8'
-  PYTHON_VER_SHORT_COMPACT: '38'
+  PYTHON_VER: '3.9.1'
+  PYTHON_VER_SHORT: '3.9'
+  PYTHON_VER_SHORT_COMPACT: '39'
   PYOTHERSIDE_VER: '1.5.9'
   OPENSSL_VER: '1.1.1g'
 
@@ -59,19 +59,19 @@ jobs:
 
       - name: Install python dependencies from source
         run: |
-          sudo /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 install --upgrade pip
-          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 install cryptography --no-binary :all: --ignore-installed --force-reinstall --no-cache
-          /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 download pyscard --no-binary :all:
+          sudo /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/bin/pip${PYTHON_VER_SHORT} install --upgrade pip
+          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/bin/pip${PYTHON_VER_SHORT} install cryptography --no-binary :all: --ignore-installed --force-reinstall --no-cache
+          /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/bin/pip${PYTHON_VER_SHORT} download pyscard --no-binary :all:
           tar -xvf pyscard*
           rm pyscard-2.0.0.tar.gz
           cd pyscard*
           patch setup.py ../.github/workflows/macos-pyscard-patch.patch
           cd ..
-          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 install ./pyscard* --no-binary :all: --ignore-installed --force-reinstall --no-cache
-          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/3.8/bin/pip3.8 install -r requirements.txt --no-binary :all:
+          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/bin/pip${PYTHON_VER_SHORT} install ./pyscard* --no-binary :all: --ignore-installed --force-reinstall --no-cache
+          sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/bin/pip${PYTHON_VER_SHORT} install -r requirements.txt --no-binary :all:
 
       - name: Change id for bundled Python
-        run: sudo sed -i '' 's/org.python.python/com.yubico.python/g' /Library/Frameworks/Python.framework/Versions/3.8/Resources/Python.app/Contents/Info.plist
+        run: sudo sed -i '' 's/org.python.python/com.yubico.python/g' /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/Resources/Python.app/Contents/Info.plist
 
       - name: Build PyOtherSide QML plugin
         run: |
