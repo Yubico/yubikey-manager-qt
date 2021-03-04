@@ -3,9 +3,9 @@ name: macOS
 on: [push, pull_request]
 
 env:
-  PYTHON_VER: '3.9.1'
-  PYTHON_VER_SHORT: '3.9'
-  PYTHON_VER_SHORT_COMPACT: '39'
+  PYTHON_VER: '3.8.3'
+  PYTHON_VER_SHORT: '3.8'
+  PYTHON_VER_SHORT_COMPACT: '38'
   PYOTHERSIDE_VER: '1.5.9'
   OPENSSL_VER: '1.1.1g'
 
