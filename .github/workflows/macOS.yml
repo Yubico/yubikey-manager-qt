@@ -17,12 +17,18 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: '5.15.1'
+          host: 'mac'
+          target: 'desktop'
+
       - name: Install dependencies from homebrew
         run: |
           pip install --upgrade pip
           brew update
-          brew install swig qt zlib curl coreutils
-          brew link qt -f
+          brew install swig zlib curl coreutils
 
       - name: Setup GPG
         run: |
