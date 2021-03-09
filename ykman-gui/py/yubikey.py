@@ -210,6 +210,13 @@ class Controller(object):
             session = PivSession(conn)
             pivman = get_pivman_data(session)
 
+            if self._dev_info['version'].split('.') >= ['5', '3', '0']:
+                key_type = session.get_management_key_metadata().key_type
+                key_length = session.get_management_key_metadata().key_type.key_len
+            else:
+                key_type = MANAGEMENT_KEY_TYPE.TDES
+                key_length = 24
+
             return success({
                 'piv_data': {
                     'certs': self._piv_list_certificates(session),
@@ -219,6 +226,8 @@ class Controller(object):
                     'pin_tries': session.get_pin_attempts(),
                     'puk_blocked': pivman.puk_blocked,
                     'supported_algorithms': _supported_algorithms(self._dev_info['version'].split('.')),
+                    'key_length': key_length,
+                    'key_type': key_type,
                 },
             })
 
@@ -579,21 +588,16 @@ class Controller(object):
                     logger.debug("PUK is blocked.", exc_info=e)
                     return failure('puk_blocked')
 
-    def piv_generate_random_mgm_key(self):
-        with self._open_device([SmartCardConnection]) as conn:
-            session = PivSession(conn)
-            try:
-                key_type = session.get_management_key_metadata().key_type
-            except NotSupportedError:
-                key_type = MANAGEMENT_KEY_TYPE.TDES
-            key = b2a_hex(ykman.piv.generate_random_management_key(key_type)).decode(
-                'utf-8')
-            return [key_type.key_len, key]
+    def piv_generate_random_mgm_key(self, key_type):
+        key = b2a_hex(ykman.piv.generate_random_management_key(MANAGEMENT_KEY_TYPE(key_type))).decode(
+            'utf-8')
+        return key
 
-    def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex,
+    def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex, keyType,
                            store_on_device=False):
         with self._open_device([SmartCardConnection]) as conn:
             session = PivSession(conn)
+
             pivman = get_pivman_data(session)
 
             if pivman.has_protected_key or store_on_device:
@@ -602,24 +606,26 @@ class Controller(object):
                 if pin_failed:
                     return pin_failed
             with PromptTimeout():
+
                 auth_failed = self._piv_ensure_authenticated(
                     session, pin=pin, mgm_key_hex=current_key_hex)
             if auth_failed:
                 return auth_failed
 
             try:
+
                 new_key = a2b_hex(new_key_hex) if new_key_hex else None
             except Exception as e:
                 logger.debug('Failed to parse new management key', exc_info=e)
                 return failure('new_mgm_key_bad_hex')
 
-            if new_key is not None and len(new_key) != 24:
+            if new_key is not None and len(new_key) != MANAGEMENT_KEY_TYPE(keyType).key_len:
                 logger.debug('Wrong length for new management key: %d',
                              len(new_key))
                 return failure('new_mgm_key_bad_length')
 
             pivman_set_mgm_key(
-                        session, new_key, MANAGEMENT_KEY_TYPE.TDES, touch=False, store_on_device=store_on_device
+                        session, new_key, MANAGEMENT_KEY_TYPE(keyType), touch=False, store_on_device=store_on_device
                     )
             return success()
 
@@ -722,16 +728,22 @@ class Controller(object):
             try:
                 pivman = get_pivman_data(session)
                 session.verify_pin(pin)
+
+                if self._dev_info['version'].split('.') >= ['5', '3', '0']:
+                    key_type = session.get_management_key_metadata().key_type
+                else:
+                    key_type = MANAGEMENT_KEY_TYPE.TDES
+
                 if pivman.has_derived_key:
                     with PromptTimeout():
                         session.authenticate(
-                            MANAGEMENT_KEY_TYPE.TDES, derive_management_key(pin, pivman.salt)
+                            key_type, derive_management_key(pin, pivman.salt)
                         )
                     session.verify_pin(pin)
                 elif pivman.has_stored_key:
                     pivman_prot = get_pivman_protected_data(session)
                     with PromptTimeout():
-                        session.authenticate(MANAGEMENT_KEY_TYPE.TDES, pivman_prot.key)
+                        session.authenticate(key_type, pivman_prot.key)
                     session.verify_pin(pin)
             except InvalidPinError as e:
                 attempts = e.attempts_remaining
@@ -748,12 +760,16 @@ class Controller(object):
     def _piv_ensure_authenticated(self, session, pin=None,
                                   mgm_key_hex=None):
         pivman = get_pivman_data(session)
+
+        if self._dev_info['version'].split('.') >= ['5', '3', '0']:
+            key_type = session.get_management_key_metadata().key_type
+        else:
+            key_type = MANAGEMENT_KEY_TYPE.TDES
+
         if pivman.has_protected_key:
             return self._piv_verify_pin(session, pin)
         else:
             if mgm_key_hex:
-                if len(mgm_key_hex) != 48:
-                    return failure('mgm_key_bad_format')
 
                 try:
                     mgm_key_bytes = a2b_hex(mgm_key_hex)
@@ -763,7 +779,7 @@ class Controller(object):
                 try:
                     with PromptTimeout():
                         session.authenticate(
-                            MANAGEMENT_KEY_TYPE.TDES, mgm_key_bytes
+                            key_type, mgm_key_bytes
                         )
                 except ApduError as e:
                     if (e.sw == SW.SECURITY_CONDITION_NOT_SATISFIED):
