@@ -30,10 +30,10 @@ function getYubiKeyImageName(yubiKey) {
     if(image === undefined) {
         if(yubiKey.supportsNfcConfiguration()) {
             image = _images_for_form_factor_nfc[yubiKey.formFactor]
-	}
+        }
         if(image === undefined) {
             image = _images_for_form_factor[yubiKey.formFactor]
-	}
+        }
     }
     return image || 'yk5series';
 }
