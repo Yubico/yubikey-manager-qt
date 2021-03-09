@@ -2,6 +2,7 @@
 var _images_for_name = {
     'YubiKey 4': 'yk4series',
     'YubiKey Edge': 'ykedge',
+    'YubiKey Plus': 'ykplus',
     'YubiKey 5A': 'yk4',
     'FIDO U2F Security Key': 'sky1',
     'Security Key by Yubico': 'sky2',
