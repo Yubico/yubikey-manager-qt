@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
     spacing: 0
+    width: app.width
     function activeKeyLbl() {
         if (!yubiKey.hasDevice || views.isShowingHomeView) {
             return ""
