@@ -149,85 +149,8 @@ Python {
         return doCall(func, args, _refreshPivBefore(cb))
     }
 
-    function isNEO() {
-        return name === 'YubiKey NEO'
-    }
-
-    function isYubiKeyEdge() {
-        return name === 'YubiKey Edge'
-    }
-
-    function isYubiKey4() {
-        return name === 'YubiKey 4'
-    }
-
-    function isSecurityKeyNfc() {
-        return name === 'Security Key NFC'
-    }
-
-    function isSecurityKeyByYubico() {
-        return name === 'Security Key by Yubico'
-    }
-
-    function isFidoU2fSecurityKey() {
-        return name === 'FIDO U2F Security Key'
-    }
-
-    function isYubiKeyStandard() {
-        return name === 'YubiKey Standard'
-    }
-
-    function isYubiKeyPreview() {
-        return name === 'YubiKey Preview'
-    }
-
-    function isYubiKey5NFC() {
-        return name === 'YubiKey 5 NFC'
-    }
-
-    function isYubiKey5Nano() {
-        return name === 'YubiKey 5 Nano'
-    }
-
-    function isYubiKey5C() {
-        return name === 'YubiKey 5C'
-    }
-
-    function isYubiKey5CNano() {
-        return name === 'YubiKey 5C Nano'
-    }
-
-    function isYubiKey5CNFC() {
-        return name === 'YubiKey 5C NFC'
-    }
-
-    function isYubiKey5A() {
-        return name === 'YubiKey 5A'
-    }
-
-    function isYubiKey5Ci() {
-        return name === 'YubiKey 5Ci'
-    }
-
-    function isYubiKeyBioA() {
-        return name === 'YubiKey Bio (FIDO Edition)'
-    }
-
-    function isYubiKeyBioC() {
-        return name === 'YubiKey Bio C (FIDO Edition)'
-    }
-
-    function isYubiKey5Family() {
-        return name.startsWith('YubiKey 5')
-    }
-
-    function hasLightningConnector() {
-        return formFactor == 5
-    }
-
     function supportsNewInterfaces() {
-        return isYubiKeyPreview() || isYubiKey5Family()
-                || isSecurityKeyByYubico() || isSecurityKeyNfc()
+        return version.startsWith('5');
     }
 
     function supportsNfcConfiguration() {
