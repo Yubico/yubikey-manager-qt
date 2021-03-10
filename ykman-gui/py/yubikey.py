@@ -139,7 +139,7 @@ class Controller(object):
                 interfaces |= USB_INTERFACE.CCID
 
             self._dev_info = {
-                'name': get_name(info, device.pid.get_type()),
+                'name': get_name(info, device.pid.get_type()).replace("YubiKey BIO", "YubiKey Bio"),
                 'version': '.'.join(str(x) for x in info.version) if info.version else "",
                 'serial': info.serial or '',
                 'usb_enabled': [
