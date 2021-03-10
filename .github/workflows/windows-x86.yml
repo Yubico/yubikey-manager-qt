@@ -91,6 +91,7 @@ jobs:
 
       - name: Copy over files and create .zip archive
         run: |
+          patch .\ykman-gui\pymodules\ykman\device.py .github/workflows/ykman-patch.patch
           Copy-Item .\ykman-gui\pymodules .\ykman-gui\release -recurse
           Get-ChildItem -File -Include *.pyc -Recurse | Remove-Item -Force
           Get-ChildItem -Include __pycache__ -Recurse | Remove-Item -Force
