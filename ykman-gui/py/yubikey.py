@@ -210,12 +210,10 @@ class Controller(object):
             session = PivSession(conn)
             pivman = get_pivman_data(session)
 
-            if self._dev_info['version'].split('.') >= ['5', '3', '0']:
+            try:
                 key_type = session.get_management_key_metadata().key_type
-                key_length = session.get_management_key_metadata().key_type.key_len
-            else:
+            except NotSupportedError:
                 key_type = MANAGEMENT_KEY_TYPE.TDES
-                key_length = 24
 
             return success({
                 'piv_data': {
@@ -226,7 +224,6 @@ class Controller(object):
                     'pin_tries': session.get_pin_attempts(),
                     'puk_blocked': pivman.puk_blocked,
                     'supported_algorithms': _supported_algorithms(self._dev_info['version'].split('.')),
-                    'key_length': key_length,
                     'key_type': key_type,
                 },
             })
@@ -593,7 +590,7 @@ class Controller(object):
             'utf-8')
         return key
 
-    def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex, keyType,
+    def piv_change_mgm_key(self, pin, current_key_hex, new_key_hex, key_type,
                            store_on_device=False):
         with self._open_device([SmartCardConnection]) as conn:
             session = PivSession(conn)
@@ -619,13 +616,13 @@ class Controller(object):
                 logger.debug('Failed to parse new management key', exc_info=e)
                 return failure('new_mgm_key_bad_hex')
 
-            if new_key is not None and len(new_key) != MANAGEMENT_KEY_TYPE(keyType).key_len:
+            if new_key is not None and len(new_key) != MANAGEMENT_KEY_TYPE(key_type).key_len:
                 logger.debug('Wrong length for new management key: %d',
                              len(new_key))
                 return failure('new_mgm_key_bad_length')
 
             pivman_set_mgm_key(
-                        session, new_key, MANAGEMENT_KEY_TYPE(keyType), touch=False, store_on_device=store_on_device
+                        session, new_key, MANAGEMENT_KEY_TYPE(key_type), touch=False, store_on_device=store_on_device
                     )
             return success()
 
@@ -729,9 +726,9 @@ class Controller(object):
                 pivman = get_pivman_data(session)
                 session.verify_pin(pin)
 
-                if self._dev_info['version'].split('.') >= ['5', '3', '0']:
+                try:
                     key_type = session.get_management_key_metadata().key_type
-                else:
+                except NotSupportedError:
                     key_type = MANAGEMENT_KEY_TYPE.TDES
 
                 if pivman.has_derived_key:
@@ -761,9 +758,9 @@ class Controller(object):
                                   mgm_key_hex=None):
         pivman = get_pivman_data(session)
 
-        if self._dev_info['version'].split('.') >= ['5', '3', '0']:
+        try:
             key_type = session.get_management_key_metadata().key_type
-        else:
+        except NotSupportedError:
             key_type = MANAGEMENT_KEY_TYPE.TDES
 
         if pivman.has_protected_key:
