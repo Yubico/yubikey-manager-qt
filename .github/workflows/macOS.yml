@@ -126,6 +126,11 @@ jobs:
           sudo install_name_tool -change /usr/local/opt/qt/lib/QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork ykman-gui/ykman-gui.app/Contents/MacOS/ykman
           sudo install_name_tool -change /usr/local/opt/qt/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore ykman-gui/ykman-gui.app/Contents/MacOS/ykman
 
+      - name: Remove extra files
+        run: |
+          rm -rf ykman-gui/ykman-gui.app/Contents/Frameworks/Python.framework/Versions/2.7
+          rm -rf ykman-gui/ykman-gui.app/Contents/Resources/pymodules
+
       - name: Rename and archive app bundle
         run: |
           export REF=$(echo ${GITHUB_REF} | cut -d '/' -f 3)
