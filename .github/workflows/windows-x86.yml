@@ -91,6 +91,7 @@ jobs:
 
       - name: Copy over files and create .zip archive
         run: |
+          ls
           $py_ver = python -V
           $py_ver -match "python (?<content>.*)"
           $version = $matches['content']
