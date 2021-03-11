@@ -91,6 +91,10 @@ jobs:
 
       - name: Copy over files and create .zip archive
         run: |
+          $py_ver = python -V
+          $py_ver -match "python (?<content>.*)"
+          $version = $matches['content']
+
           patch .\ykman-gui\pymodules\ykman\device.py .github/workflows/ykman-patch.patch
           Copy-Item .\ykman-gui\pymodules .\ykman-gui\release -recurse
           Get-ChildItem -File -Include *.pyc -Recurse | Remove-Item -Force
@@ -100,7 +104,7 @@ jobs:
           Copy-Item .\ykman-cli\release\ykman.exe .\ykman-gui\release
 
           cd .\ykman-gui\release
-          7z x ..\..\python-$env:PYTHON_VER-embed-win32.zip
+          7z x ..\..\python-$version-embed-win32.zip
 
       - name: Create .zip artifact
         shell: powershell
