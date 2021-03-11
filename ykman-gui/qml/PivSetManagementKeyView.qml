@@ -14,10 +14,15 @@ ColumnLayout {
                                             || false
     readonly property bool storeManagementKey: storeManagementKeyCheckbox.checked
 
-    property int keyLength: 0
+    property var map: {"TDES":3, "AES128":8, "AES192":10, "AES256":12}
+    property var mapLength: {3:24, 8:16, 10:24, 12:32}
+
+    property int keyLength: mapLength[keyType]
+    property int keyType: yubiKey.piv.key_type
+    property int origKeyLength: mapLength[yubiKey.piv.key_type]
     property bool validCurrentManagementKey: (!hasCurrentManagementKeyInput
                                                        || currentManagementKey.text.length
-                                                       === keyLength*2)
+                                                       === origKeyLength*2)
     property bool validNewManagementKey: (!hasNewManagementKeyInput
                                                    || newManagementKey.text.length
                                                    === keyLength*2)
@@ -30,9 +35,8 @@ ColumnLayout {
     }
 
     function generateManagementKey() {
-        yubiKey.pivGenerateRandomMgmKey(function (key) {
-            keyLength = key[0]
-            newManagementKey.text = key[1]
+        yubiKey.pivGenerateRandomMgmKey(keyType, function (key) {
+            newManagementKey.text = key
         })
     }
 
@@ -61,7 +65,7 @@ ColumnLayout {
                     snackbarSuccess.show(qsTr("Changed the Management Key"))
                 } else {
                     snackbarError.showResponseError(resp, {
-                                                        mgm_key_bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters").arg(constants.pivManagementKeyHexLength),
+                                                        mgm_key_bad_format: qsTr("Current management key must be exactly %1 hexadecimal characters").arg(origKeyLength*2),
                                                         mgm_key_required: qsTr("Please enter the current management key"),
                                                         pin_required: qsTr("Please enter the PIN"),
                                                         wrong_mgm_key: qsTr("Wrong current management key")
@@ -77,7 +81,7 @@ ColumnLayout {
                         }
                     }
                 }
-            }, pin, currentManagementKey.text, newManagementKey.text,
+            }, pin, currentManagementKey.text, newManagementKey.text, keyType,
             storeManagementKey)
         }
     }
@@ -108,6 +112,8 @@ ColumnLayout {
                     background.width: width
                     visible: hasCurrentManagementKeyInput
                     enabled: !useDefaultCurrentManagementKeyCheckbox.checked
+                    toolTipText: qsTr("Management key must be exactly %1 hexadecimal digits.").arg(origKeyLength*2)
+                    maximumLength: origKeyLength*2
                 }
                 CheckBox {
                     id: useDefaultCurrentManagementKeyCheckbox
@@ -128,12 +134,36 @@ ColumnLayout {
                     Layout.fillWidth: true
                     background.width: width
                     maximumLength: keyLength*2
+                    toolTipText: qsTr("Management key must be exactly %1 hexadecimal digits.").arg(keyLength*2)
                 }
-                CustomButton {
-                    id: randomManagementKeyBtn
-                    text: qsTr("Generate")
+                RowLayout {
+                    Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    onClicked: generateManagementKey()
+                    Label {
+                        text: qsTr("Algorithm")
+                        color: yubicoBlue
+                        font.pixelSize: constants.h3
+                        visible: yubiKey.version.split('.')[0] >= 5 && yubiKey.version.split('.')[1] >= 3
+                    }
+
+                    ComboBox {
+                        id: algorithmInput
+                        model: ["TDES", "AES128", "AES192", "AES256"]
+                        currentIndex: [3, 8, 10, 12].findIndex(function (alg) {
+                            return alg === keyType
+                        })
+                        Material.foreground: yubicoBlue
+                        onCurrentTextChanged: keyType = map[currentText]
+                        Layout.minimumWidth: implicitWidth + constants.contentMargins / 2
+                        visible: yubiKey.version.split('.')[0] >= 5 && yubiKey.version.split('.')[1] >= 3
+                    }
+
+                    CustomButton {
+                        id: randomManagementKeyBtn
+                        text: qsTr("Generate")
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        onClicked: generateManagementKey()
+                    }
                 }
             }
 
@@ -148,6 +178,8 @@ ColumnLayout {
                 ToolTip.text: qsTr("Store the management key on the YubiKey, protected by PIN.")
             }
         }
+
+
 
         ButtonsBar {
             finishCallback: finish

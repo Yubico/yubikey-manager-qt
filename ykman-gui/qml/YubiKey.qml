@@ -377,13 +377,13 @@ Python {
                   })
     }
 
-    function pivGenerateRandomMgmKey(cb) {
-        doPivCall('yubikey.controller.piv_generate_random_mgm_key', [], cb)
+    function pivGenerateRandomMgmKey(keyType, cb) {
+        doPivCall('yubikey.controller.piv_generate_random_mgm_key', [keyType], cb)
     }
 
-    function pivChangeMgmKey(cb, pin, currentMgmKey, newKey, storeOnDevice) {
+    function pivChangeMgmKey(cb, pin, currentMgmKey, newKey, keyType, storeOnDevice) {
         doPivCall('yubikey.controller.piv_change_mgm_key',
-                  [pin, currentMgmKey, newKey, storeOnDevice], cb)
+                  [pin, currentMgmKey, newKey, keyType, storeOnDevice], cb)
     }
 
     function pivReset(cb) {
