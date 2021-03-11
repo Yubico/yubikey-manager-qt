@@ -51,6 +51,8 @@ from fido2.ctap2 import Ctap2, ClientPin
 logger = logging.getLogger(__name__)
 log = logging.getLogger("ykman.hid")
 log.setLevel(logging.WARNING)
+log = logging.getLogger("fido2.hid")
+log.setLevel(logging.WARNING)
 
 
 def as_json(f):
