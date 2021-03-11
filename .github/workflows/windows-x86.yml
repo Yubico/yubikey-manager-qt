@@ -37,7 +37,7 @@ jobs:
           wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-1.20.0-win32.zip -OutFile ykpers-1.20.0-win32.zip
           wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-1.20.0-win32.zip.sig -OutFile ykpers-1.20.0-win32.zip.sig
           wget https://github.com/libusb/libusb/releases/download/v1.0.22/libusb-1.0.22.7z -OutFile libusb-1.0.22.7z
-          wget https://www.python.org/ftp/python/$version/python-$version-embed-win32.zip -OutFile python-$env:PYTHON_VER-embed-win32.zip
+          wget https://www.python.org/ftp/python/$version/python-$version-embed-win32.zip -OutFile python-$version-embed-win32.zip
         shell: powershell
 
       - name: Install swig
