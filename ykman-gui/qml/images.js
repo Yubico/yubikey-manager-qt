@@ -16,7 +16,7 @@ var _images_for_form_factor = {
     2: 'yk5nano',
     3: 'yk5c',
     4: 'yk5cnano',
-    5: 'lightning',
+    5: 'yk5ci',
     6: 'ykbioa',
     7: 'ykbioc',
 };
