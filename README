@@ -27,13 +27,7 @@ Installers are available https://developers.yubico.com/yubikey-manager-qt/Releas
 In addition to the application itself, you may also need to manually install and start the `pcscd` service for CCID support.
 
 ===== AppImage
-An experimental AppImage is available https://developers.yubico.com/yubikey-manager-qt/Releases/[here].
-
-===== Ubuntu
-
-    $ sudo apt-add-repository ppa:yubico/stable
-    $ sudo apt update
-    $ sudo apt install yubikey-manager-qt
+AppImage is available https://developers.yubico.com/yubikey-manager-qt/Releases/[here].
 
 ==== Source
 To install from source, see the link:doc/development.adoc[development] instructions.
