@@ -33,7 +33,7 @@ from ykman.util import (
     parse_certificates, parse_private_key, get_leaf_certificates)
 
 from yubikit.core import CommandError
-from yubikit.core.otp import modhex_encode, modhex_decode, OtpConnection
+from yubikit.core.otp import modhex_encode, modhex_decode, OtpConnection, CommandRejectedError
 from yubikit.core.fido import FidoConnection
 from yubikit.core.smartcard import ApduError, SW, SmartCardConnection
 from yubikit.management import (
@@ -265,16 +265,22 @@ class Controller(object):
             return success({'status': ans})
 
     def erase_slot(self, slot):
-        with self._open_device([OtpConnection]) as conn:
-            session = YubiOtpSession(conn)
-            session.delete_slot(slot)
-        return success()
+        try:
+            with self._open_device([OtpConnection]) as conn:
+                session = YubiOtpSession(conn)
+                session.delete_slot(slot)
+            return success()
+        except CommandRejectedError:
+            return failure("write error")
 
     def swap_slots(self):
-        with self._open_device([OtpConnection]) as conn:
-            session = YubiOtpSession(conn)
-            session.swap_slots()
-        return success()
+        try:
+            with self._open_device([OtpConnection]) as conn:
+                session = YubiOtpSession(conn)
+                session.swap_slots()
+            return success()
+        except CommandRejectedError:
+            return failure("write error")
 
     def serial_modhex(self):
         with self._open_device([OtpConnection]) as conn:
