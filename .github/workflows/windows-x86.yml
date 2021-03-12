@@ -104,6 +104,7 @@ jobs:
 
           cd .\ykman-gui\release
           7z x ..\..\python-$version-embed-win32.zip
+        shell: powershell
 
       - name: Create .zip artifact
         shell: powershell
