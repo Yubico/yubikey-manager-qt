@@ -92,7 +92,7 @@ jobs:
           $py_ver -match "python (?<content>.*)"
           $version = $matches['content']
 
-          Remove-Item .\ykman-gui\pymodules\bin
+          Remove-Item .\ykman-gui\pymodules\bin -Force -Recurse
           patch .\ykman-gui\pymodules\ykman\device.py .github/workflows/ykman-patch.patch
           patch .\ykman-gui\pymodules\ykman\hid\windows.py .github/workflows/ykman-win32-patch.patch
           Copy-Item .\ykman-gui\pymodules .\ykman-gui\release -recurse
