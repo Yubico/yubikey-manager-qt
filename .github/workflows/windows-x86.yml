@@ -34,9 +34,6 @@ jobs:
           $version = $matches['content']
           wget https://download.qt.io/official_releases/jom/jom.zip -OutFile jom.zip
           wget https://github.com/thp/pyotherside/archive/$env:PYOTHERSIDE_VER.zip -OutFile pyotherside-$env:PYOTHERSIDE_VER.zip
-          wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-1.20.0-win32.zip -OutFile ykpers-1.20.0-win32.zip
-          wget https://developers.yubico.com/yubikey-personalization/Releases/ykpers-1.20.0-win32.zip.sig -OutFile ykpers-1.20.0-win32.zip.sig
-          wget https://github.com/libusb/libusb/releases/download/v1.0.22/libusb-1.0.22.7z -OutFile libusb-1.0.22.7z
           wget https://www.python.org/ftp/python/$version/python-$version-embed-win32.zip -OutFile python-$version-embed-win32.zip
         shell: powershell
 
@@ -95,6 +92,7 @@ jobs:
           $py_ver -match "python (?<content>.*)"
           $version = $matches['content']
 
+          Remove-Item .\ykman-gui\pymodules\bin
           patch .\ykman-gui\pymodules\ykman\device.py .github/workflows/ykman-patch.patch
           patch .\ykman-gui\pymodules\ykman\hid\windows.py .github/workflows/ykman-win32-patch.patch
           Copy-Item .\ykman-gui\pymodules .\ykman-gui\release -recurse
