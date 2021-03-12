@@ -70,8 +70,15 @@ Python {
     }
 
     Component.onCompleted: {
+        var path = appDir
+        if (Qt.platform.os === "osx") {
+            path = path + '/../Resources/pymodules'
+        } else {
+            path = path + '/pymodules'
+        }
+
         importModule('site', function () {
-            call('site.addsitedir', [appDir + '/pymodules'], function () {
+            call('site.addsitedir', [path], function () {
                 addImportPath(urlPrefix + '/py')
 
                 importModule('yubikey', function () {
@@ -142,77 +149,8 @@ Python {
         return doCall(func, args, _refreshPivBefore(cb))
     }
 
-    function isNEO() {
-        return name === 'YubiKey NEO'
-    }
-
-    function isYubiKeyEdge() {
-        return name === 'YubiKey Edge'
-    }
-
-    function isYubiKey4() {
-        return name === 'YubiKey 4'
-    }
-
-    function isSecurityKeyNfc() {
-        return name === 'Security Key NFC'
-    }
-
-    function isSecurityKeyByYubico() {
-        return name === 'Security Key by Yubico'
-    }
-
-    function isFidoU2fSecurityKey() {
-        return name === 'FIDO U2F Security Key'
-    }
-
-    function isYubiKeyStandard() {
-        return name === 'YubiKey Standard'
-    }
-
-    function isYubiKeyPreview() {
-        return name === 'YubiKey Preview'
-    }
-
-    function isYubiKey5NFC() {
-        return name === 'YubiKey 5 NFC'
-    }
-
-    function isYubiKey5Nano() {
-        return name === 'YubiKey 5 Nano'
-    }
-
-    function isYubiKey5C() {
-        return name === 'YubiKey 5C'
-    }
-
-    function isYubiKey5CNano() {
-        return name === 'YubiKey 5C Nano'
-    }
-
-    function isYubiKey5CNFC() {
-        return name === 'YubiKey 5C NFC'
-    }
-
-    function isYubiKey5A() {
-        return name === 'YubiKey 5A'
-    }
-
-    function isYubiKey5Ci() {
-        return name === 'YubiKey 5Ci'
-    }
-
-    function isYubiKey5Family() {
-        return name.startsWith('YubiKey 5')
-    }
-
-    function hasLightningConnector() {
-        return formFactor == 5
-    }
-
     function supportsNewInterfaces() {
-        return isYubiKeyPreview() || isYubiKey5Family()
-                || isSecurityKeyByYubico() || isSecurityKeyNfc()
+        return version.startsWith('5');
     }
 
     function supportsNfcConfiguration() {
@@ -439,13 +377,13 @@ Python {
                   })
     }
 
-    function pivGenerateRandomMgmKey(cb) {
-        doPivCall('yubikey.controller.piv_generate_random_mgm_key', [], cb)
+    function pivGenerateRandomMgmKey(keyType, cb) {
+        doPivCall('yubikey.controller.piv_generate_random_mgm_key', [keyType], cb)
     }
 
-    function pivChangeMgmKey(cb, pin, currentMgmKey, newKey, storeOnDevice) {
+    function pivChangeMgmKey(cb, pin, currentMgmKey, newKey, keyType, storeOnDevice) {
         doPivCall('yubikey.controller.piv_change_mgm_key',
-                  [pin, currentMgmKey, newKey, storeOnDevice], cb)
+                  [pin, currentMgmKey, newKey, keyType, storeOnDevice], cb)
     }
 
     function pivReset(cb) {

@@ -1,0 +1,29 @@
+diff --git a/ykman/otp.py b/ykman/otp.py
+index 949534c..94d6e31 100644
+--- a/ykman/otp.py
++++ b/ykman/otp.py
+@@ -35,6 +35,7 @@ from http.client import HTTPSConnection
+ from typing import Iterable
+
+ import re
++import ssl
+ import json
+ import struct
+ import random
+@@ -109,7 +110,15 @@ def prepare_upload_key(
+         "private_id": private_id.hex(),
+     }
+
+-    httpconn = HTTPSConnection(UPLOAD_HOST, timeout=1)  # nosec
++    try:
++        from pip._vendor import certifi
++
++        context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
++        context.load_verify_locations(certifi.where())
++    except Exception as e:
++        logger.error("Unable to load certifi CA bundle.", exc_info=e)
++        context = ssl.create_default_context()
++    httpconn = HTTPSConnection(UPLOAD_HOST, timeout=1, context=context)  # nosec
+
+     try:
+         httpconn.request(

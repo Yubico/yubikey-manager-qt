@@ -264,9 +264,9 @@ Do you want to continue?"), function () {
                     yubiKey.getUserName(function (resp) {
                         if (resp.success) {
                             if (!subjectCommonName) {
-                                subjectNameInput.text = resp.username
+                                subject.text = resp.username
                             } else {
-                                subjectNameInput.text = subjectCommonName
+                                subject.text = subjectCommonName
                             }
                         }
                     })
@@ -275,16 +275,16 @@ Do you want to continue?"), function () {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     Label {
-                        text: qsTr("Subject name")
+                        text: qsTr("Subject")
                         font.pixelSize: constants.h3
                         color: yubicoBlue
                     }
 
                     CustomTextField {
-                        id: subjectNameInput
+                        id: subject
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         Layout.fillWidth: true
-                        toolTipText: qsTr("The subject common name (CN) for the certificate")
+                        toolTipText: qsTr("The subject for the certificate")
                         onTextChanged: subjectCommonName = text
                     }
                 }

@@ -20,7 +20,7 @@ ColumnLayout {
             id: "U2F",
             name: qsTr("FIDO U2F")
         }, {
-            id: "OPGP",
+            id: "OPENPGP",
             name: qsTr("OpenPGP")
         }, {
             id: "PIV",
