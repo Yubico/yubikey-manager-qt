@@ -1,3 +1,10 @@
+* Version 1.2.0 (released 2021-03-16)
+ ** Compatibility update for ykman 4.0.
+  *** ykman >= 4.0 now required.
+  *** Drop dependencies on libusb and libykpers.
+ ** MacOS: Fix Yubico OTP upload to YubiCloud.
+ ** Add additional product images.
+
 * Version 1.1.5b (released 2020-11-19)
  ** macOS: Fix version in Info.plist
 
