@@ -14,12 +14,11 @@ It's assumed a Python environment with pip is installed.
 
 ==== Windows
 Install https://www.qt.io/download[Qt5]. Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#building-pyotherside[PyOtherSide].
-Make sure the http://www.swig.org/[swig] executable is in your PATH. Add http://libusb.info/[libusb] and https://developers.yubico.com/yubikey-personalization/[ykpers] DLLs to
-the root of the repository of ykman (after setting up the project).
+Make sure the http://www.swig.org/[swig] executable is in your PATH.
 
 ==== macOS
 
-    $ brew install python3 swig ykpers libusb qt
+    $ brew install python3 swig qt
     # Allow access to qmake - see https://superuser.com/a/1153338/104372
     $ brew link qt --force
 
@@ -51,7 +50,7 @@ Build and install the Qt5 plugin http://pyotherside.readthedocs.io/en/latest/#bu
 ==== Linux (Fedora 29)
 
     $ sudo dnf install make python \
-      libyubikey ykpers python3-yubikey-manager \
+      libyubikey python3-yubikey-manager \
       qt5-devel qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtquickcontrols2-devel \
       qt5-qtquickcontrols qt5-qtgraphicaleffects pyotherside
 
