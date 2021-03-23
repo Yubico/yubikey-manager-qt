@@ -11,6 +11,7 @@ import pyotherside
 import smartcard
 import struct
 import types
+import time
 import getpass
 import urllib.parse
 import ykman.logging_setup
@@ -118,18 +119,29 @@ class Controller(object):
     def refresh(self):
         devices, state = scan_devices()
         n_devs = sum(devices.values())
-        if n_devs != 1:
-            return failure('multiple_devices')
 
         if state != self._state:
             self._state = state
-            try:
-                connection, device, info = connect_to_device()
-                connection.close()
-            except:
-                self._state = None
-                self._dev_info = None
-                return failure('no_device')
+
+            self._dev_info = None
+            if n_devs == 0:
+                return success({})
+            if n_devs > 1:
+                return failure('multiple_devices')
+
+            attempts = 3
+            while True:
+                try:
+                    connection, device, info = connect_to_device()
+                    connection.close()
+                    break
+                except:
+                    attempts -= 1
+                    if attempts < 1:
+                        self._state = None
+                        return failure('no_device')
+                    logger.debug("Sleep...")
+                    time.sleep(0.5)
 
             interfaces = USB_INTERFACE(0)
             usb_supported = info.supported_capabilities.get(TRANSPORT.USB)
@@ -164,7 +176,6 @@ class Controller(object):
                 'configuration_locked': info.is_locked,
                 'form_factor': info.form_factor
             }
-
         return success({'dev': self._dev_info})
 
     def write_config(self, usb_applications, nfc_applications, lock_code):

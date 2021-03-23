@@ -29,6 +29,8 @@ SnackBar {
                         constants.pivManagementKeyHexLength)
         case 'no_device':
             return qsTr('No YubiKey present')
+        case 'multiple_devices':
+            return qsTr('Make sure only one YubiKey is inserted')
         case 'open_device_failed':
             return qsTr("Failed connecting to the YubiKey. Make sure the application has the required permissions.")
         case 'pcsc_establish_context_failed':
