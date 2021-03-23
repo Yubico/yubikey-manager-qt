@@ -3,7 +3,7 @@ name: macOS
 on: [push, pull_request]
 
 env:
-  PYTHON_VER: '3.9.1'
+  PYTHON_VER: '3.9.2'
   PYTHON_VER_SHORT: '3.9'
   PYTHON_VER_SHORT_COMPACT: '39'
   PYOTHERSIDE_VER: '1.5.9'
@@ -49,7 +49,6 @@ jobs:
  
       - name: Build Python as a framework
         run: |
-          rm '/usr/local/bin/2to3'
           wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz
           wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz.asc
           gpg --verify Python-${PYTHON_VER}.tgz.asc
@@ -59,8 +58,10 @@ jobs:
           # otherwise it seems to break the linking for PyOtherSide build later.
           # Re-intall after, because it's needed for wget.
           brew uninstall gettext --ignore-dependencies
+          brew unlink python@3.9
           ./configure MACOSX_DEPLOYMENT_TARGET=10.13 CPPFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" CC=clang --enable-framework --with-openssl=/opt/openssl --enable-optimizations
           sudo make altinstall
+          brew link --overwrite python@3.9
           brew reinstall gettext
 
       - name: Install python dependencies
@@ -68,7 +69,6 @@ jobs:
           sudo /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/bin/pip${PYTHON_VER_SHORT} install --upgrade pip
           sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/bin/pip${PYTHON_VER_SHORT} install -r requirements.txt
           sudo patch /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/lib/python${PYTHON_VER_SHORT}/site-packages/ykman/otp.py .github/workflows/macos-ykman-patch.patch
-          sudo patch /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/lib/python${PYTHON_VER_SHORT}/site-packages/ykman/device.py .github/workflows/ykman-patch.patch
 
 
       - name: Change id for bundled Python

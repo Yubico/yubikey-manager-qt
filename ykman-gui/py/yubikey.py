@@ -11,6 +11,7 @@ import pyotherside
 import smartcard
 import struct
 import types
+import time
 import getpass
 import urllib.parse
 import ykman.logging_setup
@@ -99,6 +100,7 @@ def unknown_failure(exception):
 class Controller(object):
     _dev_info = None
     _state = None
+    _n_devs = 0
 
     def __init__(self):
         # Wrap all return values as JSON.
@@ -108,28 +110,33 @@ class Controller(object):
                 if isinstance(func, types.MethodType):
                     setattr(self, f, as_json(catch_error(func)))
 
-    def count_devices(self):
-        devices, state = scan_devices()
-        return sum(devices.values())
-
     def _open_device(self, connection_types=[SmartCardConnection, FidoConnection, OtpConnection]):
         return connect_to_device(connection_types=connection_types)[0]
 
     def refresh(self):
         devices, state = scan_devices()
         n_devs = sum(devices.values())
-        if n_devs != 1:
-            return failure('multiple_devices')
 
         if state != self._state:
             self._state = state
-            try:
-                connection, device, info = connect_to_device()
-                connection.close()
-            except:
-                self._state = None
-                self._dev_info = None
-                return failure('no_device')
+            self._n_devs = n_devs
+            self._dev_info = None
+            if n_devs != 1:
+                return success({'n_devs': self._n_devs})
+
+            attempts = 3
+            while True:
+                try:
+                    connection, device, info = connect_to_device()
+                    connection.close()
+                    break
+                except:
+                    attempts -= 1
+                    if attempts < 1:
+                        self._state = None
+                        return failure('no_device')
+                    logger.debug("Sleep...")
+                    time.sleep(0.5)
 
             interfaces = USB_INTERFACE(0)
             usb_supported = info.supported_capabilities.get(TRANSPORT.USB)
@@ -164,8 +171,7 @@ class Controller(object):
                 'configuration_locked': info.is_locked,
                 'form_factor': info.form_factor
             }
-
-        return success({'dev': self._dev_info})
+        return success({'dev': self._dev_info, 'n_devs': self._n_devs})
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
         usb_enabled = 0x00
