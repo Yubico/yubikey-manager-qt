@@ -61,7 +61,7 @@ jobs:
           brew unlink python@3.9
           ./configure MACOSX_DEPLOYMENT_TARGET=10.13 CPPFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" CC=clang --enable-framework --with-openssl=/opt/openssl --enable-optimizations
           sudo make altinstall
-          brew link python@3.9
+          brew link --overwrite python@3.9
           brew reinstall gettext
 
       - name: Install python dependencies
