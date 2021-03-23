@@ -3,7 +3,7 @@ name: macOS
 on: [push, pull_request]
 
 env:
-  PYTHON_VER: '3.9.1'
+  PYTHON_VER: '3.9.2'
   PYTHON_VER_SHORT: '3.9'
   PYTHON_VER_SHORT_COMPACT: '39'
   PYOTHERSIDE_VER: '1.5.9'
@@ -49,8 +49,6 @@ jobs:
  
       - name: Build Python as a framework
         run: |
-          rm '/usr/local/bin/2to3'
-          rm '/usr/local/bin/2to3-3.9'
           wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz
           wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz.asc
           gpg --verify Python-${PYTHON_VER}.tgz.asc
