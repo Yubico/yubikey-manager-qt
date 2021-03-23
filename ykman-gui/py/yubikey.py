@@ -100,6 +100,7 @@ def unknown_failure(exception):
 class Controller(object):
     _dev_info = None
     _state = None
+    _n_devs = 0
 
     def __init__(self):
         # Wrap all return values as JSON.
@@ -108,10 +109,6 @@ class Controller(object):
                 func = getattr(self, f)
                 if isinstance(func, types.MethodType):
                     setattr(self, f, as_json(catch_error(func)))
-
-    def count_devices(self):
-        devices, state = scan_devices()
-        return sum(devices.values())
 
     def _open_device(self, connection_types=[SmartCardConnection, FidoConnection, OtpConnection]):
         return connect_to_device(connection_types=connection_types)[0]
@@ -122,12 +119,10 @@ class Controller(object):
 
         if state != self._state:
             self._state = state
-
+            self._n_devs = n_devs
             self._dev_info = None
-            if n_devs == 0:
-                return success({})
-            if n_devs > 1:
-                return failure('multiple_devices')
+            if n_devs != 1:
+                return success({'n_devs': self._n_devs})
 
             attempts = 3
             while True:
@@ -176,7 +171,7 @@ class Controller(object):
                 'configuration_locked': info.is_locked,
                 'form_factor': info.form_factor
             }
-        return success({'dev': self._dev_info})
+        return success({'dev': self._dev_info, 'n_devs': self._n_devs})
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
         usb_enabled = 0x00

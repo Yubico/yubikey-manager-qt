@@ -104,7 +104,6 @@ Python {
     onYubikeyReadyChanged: runQueue()
 
     function clearYubiKey() {
-        hasDevice = false
         name = ''
         version = ''
         serial = ''
@@ -201,11 +200,11 @@ Python {
     }
 
     function refresh(doneCallback) {
-        doCall('yubikey.controller.count_devices', [], function (n) {
-            nDevices = n
-            doCall('yubikey.controller.refresh', [], function (resp) {
-                if (resp.success && resp.dev) {
-                    hasDevice = true
+        doCall('yubikey.controller.refresh', [], function (resp) {
+            if (resp.success) {
+                nDevices = resp.n_devs
+                hasDevice = nDevices == 1
+                if (resp.dev) {
                     name = resp.dev.name
                     version = resp.dev.version
                     serial = resp.dev.serial
@@ -218,15 +217,17 @@ Python {
                     usbInterfacesEnabled = resp.dev.usb_interfaces_enabled
                     canWriteConfig = resp.dev.can_write_config
                     formFactor = resp.dev.form_factor
-                } else {
-                    clearYubiKey()
                 }
+            }
 
-                if (doneCallback) {
-                    doneCallback(resp)
-                }
+            if (!hasDevice) {
+                clearYubiKey()
+            }
 
-            })
+            if (doneCallback) {
+                doneCallback(resp)
+            }
+
         })
     }
 
