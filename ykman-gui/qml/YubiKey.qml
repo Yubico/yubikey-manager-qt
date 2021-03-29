@@ -104,7 +104,6 @@ Python {
     onYubikeyReadyChanged: runQueue()
 
     function clearYubiKey() {
-        hasDevice = false
         name = ''
         version = ''
         serial = ''
@@ -201,36 +200,32 @@ Python {
     }
 
     function refresh(doneCallback) {
-        doCall('yubikey.controller.count_devices', [], function (n) {
-            nDevices = n
-            if (nDevices == 1) {
-                doCall('yubikey.controller.refresh', [], function (resp) {
-                    if (resp.success && resp.dev) {
-                        hasDevice = true
-                        name = resp.dev.name
-                        version = resp.dev.version
-                        serial = resp.dev.serial
-                        configurationLocked = resp.dev.configuration_locked
-                        applicationsSupportedOverUsb = resp.dev.usb_supported
-                        applicationsEnabledOverUsb = resp.dev.usb_enabled
-                        applicationsSupportedOverNfc = resp.dev.nfc_supported
-                        applicationsEnabledOverNfc = resp.dev.nfc_enabled
-                        usbInterfacesSupported = resp.dev.usb_interfaces_supported
-                        usbInterfacesEnabled = resp.dev.usb_interfaces_enabled
-                        canWriteConfig = resp.dev.can_write_config
-                        formFactor = resp.dev.form_factor
-                    } else {
-                        clearYubiKey()
-                    }
+        doCall('yubikey.controller.refresh', [], function (resp) {
+            if (resp.success) {
+                nDevices = resp.n_devs
+                hasDevice = nDevices == 1
+                if (resp.dev) {
+                    name = resp.dev.name
+                    version = resp.dev.version
+                    serial = resp.dev.serial
+                    configurationLocked = resp.dev.configuration_locked
+                    applicationsSupportedOverUsb = resp.dev.usb_supported
+                    applicationsEnabledOverUsb = resp.dev.usb_enabled
+                    applicationsSupportedOverNfc = resp.dev.nfc_supported
+                    applicationsEnabledOverNfc = resp.dev.nfc_enabled
+                    usbInterfacesSupported = resp.dev.usb_interfaces_supported
+                    usbInterfacesEnabled = resp.dev.usb_interfaces_enabled
+                    canWriteConfig = resp.dev.can_write_config
+                    formFactor = resp.dev.form_factor
+                }
+            }
 
-                    if (doneCallback) {
-                        doneCallback(resp)
-                    }
-
-                })
-
-            } else if (hasDevice) {
+            if (!hasDevice) {
                 clearYubiKey()
+            }
+
+            if (doneCallback) {
+                doneCallback(resp)
             }
 
         })

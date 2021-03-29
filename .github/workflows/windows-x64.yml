@@ -88,7 +88,6 @@ jobs:
           $version = $matches['content']
 
           Remove-Item .\ykman-gui\pymodules\bin -Force -Recurse
-          patch .\ykman-gui\pymodules\ykman\device.py .github/workflows/ykman-patch.patch
           Copy-Item .\ykman-gui\pymodules .\ykman-gui\release -recurse
           Get-ChildItem -File -Include *.pyc -Recurse | Remove-Item -Force
           Get-ChildItem -Include __pycache__ -Recurse | Remove-Item -Force
