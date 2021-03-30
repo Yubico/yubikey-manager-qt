@@ -1,3 +1,8 @@
+* Version 1.2.1 (released 2021-03-30)
+ ** Compatibility update for ykman 4.0.1.
+ ** Add additional product names.
+ ** Bugfix: Device caching with multiple devices.
+
 * Version 1.2.0 (released 2021-03-16)
  ** Compatibility update for ykman 4.0.
   *** ykman >= 4.0 now required.
