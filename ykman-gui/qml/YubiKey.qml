@@ -65,7 +65,7 @@ Python {
             touchYubiKey.close()
             break
         default:
-            console.log('Recevied event:', data)
+            console.log('Received event:', data)
         }
     }
 
@@ -90,7 +90,11 @@ Python {
 
     onEnableLogging: {
         doCall('yubikey.init_with_logging',
-               [logLevel || 'DEBUG', logFile || null], function () {
+               [logLevel || 'DEBUG', logFile || null], function (error) {
+                   if(error) {
+                       console.log('Error setting up logging:', JSON.stringify(error))
+                       Qt.quit()
+                   }
                    yubikeyReady = true
                })
     }
