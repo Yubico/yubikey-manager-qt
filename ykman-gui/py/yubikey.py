@@ -863,7 +863,10 @@ def _close_touch_prompt():
 
 def init_with_logging(log_level, log_file=None):
     logging_setup = as_json(ykman.logging_setup.setup)
-    logging_setup(log_level, log_file)
+    try:
+        logging_setup(log_level.upper(), log_file)
+    except Exception as e:
+        return json.dumps(unknown_failure(e))
 
     init()
 
