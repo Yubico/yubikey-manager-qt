@@ -12,7 +12,7 @@ RUN apt-get install -y git make build-essential libssl-dev zlib1g-dev libbz2-dev
     qt514sensors qt514serialbus qt514serialport qt514x11extras qt514quickcontrols2 \
     qt514connectivity qt514scxml qt514wayland qt514remoteobjects qtbase5-dev \
     desktop-file-utils libglib2.0-bin qtchooser python3-pip python mesa-common-dev curl swig \
-    libpcsclite-dev libffi-dev libykpers-1-1
+    libpcsclite-dev libffi-dev
 ENV QT_BASE_DIR=/opt/qt514 \
     QT_DIR=/opt/qt514 \
     PYTHON_CFLAGS=-fPIC \
@@ -40,8 +40,6 @@ RUN mkdir -p yubikey-manager-qt/appDir/usr \
     && pip3 install --upgrade pip \
     && pip3 install -r requirements.txt \
     && cp -R /root/.pyenv/versions/3.8.3/* appDir/usr \
-    && apt-get download libykpers-1-1 \
-    && dpkg -x libykpers*.deb appDir/ \
     && qmake \
     && make \
     && cp resources/ykman-gui.desktop appDir/ \
