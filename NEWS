@@ -1,3 +1,8 @@
+* Version 1.2.2 (released 2021-04-13)
+ ** Update device names.
+ ** Linux: Use the embedded version of ykman in AppImage.
+ ** Bugfix: Fix detection of YubiKey Plus.
+
 * Version 1.2.1 (released 2021-03-30)
  ** Compatibility update for ykman 4.0.1.
  ** Add additional product names.
