@@ -737,13 +737,15 @@ class Controller(object):
     def _piv_verify_pin(self, session, pin=None):
         if pin:
             try:
-                pivman = get_pivman_data(session)
-                session.verify_pin(pin)
 
                 try:
                     key_type = session.get_management_key_metadata().key_type
                 except NotSupportedError:
                     key_type = MANAGEMENT_KEY_TYPE.TDES
+
+
+                pivman = get_pivman_data(session)
+                session.verify_pin(pin)
 
                 if pivman.has_derived_key:
                     with PromptTimeout():
