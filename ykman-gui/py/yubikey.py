@@ -134,7 +134,7 @@ class Controller(object):
                     attempts -= 1
                     if attempts < 1:
                         self._state = None
-                        return failure('no_device')
+                        return failure('open_device_failed')
                     logger.debug("Sleep...")
                     time.sleep(0.5)
 
@@ -262,13 +262,16 @@ class Controller(object):
         return success({'is_macos': sys.platform == 'darwin'})
 
     def slots_status(self):
-        with self._open_device([OtpConnection]) as conn:
-            session = YubiOtpSession(conn)
-            state = session.get_config_state()
-            slot1 = state.is_configured(1)
-            slot2 = state.is_configured(2)
-            ans = [slot1, slot2]
-            return success({'status': ans})
+        try:
+            with self._open_device([OtpConnection]) as conn:
+                session = YubiOtpSession(conn)
+                state = session.get_config_state()
+                slot1 = state.is_configured(1)
+                slot2 = state.is_configured(2)
+                ans = [slot1, slot2]
+                return success({'status': ans})
+        except OSError:
+            return failure('open_device_failed')
 
     def erase_slot(self, slot):
         try:
