@@ -1,3 +1,8 @@
+* Version 1.2.3 (released 2021-05-17)
+ ** Improved error handling when using SKY keys.
+ ** PIV: Fix generation of certificate in slot 9c.
+ ** MacOS: Use correct path when importing files.
+
 * Version 1.2.2 (released 2021-04-13)
  ** Update device names.
  ** Linux: Use the embedded version of ykman in AppImage.
