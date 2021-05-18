@@ -1,5 +1,5 @@
-* Version 1.2.3 (released 2021-05-17)
- ** Improved error handling when using SKY keys.
+* Version 1.2.3 (released 2021-05-18)
+ ** Improved error handling when using Security Key Series devices.
  ** PIV: Fix generation of certificate in slot 9c.
  ** MacOS: Use correct path when importing files.
 
