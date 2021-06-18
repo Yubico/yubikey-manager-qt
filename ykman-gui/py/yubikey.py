@@ -31,7 +31,7 @@ from ykman.piv import (
 from ykman.otp import PrepareUploadFailed, prepare_upload_key, generate_static_pw
 from ykman.scancodes import KEYBOARD_LAYOUT, encode
 from ykman.util import (
-    parse_certificates, parse_private_key, get_leaf_certificates)
+    parse_certificates, parse_private_key, get_leaf_certificates, InvalidPasswordError )
 
 from yubikit.core import CommandError
 from yubikit.core.otp import modhex_encode, modhex_decode, OtpConnection, CommandRejectedError
@@ -692,7 +692,7 @@ class Controller(object):
             try:
                 private_key = parse_private_key(data, password)
                 is_private_key = True
-            except (ValueError, TypeError):
+            except (ValueError, TypeError, InvalidPasswordError):
                 pass
 
             if not (is_cert or is_private_key):
