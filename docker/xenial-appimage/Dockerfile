@@ -32,14 +32,20 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
     && qmake \
     && make \
     && make install
-COPY . yubikey-manager-qt
+
+COPY requirements.txt yubikey-manager-qt/
 RUN mkdir -p yubikey-manager-qt/appDir/usr \
     && eval "$(pyenv init --path)" \
     && pyenv global 3.8.3 \
     && cd yubikey-manager-qt \
     && pip3 install --upgrade pip \
     && pip3 install -r requirements.txt \
-    && cp -R /root/.pyenv/versions/3.8.3/* appDir/usr \
+    && cp -R /root/.pyenv/versions/3.8.3/* appDir/usr
+
+COPY . yubikey-manager-qt
+RUN eval "$(pyenv init --path)" \
+    && pyenv global 3.8.3 \
+    && cd yubikey-manager-qt \
     && qmake \
     && make \
     && cp resources/ykman-gui.desktop appDir/ \
