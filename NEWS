@@ -1,3 +1,6 @@
+* Version 1.2.3b (released 2021-08-23)
+ ** Linux AppImage: Added option to run ykman CLI
+
 * Version 1.2.3 (released 2021-05-17)
  ** Improved error handling when using SKY keys.
  ** PIV: Fix generation of certificate in slot 9c.
