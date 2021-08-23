@@ -63,4 +63,5 @@ CMD cd yubikey-manager-qt \
     && rm appDir/AppRun \
     && cp ./resources/linux/AppRun appDir/ \
     && chmod a+x appDir/AppRun \
+    && find appDir -exec touch --no-create -m -t '197001010000.00' {} \; \
     && ./appimagetool*.AppImage appDir
