@@ -38,7 +38,7 @@ jobs:
         shell: powershell
 
       - name: Install swig
-        run: choco install swig --version=4.0.1
+        run: choco install swig
 
       - name: Install jom
         run: |
