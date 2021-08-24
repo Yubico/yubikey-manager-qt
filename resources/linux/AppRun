@@ -4,4 +4,10 @@ export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH}"
 export PATH="${HERE}/usr/bin:${PATH}"
 export PYTHONPATH="${HERE}/usr/lib/python3.8/site-packages"
 cd "${HERE}"
-exec "${HERE}/usr/bin/ykman-gui" "$@"
+
+if [[ "$1" == "ykman" ]]; then
+  shift
+  exec python "${HERE}/usr/bin/ykman" "$@"
+else
+  exec "${HERE}/usr/bin/ykman-gui" "$@"
+fi
