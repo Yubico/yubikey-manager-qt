@@ -1,2 +1,3 @@
 resources/icons/ykman.png usr/share/pixmaps
+resources/com.yubico.yubikey_manager.metainfo.xml usr/share/metainfo/
 resources/ykman-gui.desktop usr/share/applications
