@@ -1,3 +1,7 @@
+* Version 1.2.4 (released 2021-10-26)
+ ** Update device names and images.
+ ** PIV: Fix import of certificate.
+
 * Version 1.2.3b (released 2021-08-23)
  ** Linux AppImage: Added option to run ykman CLI
 
