@@ -18,7 +18,7 @@ Expected result
 [What did you expect to happen when you did the above?]
 
 
-Actual results and logs
+Actual results
 ---
 
 [What actually happened?]
