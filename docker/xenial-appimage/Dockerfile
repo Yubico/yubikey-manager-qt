@@ -1,7 +1,6 @@
 FROM ubuntu:xenial
 RUN apt-get update -qq \
     && apt-get install -qq software-properties-common \
-    && add-apt-repository -y ppa:yubico/stable \
     && add-apt-repository -y ppa:beineri/opt-qt-5.14.2-xenial \
     && apt-get -qq update \
     && apt-get -qq upgrade
