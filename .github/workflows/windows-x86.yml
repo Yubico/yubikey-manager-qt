@@ -5,6 +5,8 @@ on: [push, pull_request]
 env:
   PYTHON_VER_DIRNAME: 'python38'
   PYOTHERSIDE_VER: '1.5.9'
+  # Batch file that initializes the build environment:
+  INIT_BUILD_ENV: '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars32.bat"'
 
 jobs:
   build:
@@ -12,11 +14,27 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
         with:
           python-version: '3.8.x'
           architecture: 'x86'
+
+      - name: Export python version
+        run: |
+          $py_ver = python -V
+          $py_ver -match "python (?<content>.*)"
+          $python_version = $matches['content']
+          echo "PYTHON_VERSION=$python_version" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Download dependencies
+        shell: powershell
+        run: |
+          wget https://download.qt.io/official_releases/jom/jom.zip -OutFile .\jom.zip
+          wget https://github.com/thp/pyotherside/archive/$env:PYOTHERSIDE_VER.zip -OutFile .\pyotherside-$env:PYOTHERSIDE_VER.zip
+          wget https://www.python.org/ftp/python/$env:PYTHON_VERSION/python-$env:PYTHON_VERSION-embed-win32.zip -OutFile .\python-$env:PYTHON_VERSION-embed-win32.zip
+          7z x .\jom.zip
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.10.0
@@ -27,72 +45,40 @@ jobs:
           arch: 'win32_msvc2017'
           aqtversion: '==0.9.7'
 
-      - name: Download dependencies
-        run: |
-          $py_ver = python -V
-          $py_ver -match "python (?<content>.*)"
-          $version = $matches['content']
-          wget https://download.qt.io/official_releases/jom/jom.zip -OutFile jom.zip
-          wget https://github.com/thp/pyotherside/archive/$env:PYOTHERSIDE_VER.zip -OutFile pyotherside-$env:PYOTHERSIDE_VER.zip
-          wget https://www.python.org/ftp/python/$version/python-$version-embed-win32.zip -OutFile python-$version-embed-win32.zip
-        shell: powershell
-
-      - name: Install swig
-        run: choco install swig
-
-      - name: Install jom
-        run: |
-          7z x jom.zip
-
       - name: Prepare pyotherside
+        shell: pwsh
         run: |
-          $py_ver = python -V
-          $py_ver -match "python (?<content>.*)"
-          $version = $matches['content']
-
-          7z x pyotherside-$env:PYOTHERSIDE_VER.zip
+          7z x .\pyotherside-$env:PYOTHERSIDE_VER.zip
           cd pyotherside-$env:PYOTHERSIDE_VER
           (Get-Content .\src\qmldir).replace('pyothersideplugin', 'pyothersideplugin1') | Set-Content .\src\qmldir
-          Clear-Content python.pri
-          Add-Content python.pri "PYTHON_CONFIG = python3-config`nQMAKE_LIBS += -LC:\hostedtoolcache\windows\Python\$version\x86\libs -l$env:PYTHON_VER_DIRNAME`nQMAKE_CXXFLAGS += -IC:\hostedtoolcache\windows\Python\$version\x86\include`n"
-        shell: powershell
+          Clear-Content .\python.pri
+          Add-Content .\python.pri "PYTHON_CONFIG = python3-config`nQMAKE_LIBS += -LC:\hostedtoolcache\windows\Python\$env:PYTHON_VERSION\x86\libs -l$env:PYTHON_VER_DIRNAME`nQMAKE_CXXFLAGS += -IC:\hostedtoolcache\windows\Python\$env:PYTHON_VERSION\x86\include`n"
 
       - name: Build and install pyotherside
         shell: cmd
         run: |
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
-          call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
+          call %INIT_BUILD_ENV%
           cd pyotherside-%PYOTHERSIDE_VER%
           qmake
-          jom
-          jom install
+          ..\jom
+          ..\jom install
 
       - name: Build app
         shell: cmd
         run: |
-          $py_ver = python -V
-          $py_ver -match "python (?<content>.*)"
-          $version = $matches['content']
-
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
-          call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
+          call %INIT_BUILD_ENV%
           qmake
           jom
 
       - name: Run windeployqt
         shell: cmd
         run: |
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
-          call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
+          call %INIT_BUILD_ENV%
           windeployqt .\ykman-gui\release\ykman-gui.exe --qmldir=.\ykman-gui\qml --no-translations --angle --release
 
-      - name: Copy over files and create .zip archive
-        shell: powershell
+      - name: Copy over files to create .zip archive
+        shell: pwsh
         run: |
-          $py_ver = python -V
-          $py_ver -match "python (?<content>.*)"
-          $version = $matches['content']
-
           Remove-Item .\ykman-gui\pymodules\bin -Force -Recurse
           Copy-Item .\ykman-gui\pymodules .\ykman-gui\release -recurse
           Get-ChildItem -File -Include *.pyc -Recurse | Remove-Item -Force
@@ -102,22 +88,22 @@ jobs:
           Copy-Item .\ykman-cli\release\ykman.exe .\ykman-gui\release
 
           cd .\ykman-gui\release
-          7z x ..\..\python-$version-embed-win32.zip
+          7z x ..\..\python-$env:PYTHON_VERSION-embed-win32.zip
 
       - name: Create .zip artifact
-        shell: powershell
+        shell: pwsh
         run: |
           $arr = $env:GITHUB_REF -split '/'
           $branch = $arr[2]
-          7z a yubikey-manager-qt-$branch-win32.zip .\ykman-gui\release
+          7z a .\yubikey-manager-qt-$branch-win32.zip .\ykman-gui\release
           mkdir deploy
-          cp yubikey-manager-qt-$branch-win32.zip deploy
+          cp .\yubikey-manager-qt-$branch-win32.zip .\deploy
 
       - name: Run GUI
-        shell: bash
+        shell: pwsh
         run: |
-          ./ykman-gui/release/ykman-gui --version
-          ./ykman-gui/release/ykman-gui --help
+          .\ykman-gui\release\ykman-gui --version
+          .\ykman-gui\release\ykman-gui --help
 
       - name: Run CLI
         shell: bash
@@ -126,7 +112,7 @@ jobs:
           [[ -z "$(./ykman-gui/release/ykman --version | grep -E "not found|missing")" ]]
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: yubikey-manager-qt-win32
           path: deploy

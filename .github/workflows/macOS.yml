@@ -15,7 +15,7 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
@@ -158,7 +158,7 @@ jobs:
           [[ -z "$(./YubiKey\ Manager.app/Contents/MacOS/ykman --version | grep -E "not found|missing")" ]]
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: yubikey-manager-qt-macos-app-bundle
           path: deploy
