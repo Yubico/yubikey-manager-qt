@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
 
     // Don't write .pyc files.
     qputenv("PYTHONDONTWRITEBYTECODE", "1");
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
     QQuickStyle::setStyle("Material");
