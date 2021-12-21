@@ -24,6 +24,7 @@ AuthenticationPopup {
                 id: keyInput
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
+                maximumLength: constants.pivPinMaxLength
                 onAccepted: accept()
             }
         }
