@@ -3,7 +3,7 @@ name: windows 64bit
 on: [push, pull_request]
 
 env:
-  PYTHON_VER_DIRNAME: 'python38'
+  PYTHON_VER_DIRNAME: 'python310'
   PYOTHERSIDE_VER: '1.5.9'
 
 jobs:
