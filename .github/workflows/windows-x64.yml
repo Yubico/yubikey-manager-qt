@@ -51,7 +51,7 @@ jobs:
 
       - name: Build and install pyotherside
         run: |
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
+          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.15.2\msvc2019_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
           call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x64
           cd pyotherside-%PYOTHERSIDE_VER%
           qmake
