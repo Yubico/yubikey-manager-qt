@@ -10,8 +10,16 @@ InlinePopup {
     focus: true
     standardButtons: Dialog.Cancel | Dialog.Ok
 
-    onAccepted: acceptCallback(keyInput.text)
+    onAccepted: validate()
     onVisibleChanged: keyInput.clear()
+
+    function validate() {
+        if (validManagementKey) {
+            acceptCallback(keyInput.text)
+        } else {
+            snackbarError.show(qsTr("Management key must be exactly %1 hexadecimal digits.").arg(origKeyLength*2))
+        }
+    }
 
     function getInputAndThen(cb) {
         acceptCallback = cb

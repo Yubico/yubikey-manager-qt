@@ -4,6 +4,9 @@ import QtQuick.Layouts 1.2
 import QtQuick.Controls.Material 2.2
 
 AuthenticationPopup {
+    property var mapLength: {3:24, 8:16, 10:24, 12:32}
+    property int origKeyLength: mapLength[yubiKey.piv.key_type]
+    property bool validManagementKey: (keyInput.text.length === origKeyLength*2)
 
     function toggleUseDefaultCurrentManagementKey() {
         if (useDefaultChkBox.checked) {
@@ -48,6 +51,7 @@ AuthenticationPopup {
                 Material.foreground: yubicoBlue
             }
         }
+
         onVisibleChanged: if (visible) {
                             useDefaultChkBox.checked = false
                           }
