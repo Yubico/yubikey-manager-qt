@@ -1,0 +1,26 @@
+diff --git a/configure b/configure
+index 70f28b0c7064ee31754be9bb87c9199d266f599f..b2d1a64206cd44025816c33b4a64880137b816b2 100755
+--- a/configure
++++ b/configure
+@@ -5227,9 +5227,6 @@ $as_echo "$as_me:
+ fi
+ 
+ 
+-MULTIARCH=$($CC --print-multiarch 2>/dev/null)
+-
+-
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for the platform triplet based on compiler characteristics" >&5
+ $as_echo_n "checking for the platform triplet based on compiler characteristics... " >&6; }
+ cat >> conftest.c <<EOF
+@@ -5388,6 +5385,11 @@ $as_echo "none" >&6; }
+ fi
+ rm -f conftest.c conftest.out
+ 
++if test x$PLATFORM_TRIPLET != xdarwin; then
++  MULTIARCH=$($CC --print-multiarch 2>/dev/null)
++fi
++
++
+ if test x$PLATFORM_TRIPLET != x && test x$MULTIARCH != x; then
+   if test x$PLATFORM_TRIPLET != x$MULTIARCH; then
+     as_fn_error $? "internal configure error for the platform triplet, please file a bug report" "$LINENO" 5
