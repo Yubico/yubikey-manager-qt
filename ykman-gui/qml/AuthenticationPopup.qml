@@ -3,7 +3,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.2
 
 InlinePopup {
-
     property var acceptCallback
 
     closePolicy: Popup.CloseOnEscape
@@ -14,11 +13,7 @@ InlinePopup {
     onVisibleChanged: keyInput.clear()
 
     function validate() {
-        if (validManagementKey) {
-            acceptCallback(keyInput.text)
-        } else {
-            snackbarError.show(qsTr("Management key must be exactly %1 hexadecimal digits.").arg(origKeyLength*2))
-        }
+        acceptCallback(keyInput.text)
     }
 
     function getInputAndThen(cb) {

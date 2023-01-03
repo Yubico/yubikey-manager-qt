@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.2
 
 AuthenticationPopup {
 
+
     ColumnLayout {
         width: parent.width
         spacing: 10
