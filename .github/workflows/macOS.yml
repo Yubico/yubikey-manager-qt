@@ -61,8 +61,6 @@ jobs:
           # Re-intall after, because it's needed for wget.
           brew uninstall gettext --ignore-dependencies
           #brew unlink python@3.9
-          #sudo patch ./configure ../.github/workflows/python.patch
-          #sudo patch ./configure.ac ../.github/workflows/python2.patch
           ./configure MACOSX_DEPLOYMENT_TARGET=10.13 CPPFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" CC=clang --enable-framework --with-openssl=/opt/openssl --enable-optimizations
           sudo make altinstall
           #brew link --overwrite python@3.9

@@ -56,11 +56,6 @@ jobs:
           Add-Content python.pri "PYTHON_CONFIG = python3-config`nQMAKE_LIBS += -LC:\hostedtoolcache\windows\Python\$version\x64\libs -l$env:PYTHON_VER_DIRNAME`nQMAKE_CXXFLAGS += -IC:\hostedtoolcache\windows\Python\$version\x64\include`n"
         shell: powershell
 
-      - name: Test
-        run: |
-          cd ../Qt/5.14.1
-          ls
-
       - name: Build and install pyotherside
         run: |
           set PATH=D:\a\yubikey-manager-qt\Qt\5.14.1\msvc2017_64\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
