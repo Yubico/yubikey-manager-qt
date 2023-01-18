@@ -61,7 +61,7 @@ jobs:
         shell: cmd
         run: |
           set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
-          call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
+          call C:\"Program Files\Microsoft Visual Studio"\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
           cd pyotherside-%PYOTHERSIDE_VER%
           qmake
           jom
@@ -75,7 +75,7 @@ jobs:
           $version = $matches['content']
 
           set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
-          call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
+          call C:\"Program Files\Microsoft Visual Studio"\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
           qmake
           jom
 
@@ -83,7 +83,7 @@ jobs:
         shell: cmd
         run: |
           set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
-          call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
+          call C:\"Program Files\Microsoft Visual Studio"\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
           windeployqt .\ykman-gui\release\ykman-gui.exe --qmldir=.\ykman-gui\qml --no-translations --angle --release
 
       - name: Copy over files and create .zip archive

@@ -5,12 +5,32 @@ import QtQuick.Controls.Material 2.2
 
 AuthenticationPopup {
 
+    property int origKeyLength
+
     function toggleUseDefaultCurrentManagementKey() {
         if (useDefaultChkBox.checked) {
             keyInput.text = constants.pivDefaultManagementKey
         } else {
             keyInput.clear()
         }
+    }
+
+    function validate() {
+        if (validKey()) {
+            acceptCallback(keyInput.text)
+        } else {
+            snackbarError.show(qsTr("Management key must be exactly %1 hexadecimal digits.").arg(origKeyLength*2))
+        }
+    }
+
+
+    function validKey() {
+        const keyType = yubiKey.piv.key_type
+        var mapLength = {3:24, 8:16, 10:24, 12:32}
+        origKeyLength = mapLength[keyType]
+        return keyInput.text.length === origKeyLength*2
+
+
     }
 
     ColumnLayout {
@@ -48,6 +68,7 @@ AuthenticationPopup {
                 Material.foreground: yubicoBlue
             }
         }
+
         onVisibleChanged: if (visible) {
                             useDefaultChkBox.checked = false
                           }
