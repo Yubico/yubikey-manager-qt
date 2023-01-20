@@ -23,12 +23,10 @@ from cryptography import x509
 from cryptography.hazmat.primitives import serialization
 from threading import Timer
 
-from ykman import connect_to_device, scan_devices, get_name
 from ykman.piv import (
     get_pivman_data, list_certificates, generate_self_signed_certificate,
     generate_csr, OBJECT_ID, generate_chuid, pivman_set_mgm_key,
     derive_management_key, get_pivman_protected_data)
-from ykman.otp import PrepareUploadFailed, prepare_upload_key, generate_static_pw
 from ykman.scancodes import KEYBOARD_LAYOUT, encode
 from ykman.util import (
     parse_certificates, parse_private_key, get_leaf_certificates, InvalidPasswordError )
@@ -46,6 +44,18 @@ from yubikit.piv import (
 from yubikit.yubiotp import (
     YubiOtpSession, YubiOtpSlotConfiguration,
     StaticPasswordSlotConfiguration, HotpSlotConfiguration, HmacSha1SlotConfiguration)
+
+from ykman import __version__ as ykman_v
+
+if int(ykman_v.split(".")[0] ) > 4:
+    from yubikit.support import get_name
+    from ykman.device import list_all_devices, scan_devices
+    from ykman.otp import (
+    _PrepareUploadFailed as PrepareUploadFailed
+    , _prepare_upload_key as prepare_upload_key, generate_static_pw)
+else:
+    from ykman import connect_to_device, scan_devices, get_name
+    from ykman.otp import PrepareUploadFailed, prepare_upload_key, generate_static_pw
 
 from fido2.ctap2 import Ctap2, ClientPin
 
@@ -101,6 +111,7 @@ class Controller(object):
     _dev_info = None
     _state = None
     _n_devs = 0
+    _dev = None
 
     def __init__(self):
         # Wrap all return values as JSON.
@@ -110,68 +121,136 @@ class Controller(object):
                 if isinstance(func, types.MethodType):
                     setattr(self, f, as_json(catch_error(func)))
 
+
     def _open_device(self, connection_types=[SmartCardConnection, FidoConnection, OtpConnection]):
-        return connect_to_device(connection_types=connection_types)[0]
+        if int(ykman_v.split(".")[0] ) > 4:
+            for conn_type in connection_types:
+                try:
+                    return self._dev.open_connection(conn_type)
+                except Exception:
+                    logger.debug(f"Failed connecting to the YubiKey over {conn_type}", exc_info=True)
+        else:
+            return connect_to_device(connection_types=connection_types)[0]
 
     def refresh(self):
-        devices, state = scan_devices()
-        n_devs = sum(devices.values())
+        if int(ykman_v.split(".")[0] ) > 4:
+            pids, new_state = scan_devices()
+            n_devs = sum(pids.values())
 
-        if state != self._state:
-            self._state = state
-            self._n_devs = n_devs
-            self._dev_info = None
-            if n_devs != 1:
-                return success({'n_devs': self._n_devs})
+            if new_state != self._state:
+                self._state = new_state
+                self._n_devs = n_devs
+                self._dev_info = None
+                if n_devs != 1:
+                    return success({'n_devs': self._n_devs})
 
-            attempts = 3
-            while True:
-                try:
-                    connection, device, info = connect_to_device()
-                    connection.close()
-                    break
-                except:
-                    attempts -= 1
-                    if attempts < 1:
-                        self._state = None
-                        return failure('open_device_failed')
-                    logger.debug("Sleep...")
-                    time.sleep(0.5)
+                attempts = 3
+                while True:
+                    try:
+                        device, info = list_all_devices()[0]
+                        self._dev = device
+                        break
+                    except:
+                        attempts -= 1
+                        if attempts < 1:
+                            self._state = None
+                            return failure('open_device_failed')
+                        logger.debug("Sleep...")
+                        time.sleep(0.5)
 
-            interfaces = USB_INTERFACE(0)
-            usb_supported = info.supported_capabilities.get(TRANSPORT.USB)
-            if CAPABILITY.OTP & usb_supported:
-                interfaces |= USB_INTERFACE.OTP
-            if (CAPABILITY.U2F | CAPABILITY.FIDO2) & usb_supported:
-                interfaces |= USB_INTERFACE.FIDO
-            if (CAPABILITY.OPENPGP | CAPABILITY.PIV | CAPABILITY.OATH) & usb_supported:
-                interfaces |= USB_INTERFACE.CCID
+                interfaces = USB_INTERFACE(0)
+                usb_supported = info.supported_capabilities.get(TRANSPORT.USB)
+                if CAPABILITY.OTP & usb_supported:
+                    interfaces |= USB_INTERFACE.OTP
+                if (CAPABILITY.U2F | CAPABILITY.FIDO2) & usb_supported:
+                    interfaces |= USB_INTERFACE.FIDO
+                if (CAPABILITY.OPENPGP | CAPABILITY.PIV | CAPABILITY.OATH) & usb_supported:
+                    interfaces |= USB_INTERFACE.CCID
 
-            self._dev_info = {
-                'name': get_name(info, device.pid.get_type()).replace("YubiKey BIO", "YubiKey Bio"),
-                'version': '.'.join(str(x) for x in info.version) if info.version else "",
-                'serial': info.serial or '',
-                'usb_enabled': [
-                    a.name for a in CAPABILITY
-                    if a in info.config.enabled_capabilities.get(TRANSPORT.USB)],
-                'usb_supported': [
-                    a.name for a in CAPABILITY
-                    if a in info.supported_capabilities.get(TRANSPORT.USB)],
-                'usb_interfaces_supported': [
-                    t.name for t in USB_INTERFACE
-                    if t in interfaces],
-                'nfc_enabled': [
-                    a.name for a in CAPABILITY
-                    if a in info.config.enabled_capabilities.get(TRANSPORT.NFC, [])],
-                'nfc_supported': [
-                    a.name for a in CAPABILITY
-                    if a in info.supported_capabilities.get(TRANSPORT.NFC, [])],
-                'usb_interfaces_enabled': [i.name for i in USB_INTERFACE if i & device.pid.get_interfaces()],
-                'can_write_config': info.version and info.version >= (5,0,0),
-                'configuration_locked': info.is_locked,
-                'form_factor': info.form_factor
-            }
-        return success({'dev': self._dev_info, 'n_devs': self._n_devs})
+                self._dev_info = {
+                    'name': get_name(info, device.pid.yubikey_type).replace("YubiKey BIO", "YubiKey Bio"),
+                    'version': '.'.join(str(x) for x in info.version) if info.version else "",
+                    'serial': info.serial or '',
+                    'usb_enabled': [
+                        a.name for a in CAPABILITY
+                        if a in info.config.enabled_capabilities.get(TRANSPORT.USB)],
+                    'usb_supported': [
+                        a.name for a in CAPABILITY
+                        if a in info.supported_capabilities.get(TRANSPORT.USB)],
+                    'usb_interfaces_supported': [
+                        t.name for t in USB_INTERFACE
+                        if t in interfaces],
+                    'nfc_enabled': [
+                        a.name for a in CAPABILITY
+                        if a in info.config.enabled_capabilities.get(TRANSPORT.NFC, [])],
+                    'nfc_supported': [
+                        a.name for a in CAPABILITY
+                        if a in info.supported_capabilities.get(TRANSPORT.NFC, [])],
+                    'usb_interfaces_enabled': [i.name for i in USB_INTERFACE if i & device.pid.usb_interfaces],
+                    'can_write_config': info.version and info.version >= (5,0,0),
+                    'configuration_locked': info.is_locked,
+                    'form_factor': info.form_factor
+                }
+            return success({'dev': self._dev_info, 'n_devs': self._n_devs})
+        else:
+            devices, state = scan_devices()
+            n_devs = sum(devices.values())
+
+            if state != self._state:
+                self._state = state
+                self._n_devs = n_devs
+                self._dev_info = None
+                if n_devs != 1:
+                    return success({'n_devs': self._n_devs})
+
+                attempts = 3
+                while True:
+                    try:
+                        connection, device, info = connect_to_device()
+                        connection.close()
+                        break
+                    except:
+                        attempts -= 1
+                        if attempts < 1:
+                            self._state = None
+                            return failure('open_device_failed')
+                        logger.debug("Sleep...")
+                        time.sleep(0.5)
+
+                interfaces = USB_INTERFACE(0)
+                usb_supported = info.supported_capabilities.get(TRANSPORT.USB)
+                if CAPABILITY.OTP & usb_supported:
+                    interfaces |= USB_INTERFACE.OTP
+                if (CAPABILITY.U2F | CAPABILITY.FIDO2) & usb_supported:
+                    interfaces |= USB_INTERFACE.FIDO
+                if (CAPABILITY.OPENPGP | CAPABILITY.PIV | CAPABILITY.OATH) & usb_supported:
+                    interfaces |= USB_INTERFACE.CCID
+
+                self._dev_info = {
+                    'name': get_name(info, device.pid.get_type()).replace("YubiKey BIO", "YubiKey Bio"),
+                    'version': '.'.join(str(x) for x in info.version) if info.version else "",
+                    'serial': info.serial or '',
+                    'usb_enabled': [
+                        a.name for a in CAPABILITY
+                        if a in info.config.enabled_capabilities.get(TRANSPORT.USB)],
+                    'usb_supported': [
+                        a.name for a in CAPABILITY
+                        if a in info.supported_capabilities.get(TRANSPORT.USB)],
+                    'usb_interfaces_supported': [
+                        t.name for t in USB_INTERFACE
+                        if t in interfaces],
+                    'nfc_enabled': [
+                        a.name for a in CAPABILITY
+                        if a in info.config.enabled_capabilities.get(TRANSPORT.NFC, [])],
+                    'nfc_supported': [
+                        a.name for a in CAPABILITY
+                        if a in info.supported_capabilities.get(TRANSPORT.NFC, [])],
+                    'usb_interfaces_enabled': [i.name for i in USB_INTERFACE if i & device.pid.get_interfaces()],
+                    'can_write_config': info.version and info.version >= (5,0,0),
+                    'configuration_locked': info.is_locked,
+                    'form_factor': info.form_factor
+                }
+            return success({'dev': self._dev_info, 'n_devs': self._n_devs})
 
     def write_config(self, usb_applications, nfc_applications, lock_code):
         usb_enabled = 0x00
