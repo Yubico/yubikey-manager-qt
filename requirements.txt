@@ -1,1 +1,1 @@
-yubikey-manager==4.0.7
+yubikey-manager==5.0.1
