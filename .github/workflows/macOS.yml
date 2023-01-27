@@ -70,7 +70,7 @@ jobs:
         run: |
           sudo /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/bin/pip${PYTHON_VER_SHORT} install --upgrade pip
           sudo env MACOSX_DEPLOYMENT_TARGET=10.13 CFLAGS="-I/opt/openssl/include" LDFLAGS="-L/opt/openssl/lib" /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/bin/pip${PYTHON_VER_SHORT} install -r requirements.txt
-          #sudo patch /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/lib/python${PYTHON_VER_SHORT}/site-packages/ykman/otp.py .github/workflows/macos-ykman-patch.patch
+          sudo patch /Library/Frameworks/Python.framework/Versions/${PYTHON_VER_SHORT}/lib/python${PYTHON_VER_SHORT}/site-packages/ykman/otp.py .github/workflows/macos-ykman-patch.patch
 
 
       - name: Change id for bundled Python
