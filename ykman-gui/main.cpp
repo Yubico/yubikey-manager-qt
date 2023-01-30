@@ -42,6 +42,10 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Material");
 
     QString app_dir = app.applicationDirPath();
+
+    #ifdef __APPLE__
+    qputenv("PYTHONPATH", app_dir.toUtf8() + "../Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages");
+    #endif
     QString main_qml = "/qml/main.qml";
     QString path_prefix;
     QString url_prefix;
