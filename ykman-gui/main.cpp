@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     QString ver;
 
     char sl[]="../Frameworks/Python.framework/Versions/Current";
-    char buf[30];
+    char buf[4];
     int  fd;
 
     if (readlink(sl, buf, sizeof(buf)) < 0)
