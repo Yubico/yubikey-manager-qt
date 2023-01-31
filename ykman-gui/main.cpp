@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <algorithm>
 #endif
 
 void handleExitSignal(int sig) {
@@ -54,13 +55,16 @@ int main(int argc, char *argv[])
     QString ver;
 
     char sl[]="../Frameworks/Python.framework/Versions/Current";
-    char buf[4];
+    char buf[30];
     int  fd;
 
-    if (readlink(sl, buf, sizeof(buf)) < 0)
+    int buf_len = readlink(sl, buf, sizeof(buf));
+    if (buf_len < 0)
         perror("readlink() error");
-    else ver = buf;
-    QString tmp = app_dir + "/../Frameworks/Python.framework/Versions/" + buf + "/lib/python" + buf + "/site-packages";
+    char ans[buf_len];
+    std::copy(buf, buf+buf_len, ans);
+
+    QString tmp = app_dir + "/../Frameworks/Python.framework/Versions/" + ans + "/lib/python" + ans + "/site-packages";
     qputenv("PYTHONPATH", tmp.toUtf8());
     //qputenv("PYTHONPATH", app_dir.toUtf8() + "/../Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages");
     #endif
