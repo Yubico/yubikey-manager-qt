@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
     QString ver;
 
-    char sl[]="YubiKey Manager.app/Contents/Frameworks/Python.framework/Versions/Current";
+    char sl[]="../Frameworks/Python.framework/Versions/Current";
     char buf[30];
     int  fd;
 
