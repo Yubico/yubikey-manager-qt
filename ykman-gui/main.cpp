@@ -6,6 +6,12 @@
 #include <QtGlobal>
 #include <QtWidgets>
 #include <QQuickStyle>
+#ifdef __APPLE__
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#endif
 
 void handleExitSignal(int sig) {
   printf("Exiting due to signal %d\n", sig);
@@ -44,6 +50,18 @@ int main(int argc, char *argv[])
     QString app_dir = app.applicationDirPath();
 
     #ifdef __APPLE__
+
+    QString ver;
+
+    char sl[]="YubiKey Manager.app/Contents/Frameworks/Python.framework/Versions/Current";
+    char buf[30];
+    int  fd;
+
+    if (readlink(sl, buf, sizeof(buf)) < 0)
+        perror("readlink() error");
+    else ver = buf;
+    QString tmp = app_dir + "/../Frameworks/Python.framework/Versions/" + buf + "/lib/python" + buf + "/site-packages";
+    qputenv("PYTHONPATH", tmp.toUtf8());
     //qputenv("PYTHONPATH", app_dir.toUtf8() + "/../Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages");
     #endif
     QString main_qml = "/qml/main.qml";
