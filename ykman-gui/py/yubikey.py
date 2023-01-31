@@ -133,6 +133,8 @@ class Controller(object):
             return connect_to_device(connection_types=connection_types)[0]
 
     def refresh(self):
+        logger.debug("Debugging here")
+        logger.debug(os.environ)
         if int(ykman_v.split(".")[0] ) > 4:
             pids, new_state = scan_devices()
             n_devs = sum(pids.values())
