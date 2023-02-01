@@ -6,6 +6,16 @@ import datetime
 import json
 import logging
 import os
+
+logger = logging.getLogger(__name__)
+log = logging.getLogger("ykman.hid")
+log.setLevel(logging.WARNING)
+log = logging.getLogger("fido2.hid")
+log.setLevel(logging.WARNING)
+
+logger.debug("Debugging here")
+logger.debug(os.environ)
+
 import sys
 import pyotherside
 import smartcard
@@ -59,11 +69,7 @@ else:
 
 from fido2.ctap2 import Ctap2, ClientPin
 
-logger = logging.getLogger(__name__)
-log = logging.getLogger("ykman.hid")
-log.setLevel(logging.WARNING)
-log = logging.getLogger("fido2.hid")
-log.setLevel(logging.WARNING)
+
 
 
 def as_json(f):
