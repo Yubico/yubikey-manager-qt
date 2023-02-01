@@ -52,15 +52,15 @@ int main(int argc, char *argv[])
 
     #ifdef __APPLE__
 
-    QString ver;
-
-    char sl[]="../Frameworks/Python.framework/Versions/Current";
+    QString t = app_dir + "/../Frameworks/Python.framework/Versions/Current";
+    QByteArray arr = t.toUtf8();
+    const char* sl = arr.constData();
+    //char sl[]="../Frameworks/Python.framework/Versions/Current";
     char buf[30];
-    int  fd;
 
     int buf_len = readlink(sl, buf, sizeof(buf));
     if (buf_len < 0)
-        perror("readlink() error");
+        perror("readlink() error!");
     char ans[buf_len];
     std::copy(buf, buf+buf_len, ans);
 
