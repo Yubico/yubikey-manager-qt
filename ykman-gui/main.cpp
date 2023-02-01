@@ -58,14 +58,18 @@ int main(int argc, char *argv[])
     char buf[30];
 
     int buf_len = readlink(sl, buf, sizeof(buf));
-    if (buf_len < 0)
+    if (buf_len < 0) {
         perror("readlink() error!");
-    char ans[buf_len];
-    std::copy(buf, buf+buf_len, ans);
+    }
+    else {
+        char ans[buf_len+1];
+        std::memcpy(ans, buf, buf_len);
+        ans[buf_len] = '\0';
 
-    QString py_path = app_dir + "/../Frameworks/Python.framework/Versions/" + ans + "/lib/python" + ans + "/site-packages";
-    qputenv("PYTHONPATH", py_path.toUtf8());
-    qputenv("PYTHONHOME", curr_path.toUtf8());
+        QString py_path = app_dir + "/../Frameworks/Python.framework/Versions/" + ans + "/lib/python" + ans + "/site-packages";
+        qputenv("PYTHONPATH", py_path.toUtf8());
+        qputenv("PYTHONHOME", curr_path.toUtf8());
+    }
     #endif
     QString main_qml = "/qml/main.qml";
     QString path_prefix;
