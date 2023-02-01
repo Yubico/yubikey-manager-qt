@@ -52,8 +52,8 @@ int main(int argc, char *argv[])
 
     #ifdef __APPLE__
 
-    QString ver_path = app_dir + "/../Frameworks/Python.framework/Versions/Current";
-    QByteArray ver_arr = ver_path.toUtf8();
+    QString curr_path = app_dir + "/../Frameworks/Python.framework/Versions/Current";
+    QByteArray ver_arr = curr_path.toUtf8();
     const char* sl = ver_arr.constData();
     char buf[30];
 
@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
 
     QString py_path = app_dir + "/../Frameworks/Python.framework/Versions/" + ans + "/lib/python" + ans + "/site-packages";
     qputenv("PYTHONPATH", py_path.toUtf8());
+    qputenv("PYTHONHOME", curr_path.toUtf8());
     #endif
     QString main_qml = "/qml/main.qml";
     QString path_prefix;
