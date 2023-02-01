@@ -52,10 +52,9 @@ int main(int argc, char *argv[])
 
     #ifdef __APPLE__
 
-    QString t = app_dir + "/../Frameworks/Python.framework/Versions/Current";
-    QByteArray arr = t.toUtf8();
-    const char* sl = arr.constData();
-    //char sl[]="../Frameworks/Python.framework/Versions/Current";
+    QString ver_path = app_dir + "/../Frameworks/Python.framework/Versions/Current";
+    QByteArray ver_arr = ver_path.toUtf8();
+    const char* sl = ver_arr.constData();
     char buf[30];
 
     int buf_len = readlink(sl, buf, sizeof(buf));
@@ -64,9 +63,8 @@ int main(int argc, char *argv[])
     char ans[buf_len];
     std::copy(buf, buf+buf_len, ans);
 
-    QString tmp = app_dir + "/../Frameworks/Python.framework/Versions/" + ans + "/lib/python" + ans + "/site-packages";
-    qputenv("PYTHONPATH", tmp.toUtf8());
-    //qputenv("PYTHONPATH", app_dir.toUtf8() + "/../Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages");
+    QString py_path = app_dir + "/../Frameworks/Python.framework/Versions/" + ans + "/lib/python" + ans + "/site-packages";
+    qputenv("PYTHONPATH", py_path.toUtf8());
     #endif
     QString main_qml = "/qml/main.qml";
     QString path_prefix;
