@@ -1,7 +1,7 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 RUN apt-get update -qq \
     && apt-get install -qq software-properties-common \
-    && add-apt-repository -y ppa:beineri/opt-qt-5.14.2-xenial \
+    && add-apt-repository -y ppa:beineri/opt-qt-5.14.2-bionic \
     && apt-get -qq update \
     && apt-get -qq upgrade
 RUN apt-get install -y git make build-essential libssl-dev zlib1g-dev libbz2-dev \

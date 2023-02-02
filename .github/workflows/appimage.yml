@@ -13,8 +13,8 @@ jobs:
       - name: Build docker image that produces the AppImage
         run: |
           export REF=$(echo ${GITHUB_REF} | cut -d '/' -f 3)
-          docker build -t xenial-appimage -f docker/xenial-appimage/Dockerfile .
-          id=$(docker create --privileged xenial-appimage)
+          docker build -t bionic-appimage -f docker/bionic-appimage/Dockerfile .
+          id=$(docker create --privileged bionic-appimage)
           docker start --attach $id
           docker cp $id:/yubikey-manager-qt/YubiKey_Manager-x86_64.AppImage yubikey-manager-qt-${REF}.AppImage
           mkdir deploy
