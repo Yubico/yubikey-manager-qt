@@ -6,6 +6,13 @@
 #include <QtGlobal>
 #include <QtWidgets>
 #include <QQuickStyle>
+#ifdef __APPLE__
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <algorithm>
+#endif
 
 void handleExitSignal(int sig) {
   printf("Exiting due to signal %d\n", sig);
@@ -42,6 +49,28 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Material");
 
     QString app_dir = app.applicationDirPath();
+
+    #ifdef __APPLE__
+
+    QString curr_path = app_dir + "/../Frameworks/Python.framework/Versions/Current";
+    QByteArray ver_arr = curr_path.toUtf8();
+    const char* sl = ver_arr.constData();
+    char buf[30];
+
+    int buf_len = readlink(sl, buf, sizeof(buf));
+    if (buf_len < 0) {
+        perror("readlink() error!");
+    }
+    else {
+        char ans[buf_len+1];
+        std::memcpy(ans, buf, buf_len);
+        ans[buf_len] = '\0';
+
+        QString py_path = app_dir + "/../Frameworks/Python.framework/Versions/" + ans + "/lib/python" + ans + "/site-packages";
+        qputenv("PYTHONPATH", py_path.toUtf8());
+        qputenv("PYTHONHOME", curr_path.toUtf8());
+    }
+    #endif
     QString main_qml = "/qml/main.qml";
     QString path_prefix;
     QString url_prefix;

@@ -349,7 +349,7 @@ class Controller(object):
                 slot2 = state.is_configured(2)
                 ans = [slot1, slot2]
                 return success({'status': ans})
-        except OSError:
+        except TypeError:
             return failure('open_device_failed')
 
     def erase_slot(self, slot):
