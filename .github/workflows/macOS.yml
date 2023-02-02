@@ -146,6 +146,11 @@ jobs:
           brew uninstall openssl@1.1 python --ignore-dependencies
           sudo rm -rf /usr/local/Cellar/qt
 
+      - name: Run GUI
+        run: |
+          ./YubiKey\ Manager.app/Contents/MacOS/ykman-gui --version
+          ./YubiKey\ Manager.app/Contents/MacOS/ykman-gui --help
+
       - name: Run CLI
         run: |
           ./YubiKey\ Manager.app/Contents/MacOS/ykman --version
