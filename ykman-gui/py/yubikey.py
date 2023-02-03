@@ -84,6 +84,10 @@ def catch_error(f):
             logger.error('Failed to open device', exc_info=e)
             return failure('open_device_failed')
 
+        except TypeError as e:
+            logger.error('Failed to open device', exc_info=e)
+            return failure('open_device_failed')
+
         except Exception as e:
             if str(e) == 'Incorrect padding':
                 return failure('incorrect_padding')

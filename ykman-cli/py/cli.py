@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from ykman.cli.__main__ import main
+try:
+    from ykman._cli.__main__ import main
+except (ModuleNotFoundError, ImportError):
+    from ykman.cli.__main__ import main
 
 
 def run(argv):
