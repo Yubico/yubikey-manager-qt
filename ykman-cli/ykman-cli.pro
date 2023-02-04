@@ -6,7 +6,7 @@ CONFIG -= app_bundle
 TEMPLATE = app
 SOURCES += main.cpp
 
-buildqrc.commands = python ../build_qrc.py ${QMAKE_FILE_IN}
+buildqrc.commands = python3 ../build_qrc.py ${QMAKE_FILE_IN}
 buildqrc.input = QRC_JSON
 buildqrc.output = ${QMAKE_FILE_IN_BASE}.qrc
 buildqrc.variable_out = RESOURCES
@@ -14,7 +14,7 @@ QMAKE_STRIPFLAGS_LIB  += --strip-unneeded
 QMAKE_EXTRA_COMPILERS += buildqrc
 QRC_JSON = resources.json
 # Generate first time
-system(python ../build_qrc.py resources.json)
+system(python3 ../build_qrc.py resources.json)
 
 # Install python dependencies with pip for win and mac
 mac|win32 {
