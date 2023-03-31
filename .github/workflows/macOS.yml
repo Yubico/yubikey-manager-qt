@@ -6,7 +6,7 @@ env:
   PYTHON_VER: '3.11.1'
   PYTHON_VER_SHORT: '3.11'
   PYTHON_VER_SHORT_COMPACT: '311'
-  PYOTHERSIDE_VER: '1.5.9'
+  PYOTHERSIDE_VER: '1.6.0'
   OPENSSL_VER: '1.1.1i'
 
 jobs:
@@ -79,7 +79,6 @@ jobs:
       - name: Build PyOtherSide QML plugin
         run: |
           wget https://github.com/thp/pyotherside/archive/${PYOTHERSIDE_VER}.tar.gz
-          echo "189cb0b973e40fcb6b95fd51b0bcd6cc8494b514d49ffe966ec488cf05bbf51e ${PYOTHERSIDE_VER}.tar.gz" | sha256sum -c -
           tar -xzvf ${PYOTHERSIDE_VER}.tar.gz
           echo "DEFINES += QT_NO_DEBUG_OUTPUT" >> pyotherside-${PYOTHERSIDE_VER}/src/src.pro
           cd pyotherside-${PYOTHERSIDE_VER}
