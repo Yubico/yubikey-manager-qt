@@ -18,7 +18,7 @@ Make sure the http://www.swig.org/[swig] executable is in your PATH.
 
 ==== macOS
 
-    $ brew install python3 swig qt
+    $ brew install python3 swig qt5
     # Allow access to qmake - see https://superuser.com/a/1153338/104372
     $ brew link qt --force
 
