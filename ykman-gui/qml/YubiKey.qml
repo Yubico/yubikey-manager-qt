@@ -331,9 +331,9 @@ Python {
                [slot, key, touch], cb)
     }
 
-    function programStaticPassword(slot, password, keyboardLayout, cb) {
+    function programStaticPassword(slot, password, enter, keyboardLayout, cb) {
         doCall('yubikey.controller.program_static_password',
-               [slot, password, keyboardLayout], cb)
+               [slot, password, enter, keyboardLayout], cb)
     }
 
     function programOathHotp(slot, key, digits, cb) {

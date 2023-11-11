@@ -7,6 +7,7 @@ import QtQuick.Controls.Material 2.2
 ColumnLayout {
 
     property string keyboardLayout: allowNonModhex.checked ? 'US' : 'MODHEX'
+    property bool enter: appendCR.checked
 
     function finish() {
         if (views.selectedSlotConfigured()) {
@@ -17,7 +18,7 @@ ColumnLayout {
     }
 
     function programStaticPassword() {
-        yubiKey.programStaticPassword(views.selectedSlot, passwordInput.text,
+        yubiKey.programStaticPassword(views.selectedSlot, passwordInput.text, enter,
                                       keyboardLayout, function (resp) {
                                           if (resp.success) {
                                               views.otp()
@@ -80,6 +81,7 @@ ColumnLayout {
                 toolTipText: qsTr("Generate a random password")
             }
         }
+
         CheckBox {
             id: allowNonModhex
             text: qsTr("Allow any character")
@@ -89,6 +91,17 @@ ColumnLayout {
             ToolTip.delay: 1000
             ToolTip.visible: hovered
             ToolTip.text: qsTr("By default only modhex characters are allowed, enable this option to allow any (US Layout) characters")
+        }
+
+        CheckBox {
+            id: appendCR
+            text: qsTr("Append a CR to the password")
+            checked: true
+            font.pixelSize: constants.h3
+            Material.foreground: yubicoBlue
+            ToolTip.delay: 1000
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("After entering the password, simulate pressing Enter or Return")
         }
 
         ButtonsBar {
