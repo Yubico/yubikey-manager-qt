@@ -70,7 +70,7 @@
  ** Add support for Security Key NFC
  ** Add support for managing PIV Application
  ** Bugfix: OATH-HOTP credentials was always configured with 6 digits
- ** UI: Replace Succes-popups with Snackbar-messages
+ ** UI: Replace Success-popups with Snackbar-messages
  ** UX: Drop confirmation prompt for OTP Swap Slots
 
 * Version 1.0.1 (released 2018-10-10)

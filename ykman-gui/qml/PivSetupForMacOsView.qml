@@ -8,7 +8,7 @@ ColumnLayout {
 
     readonly property string authenticationName: 'Yubico PIV Authentication'
     readonly property string encryptionName: 'Yubico PIV Encryption'
-    readonly property string algoritm: 'ECCP256'
+    readonly property string algorithm: 'ECCP256'
     property string expirationDate: Utils.formatDate(
                                         getExpirationDateIn30years())
     property bool isBusy
@@ -40,7 +40,7 @@ ColumnLayout {
             function _generateCertificate(slot, cb) {
                 yubiKey.pivGenerateCertificate({
                                                    slotName: slot,
-                                                   algorithm: algoritm,
+                                                   algorithm: algorithm,
                                                    commonName: authenticationName,
                                                    expirationDate: expirationDate,
                                                    selfSign: true,

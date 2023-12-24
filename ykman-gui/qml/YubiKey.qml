@@ -260,7 +260,7 @@ Python {
      * and then itself when `refresh` is done.
      *
      * The arguments and `this` context of the call to the `callback` are
-     * preseved.
+     * preserved.
      *
      * @param callback a function
      *

@@ -31,7 +31,7 @@ macx {
     pip.commands = pip3 install -r ../requirements.txt --target pymodules
 }
 
-# On mac, embedd a Info.plist file in the binary, needed for codesign
+# On mac, embed a Info.plist file in the binary, needed for codesign
 macx{
     QMAKE_LFLAGS += -sectcreate __TEXT __info_plist $$shell_quote(../resources/mac/Info.plist.cli)
 }
