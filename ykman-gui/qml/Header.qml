@@ -5,6 +5,9 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
+    property bool pressed
+
+
     spacing: 0
     width: app.width
     function activeKeyLbl() {
@@ -34,14 +37,23 @@ ColumnLayout {
                 color: yubicoBlue
                 font.pixelSize: constants.h4
             }
-            CustomButton {
-                flat: true
-                text: qsTr("Help")
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                iconSource: "../images/help.svg"
-                toolTipText: qsTr("Visit Yubico Support in your web browser")
-                onClicked: Qt.openUrlExternally("https://www.yubico.com/kb")
-                font.pixelSize: constants.h4
+            ColumnLayout {
+                CustomButton {
+                    flat: true
+                    text: qsTr("Help")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    iconSource: "../images/help.svg"
+                    onClicked: pressed = true
+                    font.pixelSize: constants.h4
+                }
+                Label {
+                    text: https://www.yubico.com/kb
+                    Layout.fillWidth: false
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    color: yubicoBlue
+                    font.pixelSize: constants.h4
+                    visible: pressed == true
+                }
             }
             CustomButton {
                 flat: true
