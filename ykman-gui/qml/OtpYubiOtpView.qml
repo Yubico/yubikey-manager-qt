@@ -5,6 +5,8 @@ import "slotutils.js" as SlotUtils
 import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
+    property bool upload
+    property string url
 
     function useSerial() {
         if (useSerialCb.checked) {
@@ -40,12 +42,12 @@ ColumnLayout {
                            enableUpload.checked, function (resp) {
                                if (resp.success) {
                                    if (resp.upload_url) {
-                                       if (Qt.openUrlExternally(resp.upload_url)) {
-                                           snackbarSuccess.show(qsTr("Configured Yubico OTP credential. Preparing upload in web browser."))
-                                           views.otp()
-                                       } else {
-                                           snackbarError.show(qsTr("Configured Yubico OTP credential. Failed to open upload in web browser!"))
-                                       }
+                                        upload = true
+                                        url = resp.upload_url
+                                        otpUrl(url, views.otp())
+                                           //snackbarSuccess.show(qsTr("Configured Yubico OTP credential. Preparing upload in web browser."))
+                                           //views.otp()
+                                       
                                    } else {
                                        snackbarSuccess.show(
                                                qsTr("Configured Yubico OTP credential"))
@@ -180,31 +182,40 @@ ColumnLayout {
                 flat: true
                 Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             }
-
             Row {
                 id: row
                 spacing: 5
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                CheckBox {
-                    id: enableUpload
-                text: qsTr("Upload")
-                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                ToolTip.delay: 1000
-                font.pixelSize: constants.h3
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Upload credential to YubiCloud (opens a web browser)")
-                Material.foreground: yubicoBlue
-            }
+                ColumnLayout {
+                    CheckBox {
+                        id: enableUpload
+                        text: qsTr("Upload")
+                        Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                        ToolTip.delay: 1000
+                        font.pixelSize: constants.h3
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Upload credential to YubiCloud (opens a web browser)")
+                        Material.foreground: yubicoBlue
+                    }
+                    TextInput {
+                        selectByMouse: true
+                        readOnly: true
+                        text: url
+                        font.pixelSize: constants.h4
+                        visible: upload
+                        color: yubicoBlue
+                    }    
+                }
 
-            FinishButton {
+                FinishButton {
 
-                onClicked:  finish()
-                enabled: publicIdInput.acceptableInput
-                           && privateIdInput.acceptableInput
-                           && secretKeyInput.acceptableInput
-                toolTipText: qsTr("Finish and write the configuration to the YubiKey")
-                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-            }
+                    onClicked:  finish()
+                    enabled: publicIdInput.acceptableInput
+                               && privateIdInput.acceptableInput
+                               && secretKeyInput.acceptableInput
+                    toolTipText: qsTr("Finish and write the configuration to the YubiKey")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                }
 
             }
 

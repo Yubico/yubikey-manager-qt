@@ -168,6 +168,14 @@ StackView {
                     callback)
     }
 
+    function otpUrl(url, callback) {
+        copyableConfirmationPopup.show(
+                    qsTr("Upload?"), qsTr(
+                        "Go to the following url in your browser to make sure your credential gets uploaded %1").arg(
+                        url),
+                    callback)
+    }
+
     function otpWriteError() {
         snackbarError.show(
                     qsTr("Failed to modify %1. Make sure the YubiKey does not have restricted access.").arg(
@@ -335,6 +343,10 @@ StackView {
 
     ConfirmationPopup {
         id: confirmationPopup
+    }
+
+    CopyableConfirmationPopup {
+        id: copyableConfirmationPopup
     }
 
     PivPinPopup {

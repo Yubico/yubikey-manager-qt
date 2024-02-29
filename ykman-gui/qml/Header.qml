@@ -7,7 +7,6 @@ import QtQuick.Controls.Material 2.2
 ColumnLayout {
     property bool pressed
 
-
     spacing: 0
     width: app.width
     function activeKeyLbl() {
@@ -22,6 +21,14 @@ ColumnLayout {
         }
     }
 
+    function press() {
+        if (pressed) {
+            pressed = false
+        } else {
+            pressed = true
+    }
+}
+
     RowLayout {
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignRight
@@ -30,12 +37,22 @@ ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignRight
             Layout.fillWidth: true
-            Label {
-                text: activeKeyLbl()
-                Layout.fillWidth: false
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                color: yubicoBlue
-                font.pixelSize: constants.h4
+            ColumnLayout {
+                Label {
+                    text: activeKeyLbl()
+                    Layout.fillWidth: false
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    color: yubicoBlue
+                    font.pixelSize: constants.h4
+                }
+                TextInput {
+                    selectByMouse: true
+                    readOnly: true
+                    text: qsTr("")
+                    font.pixelSize: constants.h4
+                    visible: pressed
+                    color: yubicoBlue
+                }
             }
             ColumnLayout {
                 CustomButton {
@@ -43,26 +60,37 @@ ColumnLayout {
                     text: qsTr("Help")
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     iconSource: "../images/help.svg"
-                    onClicked: pressed = true
+                    toolTipText: qsTr("Visit Yubico Support in your web browser")
+                    onClicked: press()
                     font.pixelSize: constants.h4
                 }
-                Label {
-                    text: https://www.yubico.com/kb
-                    Layout.fillWidth: false
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    color: yubicoBlue
+                TextInput {
+                    selectByMouse: true
+                    readOnly: true
+                    text: qsTr("https://www.yubico.com/kb")
                     font.pixelSize: constants.h4
-                    visible: pressed == true
+                    visible: pressed
+                    color: yubicoBlue
                 }
             }
-            CustomButton {
-                flat: true
-                text: qsTr("About")
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                iconSource: "../images/info.svg"
-                toolTipText: qsTr("About YubiKey Manager")
-                onClicked: aboutPage.open()
-                font.pixelSize: constants.h4
+            ColumnLayout {
+                CustomButton {
+                    flat: true
+                    text: qsTr("About")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    iconSource: "../images/info.svg"
+                    toolTipText: qsTr("About YubiKey Manager")
+                    onClicked: aboutPage.open()
+                    font.pixelSize: constants.h4
+                }
+                TextInput {
+                    selectByMouse: true
+                    readOnly: true
+                    text: qsTr("")
+                    font.pixelSize: constants.h4
+                    visible: pressed
+                    color: yubicoBlue
+                }
             }
         }
     }
