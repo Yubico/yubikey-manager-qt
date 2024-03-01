@@ -186,25 +186,15 @@ ColumnLayout {
                 id: row
                 spacing: 5
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                ColumnLayout {
-                    CheckBox {
-                        id: enableUpload
-                        text: qsTr("Upload")
-                        Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                        ToolTip.delay: 1000
-                        font.pixelSize: constants.h3
-                        ToolTip.visible: hovered
-                        ToolTip.text: qsTr("Upload credential to YubiCloud (opens a web browser)")
-                        Material.foreground: yubicoBlue
-                    }
-                    TextInput {
-                        selectByMouse: true
-                        readOnly: true
-                        text: url
-                        font.pixelSize: constants.h4
-                        visible: upload
-                        color: yubicoBlue
-                    }    
+                CheckBox {
+                    id: enableUpload
+                    text: qsTr("Upload")
+                    Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                    ToolTip.delay: 1000
+                    font.pixelSize: constants.h3
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Upload credential to YubiCloud (opens a web browser)")
+                    Material.foreground: yubicoBlue
                 }
 
                 FinishButton {
