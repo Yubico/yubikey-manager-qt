@@ -44,9 +44,9 @@ ColumnLayout {
                                    if (resp.upload_url) {
                                         upload = true
                                         url = resp.upload_url
-                                        otpUrl(url, views.otp())
+                                        otpUrl(url)
                                            //snackbarSuccess.show(qsTr("Configured Yubico OTP credential. Preparing upload in web browser."))
-                                           //views.otp()
+                                        views.otp()
                                        
                                    } else {
                                        snackbarSuccess.show(

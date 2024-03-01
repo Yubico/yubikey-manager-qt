@@ -6,13 +6,11 @@ InlinePopup {
 
     property var acceptCallback
     standardButtons: Dialog.Ok
-    onAccepted: acceptCallback()
     focus: true
 
-    function show(heading, message, cb) {
+    function show(heading, message) {
         confirmationHeading.text = heading
         confirmationLbl.text = message
-        acceptCallback = cb
         open()
     }
 
@@ -32,6 +30,8 @@ InlinePopup {
             color: yubicoBlue
             selectByMouse: true
             readOnly: true
+            Layout.maximumWidth: parent.width
+            width: parent.width
         }    
     }
 }
