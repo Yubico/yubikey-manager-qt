@@ -19,13 +19,12 @@ jobs:
           architecture: 'x86'
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2.10.0
+        uses: jurplel/install-qt-action@v3
         with:
           version: '5.14.1'
           host: 'windows'
           target: 'desktop'
           arch: 'win32_msvc2017'
-          aqtversion: '==0.9.7'
 
       - name: Download dependencies
         run: |
@@ -60,7 +59,7 @@ jobs:
       - name: Build and install pyotherside
         shell: cmd
         run: |
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
+          set PATH=D:\a\yubikey-manager-qt-private\yubikey-manager-qt-private\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt-private\yubikey-manager-qt-private;%PATH%
           call C:\"Program Files\Microsoft Visual Studio"\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
           cd pyotherside-%PYOTHERSIDE_VER%
           qmake
@@ -74,7 +73,7 @@ jobs:
           $py_ver -match "python (?<content>.*)"
           $version = $matches['content']
 
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
+          set PATH=D:\a\yubikey-manager-qt-private\yubikey-manager-qt-private\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt-private\yubikey-manager-qt-private;%PATH%
           call C:\"Program Files\Microsoft Visual Studio"\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
           qmake
           jom
@@ -82,7 +81,7 @@ jobs:
       - name: Run windeployqt
         shell: cmd
         run: |
-          set PATH=D:\a\yubikey-manager-qt\yubikey-manager-qt\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt\yubikey-manager-qt;%PATH%
+          set PATH=D:\a\yubikey-manager-qt-private\yubikey-manager-qt-private\5.14.1\msvc2017\bin;D:\a\yubikey-manager-qt-private\yubikey-manager-qt-private;%PATH%
           call C:\"Program Files\Microsoft Visual Studio"\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x86
           windeployqt .\ykman-gui\release\ykman-gui.exe --qmldir=.\ykman-gui\qml --no-translations --angle --release
 
