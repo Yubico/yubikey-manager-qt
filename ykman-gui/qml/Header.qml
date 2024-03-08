@@ -43,9 +43,9 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 iconSource: "../images/help.svg"
                 toolTipText: qsTr("Visit Yubico Support in your web browser")
-                onClicked: helpPopup.show(
+                onClicked: yubiKey.isAdmin ? helpPopup.show(
                     qsTr("Help"), qsTr(
-                        "Visit https://www.yubico.com/kb for support with YubiKey Manager"))
+                        "Visit https://www.yubico.com/kb for support with YubiKey Manager")) : Qt.openUrlExternally("https://www.yubico.com/kb")
                 font.pixelSize: constants.h4
             }
             CustomButton {

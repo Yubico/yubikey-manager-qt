@@ -13,6 +13,7 @@ Python {
     property string serial
     property bool canWriteConfig
     property bool configurationLocked
+    property bool isAdmin: true
 
     property var applicationsEnabledOverUsb: []
     property var applicationsEnabledOverNfc: []
@@ -76,6 +77,12 @@ Python {
         } else {
             path = path + '/pymodules'
         }
+
+        importModule('ctypes', function () {
+            call('ctypes.windll.shell32.IsUserAnAdmin', [], function (res) {
+                isAdmin = (res === 1)
+            })
+        })
 
         importModule('site', function () {
             call('site.addsitedir', [path], function () {
