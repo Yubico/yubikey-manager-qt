@@ -170,8 +170,8 @@ StackView {
 
     function otpUrl(url) {
         copyableConfirmationPopup.show(
-                    qsTr("Upload?"), qsTr(
-                        "Go to the following url in your browser to make sure your credential gets uploaded %1").arg(
+                    qsTr("Upload"), qsTr(
+                        "Complete the upload of your credential by visiting the following URL: %1").arg(
                         url),
                     )
     }

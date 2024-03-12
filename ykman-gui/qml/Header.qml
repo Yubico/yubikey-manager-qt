@@ -45,7 +45,7 @@ ColumnLayout {
                 toolTipText: qsTr("Visit Yubico Support in your web browser")
                 onClicked: yubiKey.isAdmin ? helpPopup.show(
                     qsTr("Help"), qsTr(
-                        "Visit https://www.yubico.com/kb for support with YubiKey Manager")) : Qt.openUrlExternally("https://www.yubico.com/kb")
+                        "Visit the following URL for support with YubiKey Manager: https://www.yubico.com/kb")
                 font.pixelSize: constants.h4
             }
             CustomButton {
