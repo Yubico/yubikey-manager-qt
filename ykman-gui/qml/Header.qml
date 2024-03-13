@@ -43,7 +43,7 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 iconSource: "../images/help.svg"
                 toolTipText: qsTr("Visit Yubico Support in your web browser")
-                onClicked: yubiKey.isAdmin ? helpPopup.show(
+                onClicked: yubiKey.isWinAdmin ? helpPopup.show(
                     qsTr("Help"), qsTr(
                         "Visit the following URL for support with YubiKey Manager: https://www.yubico.com/kb")) : Qt.openUrlExternally("https://www.yubico.com/kb")
                 font.pixelSize: constants.h4

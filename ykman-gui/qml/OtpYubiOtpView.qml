@@ -42,7 +42,7 @@ ColumnLayout {
                            enableUpload.checked, function (resp) {
                                if (resp.success) {
                                    if (resp.upload_url) {
-                                        if (yubiKey.isAdmin) {
+                                        if (yubiKey.isWinAdmin) {
                                             upload = true
                                             url = resp.upload_url
                                             otpUrl(url, views.otp())
