@@ -42,6 +42,10 @@ macx {
     pip.commands = pip3 install -r ../requirements.txt --target pymodules
 }
 
+win32 {
+    QMAKE_CXXFLAGS += /guard:cf
+}
+
 # Default rules for deployment.
 include(deployment.pri)
 
