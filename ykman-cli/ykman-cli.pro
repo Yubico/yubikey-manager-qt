@@ -25,7 +25,9 @@ mac|win32 {
 }
 
 win32 {
+    QMAKE_CFLAGS += /guard:cf
     QMAKE_CXXFLAGS += /guard:cf
+    QMAKE_LFLAGS += /guard:cf
 }
 
 macx {

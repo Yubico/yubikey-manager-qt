@@ -43,7 +43,9 @@ macx {
 }
 
 win32 {
+    QMAKE_CFLAGS += /guard:cf
     QMAKE_CXXFLAGS += /guard:cf
+    QMAKE_LFLAGS += /guard:cf
 }
 
 # Default rules for deployment.
