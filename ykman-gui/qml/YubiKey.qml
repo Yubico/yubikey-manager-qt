@@ -13,6 +13,7 @@ Python {
     property string serial
     property bool canWriteConfig
     property bool configurationLocked
+    property bool isWinAdmin: true
 
     property var applicationsEnabledOverUsb: []
     property var applicationsEnabledOverNfc: []
@@ -75,6 +76,16 @@ Python {
             path = path + '/../Resources/pymodules'
         } else {
             path = path + '/pymodules'
+        }
+
+        if (Qt.platform.os === "windows") {
+            importModule('ctypes', function () {
+                call('ctypes.windll.shell32.IsUserAnAdmin', [], function (res) {
+                    isWinAdmin = (res === 1)
+                })
+            })
+        } else {
+            isWinAdmin = false
         }
 
         importModule('site', function () {

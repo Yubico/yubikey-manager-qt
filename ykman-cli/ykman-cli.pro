@@ -24,6 +24,12 @@ mac|win32 {
     QMAKE_CLEAN += -r pymodules
 }
 
+win32 {
+    QMAKE_CFLAGS += /guard:cf
+    QMAKE_CXXFLAGS += /guard:cf
+    QMAKE_LFLAGS += /guard:cf
+}
+
 macx {
     pip.commands = python3 -m venv pymodules && source pymodules/bin/activate && pip3 install -r ../requirements.txt && deactivate
 }

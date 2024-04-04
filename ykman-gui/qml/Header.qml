@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
+
     spacing: 0
     width: app.width
     function activeKeyLbl() {
@@ -18,6 +19,7 @@ ColumnLayout {
             }
         }
     }
+
 
     RowLayout {
         Layout.fillWidth: true
@@ -33,14 +35,17 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 color: yubicoBlue
                 font.pixelSize: constants.h4
-            }
+            }   
             CustomButton {
+
                 flat: true
                 text: qsTr("Help")
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 iconSource: "../images/help.svg"
                 toolTipText: qsTr("Visit Yubico Support in your web browser")
-                onClicked: Qt.openUrlExternally("https://www.yubico.com/kb")
+                onClicked: yubiKey.isWinAdmin ? helpPopup.show(
+                    qsTr("Help"), qsTr(
+                        "Visit the following URL for support with YubiKey Manager: https://www.yubico.com/kb")) : Qt.openUrlExternally("https://www.yubico.com/kb")
                 font.pixelSize: constants.h4
             }
             CustomButton {
@@ -52,6 +57,8 @@ ColumnLayout {
                 onClicked: aboutPage.open()
                 font.pixelSize: constants.h4
             }
+            
+            
         }
     }
 

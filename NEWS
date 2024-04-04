@@ -1,3 +1,7 @@
+* Version 1.2.6 (released 2024-04-04)
+ ** Windows-only security fix, see advisory:
+    https://www.yubico.com/support/security-advisories/ysa-2024-01/
+
 * Version 1.2.5 (released 2023-02-02)
  ** Compatibility update for ykman 5.0.1.
  ** Update to Python 3.11.

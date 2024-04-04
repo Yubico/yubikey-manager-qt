@@ -5,12 +5,12 @@ SOURCES += main.cpp
 
 # This is the internal verson number, Windows requires 4 digits.
 win32|win64 {
-    VERSION = 1.2.5.0
+    VERSION = 1.2.6.0
 } else {
-    VERSION = 1.2.5
+    VERSION = 1.2.6
 }
 # This is the version shown on the About page
-DEFINES += APP_VERSION=\\\"1.2.5\\\"
+DEFINES += APP_VERSION=\\\"1.2.6\\\"
 
 message(Version of this build: $$VERSION)
 
@@ -40,6 +40,12 @@ macx {
 }
 !macx {
     pip.commands = pip3 install -r ../requirements.txt --target pymodules
+}
+
+win32 {
+    QMAKE_CFLAGS += /guard:cf
+    QMAKE_CXXFLAGS += /guard:cf
+    QMAKE_LFLAGS += /guard:cf
 }
 
 # Default rules for deployment.

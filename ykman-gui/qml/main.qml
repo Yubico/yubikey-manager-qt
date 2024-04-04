@@ -143,4 +143,8 @@ ApplicationWindow {
     AboutPagePopup {
         id: aboutPage
     }
+
+    CopyableConfirmationPopup {
+        id: helpPopup
+    }
 }
