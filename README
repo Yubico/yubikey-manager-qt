@@ -1,6 +1,8 @@
 == YubiKey Manager
 Cross-platform application for configuring any YubiKey over all USB interfaces.
 
+NOTE: This project is no longer under active development. We recommend https://github.com/Yubico/yubioath-flutter/[Yubico Authenticator] to configure a YubiKey.
+
 image::screenshot.png[]
 
 === Features
