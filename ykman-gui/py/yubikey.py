@@ -441,13 +441,14 @@ class Controller(object):
                 return failure("write error")
         return success()
 
-    def program_static_password(self, slot, key, keyboard_layout):
+    def program_static_password(self, slot, key, enter, keyboard_layout):
         with self._open_device([OtpConnection]) as conn:
             session = YubiOtpSession(conn)
             scan_codes = encode(key, KEYBOARD_LAYOUT[keyboard_layout])
+            slot_config = StaticPasswordSlotConfiguration(scan_codes).append_cr(enter)
 
             try:
-                session.put_configuration(slot, StaticPasswordSlotConfiguration(scan_codes))
+                session.put_configuration(slot, slot_config)
             except CommandError as e:
                 logger.debug("Failed to program static password", exc_info=e)
                 return failure("write error")
