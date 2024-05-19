@@ -36,3 +36,7 @@ To install from source, see the link:doc/development.adoc[development] instructi
 
 === Command line version
 This project also bundles the https://developers.yubico.com/yubikey-manager/[command line version].
+
+Windows Powershell or Command Prompt accesses the YubiKey Manager CLI by calling `ykman.exe` in the YubiKey Manager directory.
+
+MacOS accesses the YubiKey Manager CLI by calling `~/Applications/YubiKey Manager.app/Contents/MacOS/ykman`.
