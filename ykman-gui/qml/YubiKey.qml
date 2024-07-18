@@ -332,9 +332,9 @@ Python {
         doCall('yubikey.controller.generate_static_pw', [keyboardLayout], cb)
     }
 
-    function programOtp(slot, publicId, privateId, key, upload, cb) {
+    function programOtp(slot, publicId, privateId, key, cb) {
         doCall('yubikey.controller.program_otp',
-               [slot, publicId, privateId, key, upload, appVersion], cb)
+               [slot, publicId, privateId, key, appVersion], cb)
     }
 
     function programChallengeResponse(slot, key, touch, cb) {

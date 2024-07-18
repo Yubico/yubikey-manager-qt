@@ -5,9 +5,6 @@ import "slotutils.js" as SlotUtils
 import QtQuick.Controls.Material 2.2
 
 ColumnLayout {
-    property bool upload
-    property string url
-
     function useSerial() {
         if (useSerialCb.checked) {
             yubiKey.serialModhex(function (res) {
@@ -39,61 +36,20 @@ ColumnLayout {
     function programYubiOtp() {
         yubiKey.programOtp(views.selectedSlot, publicIdInput.text,
                            privateIdInput.text, secretKeyInput.text,
-                           enableUpload.checked, function (resp) {
+                           function (resp) {
                                if (resp.success) {
-                                   if (resp.upload_url) {
-                                        if (yubiKey.isWinAdmin) {
-                                            upload = true
-                                            url = resp.upload_url
-                                            otpUrl(url, views.otp())
-                                            
-                                            views.otp()
-                                        } else {
-                                            if (Qt.openUrlExternally(resp.upload_url)) {
-                                               snackbarSuccess.show(qsTr("Configured Yubico OTP credential. Preparing upload in web browser."))
-                                               views.otp()
-                                           } else {
-                                               snackbarError.show(qsTr("Configured Yubico OTP credential. Failed to open upload in web browser!"))
-                                           }
-                                        }
-                                       
-                                   } else {
-                                       snackbarSuccess.show(
-                                               qsTr("Configured Yubico OTP credential"))
-                                       views.otp()
-                                   }
-
+                                    snackbarSuccess.show(
+                                            qsTr("Configured Yubico OTP credential"))
+                                    views.otp()
                                } else {
                                    if (resp.error_id === 'write error') {
                                        views.otpWriteError()
-                                   } else if (resp.error_id === 'upload_failed') {
-                                       snackbarError.show(
-                                                   qsTr(
-                                                       "Upload failed: %1 Credential not configured.").arg(
-                                                       getUploadErrorMessage(
-                                                           resp.upload_errors[0])))
                                    } else {
                                        views.otpFailedToConfigureErrorPopup(
                                                    resp.error_id)
                                    }
                                }
                            })
-    }
-
-    function getUploadErrorMessage(uploadErrorId) {
-        // Keys defined in ykman library
-        switch (uploadErrorId) {
-        case 'CONNECTION_FAILED':
-            return qsTr('Failed to open HTTPS connection.')
-        case 'NOT_FOUND':
-            return qsTr('Upload request not recognized by server.')
-        case 'PUBLIC_ID_NOT_VV':
-            return qsTr('Public ID must begin with "vv".')
-        case 'PUBLIC_ID_OCCUPIED':
-            return qsTr('Public ID is already in use.')
-        case 'SERVICE_UNAVAILABLE':
-            return qsTr('Service temporarily unavailable, please try again later.')
-        }
     }
 
     CustomContentColumn {
@@ -191,31 +147,17 @@ ColumnLayout {
                 flat: true
                 Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             }
-            Row {
-                id: row
-                spacing: 5
+
+            FinishButton {
+                Layout.fillWidth: false
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                CheckBox {
-                    id: enableUpload
-                    text: qsTr("Upload")
-                    Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                    ToolTip.delay: 1000
-                    font.pixelSize: constants.h3
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Upload credential to YubiCloud (opens a web browser)")
-                    Material.foreground: yubicoBlue
-                }
 
-                FinishButton {
-
-                    onClicked:  finish()
-                    enabled: publicIdInput.acceptableInput
-                               && privateIdInput.acceptableInput
-                               && secretKeyInput.acceptableInput
-                    toolTipText: qsTr("Finish and write the configuration to the YubiKey")
-                    Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                }
-
+                onClicked:  finish()
+                enabled: publicIdInput.acceptableInput
+                            && privateIdInput.acceptableInput
+                            && secretKeyInput.acceptableInput
+                toolTipText: qsTr("Finish and write the configuration to the YubiKey")
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             }
 
         }

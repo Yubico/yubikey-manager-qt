@@ -50,12 +50,10 @@ from ykman import __version__ as ykman_v
 if int(ykman_v.split(".")[0] ) > 4:
     from yubikit.support import get_name
     from ykman.device import list_all_devices, scan_devices
-    from ykman.otp import (
-    _PrepareUploadFailed as PrepareUploadFailed
-    , _prepare_upload_key as prepare_upload_key, generate_static_pw)
+    from ykman.otp import generate_static_pw
 else:
     from ykman import connect_to_device, scan_devices, get_name
-    from ykman.otp import PrepareUploadFailed, prepare_upload_key, generate_static_pw
+    from ykman.otp import generate_static_pw
 
 from fido2.ctap2 import Ctap2, ClientPin
 
@@ -391,26 +389,12 @@ class Controller(object):
     def random_key(self, bytes):
         return b2a_hex(os.urandom(int(bytes))).decode('ascii')
 
-    def program_otp(self, slot, public_id, private_id, key, upload=False,
-                    app_version='unknown'):
+    def program_otp(self, slot, public_id, private_id, key, app_version='unknown'):
         key = a2b_hex(key)
         public_id = modhex_decode(public_id)
         private_id = a2b_hex(private_id)
 
-        upload_url = None
-
         with self._open_device([OtpConnection]) as conn:
-            if upload:
-                try:
-                    upload_url = prepare_upload_key(
-                        key, public_id, private_id,
-                        serial=self._dev_info['serial'],
-                        user_agent='ykman-qt/' + app_version)
-                except PrepareUploadFailed as e:
-                    logger.debug('YubiCloud upload failed', exc_info=e)
-                    return failure('upload_failed',
-                                   {'upload_errors': [err.name
-                                                      for err in e.errors]})
             try:
                 session = YubiOtpSession(conn)
                 session.put_configuration(
@@ -422,10 +406,7 @@ class Controller(object):
                 return failure("write error")
 
         logger.debug('YubiOTP successfully programmed.')
-        if upload_url:
-            logger.debug('Upload url: %s', upload_url)
-
-        return success({'upload_url': upload_url})
+        return success()
 
     def program_challenge_response(self, slot, key, touch):
         key = a2b_hex(key)
