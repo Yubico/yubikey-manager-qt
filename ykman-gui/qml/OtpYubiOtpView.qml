@@ -73,8 +73,7 @@ ColumnLayout {
                                                        getUploadErrorMessage(
                                                            resp.upload_errors[0])))
                                    } else {
-                                       views.otpFailedToConfigureErrorPopup(
-                                                   resp.error_id)
+                                       views.otpFailedToConfigureErrorPopup(resp)
                                    }
                                }
                            })

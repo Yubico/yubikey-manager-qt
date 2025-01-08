@@ -55,6 +55,8 @@ SnackBar {
             return qsTr("Failed to parse file")
         case 'incorrect_padding':
             return qsTr("Incorrect padding.")
+        case 'yubicloud_upload_not_supported':
+            return qsTr("Automated YubiCloud upload support has been ended.")
         }
     }
 

@@ -33,8 +33,7 @@ ColumnLayout {
                                                  if (resp.error_id === 'write error') {
                                                      views.otpWriteError()
                                                  } else {
-                                                     views.otpFailedToConfigureErrorPopup(
-                                                                 resp.error_id)
+                                                     views.otpFailedToConfigureErrorPopup(resp)
                                                  }
                                              }
                                          })

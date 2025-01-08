@@ -50,9 +50,11 @@ from ykman import __version__ as ykman_v
 if int(ykman_v.split(".")[0] ) > 4:
     from yubikit.support import get_name
     from ykman.device import list_all_devices, scan_devices
-    from ykman.otp import (
-    _PrepareUploadFailed as PrepareUploadFailed
-    , _prepare_upload_key as prepare_upload_key, generate_static_pw)
+    if int(ykman_v.split(".")[0]) == 5 and int(ykman_v.split(".")[1]) < 5:
+        from ykman.otp import (
+        _PrepareUploadFailed as PrepareUploadFailed
+        , _prepare_upload_key as prepare_upload_key)
+    from ykman.otp import generate_static_pw
 else:
     from ykman import connect_to_device, scan_devices, get_name
     from ykman.otp import PrepareUploadFailed, prepare_upload_key, generate_static_pw
@@ -401,6 +403,12 @@ class Controller(object):
 
         with self._open_device([OtpConnection]) as conn:
             if upload:
+                # Automated YubiCloud upload support has been ended. It's not supported in ykman>=5.5.0.
+                ykman_v_major = int(ykman_v.split(".")[0])
+                ykman_v_minor = int(ykman_v.split(".")[1])
+                if ykman_v_major > 5 or (ykman_v_major == 5 and ykman_v_minor >= 5):
+                    return failure('yubicloud_upload_not_supported')
+
                 try:
                     upload_url = prepare_upload_key(
                         key, public_id, private_id,

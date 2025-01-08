@@ -182,10 +182,10 @@ StackView {
                         SlotUtils.slotNameCapitalized(views.selectedSlot)))
     }
 
-    function otpFailedToConfigureErrorPopup(error) {
+    function otpFailedToConfigureErrorPopup(resp) {
         snackbarError.show(qsTr("Failed to configure %1. %2").arg(
                                SlotUtils.slotNameCapitalized(
-                                   views.selectedSlot)).arg(snackbarError.getDefaultMessage(error)))
+                                   views.selectedSlot)).arg(snackbarError.getDefaultMessage(resp)))
     }
 
     function snackbarErrorMessage(error) {
